@@ -1,0 +1,297 @@
+Description: Setup IAM policies, groups and accounts
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  InitNewUserPassword:
+    Type: String
+    NoEcho: true
+Resources:
+  # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
+  # Therefore you must do the following before deleting them from this file:
+  # 1. Detach or remove the following user resources: login profile, attached
+  #    MFA device, access-keys, ssh-keys, and policies.
+  # 2. Detach the user from all groups.
+  AWSIAMXavierSchildwachterUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: x.schildwachter@sagebase.org
+      Groups:
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMKhaiDoUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: khai.do@sagebase.org
+      Groups:
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMDeveloperUsersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+        - arn:aws:iam::aws:policy/IAMReadOnlyAccess
+        - !Ref AWSIAMEnforceMfaPolicy
+        - !Ref AWSIAMDynamoDenyDeletePolicy
+        - !Ref AWSIAMRdsDenyDeletePolicy
+  AWSIAMAdminRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !GetAtt AWSIAMXavierSchildwachterUser.Arn
+                - !GetAtt AWSIAMKhaiDoUser.Arn
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+  AWSIAMDynamoDenyDeletePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Deny
+            Action:
+              # UpdateTable operation retricts deletion of indexes
+              - dynamodb:UpdateTable
+              - dynamodb:DeleteTable
+            Resource: "*"
+  AWSIAMRdsDenyDeletePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Deny
+            Action:
+              - rds:DeleteDBCluster
+              - rds:DeleteDBClusterSnapshot
+              - rds:DeleteDBInstance
+              - rds:DeleteDBSnapshot
+            Resource: "*"
+  AWSIAMAdminRolePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "admin"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "*"
+            Resource: "*"
+      Roles:
+        -
+          !Ref AWSIAMAdminRole
+  AWSIAMInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Path: "/"
+      Roles:
+        -
+          !Ref "AWSIAMAdminRole"
+  # resources for auditors
+  AWSIAMAuditorAccessPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Deny
+            Action:
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - codecommit:GetCommit
+            - codecommit:GitPull
+            - dynamodb:BatchGetItem
+            - dynamodb:GetItem
+            - dynamodb:GetRecords
+            - sqs:ReceiveMessage
+            - sdb:Select
+            Resource: "*"
+  AWSIAMAuditorsGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - !Ref AWSIAMAuditorAccessPolicy
+        - !Ref AWSIAMEnforceMfaPolicy
+  # resources for logging services
+  AWSIAMSumoLogicUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      Groups:
+        - !Ref AWSIAMLoggingServiceGroup
+  AWSIAMSumoLogicUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref AWSIAMSumoLogicUser
+  IAMLoggingServiceManagedPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - 's3:GetObject'
+              - 's3:GetObjectVersion'
+              - 's3:ListBucketVersions'
+              - 's3:ListBucket'
+            Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::elasticbeanstalk-'
+                  - !Ref AWS::Region
+                  - '-'
+                  - !Ref AWS::AccountId
+                  - '/*'
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::elasticbeanstalk-'
+                  - !Ref AWS::Region
+                  - '-'
+                  - !Ref AWS::AccountId
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !ImportValue us-east-1-essentials-CloudtrailBucket
+                  - '/*'
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !ImportValue us-east-1-essentials-CloudtrailBucket
+  AWSIAMLoggingServiceGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - !Ref IAMLoggingServiceManagedPolicy
+  # policy to enforce MFA
+  AWSIAMEnforceMfaPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowAllUsersToListAccounts
+            Effect: Allow
+            Action:
+              - 'iam:ListAccountAliases'
+              - 'iam:ListUsers'
+              - 'iam:GetAccountSummary'
+            Resource: '*'
+          - Sid: AllowIndividualUserToSeeAndManageOnlyTheirOwnAccountInformation
+            Effect: Allow
+            Action:
+              - 'iam:ChangePassword'
+              - 'iam:CreateAccessKey'
+              - 'iam:CreateLoginProfile'
+              - 'iam:DeleteAccessKey'
+              - 'iam:DeleteLoginProfile'
+              - 'iam:GetAccountPasswordPolicy'
+              - 'iam:GetLoginProfile'
+              - 'iam:ListAccessKeys'
+              - 'iam:UpdateAccessKey'
+              - 'iam:UpdateLoginProfile'
+              - 'iam:ListSigningCertificates'
+              - 'iam:DeleteSigningCertificate'
+              - 'iam:UpdateSigningCertificate'
+              - 'iam:UploadSigningCertificate'
+              - 'iam:ListSSHPublicKeys'
+              - 'iam:GetSSHPublicKey'
+              - 'iam:DeleteSSHPublicKey'
+              - 'iam:UpdateSSHPublicKey'
+              - 'iam:UploadSSHPublicKey'
+            Resource: !Join
+              - ''
+              - - 'arn:aws:iam::'
+                - !Ref AWS::AccountId
+                - ':user/${aws:username}'
+          - Sid: AllowIndividualUserToListOnlyTheirOwnMFA
+            Effect: Allow
+            Action:
+              - 'iam:ListVirtualMFADevices'
+              - 'iam:ListMFADevices'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':mfa/*'
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':user/${aws:username}'
+          - Sid: AllowIndividualUserToManageTheirOwnMFA
+            Effect: Allow
+            Action:
+              - 'iam:CreateVirtualMFADevice'
+              - 'iam:DeleteVirtualMFADevice'
+              - 'iam:RequestSmsMfaRegistration'
+              - 'iam:FinalizeSmsMfaRegistration'
+              - 'iam:EnableMFADevice'
+              - 'iam:ResyncMFADevice'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':mfa/${aws:username}'
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':user/${aws:username}'
+          - Sid: AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA
+            Effect: Allow
+            Action:
+              - 'iam:DeactivateMFADevice'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':mfa/${aws:username}'
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':user/${aws:username}'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+          - Sid: BlockAnyAccessOtherThanAboveUnlessSignedInWithMFA
+            Effect: Deny
+            NotAction: 'iam:*'
+            Resource: '*'
+            Condition:
+              BoolIfExists:
+                'aws:MultiFactorAuthPresent': 'false'
+Outputs:
+  AWSIAMSumoLogicUser:
+    Value: !Ref AWSIAMSumoLogicUser
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SumoLogicUser'
+  AWSIAMSumoLogicUserAccessKey:
+    Value: !Ref AWSIAMSumoLogicUserAccessKey
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SumoLogicUserAccessKey'
+  AWSIAMSumoLogicUserSecretAccessKey:
+    Value: !GetAtt AWSIAMSumoLogicUserAccessKey.SecretAccessKey
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SumoLogicUserSecretAccessKey'
+  AWSIAMEnforceMfaPolicy:
+    Value: !Ref AWSIAMEnforceMfaPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-EnforceMfaPolicy'
