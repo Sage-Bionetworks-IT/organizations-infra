@@ -1,5 +1,5 @@
 project_code: sage-bionetworks
 profile: {{ var.profile | default("default") }}
 region: {{ var.region }}
-template_bucket_name: "{{ environment_variable.LogcentralInfraCfBucket }}"
+template_bucket_name: "{{ environment_variable.OrganizationsInfraCfBucket }}"
 template_key_prefix: {{ environment_variable.TRAVIS_BRANCH | default("testing") }}
