@@ -1,0 +1,4 @@
+# unencypted environment variables
+export OperatorEmail=aws.organizations@sagebase.org
+export AdminCentralInfraCfBucket=bootstrap-awss3cloudformationbucket-19qromfd235z9
+export OrganizationsInfraCfBucket=bootstrap-awss3cloudformationbucket-wyojnuok594o

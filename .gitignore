@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+env/
 build/
 develop-eggs/
 dist/
@@ -102,3 +103,20 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.idea/
+git-crypt.key
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# sceptre artifacts
+remote-templates
+
+# lambda artifacts
+lambdas/*.zip
+
+# MAC Crap
+.DS_Store

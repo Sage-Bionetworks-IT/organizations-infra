@@ -1,0 +1,5 @@
+template_path: remote-templates/bootstrap.yaml
+stack_name: bootstrap
+hooks:
+  before_update:
+    - !cmd "aws --profile {{ var.profile }} s3 cp s3://{{ environment_variable.AdminCentralInfraCfBucket }}/aws-infra/master/bootstrap.yaml ./remote-templates/bootstrap.yaml"
