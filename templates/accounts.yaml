@@ -28,6 +28,15 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
+  AWSIAMMikeKellenUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: mike.kellen@sagebionetworks.org
+      Groups:
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
