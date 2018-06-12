@@ -127,15 +127,6 @@ Resources:
         - !Ref AWSIAMAuditorAccessPolicy
         - !Ref AWSIAMEnforceMfaPolicy
   # resources for logging services
-  AWSIAMSumoLogicUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      Groups:
-        - !Ref AWSIAMLoggingServiceGroup
-  AWSIAMSumoLogicUserAccessKey:
-    Type: 'AWS::IAM::AccessKey'
-    Properties:
-      UserName: !Ref AWSIAMSumoLogicUser
   IAMLoggingServiceManagedPolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
@@ -279,18 +270,6 @@ Resources:
               BoolIfExists:
                 'aws:MultiFactorAuthPresent': 'false'
 Outputs:
-  AWSIAMSumoLogicUser:
-    Value: !Ref AWSIAMSumoLogicUser
-    Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-SumoLogicUser'
-  AWSIAMSumoLogicUserAccessKey:
-    Value: !Ref AWSIAMSumoLogicUserAccessKey
-    Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-SumoLogicUserAccessKey'
-  AWSIAMSumoLogicUserSecretAccessKey:
-    Value: !GetAtt AWSIAMSumoLogicUserAccessKey.SecretAccessKey
-    Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-SumoLogicUserSecretAccessKey'
   AWSIAMEnforceMfaPolicy:
     Value: !Ref AWSIAMEnforceMfaPolicy
     Export:
