@@ -15,6 +15,7 @@ Resources:
     Properties:
       UserName: x.schildwachter@sagebase.org
       Groups:
+        - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
@@ -24,6 +25,7 @@ Resources:
     Properties:
       UserName: khai.do@sagebase.org
       Groups:
+        - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
@@ -33,7 +35,8 @@ Resources:
     Properties:
       UserName: mike.kellen@sagebionetworks.org
       Groups:
-        - !Ref AWSIAMDeveloperUsersGroup
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMSageExecutivesGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
@@ -43,7 +46,6 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
         - arn:aws:iam::aws:policy/IAMReadOnlyAccess
-        - !Ref AWSIAMEnforceMfaPolicy
         - !Ref AWSIAMDynamoDenyDeletePolicy
         - !Ref AWSIAMRdsDenyDeletePolicy
   AWSIAMAdminRole:
@@ -87,6 +89,16 @@ Resources:
               - rds:DeleteDBClusterSnapshot
               - rds:DeleteDBInstance
               - rds:DeleteDBSnapshot
+            Resource: "*"
+  AWSIAMOrganizationsFullAccessPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "organizations:*"
             Resource: "*"
   AWSIAMAdminRolePolicy:
     Type: "AWS::IAM::Policy"
@@ -132,9 +144,19 @@ Resources:
     Type: 'AWS::IAM::Group'
     Properties:
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/ReadOnlyAccess
         - !Ref AWSIAMAuditorAccessPolicy
+  AWSIAMAllUsersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
         - !Ref AWSIAMEnforceMfaPolicy
+  AWSIAMSageExecutivesGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/job-function/Billing
+        - !Ref AWSIAMOrganizationsFullAccessPolicy
   # resources for logging services
   IAMLoggingServiceManagedPolicy:
     Type: "AWS::IAM::ManagedPolicy"
