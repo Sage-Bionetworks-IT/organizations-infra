@@ -5,15 +5,13 @@ Install, configure and manage the AWS organizations account.
 ## Instructions to create or update CF stacks
 
 ```
-# unlock repo
-git-crypt unlock
-# set env vars
-source env_vars && source env_vars.secret
-# Update CF stacks with sceptre
+# Update CF stacks with sceptre:
+# sceptre launch-stack prod <stack_name>
 ```
 
-The above should setup resources for the account.  Once the infrastructure for the account has been setup
-you can access and view the account using the [AWS console](https://AWS-account-ID-or-alias.signin.aws.amazon.com/console).
+The above should setup resources for the AWS account.  Once the infrastructure
+for the account has been setup you can access and view the account using the
+[AWS console](https://AWS-account-ID-or-alias.signin.aws.amazon.com/console).
 
 *Note - This project depends on CF templates from other accounts.*
 
@@ -27,10 +25,10 @@ We have configured Travis to deploy CF template updates.  Travis deploys using
 * https://sagebionetworks.jira.com/projects/IT
 
 ## Builds
-* https://travis-ci.org/Sage-Bionetworks/scicomp-infra
+* https://travis-ci.org/Sage-Bionetworks/organizations-infra
 
 ## Secrets
-* We use [git-crypt](https://github.com/AGWA/git-crypt) to hide secrets.
-Access to secrets is tightly controlled.  You will be required to
-have your own [GPG key](https://help.github.com/articles/generating-a-new-gpg-key)
-and you must request access by a maintainer of this project.
+* We use the [AWS SSM](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html)
+to store secrets for this project.  Sceptre retrieves the secrets using
+a [sceptre ssm resolver](https://github.com/cloudreach/sceptre/tree/v1/contrib/ssm-resolver)
+and passes them to the cloudformation stack on deployment.

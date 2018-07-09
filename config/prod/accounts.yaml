@@ -3,4 +3,4 @@ stack_name: accounts
 dependencies:
   - essentials
 parameters:
-  InitNewUserPassword: {{ environment_variable.InitNewUserPassword }}
+  InitNewUserPassword: !ssm /infra/InitNewUserPassword
