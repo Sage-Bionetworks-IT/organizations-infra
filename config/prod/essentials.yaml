@@ -3,7 +3,6 @@ stack_name: essentials
 dependencies:
   - bootstrap
 parameters:
-  FhcrcVpnCidrip: {{ environment_variable.FhcrcVpnCidrip }}
   OperatorEmail: {{ environment_variable.OperatorEmail }}
   VpcPeeringRequesterAwsAccountId: "{{ environment_variable.AdmincentralAwsAccountId }}"
 hooks:
