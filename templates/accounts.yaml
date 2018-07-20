@@ -48,6 +48,43 @@ Resources:
         - arn:aws:iam::aws:policy/IAMReadOnlyAccess
         - !Ref AWSIAMDynamoDenyDeletePolicy
         - !Ref AWSIAMRdsDenyDeletePolicy
+  AWSIAMBillingUserRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !GetAtt AWSIAMXavierSchildwachterUser.Arn
+                - !GetAtt AWSIAMKhaiDoUser.Arn
+                - !GetAtt AWSIAMMikeKellenUser.Arn
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+  AWSIAMBillingAccessPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "billing"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - aws-portal:*Billing
+              - awsbillingconsole:*Billing
+              - aws-portal:*Usage
+              - awsbillingconsole:*Usage
+              - budgets:ViewBudget
+              - budgets:ModifyBudget
+              - cur:*
+            Resource: "*"
+      Roles:
+        -
+          !Ref AWSIAMBillingUserRole
   AWSIAMAdminRole:
     Type: "AWS::IAM::Role"
     Properties:
