@@ -121,30 +121,6 @@ Resources:
       Roles:
         -
           !Ref "AWSIAMAdminRole"
-  # resources for auditors
-  AWSIAMAuditorAccessPolicy:
-    Type: 'AWS::IAM::ManagedPolicy'
-    Properties:
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          - Effect: Deny
-            Action:
-            - s3:GetObject
-            - s3:GetObjectVersion
-            - codecommit:GetCommit
-            - codecommit:GitPull
-            - dynamodb:BatchGetItem
-            - dynamodb:GetItem
-            - dynamodb:GetRecords
-            - sqs:ReceiveMessage
-            - sdb:Select
-            Resource: "*"
-  AWSIAMAuditorsGroup:
-    Type: 'AWS::IAM::Group'
-    Properties:
-      ManagedPolicyArns:
-        - !Ref AWSIAMAuditorAccessPolicy
   AWSIAMAllUsersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
