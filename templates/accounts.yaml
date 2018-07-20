@@ -17,6 +17,7 @@ Resources:
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
+        - !Ref AWSIAMBillingManagersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
@@ -27,6 +28,7 @@ Resources:
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
+        - !Ref AWSIAMBillingManagersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
@@ -36,7 +38,7 @@ Resources:
       UserName: mike.kellen@sagebionetworks.org
       Groups:
         - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMSageExecutivesGroup
+        - !Ref AWSIAMBillingManagersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
@@ -127,7 +129,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
         - !Ref AWSIAMEnforceMfaPolicy
-  AWSIAMSageExecutivesGroup:
+  AWSIAMBillingManagersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
       ManagedPolicyArns:
