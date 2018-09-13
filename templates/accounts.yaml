@@ -135,47 +135,6 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/job-function/Billing
         - !Ref AWSIAMOrganizationsFullAccessPolicy
-  # resources for logging services
-  IAMLoggingServiceManagedPolicy:
-    Type: "AWS::IAM::ManagedPolicy"
-    Properties:
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Action:
-              - 's3:GetObject'
-              - 's3:GetObjectVersion'
-              - 's3:ListBucketVersions'
-              - 's3:ListBucket'
-            Effect: Allow
-            Resource:
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::elasticbeanstalk-'
-                  - !Ref AWS::Region
-                  - '-'
-                  - !Ref AWS::AccountId
-                  - '/*'
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::elasticbeanstalk-'
-                  - !Ref AWS::Region
-                  - '-'
-                  - !Ref AWS::AccountId
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !ImportValue us-east-1-essentials-CloudtrailBucket
-                  - '/*'
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !ImportValue us-east-1-essentials-CloudtrailBucket
-  AWSIAMLoggingServiceGroup:
-    Type: 'AWS::IAM::Group'
-    Properties:
-      ManagedPolicyArns:
-        - !Ref IAMLoggingServiceManagedPolicy
   # policy to enforce MFA
   AWSIAMEnforceMfaPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
