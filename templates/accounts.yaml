@@ -116,13 +116,6 @@ Resources:
       Roles:
         -
           !Ref AWSIAMAdminRole
-  AWSIAMInstanceProfile:
-    Type: "AWS::IAM::InstanceProfile"
-    Properties:
-      Path: "/"
-      Roles:
-        -
-          !Ref "AWSIAMAdminRole"
   AWSIAMAllUsersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
