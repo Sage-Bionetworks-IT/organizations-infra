@@ -1,7 +1,7 @@
-template_path: remote-templates/AccountAlertTopics.yaml
+template_path: remote/AccountAlertTopics.yaml
 stack_name: AccountAlertTopics
 dependencies:
-  - bootstrap
+  - prod/bootstrap.yaml
 parameters:
   InitialSubscriberEmail: "sandbox@sagebase.org"
   EnableSubscriberSMS: "false"
@@ -11,4 +11,4 @@ parameters:
   SlackChannel: "#infra-notices"
 hooks:
   before_update:
-    - !cmd "curl https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/AccountAlertTopics.yaml --create-dirs -o remote-templates/AccountAlertTopics.yaml"
+    - !cmd "curl https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/AccountAlertTopics.yaml --create-dirs -o templates/remote/AccountAlertTopics.yaml"

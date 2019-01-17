@@ -1,5 +1,5 @@
-template_path: remote-templates/bootstrap.yaml
+template_path: remote/bootstrap.yaml
 stack_name: bootstrap
 hooks:
   before_update:
-    - !cmd "curl https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/bootstrap.yaml --create-dirs -o remote-templates/bootstrap.yaml"
+    - !cmd "curl https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/bootstrap.yaml --create-dirs -o templates/remote/bootstrap.yaml"

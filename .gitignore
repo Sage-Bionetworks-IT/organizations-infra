@@ -112,11 +112,14 @@ git-crypt.key
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-# sceptre artifacts
-remote-templates
+# sceptre remote templates
+templates/remote/
 
 # lambda artifacts
 lambdas/*.zip
 
 # MAC Crap
 .DS_Store
+
+# temp files
+/temp/
