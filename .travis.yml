@@ -20,7 +20,5 @@ jobs:
     - stage: validate
       script: cfn-lint ./templates/**/*.yaml
     - stage: deploy
-      script:
-        - sceptre validate prod
-        - sceptre launch prod --yes
+      script: sceptre launch prod --yes
 
