@@ -1,6 +1,6 @@
-template_path: templates/accounts.yaml
+template_path: accounts.yaml
 stack_name: accounts
 dependencies:
-  - essentials
+  - prod/essentials.yaml
 parameters:
   InitNewUserPassword: !ssm /infra/InitNewUserPassword
