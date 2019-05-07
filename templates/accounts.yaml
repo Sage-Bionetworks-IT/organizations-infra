@@ -72,7 +72,7 @@ Resources:
               AWS:
                 - !GetAtt AWSIAMXavierSchildwachterUser.Arn
                 - !GetAtt AWSIAMKhaiDoUser.Arn
-                - !GetAtt AWSIAMAaronHaydenUser
+                - !GetAtt AWSIAMAaronHaydenUser.Arn
             Action:
               - "sts:AssumeRole"
       Path: "/"
