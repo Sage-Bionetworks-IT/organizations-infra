@@ -8,7 +8,7 @@ install:
   - unzip -j -n /tmp/infra-utils.zip -x "infra-utils-master/.gitignore" "infra-utils-master/LICENSE" "infra-utils-master/*.md" "infra-utils-master/aws/*"
   - ./setup_aws_cli.sh || travis_terminate 1
   - pip install cfn-lint
-  - pip install git+git://github.com/zaro0508/sceptre@issue-586
+  - pip install git+git://github.com/cloudreach/sceptre@v2.1.2
   - pip install git+git://github.com/zaro0508/sceptre-ssm-resolver.git
   - pip install git+git://github.com/zaro0508/sceptre-date-resolver.git
 stages:
