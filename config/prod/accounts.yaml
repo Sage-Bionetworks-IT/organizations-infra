@@ -1,6 +1,6 @@
-template_path: accounts.yaml
-stack_name: accounts
+template_path: "accounts.yaml"
+stack_name: "accounts"
 dependencies:
-  - prod/essentials.yaml
+  - "prod/essentials.yaml"
 parameters:
-  InitNewUserPassword: !ssm /infra/InitNewUserPassword
+  InitNewUserPassword: !ssm "/infra/InitNewUserPassword"
