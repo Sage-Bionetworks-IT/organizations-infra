@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   OrganizationsAdminMetadata:
     Type: String
-    Description: "Public certificate for Jumpcloud admincentral-admin app"
+    Description: "Public certificate for Jumpcloud organizations-admin app"
 Resources:
   OrganizationsAdminSamlProvider:
     Type: Custom::SAMLProvider
