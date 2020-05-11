@@ -1,0 +1,41 @@
+Description: Resources for Jumpcloud IDP
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  OrganizationsAdminMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud admincentral-admin app"
+Resources:
+  OrganizationsAdminSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "organizations-admin"
+      Metadata: !Ref OrganizationsAdminMetadata
+      URL: ""
+  OrganizationsAdminSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt OrganizationsAdminSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref OrganizationsAdminSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+Outputs:
+  OrganizationsAdminSamlProviderArn:
+    Value: !Ref OrganizationsAdminSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-OrganizationsAdminSamlProviderArn'
+  OrganizationsAdminSamlProviderRoleArn:
+    Value: !GetAtt OrganizationsAdminSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-OrganizationsAdminSamlProviderRoleArn'
