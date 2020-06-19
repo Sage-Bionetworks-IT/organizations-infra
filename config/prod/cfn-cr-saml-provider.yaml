@@ -6,4 +6,4 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 hooks:
   before_launch:
-    - !cmd "curl https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/cfn-cr-saml-provider/master/cfn-cr-saml-provider.yaml --create-dirs -o templates/remote/cfn-cr-saml-provider.yaml"
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-saml-provider/master/cfn-cr-saml-provider.yaml --create-dirs -o templates/remote/cfn-cr-saml-provider.yaml"
