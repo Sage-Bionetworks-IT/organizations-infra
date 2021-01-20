@@ -1,0 +1,33 @@
+# TIP: keep your tasks organized!
+# group your tasks by feature and assign each feature a folder.
+# use this file to include the various features and manage dependencies between features using DependsOn.
+# use a numbering scheme to prefix the feature folders. this way you can control the order in which the folders are listed.
+# e.g:
+#   /000-bootstrap/{organization-tasks.yml & templates}
+#   /100-organization-build/{organization-tasks.yml & templates}
+#   /200-baseline/{organization-tasks.yml & templates}
+#   /300-account-defaults/{organization-tasks.yml & templates}
+#   /410-budget-alarms/{organization-tasks.yml & templates}
+#   /500-iam/{organization-tasks.yml & templates}
+#   /600-access/{organization-tasks.yml & templates}
+#   /700-cloudtrail/{organization-tasks.yml & templates}
+#   /800-config/{organization-tasks.yml & templates}
+#   /710-config-custom-rules/{organization-tasks.yml & templates}
+#   /750-config-conformance-packs/{organization-tasks.yml & templates}
+#   /760-config-security-hub/{organization-tasks.yml & templates}
+#   /###-etc/
+#   /organization-tasks.yml <-- this file
+#   /organization-parameters.yml <-- contains global parameter values that can be included
+#   /organization.yml <-- contains your organization model
+
+OrganizationUpdate:
+  Type: update-organization
+  Template: ./organization.yaml
+
+Baseline:
+  Type: include
+  Path: ./200-baseline/organization-tasks.yaml
+
+AccountDefaults:
+  Type: include
+  Path: ./300-account-defaults/organization-tasks.yaml

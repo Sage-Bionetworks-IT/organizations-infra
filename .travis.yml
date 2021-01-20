@@ -1,25 +1,39 @@
-sudo: false
-language: python
-python: 3.6
-cache: pip
-fast_finish: true
+dist: bionic
+language: node_js
+node_js:
+  - 15
 branches:
   only:
-  - master
+    - master
+before_install:
+  - pyenv global 3.8
 install:
-  - wget https://github.com/Sage-Bionetworks/infra-utils/archive/master.zip -O /tmp/infra-utils.zip
-  - unzip -j -n /tmp/infra-utils.zip -x "infra-utils-master/.gitignore" "infra-utils-master/LICENSE" "infra-utils-master/*.md" "infra-utils-master/aws/*"
-  - ./setup_aws_cli.sh || travis_terminate 1
-  - pip install pre-commit sceptre sceptre-ssm-resolver
+  - npm install
+  - pip install pre-commit assume sceptre sceptre-ssm-resolver sceptre-date-resolver
+  - pip install git+git://github.com/Sceptre/sceptre-file-resolver.git
+before_script:
+  - mkdir -p ~/.aws
+  - echo -e "[profile orgman-servicerole]\nregion=us-east-1\nsource_profile=orgman-serviceuser\nrole_arn=$CiServiceRoleArn" > ~/.aws/config
+  - echo -e "[default]\n\n[orgman-serviceuser]\naws_access_key_id=$CiUserAccessKey\naws_secret_access_key=$CiUserSecretAccessKey" > ~/.aws/credentials
 stages:
   - name: validate
-  - name: deploy
-    if: branch = master AND type = push
+  - name: deploy-orgf
+    if: type = push AND branch = master
+  - name: deploy-sceptre
+    if: type = push AND branch = master
 jobs:
+  fast_finish: true
   include:
     - stage: validate
       script:
-        - pre-commit autoupdate
         - pre-commit run --all-files
-    - stage: deploy
-      script: sceptre launch prod --yes
+    - stage: deploy-orgf
+      name: org-formation
+      script:
+        - cd org-formation
+        - npx org-formation perform-tasks --profile orgman-servicerole --verbose --print-stack --perform-cleanup organization-tasks.yaml
+    - stage: deploy-sceptre
+      name: sceptre
+      script:
+        - cd sceptre
+        - npx lerna run deploy --stream
