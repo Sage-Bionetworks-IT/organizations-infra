@@ -5,7 +5,7 @@ Organization:
   MasterAccount:
     Type: OC::ORG::MasterAccount
     Properties:
-      AccountName: organizations
+      AccountName: org-sagebase-organizations
       Alias: org-sagebase-organizations
       AccountId: '531805629419'
       RootEmail: aws.organizations@sagebase.org
