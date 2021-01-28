@@ -1,0 +1,5 @@
+{
+  "scripts": {
+      "deploy": "sceptre --profile orgman-servicerole launch prod --yes"
+  }
+}

@@ -123,3 +123,15 @@ lambdas/*.zip
 
 # temp files
 /temp/
+
+# pipenv
+Pipfile*
+
+# npm
+node_modules/
+
+# sceptre
+sceptre/**/templates/remote/
+
+# lerna
+lerna-debug.log

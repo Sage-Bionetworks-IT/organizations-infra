@@ -1,19 +1,26 @@
 # Overview
 Install, configure and manage the AWS organizations account.
 
+## Deployments
 
-## Instructions to create or update CF stacks
+### org-formation
 
-```
-# Update CF stacks with sceptre:
-# sceptre launch-stack prod <stack_name>
-```
+Deploy resources to master and all member accounts
 
-The above should setup resources for the AWS account.  Once the infrastructure
-for the account has been setup you can access and view the account using the
-[AWS console](https://AWS-account-ID-or-alias.signin.aws.amazon.com/console).
+* install [nodejs][3]
+* cd org-formation
+* npx org-formation print-tasks --profile master-profile --verbose --print-stack organization-tasks.yaml
 
-*Note - This project depends on CF templates from other accounts.*
+### sceptre
+
+Deploy resources to master and all member accounts
+
+* install [lerna][4]
+* cd sceptre
+* npx lerna run deploy --stream
+
+We use lerna to recursively execute deployment `scripts` (in package.json files) in all sub directories.
+
 
 ## Contributions
 Contributions are welcome.
@@ -44,3 +51,9 @@ automatically run on every commit.
 to store secrets for this project.  Sceptre retrieves the secrets using
 a [sceptre ssm resolver](https://github.com/cloudreach/sceptre/tree/v1/contrib/ssm-resolver)
 and passes them to the cloudformation stack on deployment.
+
+
+[1]: https://github.com/org-formation/org-formation-cli
+[2]: https://github.com/Sceptre/sceptre
+[3]: https://nodejs.org/en/download/package-manager/
+[4]: https://lerna.js.org/
