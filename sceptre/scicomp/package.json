@@ -1,7 +1,7 @@
 {
   "name": "scicomp",
   "scripts": {
-      "predeploy": "assume add member --profile orgman-servicerole --role-arn arn:aws:iam::320171649655:role/OrganizationAccountAccessRole && assume switch member",
+      "predeploy": "assume add member --profile orgman-servicerole --role-arn arn:aws:iam::055273631518:role/OrganizationAccountAccessRole && assume switch member",
       "deploy": "sceptre launch prod --yes"
   }
 }
