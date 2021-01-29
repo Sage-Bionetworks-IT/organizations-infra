@@ -1,4 +1,5 @@
 {
+  "name": "sandbox",
   "scripts": {
       "predeploy": "assume add member --profile orgman-servicerole --role-arn arn:aws:iam::563295687221:role/OrganizationAccountAccessRole && assume switch member",
       "deploy": "sceptre launch prod --yes"
