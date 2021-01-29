@@ -1,0 +1,8 @@
+template_path: "remote/cloudwatch-cross-account-sharing.yaml"
+stack_name: "cloudwatch-cross-account-sharing"
+parameters:
+  MonitoringAccountIds:
+    - "563295687221"  # org-sagebase-sandbox
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/cloudwatch-cross-account-sharing.yaml --create-dirs -o templates/remote/cloudwatch-cross-account-sharing.yaml"

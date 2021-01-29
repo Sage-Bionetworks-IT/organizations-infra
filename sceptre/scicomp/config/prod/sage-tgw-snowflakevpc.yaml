@@ -1,0 +1,10 @@
+template_path: "remote/transit-gateway-attachment.yaml"
+stack_name: "sage-tgw-snowflakevpc"
+dependencies:
+  - "prod/snowflakevpc.yaml"
+parameters:
+  VpcName: "snowflakevpc"
+  TransitGatewayId: 'tgw-08aa3c487e457374a'   # sage-tgw transit gateway
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/transit-gateway-attachment.yaml --create-dirs -o templates/remote/transit-gateway-attachment.yaml"

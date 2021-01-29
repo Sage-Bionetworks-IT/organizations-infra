@@ -1,0 +1,9 @@
+template_path: remote/ParkMyCloud.yaml
+stack_name: park-my-cloud
+dependencies:
+  - prod/bootstrap.yaml
+parameters:
+  PMCExternalID: !ssm /infra/PMCExternalID
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/ParkMyCloud.yaml --create-dirs -o templates/remote/ParkMyCloud.yaml"

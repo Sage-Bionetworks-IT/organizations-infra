@@ -1,0 +1,21 @@
+template_path: "remote/transit-gateway-spoke.yaml"
+stack_name: "tgw-spoke-snowflakevpc"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "prod/snowflakevpc.yaml"
+parameters:
+  TransitGatewayEndpointCidr: "10.50.0.0/16"
+  VpcRouteTableId: !stack_output_external snowflakevpc::PrivateRouteTable
+  VpcId: !stack_output_external snowflakevpc::VPCId
+  SubnetIds:
+    - !stack_output_external snowflakevpc::PrivateSubnet
+    - !stack_output_external snowflakevpc::PrivateSubnet1
+    - !stack_output_external snowflakevpc::PrivateSubnet2
+  # shared TGW, https://github.com/Sage-Bionetworks/transit-infra/blob/master/templates/transit-gateway.j2
+  TransitGatewayId: "tgw-0004e7e3454cacac5"
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/transit-gateway-spoke.yaml --create-dirs -o templates/remote/transit-gateway-spoke.yaml"

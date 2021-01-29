@@ -1,0 +1,14 @@
+template_path: remote/AccountAlertTopics.yaml
+stack_name: AccountAlertTopics
+dependencies:
+  - prod/bootstrap.yaml
+parameters:
+  InitialSubscriberEmail: "aws.scicomp@sagebase.org"
+  EnableSubscriberSMS: "false"
+  BillingThreshold: "1000"
+  DeployLambda: "true"
+  SlackWebhookURL: !ssm /infra/SlackWebhookUrl
+  SlackChannel: "#infra-notices"
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/AccountAlertTopics.yaml --create-dirs -o templates/remote/AccountAlertTopics.yaml"

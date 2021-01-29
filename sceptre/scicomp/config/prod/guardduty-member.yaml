@@ -1,0 +1,10 @@
+template_path: remote/GuardDutyMember.yaml
+stack_name: guardduty-member
+dependencies:
+  - prod/essentials.yaml
+parameters:
+  MasterAccountId: !ssm /infra/SecuritycentralAwsAccountId
+  InvitationId: b8b3d07074f4b54d579c4927a4b5f78e
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/GuardDutyMember.yaml --create-dirs -o templates/remote/GuardDutyMember.yaml"
