@@ -1,4 +1,5 @@
 {
+  "name": "organizations",
   "scripts": {
       "deploy": "sceptre --var \"profile=orgman-servicerole\" launch prod --yes"
   }
