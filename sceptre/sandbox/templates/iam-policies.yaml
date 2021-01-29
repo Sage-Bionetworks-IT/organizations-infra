@@ -1,0 +1,44 @@
+Description: IAM Policies for AWS
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  # policy allows viewing cost and usage reports
+  ViewReportsPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowUserToViewUsage
+            Effect: Allow
+            Action:
+              - 'aws-portal:ViewUsage'
+              - 'aws-portal:ViewBilling'
+            Resource: '*'
+  # policy allows working with capacity reservations
+  CapacityReservationPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allow creating, modifying, and canceling capacity reservations
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - ec2:CancelCapacityReservation
+              - ec2:CreateCapacityReservation
+              - ec2:DescribeCapacityReservations
+              - ec2:DescribeTags
+              - ec2:GetCapacityReservationUsage
+              - ec2:ModifyCapacityReservation
+              - ec2:ModifyInstanceCapacityReservationAttributes
+            Resource: "*"
+Outputs:
+  ViewReportsPolicyArn:
+    Value: !Ref ViewReportsPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ViewReportsPolicyArn'
+  CapacityReservationPolicyArn:
+    Value: !Ref CapacityReservationPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CapacityReservationPolicyArn'

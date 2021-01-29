@@ -1,0 +1,79 @@
+Description: Resources for Jumpcloud IDP
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  SandboxAdminMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud sandbox-admin app"
+  SandboxDeveloperMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud sandbox-developer app"
+Resources:
+  SandboxAdminSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "sandbox-admin"
+      Metadata: !Ref SandboxAdminMetadata
+      URL: ""
+  SandboxAdminSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt SandboxAdminSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref SandboxAdminSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  SandboxDeveloperSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "sandbox-developer"
+      Metadata: !Ref SandboxDeveloperMetadata
+      URL: ""
+  SandboxDeveloperSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt SandboxDeveloperSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+        - 'Fn::ImportValue': !Sub '${AWS::Region}-iam-policies-CapacityReservationPolicyArn'
+        - 'Fn::ImportValue': !Sub '${AWS::Region}-iam-policies-ViewReportsPolicyArn'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref SandboxDeveloperSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+Outputs:
+  SandboxAdminSamlProviderArn:
+    Value: !Ref SandboxAdminSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SandboxAdminSamlProviderArn'
+  SandboxAdminSamlProviderRoleArn:
+    Value: !GetAtt SandboxAdminSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SandboxAdminSamlProviderRoleArn'
+  SandboxDeveloperSamlProviderArn:
+    Value: !Ref SandboxDeveloperSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SandboxDeveloperSamlProviderArn'
+  SandboxDeveloperSamlProviderRoleArn:
+    Value: !GetAtt SandboxDeveloperSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SandboxDeveloperSamlProviderRoleArn'

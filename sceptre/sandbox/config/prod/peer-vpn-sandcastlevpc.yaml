@@ -1,0 +1,12 @@
+template_path: remote/peer-route-config.yaml
+stack_name: peer-vpn-sandcastlevpc
+dependencies:
+  - prod/sandcastlevpc.yaml
+parameters:
+  PeeringConnectionId: pcx-66912d0e
+  VpcPrivateRouteTable: rtb-03749e8c822352561
+  VpcPublicRouteTable: rtb-0707730d3016e2737
+  VpnCidr: 10.1.0.0/16
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/peer-route-config.yaml --create-dirs -o templates/remote/peer-route-config.yaml"
