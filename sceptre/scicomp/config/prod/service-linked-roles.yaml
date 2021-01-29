@@ -1,0 +1,7 @@
+template_path: remote/service-linked-roles.yaml
+stack_name: service-linked-roles
+dependencies:
+  - prod/bootstrap.yaml
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/service-linked-roles.yaml --create-dirs -o templates/remote/service-linked-roles.yaml"
