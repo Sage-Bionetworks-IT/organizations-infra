@@ -39,4 +39,4 @@ jobs:
       name: sceptre
       script:
         - cd sceptre
-        - npx lerna run deploy --stream
+        - npx lerna run deploy --stream --parallel
