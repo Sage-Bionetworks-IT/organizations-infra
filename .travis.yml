@@ -47,6 +47,12 @@ jobs:
         - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::804034162148:role/OrganizationAccountAccessRole && assume switch member
         - sceptre launch prod --yes
     - stage: deploy-sceptre
+      name: sandbox
+      script:
+        - cd sceptre/scicomp
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::563295687221:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch prod --yes
+    - stage: deploy-sceptre
       name: scicomp
       script:
         - cd sceptre/scicomp

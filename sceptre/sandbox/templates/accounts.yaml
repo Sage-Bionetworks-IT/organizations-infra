@@ -1,0 +1,613 @@
+Description: Setup IAM policies, groups and accounts
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
+  # Therefore you must do the following before deleting them from this file:
+  # 1. Detach or remove the following user resources: login profile, attached
+  #    MFA device, access-keys, ssh-keys, and policies.
+  # 2. Detach the user from all groups.
+  AWSIAMNicoleKauerUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: nicole.kauer@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMCindyMolitorUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: cindy.molitor@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMKelseyMontgomeryUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: kelsey.montgomery@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMBrianMBotUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: brian.bot@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMDanWebsterUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: dan.webster@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMVerenaChungUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: verena.chung@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMArytonTediarjoUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: aryton.tediarjo@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMEliasChaibubNetoUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: elias.chaibub.neto@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMJinetaBanerjeeUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: jineta.banerjee@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMBrianWhiteUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: brian.white@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMMichaelMasonUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: michael.mason@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMAndrewLambUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: andrew.lamb@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMXindiGuoUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: xindi.guo@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMMilenNikolovUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: milen.nikolov@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMZimingDongTestUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: ziming.dong@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMXavierSchildwachterUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: x.schildwachter@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+        - !Ref AWSIAMBillingManagersGroup
+  AWSIAMKhaiDoUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: khai.do@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+        - !Ref AWSIAMBillingManagersGroup
+  AWSIAMThomasYuUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: thomas.yu@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMPhilSnyderUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: phil.snyder@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMRobertAllawayUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: robert.allaway@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMXengieDoanUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: xengie.doan@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMJakeGockleyUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: jake.gockley@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMThomasSchaffterUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: thomas.schaffter@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMWilliamPoehlmanUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: william.poehlman@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMTessThyerUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: tess.thyer@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMAaronHaydenUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: aaron.hayden@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMJamesEddyUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: james.eddy@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMLauraHeathUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: laura.heath@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMKaraWooUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: kara.woo@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMBruceHoffUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: bruce.hoff@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMLarssonOmbergUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: larsson.omberg@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+  CelgeneAnnotatorServiceUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+  CelgeneAnnotatorServiceUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref CelgeneAnnotatorServiceUser
+
+  # for deployments from Sage-Bionetworks/PHCCollaborationPortal repo
+  PhccpServiceUser:
+    Type: 'AWS::IAM::User'
+  PhccpServiceUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref PhccpServiceUser
+  AWSIAMDeveloperUsersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+        - arn:aws:iam::aws:policy/IAMReadOnlyAccess
+        - !Ref AWSIAMDynamoDenyDeletePolicy
+        - !Ref AWSIAMRdsDenyDeletePolicy
+        - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
+        - arn:aws:iam::aws:policy/AWSBatchFullAccess
+  CodeDeployDeployerRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !GetAtt PhccpServiceUser.Arn
+                - !GetAtt AWSIAMThomasSchaffterUser.Arn
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
+  CodeDeployManagerRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !GetAtt AWSIAMThomasSchaffterUser.Arn
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+  CodeDeployManagerPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: CodeDeployDeployerPolicy
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Allow
+            Action:
+            - autoscaling:*
+            - codedeploy:*
+            - ec2:*
+            - lambda:*
+            - ecs:*
+            - elasticloadbalancing:*
+            - iam:AddRoleToInstanceProfile
+            - iam:CreateInstanceProfile
+            - iam:CreateRole
+            - iam:DeleteInstanceProfile
+            - iam:DeleteRole
+            - iam:DeleteRolePolicy
+            - iam:GetInstanceProfile
+            - iam:GetRole
+            - iam:GetRolePolicy
+            - iam:ListInstanceProfilesForRole
+            - iam:ListRolePolicies
+            - iam:ListRoles
+            - iam:PassRole
+            - iam:PutRolePolicy
+            - iam:RemoveRoleFromInstanceProfile
+            - s3:*
+            Resource: "*"
+      Roles:
+        -
+          !Ref CodeDeployManagerRole
+
+  EksServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - eks.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+
+  AWSIAMAdminRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !GetAtt AWSIAMXavierSchildwachterUser.Arn
+                - !GetAtt AWSIAMKhaiDoUser.Arn
+                - !GetAtt AWSIAMThomasYuUser.Arn
+                - !GetAtt AWSIAMTessThyerUser.Arn
+                - !GetAtt AWSIAMAaronHaydenUser.Arn
+                - !GetAtt AWSIAMBruceHoffUser.Arn
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+  AWSCapacityReservationRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !GetAtt AWSIAMTessThyerUser.Arn
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - !Ref AWSCapacityReservationPolicy
+  AWSIAMDynamoDenyDeletePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Deny
+            Action:
+              # UpdateTable operation retricts deletion of indexes
+              - dynamodb:UpdateTable
+              - dynamodb:DeleteTable
+            Resource: "*"
+  AWSIAMRdsDenyDeletePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Deny
+            Action:
+              - rds:DeleteDBCluster
+              - rds:DeleteDBClusterSnapshot
+              - rds:DeleteDBInstance
+              - rds:DeleteDBSnapshot
+            Resource: "*"
+  AWSIAMOrganizationsFullAccessPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "organizations:*"
+            Resource: "*"
+  AWSIAMAdminRolePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "admin"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "*"
+            Resource: "*"
+      Roles:
+        -
+          !Ref AWSIAMAdminRole
+  AWSIAMAllUsersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/AWSSupportAccess
+        - !Ref AWSIAMEnforceMfaPolicy
+        - !Ref AWSViewReportsPolicy
+  AWSIAMBillingManagersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/job-function/Billing
+        - !Ref AWSIAMOrganizationsFullAccessPolicy
+  # policy to enforce MFA
+  AWSIAMEnforceMfaPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowAllUsersToListAccounts
+            Effect: Allow
+            Action:
+              - 'iam:ListAccountAliases'
+              - 'iam:ListUsers'
+              - 'iam:GetAccountSummary'
+            Resource: '*'
+          - Sid: AllowIndividualUserToSeeAndManageOnlyTheirOwnAccountInformation
+            Effect: Allow
+            Action:
+              - 'iam:ChangePassword'
+              - 'iam:CreateAccessKey'
+              - 'iam:CreateLoginProfile'
+              - 'iam:DeleteAccessKey'
+              - 'iam:DeleteLoginProfile'
+              - 'iam:GetAccountPasswordPolicy'
+              - 'iam:GetLoginProfile'
+              - 'iam:ListAccessKeys'
+              - 'iam:UpdateAccessKey'
+              - 'iam:UpdateLoginProfile'
+              - 'iam:ListSigningCertificates'
+              - 'iam:DeleteSigningCertificate'
+              - 'iam:UpdateSigningCertificate'
+              - 'iam:UploadSigningCertificate'
+              - 'iam:ListSSHPublicKeys'
+              - 'iam:GetSSHPublicKey'
+              - 'iam:DeleteSSHPublicKey'
+              - 'iam:UpdateSSHPublicKey'
+              - 'iam:UploadSSHPublicKey'
+            Resource: !Join
+              - ''
+              - - 'arn:aws:iam::'
+                - !Ref AWS::AccountId
+                - ':user/${aws:username}'
+          - Sid: AllowIndividualUserToListOnlyTheirOwnMFA
+            Effect: Allow
+            Action:
+              - 'iam:ListVirtualMFADevices'
+              - 'iam:ListMFADevices'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':mfa/*'
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':user/${aws:username}'
+          - Sid: AllowIndividualUserToManageTheirOwnMFA
+            Effect: Allow
+            Action:
+              - 'iam:CreateVirtualMFADevice'
+              - 'iam:DeleteVirtualMFADevice'
+              - 'iam:RequestSmsMfaRegistration'
+              - 'iam:FinalizeSmsMfaRegistration'
+              - 'iam:EnableMFADevice'
+              - 'iam:ResyncMFADevice'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':mfa/${aws:username}'
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':user/${aws:username}'
+          - Sid: AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA
+            Effect: Allow
+            Action:
+              - 'iam:DeactivateMFADevice'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':mfa/${aws:username}'
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':user/${aws:username}'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+          - Sid: BlockAnyAccessOtherThanAboveUnlessSignedInWithMFA
+            Effect: Deny
+            NotAction: 'iam:*'
+            Resource: '*'
+            Condition:
+              BoolIfExists:
+                'aws:MultiFactorAuthPresent': 'false'
+  # policy allows viewing cost and usage reports
+  AWSViewReportsPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowUserToViewUsage
+            Effect: Allow
+            Action:
+              - 'aws-portal:ViewUsage'
+              - 'aws-portal:ViewBilling'
+            Resource: '*'
+  # policy allows working with capacity reservations
+  AWSCapacityReservationPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allow creating, modifying, and canceling capacity reservations
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - ec2:CancelCapacityReservation
+              - ec2:CreateCapacityReservation
+              - ec2:DescribeCapacityReservations
+              - ec2:DescribeTags
+              - ec2:GetCapacityReservationUsage
+              - ec2:ModifyCapacityReservation
+              - ec2:ModifyInstanceCapacityReservationAttributes
+            Resource: "*"
+Outputs:
+  CelgeneAnnotatorServiceUserArn:
+    Value: !GetAtt CelgeneAnnotatorServiceUser.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CelgeneAnnotatorServiceUserArn'
+  CelgeneAnnotatorServiceUserAccessKey:
+    Value: !Ref CelgeneAnnotatorServiceUserAccessKey
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CelgeneAnnotatorServiceUserAccessKey'
+  CelgeneAnnotatorServiceUserSecretAccessKey:
+    Value: !GetAtt CelgeneAnnotatorServiceUserAccessKey.SecretAccessKey
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CelgeneAnnotatorServiceUserSecretAccessKey'
+  AWSIAMEnforceMfaPolicy:
+    Value: !Ref AWSIAMEnforceMfaPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-EnforceMfaPolicy'
+  PhccpServiceUserAccessKey:
+    Value: !Ref PhccpServiceUserAccessKey
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-PhccpServiceUserAccessKey'
+  PhccpServiceUserSecretAccessKey:
+    Value: !GetAtt PhccpServiceUserAccessKey.SecretAccessKey
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-PhccpServiceUserSecretAccessKey'
+  CodeDeployDeployerRoleArn:
+    Value: !GetAtt CodeDeployDeployerRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CodeDeployDeployerRoleArn'
+  AWSViewReportsPolicy:
+    Value: !Ref AWSViewReportsPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ViewReportsPolicy'
+  AWSIAMAdminRoleArn:
+    Value: !GetAtt AWSIAMAdminRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AdminRoleArn'
+  EksServiceRoleArn:
+    Description: The role that Amazon EKS will use to create AWS resources for Kubernetes clusters
+    Value: !GetAtt EksServiceRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-EksServiceRoleArn'

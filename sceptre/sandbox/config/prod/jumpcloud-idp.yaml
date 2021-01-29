@@ -1,0 +1,12 @@
+template_path: "jumpcloud-idp.yaml"
+stack_name: "jumpcloud-idp"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+parameters:
+  SandboxAdminMetadata: !file_contents idp/jumpcloud/sandbox-admin.xml
+  SandboxDeveloperMetadata: !file_contents idp/jumpcloud/sandbox-developer.xml
+dependencies:
+  - "prod/cfn-cr-saml-provider.yaml"
+  - "prod/iam-policies.yaml"
