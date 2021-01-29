@@ -36,7 +36,19 @@ jobs:
         - cd org-formation
         - npx org-formation perform-tasks --profile orgman-servicerole --verbose --print-stack --perform-cleanup organization-tasks.yaml
     - stage: deploy-sceptre
-      name: sceptre
+      name: organizations
       script:
-        - cd sceptre
-        - npx lerna run deploy --stream --no-bail
+        - cd sceptre/organizations
+        - sceptre --var "profile=orgman-servicerole" launch prod --yes
+    - stage: deploy-sceptre
+      name: itsandbox
+      script:
+        - cd sceptre/itsandbox
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::804034162148:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch prod --yes
+    - stage: deploy-sceptre
+      name: scicomp
+      script:
+        - cd sceptre/scicomp
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::055273631518:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch prod --yes
