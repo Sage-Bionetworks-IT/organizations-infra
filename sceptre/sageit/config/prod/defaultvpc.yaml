@@ -1,0 +1,12 @@
+template_path: remote/vpc.yaml
+stack_name: defaultvpc
+dependencies:
+  - prod/bootstrap.yaml
+parameters:
+  VpcSubnetPrefix: "10.13"
+  PrivateSubnetZones: "us-east-1c, us-east-1d, us-east-1e"
+  PublicSubnetZones: "us-east-1c, us-east-1d, us-east-1e"
+  VpcName: sagedefaultvpc
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/vpc.yaml --create-dirs -o templates/remote/vpc.yaml"

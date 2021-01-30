@@ -1,0 +1,10 @@
+template_path: s3webredirect.yaml
+stack_name: bsmnredirect
+stack_tags:
+  Department: IT
+  Project: Infrastructure
+  OwnerEmail: x.schildwachter@sagebionetworks.org
+parameters:
+  RedirectFrom: brainsomaticmosaicism.org
+  RedirectTo: bsmn.synapse.org
+  RedirectFromAcmCertArn: arn:aws:acm:us-east-1:797640923903:certificate/da0bc0fe-f9b8-42af-9265-bf6a40e72f59

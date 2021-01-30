@@ -1,0 +1,68 @@
+---
+Description: Setup IAM policies, groups and accounts
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
+  # Therefore you must do the following before deleting them from this file:
+  # 1. Detach or remove the following user resources: login profile, attached
+  #    MFA device, access-keys, ssh-keys, and policies.
+  # 2. Detach the user from all groups.
+  # EC2 instance role to deploy portals
+  AWSIAMPortalDeployerPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: portaldeployer
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          # S3
+        - Effect: Allow
+          Action: "s3:*"
+          Resource: "*"
+          # CFront
+        - Effect: Allow
+          Action:
+            - acm:ListCertificates,
+            - cloudfront:CreateDistribution
+            - cloudfront:DeleteDistribution
+            - cloudfront:GetDistribution
+            - cloudfront:GetDistributionConfig
+            - cloudfront:ListDistributions
+            - cloudfront:UpdateDistribution
+            - cloudfront:ListCloudFrontOriginAccessIdentities
+            - cloudfront:CreateInvalidation
+            - cloudfront:GetInvalidation
+            - cloudfront:ListInvalidations
+            - cloudfront:TagResource
+            - elasticloadbalancing:DescribeLoadBalancers
+            - iam:ListServerCertificates,
+            - sns:ListSubscriptionsByTopic
+            - sns:ListTopics
+            - waf:GetWebACL
+            - waf:ListWebACLs
+          Resource: "*"
+          # CFormation
+        - Effect: Allow
+          Action: cloudformation:*
+          Resource: "*"
+      Roles:
+        - !Ref AWSIAMPortalDeployerRole
+  AWSIAMPortalDeployerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+  AWSIAMPortalDeployerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref AWSIAMPortalDeployerRole

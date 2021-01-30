@@ -1,0 +1,12 @@
+template_path: remote/managed-s3WebCloudfront.yaml
+stack_name: staging-csbc-pson-s3webcf
+parameters:
+  DomainName: csbc-pson.synapse.org
+  SubDomainName: staging
+  AcmCertificateArn: arn:aws:acm:us-east-1:797640923903:certificate/1617873b-a3a4-4094-a8cc-0dfd2c6ba8b7
+  Department: Oncology
+  Project: CSBC-PSON
+  OwnerEmail: michael.lee@sagebionetworks.org
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/managed-s3WebCloudfront.yaml --create-dirs -o templates/remote/managed-s3WebCloudfront.yaml"

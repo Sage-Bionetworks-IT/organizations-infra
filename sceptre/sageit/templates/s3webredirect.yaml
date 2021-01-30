@@ -1,0 +1,94 @@
+# This template sets up an S3 static website with routing rules to
+# another website, and a Cloudfront distribution to enable https.
+# The purpose is to setup R53 DNS to this site and get redirected (307) to another site.
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Provision a S3 website with redirect rules with cloudfront
+Parameters:
+  RedirectFrom:
+    Description: Domain name of the old website (redirected from)
+    Type: String
+    AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
+    ConstraintDescription: must be a valid DNS zone name.
+  RedirectTo:
+    Description: Domain name of the new website (redirected to)
+    Type: String
+    AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
+    ConstraintDescription: must be a valid DNS zone name.
+  RedirectFromAcmCertArn:
+    Type: String
+    Description: The Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate that covers the 'RedirectFrom' site.
+    AllowedPattern: "arn:aws:acm:.*"
+    ConstraintDescription: must be a valid certificate ARN.
+Resources:
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Ref RedirectFrom
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+        RoutingRules:
+          - RedirectRule:
+              HostName: !Ref RedirectTo
+              Protocol: https
+              HttpRedirectCode: "307"
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+
+  Cloudfront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: Cloudfront Distribution pointing to S3 bucket
+        Origins:
+          - DomainName: !Select [2, !Split ["/", !GetAtt WebsiteBucket.WebsiteURL]]
+            Id: S3Origin
+            CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginProtocolPolicy: http-only
+        Enabled: true
+        HttpVersion: 'http2'
+        DefaultRootObject: index.html
+        Aliases:
+          -
+            !Ref RedirectFrom
+        DefaultCacheBehavior:
+          DefaultTTL: 3600
+          AllowedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          TargetOriginId: S3Origin
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: !Ref RedirectFromAcmCertArn
+          SslSupportMethod: sni-only
+Outputs:
+  CloudfrontId:
+    Value: !Ref Cloudfront
+    Description: ID of the Cloudfront distribution
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CloudfrontId'
+  CloudfrontEndpoint:
+    Value: !Join ['', ['https://', !GetAtt Cloudfront.DomainName ]]
+    Description: URL for cloudfront
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CloudfrontEndpoint'
+  BucketWebsiteUrl:
+    Value: !GetAtt WebsiteBucket.WebsiteURL
+    Description: URL for website redirector
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BucketWebsiteUrl'
+  WebsiteBucket:
+    Value: !Ref WebsiteBucket
+    Description: The bucket containing the website redirect rules
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-WebsiteBucket'
