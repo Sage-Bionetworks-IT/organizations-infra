@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: S3 private encrypted ServiceCatalog product. (fdp-1p4da46rq)
+Parameters:
+  RepoRootURL:
+    Type: String
+    Description: Root url for the repo containing the product templates.
+  ProductName:
+    Type: String
+    Description: Name of the product that will be visible to the end user
+    Default: 'S3: Private Encrypted Bucket'
+  StackDatetime:
+    Type: String
+    Description: Last updated date and time of product
+    Default: ''
+Resources:
+  scs3product:
+    Type: AWS::ServiceCatalog::CloudFormationProduct
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002
+            - E3003
+            - W2001
+    Properties:
+      Name: !Ref ProductName
+      Description: This product builds an AWS S3 bucket encrypted with private
+        access accessible from any source.
+      ProvisioningArtifactParameters:
+        # StackDatetime is used to force this template to pick updated nested stack code.  Add it to
+        # the description to force cloudformation to update the stack with the latest code.
+        - Description: 'Baseline version.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.0.0/s3/sc-s3-encrypted-ra-v1.0.0.yaml'
+          Name: 'v1.0.0'
+        - Description: 'Fix resource contention bug with S3 custom resources'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.0.1/s3/sc-s3-encrypted-ra-v1.0.1.yaml'
+          Name: 'v1.0.1'
+        - Description: 'Use SynapseTagger'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.7/s3/sc-s3-encrypted-ra.yaml'
+          Name: 'v1.1.7'
+        - Description: 'Remove VpcName input'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.8/s3/sc-s3-encrypted-ra.yaml'
+          Name: 'v1.1.8'
+        - Description: 'Update for strides'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.9/s3/sc-s3-encrypted-ra.yaml'
+          Name: 'v1.1.9'
+        - Description: !Sub 'Include params in mapping. Last updated at ${StackDatetime}.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.10/s3/sc-s3-encrypted-ra.yaml'
+          Name: 'v1.1.10'
+      'Fn::Transform':
+        Name: 'AWS::Include'
+        Parameters:
+          Location: "s3://cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz/scipool/products.yaml"
+      ReplaceProvisioningArtifacts: true
+  Associates3:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-s3-basic-SCS3portfolioId'
+      ProductId: !Ref scs3product
+  constraintec2linux:
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    DependsOn: Associates3
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-s3-basic-SCS3portfolioId'
+      ProductId: !Ref 'scs3product'
+      RoleArn: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-s3-launchrole-LaunchRoleArn'
+Outputs:
+  ProductId:
+    Value: !Ref 'scs3product'
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProductId'

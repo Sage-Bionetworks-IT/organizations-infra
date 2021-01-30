@@ -1,0 +1,11 @@
+template_path: "sc-product-s3-private-enc.yaml"
+stack_name: "sc-product-s3-private-enc"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "develop/sc-portfolio-s3-basic.yaml"
+parameters:
+  RepoRootURL: "https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}"
+  StackDatetime: !date

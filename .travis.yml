@@ -58,3 +58,21 @@ jobs:
         - cd sceptre/scicomp
         - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::055273631518:role/OrganizationAccountAccessRole && assume switch member
         - sceptre launch prod --yes
+    - stage: deploy-sceptre
+      name: scipooldev
+      script:
+        - cd sceptre/scipool
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::465877038949:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch develop --yes
+    - stage: deploy-sceptre
+      name: scipoolprod
+      script:
+        - cd sceptre/scipool
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::237179673806:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch prod --yes
+    - stage: deploy-sceptre
+      name: strides
+      script:
+        - cd sceptre/scipool
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::423819316185:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch strides --yes

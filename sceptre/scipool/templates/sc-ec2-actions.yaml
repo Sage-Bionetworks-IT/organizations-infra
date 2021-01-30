@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: SC EC2 Actions
+Parameters:
+  AssumeRole:
+    Type: String
+    Description: The IAM role that SC actions will use
+Resources:
+  RestartEC2InstanceAction:
+    Type: Custom::ScActionsProvider
+    Properties:
+     ServiceToken: !ImportValue
+      'Fn::Sub': '${AWS::Region}-cfn-cr-sc-actions-provider-CreateFunctionArn'
+     SsmDocName: "AWS-RestartEC2Instance"
+     SsmDocVersion: "1"
+     Name: "Restart"
+     AssumeRole: !Ref AssumeRole
+  StopEC2InstanceAction:
+    Type: Custom::ScActionsProvider
+    Properties:
+     ServiceToken: !ImportValue
+      'Fn::Sub': '${AWS::Region}-cfn-cr-sc-actions-provider-CreateFunctionArn'
+     SsmDocName: "AWS-StopEC2Instance"
+     SsmDocVersion: "1"
+     Name: "Stop"
+     AssumeRole: !Ref AssumeRole
+  StartEC2InstanceAction:
+    Type: Custom::ScActionsProvider
+    Properties:
+     ServiceToken: !ImportValue
+      'Fn::Sub': '${AWS::Region}-cfn-cr-sc-actions-provider-CreateFunctionArn'
+     SsmDocName: "AWS-StartEC2Instance"
+     SsmDocVersion: "1"
+     Name: "Start"
+     AssumeRole: !Ref AssumeRole
+Outputs:
+  RestartEC2InstanceActionId:
+    Value: !Ref RestartEC2InstanceAction
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-RestartEC2InstanceActionId'
+  StopEC2InstanceActionId:
+    Value: !Ref StopEC2InstanceAction
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StopEC2InstanceActionId'
+  StartEC2InstanceActionId:
+    Value: !Ref StartEC2InstanceAction
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StartEC2InstanceActionId'

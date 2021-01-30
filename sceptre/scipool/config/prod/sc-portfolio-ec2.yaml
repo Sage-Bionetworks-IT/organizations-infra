@@ -1,0 +1,8 @@
+template_path: "sc-portfolio-ec2.yaml"
+stack_name: "sc-portfolio-ec2"
+dependencies:
+  - "prod/sc-ec2vpc-launchrole.yaml"
+  - "prod/sc-enduser-iam.yaml"
+parameters:
+  PorfolioName: "Sage EC2 Porfolio"
+  PorfolioDescription: "EC2 Products for Sage Bionetworks staff"

@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: EC2 Portfolio for Service Catalog
+Parameters:
+  PortfolioProvider:
+    Type: String
+    Description: Provider Name
+    Default: Sage Bionetworks
+  PorfolioName:
+    Type: String
+    Description: Portfolio Name
+    Default: EC2 Portfolio
+  PorfolioDescription:
+    Type: String
+    Description: Portfolio Description
+    Default: Portfolio of EC2 products
+Resources:
+  SCEC2portfolio:
+    Type: AWS::ServiceCatalog::Portfolio
+    Properties:
+      ProviderName: !Ref 'PortfolioProvider'
+      Description: !Ref 'PorfolioDescription'
+      DisplayName: !Ref 'PorfolioName'
+  LinkEndusersRole:
+    Type: AWS::ServiceCatalog::PortfolioPrincipalAssociation
+    Properties:
+      PrincipalARN: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-enduser-iam-ServiceCatalogExternalEndusers-RoleArn'
+      PortfolioId: !Ref 'SCEC2portfolio'
+      PrincipalType: IAM
+Outputs:
+  SCEC2portfolioId:
+    Value: !Ref SCEC2portfolio
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SCEC2portfolioId'

@@ -1,0 +1,18 @@
+Description: "Policy needed to get role information, used with SSM StartSession connection filtering"
+Resources:
+  ReadAssumedRoleInformationPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Sid: ReadAssumedRoleInformation
+            Effect: Allow
+            Action: "iam:GetRole"
+            Resource: "*"
+Outputs:
+  ReadAssumedRoleInformationPolicy:
+    Value: !Ref ReadAssumedRoleInformationPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ReadAssumedRoleInformationPolicy'

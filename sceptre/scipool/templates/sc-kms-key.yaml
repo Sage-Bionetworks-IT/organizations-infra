@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: Service Catalog KMS Key and IAM policy
+
+Parameters:
+  AdminRoleArn:
+    Type: String
+    Description: ARN of the Administrator Role for a particular account
+
+Resources:
+
+  KmsDecryptPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ReadAccess
+            Action:
+              - 'kms:Describe*'
+              - 'kms:GetKeyPolicy'
+              - 'kms:GetKeyRotationStatus'
+              - 'kms:List*'
+              - 'kms:Verify'
+            Effect: Allow
+            Resource: !GetAtt KmsKey.Arn
+          - Sid: DecryptAccess
+            Action:
+              - 'kms:Encrypt'
+              - 'kms:Decrypt'
+            Effect: Allow
+            Resource: !GetAtt KmsKey.Arn
+
+  KmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub '${AWS::StackName}-KmsKey'
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: 'Default KMS Policy that enables IAM permissions'  # https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default
+            Effect: 'Allow'
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action:
+              - 'kms:*'
+            Resource: '*'
+          - Sid: "Allow administration of the key to CFN service role"
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !ImportValue
+                    'Fn::Sub': '${AWS::Region}-bootstrap-CfServiceRoleArn'
+                - !Ref AdminRoleArn
+            Action:
+              - "kms:Create*"
+              - "kms:Describe*"
+              - "kms:Enable*"
+              - "kms:List*"
+              - "kms:Put*"
+              - "kms:Update*"
+              - "kms:Revoke*"
+              - "kms:Disable*"
+              - "kms:Get*"
+              - "kms:Delete*"
+              - "kms:ScheduleKeyDeletion"
+              - "kms:CancelKeyDeletion"
+            Resource: "*"
+
+  KmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub 'alias/${AWS::StackName}/KmsKey'
+      TargetKeyId: !Ref KmsKey
+
+Outputs:
+
+  KmsKey:
+    Value: !Ref KmsKey
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-KmsKey'
+
+  KmsKeyAlias:
+    Value: !Ref KmsKeyAlias
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-KmsKeyAlias'
+
+  KmsKeyArn:
+    Value: !GetAtt KmsKey.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-KmsKeyArn'
+
+  KmsDecryptPolicyArn:
+    Value: !Ref KmsDecryptPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-KmsDecryptPolicyArn'

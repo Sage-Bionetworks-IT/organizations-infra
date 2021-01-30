@@ -1,0 +1,6 @@
+project_code: "sage-bionetworks"
+profile: {{ var.profile | default("default") }}
+region: {{ var.region | default("us-east-1") }}
+template_key_prefix: {{ environment_variable.TRAVIS_BRANCH | default("testing") }}
+admincentral_cf_bucket: "bootstrap-awss3cloudformationbucket-19qromfd235z9"
+service_catalog_library: "service-catalog-library"

@@ -1,0 +1,9 @@
+template_path: "sc-portfolio-s3-basic.yaml"
+stack_name: "sc-portfolio-s3-basic"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "prod/sc-s3-launchrole.yaml"
+  - "prod/sc-enduser-iam.yaml"

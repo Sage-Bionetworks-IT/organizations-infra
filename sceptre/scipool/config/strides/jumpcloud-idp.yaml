@@ -1,0 +1,11 @@
+template_path: "strides/jumpcloud-idp.yaml"
+stack_name: "jumpcloud-idp"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+parameters:
+  StridesAdminMetadata: !file_contents idp/jumpcloud/strides-admin.xml
+  StridesCommunityMgrMetadata: !file_contents idp/jumpcloud/strides-communitymgr.xml
+dependencies:
+  - "strides/cfn-cr-saml-provider.yaml"

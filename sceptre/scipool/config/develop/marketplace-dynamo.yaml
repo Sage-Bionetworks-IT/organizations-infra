@@ -1,0 +1,5 @@
+template_path: "marketplace-dynamo.yaml"
+stack_name: "marketplace-dynamo"
+dependencies:
+  - "develop/essentials.yaml"
+  - "develop/synapse-oidc-idp.yaml"

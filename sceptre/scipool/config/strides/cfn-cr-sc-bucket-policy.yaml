@@ -1,0 +1,9 @@
+template_path: remote/cfn-cr-sc-bucket-policy.yaml
+stack_name: cfn-cr-sc-bucket-policy
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-bucket-policy/master/cfn-cr-sc-bucket-policy.yaml --create-dirs -o templates/remote/cfn-cr-sc-bucket-policy.yaml"

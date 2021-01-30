@@ -1,0 +1,10 @@
+template_path: "sc-kms-key.yaml"
+stack_name: "sc-kms-key"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "develop/jumpcloud-idp.yaml"
+parameters:
+  AdminRoleArn: !stack_output_external jumpcloud-idp::ScipooldevAdminSamlProviderRoleArn
