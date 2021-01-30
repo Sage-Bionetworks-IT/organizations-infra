@@ -1,0 +1,9 @@
+template_path: remote/cfn-cr-saml-provider.yaml
+stack_name: cfn-cr-saml-provider
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+hooks:
+  before_launch:
+    - !cmd "curl https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/cfn-cr-saml-provider/master/cfn-cr-saml-provider.yaml --create-dirs -o templates/remote/cfn-cr-saml-provider.yaml"

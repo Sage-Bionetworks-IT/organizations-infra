@@ -111,3 +111,8 @@ jobs:
         - cd sceptre/synapsedw
         - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::383874245509:role/OrganizationAccountAccessRole && assume switch member
         - sceptre launch prod --yes
+      name: synapseprod
+      script:
+        - cd sceptre/synapseprod
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::325565585839:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch prod --yes
