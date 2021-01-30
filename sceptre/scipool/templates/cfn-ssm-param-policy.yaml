@@ -1,0 +1,18 @@
+Description: Invoke policy for SsmParam Lambda Function
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  InvokePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: InvokeSsmParamFunction
+            Effect: 'Allow'
+            Action: 'lambda:InvokeFunction'
+            Resource: !ImportValue
+              'Fn::Sub': '${AWS::Region}-cfn-macro-ssm-param-SsmParamFunctionArn'
+      Roles:
+        - !ImportValue
+          'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleName'

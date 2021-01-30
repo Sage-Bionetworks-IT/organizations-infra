@@ -1,0 +1,10 @@
+template_path: "sc-ec2-action-associations.yaml"
+stack_name: "sc-product-assoc-ec2-linux-jumpcloud"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "develop/sc-product-ec2-linux-jumpcloud.yaml"
+parameters:
+  ProductId: !stack_output_external sc-product-ec2-linux-jumpcloud::ProductId

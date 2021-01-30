@@ -1,0 +1,9 @@
+template_path: remote/cfn-cr-synapse-tagger.yaml
+stack_name: cfn-cr-synapse-tagger
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-synapse-tagger/0.0.10/cfn-cr-synapse-tagger.yaml --create-dirs -o templates/remote/cfn-cr-synapse-tagger.yaml"

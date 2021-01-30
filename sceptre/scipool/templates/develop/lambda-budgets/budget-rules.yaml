@@ -1,0 +1,8 @@
+# budget rules per user by synapse team id
+teams:
+  '3412821':
+    amount: '10'
+    period: ANNUALLY
+    unit: USD
+    community_manager_emails:
+      - 'sc-support-dev@sagebase.org'

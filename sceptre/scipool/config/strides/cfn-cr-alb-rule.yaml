@@ -1,0 +1,16 @@
+template_path: remote/cfn-cr-alb-rule.yaml
+stack_name: cfn-cr-alb-rule
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+parameters:
+  OidcClientSecretKeyName: '/service-catalog/SynapseOauthClientSecret'
+  OidcIssuer: 'https://repo-prod.prod.sagebase.org/auth/v1'
+  OidcAuthorizationEndpoint: 'https://signin.synapse.org'
+  OidcTokenEndpoint: 'https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token'
+  OidcUserInfoEndpoint: 'https://repo-prod.prod.sagebase.org/auth/v1/oauth2/userinfo'
+  OidcClientId: '100063'
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/master/cfn-cr-alb-rule.yaml --create-dirs -o templates/remote/cfn-cr-alb-rule.yaml"

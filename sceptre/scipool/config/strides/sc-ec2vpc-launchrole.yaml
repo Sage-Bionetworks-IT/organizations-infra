@@ -1,0 +1,4 @@
+template_path: "sc-ec2vpc-launchrole.yaml"
+stack_name: "sc-ec2vpc-launchrole"
+dependencies:
+  - "strides/essentials.yaml"

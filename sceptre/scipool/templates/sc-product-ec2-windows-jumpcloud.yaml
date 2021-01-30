@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Windows EC2 ServiceCatalog product with Jumpcloud integration.
+Parameters:
+  RepoRootURL:
+    Type: String
+    Description: Root url for the repo containing the product templates.
+  ProductName:
+    Type: String
+    Description: Name of the product that will be visible to the end user
+    Default: 'EC2: Windows'
+  StackDatetime:
+    Type: String
+    Description: Last updated date and time of product
+    Default: ''
+  ReplaceProvisioningArtifacts:
+    Type: String
+    Description: "Whether to keep or replace the provisioning artifact identifier on update"
+    Default: 'false'
+Resources:
+  scec2windowsproduct:
+    Type: AWS::ServiceCatalog::CloudFormationProduct
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002
+            - E3003
+            - W2001
+    Properties:
+      Name: !Ref ProductName
+      Description: This product builds one Microsoft Windows EC2 instance with
+        Jumpcloud integration.
+      ProvisioningArtifactParameters:
+        # StackDatetime is used to force this template to pick updated nested stack code.  Add it to
+        # the description to force cloudformation to update the stack with the latest code.
+        - Description: 'Baseline version.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.0.0/ec2/sc-ec2-windows-jumpcloud-v1.0.0.yaml'
+          Name: 'v1.0.0'
+        - Description: 'Update base AMI and Cloudformation hooks'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.3/ec2/sc-ec2-windows-jumpcloud.yaml'
+          Name: 'v1.1.3'
+        - Description: 'Use SynapseTagger'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.7/ec2/sc-ec2-windows-jumpcloud.yaml'
+          Name: 'v1.1.7'
+        - Description: 'Remove VpcName input'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.8/ec2/sc-ec2-windows-jumpcloud.yaml'
+          Name: 'v1.1.8'
+        - Description: 'Update for strides'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.9/ec2/sc-ec2-windows-jumpcloud.yaml'
+          Name: 'v1.1.9'
+        - Description: 'Include params in mapping'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.10/ec2/sc-ec2-windows-jumpcloud.yaml'
+          Name: 'v1.1.10'
+        - Description: 'Fix policies.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.13/ec2/sc-ec2-windows-jumpcloud.yaml'
+          Name: 'v1.1.13'
+        - Description: !Sub 'Restore set_env_var. Last updated at ${StackDatetime}.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.14/ec2/sc-ec2-windows-jumpcloud.yaml'
+          Name: 'v1.1.14'
+      'Fn::Transform':
+        Name: 'AWS::Include'
+        Parameters:
+          # source: https://github.com/Sage-Bionetworks/admincentral-infra/blob/master/templates/cfn-snippets-bucket.yaml
+          Location: "s3://cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz/scipool/products.yaml"
+      ReplaceProvisioningArtifacts: !Ref ReplaceProvisioningArtifacts
+  Associateec2windows:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-SCEC2portfolioId'
+      ProductId: !Ref 'scec2windowsproduct'
+  constraintec2linux:
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    DependsOn: Associateec2windows
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-SCEC2portfolioId'
+      ProductId: !Ref 'scec2windowsproduct'
+      RoleArn: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+Outputs:
+  ProductId:
+    Value: !Ref 'scec2windowsproduct'
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProductId'

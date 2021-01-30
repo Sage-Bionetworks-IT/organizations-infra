@@ -1,0 +1,13 @@
+template_path: "sc-product-ec2-windows-jumpcloud.yaml"
+stack_name: "sc-product-ec2-windows-jumpcloud"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "develop/sc-portfolio-ec2.yaml"
+  - "develop/sc-ec2-actions.yaml"
+parameters:
+  RepoRootURL: "https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}"
+  StackDatetime: !date
+  ReplaceProvisioningArtifacts: "true"

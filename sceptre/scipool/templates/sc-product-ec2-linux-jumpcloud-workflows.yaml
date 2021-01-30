@@ -1,0 +1,132 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Workflows Linux EC2 ServiceCatalog product'
+Parameters:
+  RepoRootURL:
+    Type: String
+    Description: Root url for the repo containing the product templates.
+  ProductName:
+    Type: String
+    Description: Name of the product that will be visible to the end user
+    Default: 'EC2: Ubuntu Linux with Workflow Software'
+  StackDatetime:
+    Type: String
+    Description: Last updated date and time of product
+    Default: ''
+  ReplaceProvisioningArtifacts:
+    Type: String
+    Description: "Whether to keep or replace the provisioning artifact identifier on update"
+    Default: 'false'
+Resources:
+  ScEc2LinuxJumpcloudWorkflowsProduct:
+    Type: AWS::ServiceCatalog::CloudFormationProduct
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002
+            - E3003
+            - W2001
+    Properties:
+      Name: !Ref ProductName
+      Description: This product builds one Linux EC2 instance using an Ubuntu AMI
+        with workflows software installed. Maintained by Sage Bionetworks.
+      ProvisioningArtifactParameters:
+        # StackDatetime is used to force this template to pick updated nested stack code.  Add it to
+        # the description to force cloudformation to update the stack with the latest code.
+        - Description: 'Baseline version.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.0.0/ec2/sc-ec2-linux-jumpcloud-workflows-v1.0.0.yaml'
+          Name: 'v1.0.0'
+        - Description: 'Includes fix for a linux relocation error.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.0.1/ec2/sc-ec2-linux-jumpcloud-workflows-v1.0.1.yaml'
+          Name: 'v1.0.1'
+        - Description: 'Fix to support multiple portfolios'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.0.2/ec2/sc-ec2-linux-jumpcloud-workflows-v1.0.2.yaml'
+          Name: 'v1.0.2'
+        - Description: 'Remove Jumpcloud Integration.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.2/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.2'
+        - Description: 'Update Cloudformation hooks.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.3/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.3'
+        - Description: 'Add ssm-user to docker group, remove reference to JC user.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.4/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.4'
+        - Description: 'Add ssm-user before adding to docker group'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.5/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.5'
+        - Description: 'Use SynapseTagger'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.7/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.7'
+        - Description: 'Remove VpcName input'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.8/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.8'
+        - Description: 'Update for strides'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.9/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.9'
+        - Description: 'Include params in mapping.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.10/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.10'
+        - Description: 'Workflow software updates: toil 3.24.0 -> 4.2.0, cwltool 2.0.20200303141624 -> 3.0.20200807132242, synapseclient 1.9.4 -> 2.2.0'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.11/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.11'
+        - Description: 'Fix policies.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.13/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.13'
+        - Description: !Sub 'Restore set_env_var. Last updated at ${StackDatetime}.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.14/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+          Name: 'v1.1.14'
+      'Fn::Transform':
+        Name: 'AWS::Include'
+        Parameters:
+          # source: https://github.com/Sage-Bionetworks/admincentral-infra/blob/master/templates/cfn-snippets-bucket.yaml
+          Location: "s3://cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz/scipool/products.yaml"
+      ReplaceProvisioningArtifacts: !Ref ReplaceProvisioningArtifacts
+  Associateec2linux:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxJumpcloudWorkflowsProduct'
+  constraintec2linux:
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    DependsOn: Associateec2linux
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxJumpcloudWorkflowsProduct'
+      RoleArn: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+  AssociatesExternalPortfolio:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-external-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxJumpcloudWorkflowsProduct'
+  ConstraintExternalPortfolio:
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    DependsOn: AssociatesExternalPortfolio
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-external-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxJumpcloudWorkflowsProduct'
+      RoleArn: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+Outputs:
+  ProductId:
+    Value: !Ref 'ScEc2LinuxJumpcloudWorkflowsProduct'
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProductId'

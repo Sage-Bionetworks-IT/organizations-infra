@@ -1,0 +1,11 @@
+template_path: "sc-ec2-actions.yaml"
+stack_name: "sc-ec2-actions"
+dependencies:
+  - "strides/sc-enduser-iam.yaml"
+  - "strides/cfn-cr-sc-actions-provider.yaml"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+parameters:
+  AssumeRole: !stack_output_external sc-ec2vpc-launchrole::LaunchRoleArn

@@ -1,0 +1,12 @@
+template_path: alb-notebook-access.yaml
+stack_name: alb-notebook-access
+dependencies:
+  - strides/alb-notebook-access-logsbucket.yaml
+parameters:
+  DomainName: "sagebio-strides.org"
+  SubDomainName: "connect"
+  VPC: !stack_output_external stridespoolvpc::VPCId
+  VpcPublicSubnetA: !stack_output_external stridespoolvpc::PublicSubnet
+  VpcPublicSubnetB: !stack_output_external stridespoolvpc::PublicSubnet1
+  VpcPublicSubnetC: !stack_output_external stridespoolvpc::PublicSubnet2
+  SSLCertificateArn: !stack_output_external synapse-login-strides-base::SSLCertificate

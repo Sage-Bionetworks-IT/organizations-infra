@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: SC action assocations to SC EC2 products
+Parameters:
+  ProductId:
+    Type: String
+    Description: The product id to associate with SC actions
+Resources:
+  RestartEC2Instance:
+    Type: Custom::ScActionsProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-sc-actions-provider-AssociateFunctionArn'
+      ServiceActionId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-ec2-actions-RestartEC2InstanceActionId'
+      ProductId: !Ref ProductId
+  StartEC2Instance:
+    Type: Custom::ScActionsProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-sc-actions-provider-AssociateFunctionArn'
+      ServiceActionId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-ec2-actions-StartEC2InstanceActionId'
+      ProductId: !Ref ProductId
+  StopEC2Instance:
+    Type: Custom::ScActionsProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-sc-actions-provider-AssociateFunctionArn'
+      ServiceActionId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-ec2-actions-StopEC2InstanceActionId'
+      ProductId: !Ref ProductId
+Outputs:
+  RestartEC2Instance:
+    Value: !Ref RestartEC2Instance
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-RestartEC2Instance'
+  StartEC2Instance:
+    Value: !Ref StartEC2Instance
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StartEC2Instance'
+  StopEC2Instance:
+    Value: !Ref StopEC2Instance
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StopEC2Instance'

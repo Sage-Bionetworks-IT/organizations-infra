@@ -1,0 +1,96 @@
+Description: Resources for Jumpcloud IDP
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  StridesAdminMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud AWS app"
+  StridesCommunityMgrMetadata:
+    Type: String
+    Description: "Public certificate for the community manager Jumpcloud AWS app"
+
+Resources:
+  StridesAdminSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "strides-admin"
+      Metadata: !Ref StridesAdminMetadata
+      URL: ""
+  StridesAdminSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt StridesAdminSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+        - arn:aws:iam::aws:policy/job-function/Billing
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref StridesAdminSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  StridesCommunityMgrSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "strides-communitymgr"
+      Metadata: !Ref StridesCommunityMgrMetadata
+      URL: ""
+  StridesCommunityMgrSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt StridesCommunityMgrSamlProvider.Name
+      ManagedPolicyArns:
+        - !Ref AWSIAMCommunityMgrAccessPolicy
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref StridesCommunityMgrSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  AWSIAMCommunityMgrAccessPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - aws-portal:ViewUsage
+              - aws-portal:ViewBilling
+              - cur:DescribeReportDefinitions
+              - cur:PutReportDefinition
+              - cur:DeleteReportDefinition
+              - cur:ModifyReportDefinition
+            Resource: "*"
+
+Outputs:
+  StridesAdminSamlProviderArn:
+    Value: !Ref StridesAdminSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesAdminSamlProviderArn'
+  StridesAdminSamlProviderRoleArn:
+    Value: !GetAtt StridesAdminSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesAdminSamlProviderRoleArn'
+  ScipoolprodCommunityMgramlProviderArn:
+    Value: !Ref StridesCommunityMgrSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesCommunityMgrSamlProviderArn'
+  StridesCommunityMgrSamlProviderRoleArn:
+    Value: !GetAtt StridesCommunityMgrSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesCommunityMgrSamlProviderRoleArn'

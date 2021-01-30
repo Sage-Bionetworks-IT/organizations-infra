@@ -1,0 +1,4 @@
+template_path: "sc-s3-launchrole.yaml"
+stack_name: "sc-s3-launchrole"
+dependencies:
+  - "develop/essentials.yaml"

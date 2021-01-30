@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: S3 Portfolio for Service Catalog. (fdp-1p5rtpgl6)
+Parameters:
+  PortfolioProvider:
+    Type: String
+    Description: Provider Name
+    Default: Sage Bionetworks
+  PorfolioName:
+    Type: String
+    Description: Portfolio Name
+    Default: S3 Portfolio
+  PorfolioDescription:
+    Type: String
+    Description: Portfolio Description
+    Default: Portfolio of S3 products
+Resources:
+  SCS3portfolio:
+    Type: AWS::ServiceCatalog::Portfolio
+    Properties:
+      ProviderName: !Ref 'PortfolioProvider'
+      Description: !Ref 'PorfolioDescription'
+      DisplayName: !Ref 'PorfolioName'
+  LinkEndusersRole:
+    Type: AWS::ServiceCatalog::PortfolioPrincipalAssociation
+    Properties:
+      PrincipalARN: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-enduser-iam-ServiceCatalogEndusers-RoleArn'
+      PortfolioId: !Ref 'SCS3portfolio'
+      PrincipalType: IAM
+Outputs:
+  SCS3portfolioId:
+    Value: !Ref SCS3portfolio
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SCS3portfolioId'

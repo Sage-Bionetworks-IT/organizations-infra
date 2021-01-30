@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create ALB that can be modified by Service Catalog provisioning requests
+
+Parameters:
+  DomainName:
+    Description: 'Domain or string to register new CNAME for ALB'
+    Type: String
+  SubDomainName:
+    Description: 'Domain or string to register new CNAME for ALB'
+    Type: String
+  VPC:
+    Description: 'VPC id for holding the ALB'
+    Type: 'AWS::EC2::VPC::Id'
+  VpcPublicSubnetA:
+    Description: 'First public subnet for redundancy'
+    Type: 'AWS::EC2::Subnet::Id'
+  VpcPublicSubnetB:
+    Description: 'Second public subnet for redundancy'
+    Type: 'AWS::EC2::Subnet::Id'
+  VpcPublicSubnetC:
+    Description: 'Third public subnet for redundancy'
+    Type: 'AWS::EC2::Subnet::Id'
+  SSLCertificateArn:
+    Description: 'ARN for a certificate that exists in the account and is valid for the domain'
+    Type: String
+
+Resources:
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Allow ingress to 443 from everywhere'
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn:
+        Ref: ApplicationLoadBalancer
+      Certificates:
+        - CertificateArn: !Ref SSLCertificateArn
+      SslPolicy: ELBSecurityPolicy-TLS-1-2-Ext-2018-06
+      DefaultActions:
+        - Type: redirect
+          Order: 50000
+          RedirectConfig:
+            Host: !Ref DomainName
+            StatusCode: HTTP_301
+      Port: 443
+      Protocol: HTTPS
+
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      Subnets:
+      - !Ref VpcPublicSubnetA
+      - !Ref VpcPublicSubnetB
+      - !Ref VpcPublicSubnetC
+      SecurityGroups:
+      - !Ref ALBSecurityGroup
+      LoadBalancerAttributes:
+        - Key: access_logs.s3.enabled
+          Value: 'true'
+        - Key: access_logs.s3.bucket
+          Value: !ImportValue
+            'Fn::Sub': '${AWS::Region}-${AWS::StackName}-logsbucket-ALBAccessLogsBucket'
+        - Key: access_logs.s3.prefix
+          Value: !Join ['', [!Ref SubDomainName, ., !Ref DomainName]]
+
+  ConnectDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub '${DomainName}.'
+      Name: !Join ['', [!Ref SubDomainName, ., !Ref DomainName]]
+      Type: CNAME
+      TTL: 900
+      ResourceRecords:
+      - !GetAtt ApplicationLoadBalancer.DNSName
+
+Outputs:
+  ALBSecurityGroup:
+    Description: 'Security group allowing public ingress to the ALB'
+    Value: !Ref ALBSecurityGroup
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ALBSecurityGroup'
+  ApplicationLoadBalancerDNSName:
+    Description: 'Public DNS name of the ALB'
+    Value: !GetAtt ApplicationLoadBalancer.DNSName
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ApplicationLoadBalancerDNSName'
+  ApplicationLoadBalancer:
+    Description: 'Application Load Balancer'
+    Value: !Ref ApplicationLoadBalancer
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ApplicationLoadBalancer'
+  ALBListenerARN:
+    Description: 'ARN of the ALB Listener'
+    Value: !Ref ALBListener
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ALBListenerARN'
+  ApplicationLoadBalancerDirectHTTPSConnectionURI:
+    Description: 'Connection string for ALB'
+    Value: !Join ['', ['https://', !GetAtt ApplicationLoadBalancer.DNSName]]
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ApplicationLoadBalancerDirectHTTPSConnectionURI'
+  ConnectionURI:  #Change this value based on which routing method (dns name vs. path) works best
+    Value: !Join ['', ['https://', !Ref SubDomainName, ., !Ref DomainName]]
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ConnectionURI'
