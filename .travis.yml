@@ -41,6 +41,12 @@ jobs:
         - cd sceptre/organizations
         - sceptre --var "profile=orgman-servicerole" launch prod --yes
     - stage: deploy-sceptre
+      name: admincentral
+      script:
+        - cd sceptre/admincentral
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::745159704268:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch prod --yes
+    - stage: deploy-sceptre
       name: itsandbox
       script:
         - cd sceptre/itsandbox

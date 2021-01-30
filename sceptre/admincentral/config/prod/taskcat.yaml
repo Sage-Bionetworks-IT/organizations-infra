@@ -1,0 +1,4 @@
+template_path: taskcat.yaml
+stack_name: taskcat
+dependencies:
+  - prod/essentials.yaml

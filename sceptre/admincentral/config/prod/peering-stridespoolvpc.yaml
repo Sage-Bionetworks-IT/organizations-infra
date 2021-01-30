@@ -1,0 +1,7 @@
+template_path: VPCPeer.yaml
+stack_name: peering-stridespoolvpc
+parameters:
+  PeerVPC: "vpc-025cba6a01d73d32b"  # org-sagebase-strides stridespoolvpc ID
+  PeerVPCOwner: "423819316185"    # org-sagebase-strides account ID
+  PeerVPCCIDR: "10.49.0.0/16"       # org-sagebase-strides stridespoolvpc CIDR
+  PeerRoleName: "essentials-VPCPeeringAuthorizerRole-CVZEDVMU5NZX"   # org-sagebase-strides us-east-1-essentials-VPCPeeringAuthorizerRole
