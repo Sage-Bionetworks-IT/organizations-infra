@@ -98,3 +98,9 @@ jobs:
         - cd sceptre/sageit
         - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::797640923903:role/OrganizationAccountAccessRole && assume switch member
         - sceptre launch prod --yes
+    - stage: deploy-sceptre
+      name: logcentral
+      script:
+        - cd sceptre/logcentral
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::231505186444:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch prod --yes
