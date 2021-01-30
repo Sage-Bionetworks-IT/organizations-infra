@@ -69,10 +69,20 @@ jobs:
       script:
         - cd sceptre/scipool
         - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::237179673806:role/OrganizationAccountAccessRole && assume switch member
-        - sceptre launch prod --yes
+        # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
+        - sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
+        - sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
+        - sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
+        - sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
+        - sceptre launch --yes prod
     - stage: deploy-sceptre
       name: strides
       script:
         - cd sceptre/scipool
         - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::423819316185:role/OrganizationAccountAccessRole && assume switch member
-        - sceptre launch strides --yes
+        # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
+        - sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
+        - sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
+        - sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
+        - sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
+        - sceptre launch --yes strides
