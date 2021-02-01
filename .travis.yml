@@ -92,3 +92,9 @@ jobs:
         - sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
         - sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
         - sceptre launch --yes strides
+    - stage: deploy-sceptre
+      name: sageit
+      script:
+        - cd sceptre/sageit
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::797640923903:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch prod --yes

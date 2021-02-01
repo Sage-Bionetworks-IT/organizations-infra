@@ -1,0 +1,14 @@
+template_path: remote/acm-certificate.yaml
+stack_name: sageit-org-acm-cert
+parameters:
+  # The Sage deparment (Platform, CompOnc, SysBio, Governance, etc..)
+  Department: "Platform"
+  # The Sage project (Infrastructure, amp-ad, ntap, dream, etc..)
+  Project: "Infrastructure"
+  # The resource owner
+  OwnerEmail: 'khai.do@sagebase.org'
+  # The domain name (i.e. acme.org)
+  DnsDomainName: "sageit.org"
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/acm-certificate.yaml --create-dirs -o templates/remote/acm-certificate.yaml"
