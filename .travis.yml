@@ -105,3 +105,9 @@ jobs:
         - cd sceptre/logcentral
         - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::231505186444:role/OrganizationAccountAccessRole && assume switch member
         - sceptre launch prod --yes
+    - stage: deploy-sceptre
+      name: synapsedw
+      script:
+        - cd sceptre/synapsedw
+        - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::383874245509:role/OrganizationAccountAccessRole && assume switch member
+        - sceptre launch prod --yes

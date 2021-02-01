@@ -1,0 +1,10 @@
+template_path: remote/peer-route-config.yaml
+stack_name: peer-vpc-admincentral
+parameters:
+  PeeringConnectionId: pcx-4904f521
+  VpcPrivateRouteTable: rtb-3d932341
+  VpcPublicRouteTable: rtb-c49d2db8
+  VpnCidr: 10.1.0.0/16
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/peer-route-config.yaml --create-dirs -o templates/remote/peer-route-config.yaml"
