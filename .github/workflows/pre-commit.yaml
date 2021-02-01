@@ -1,4 +1,4 @@
-name: pre-commit
+name: aws-deploy
 
 on:
   pull_request:
@@ -13,3 +13,23 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: pre-commit/action@v2.0.0
+  deploy-orgf:
+    needs: pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.CIUSERACCESSKEY }}
+          aws-secret-access-key: ${{ secrets.CIUSERSECRETACCESSKEY }}
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
+          role-duration-seconds: 1200
+          role-session-name: GH_ACTIONS_CI
+      - uses: actions/checkout@v2
+      - name: Use Node.js 15.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+      - run: cd org-formation
+      - run: npx org-formation perform-tasks --verbose --print-stack --perform-cleanup organization-tasks.yaml
