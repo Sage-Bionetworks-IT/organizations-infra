@@ -17,19 +17,23 @@ jobs:
     needs: pre-commit
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+      - uses: actions/checkout@v2
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CIUSERACCESSKEY }}
-          aws-secret-access-key: ${{ secrets.CIUSERSECRETACCESSKEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
+          role-to-assume: 'arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ'
           role-duration-seconds: 1200
-          role-session-name: GH_ACTIONS_CI
-      - uses: actions/checkout@v2
+          role-session-name: deploy-orgf
+
       - name: Use Node.js 15.x
         uses: actions/setup-node@v1
         with:
           node-version: 15.x
-      - run: cd org-formation
-      - run: npx org-formation perform-tasks --verbose --print-stack --perform-cleanup organization-tasks.yaml
+      - run: |
+          cd org-formation
+          npx org-formation perform-tasks --verbose --print-stack --perform-cleanup organization-tasks.yaml
