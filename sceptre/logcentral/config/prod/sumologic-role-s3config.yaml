@@ -1,0 +1,11 @@
+template_path: remote/sumologic-role.yaml
+stack_name: sumologic-role-s3config
+dependencies:
+  - prod/essentials.yaml
+parameters:
+  ExternalID: !ssm /infra/SumologicExternalID
+  Actions: 's3:GetObject,s3:GetObjectVersion,s3:ListBucketVersions,s3:ListBucket'
+  Resource: "arn:aws:s3:::essentials-awss3configbucket-9n8wjykhvr5z"
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/sumologic-role.yaml --create-dirs -o templates/remote/sumologic-role.yaml"

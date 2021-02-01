@@ -1,0 +1,23 @@
+template_path: CloudtrailLogAggregation.j2
+stack_name: CloudtrailLogAggregation
+sceptre_user_data:
+  stackname: !stack_name
+  cloudtrail_bucket: !stack_output_external essentials::AWSS3CloudtrailBucket
+  accounts:
+    - !ssm /infra/AdmincentralAwsAccountId
+    - !ssm /infra/BridgeDevAwsAccountId
+    - !ssm /infra/BridgeProdAwsAccountId
+    - !ssm /infra/ScicompAwsAccountId
+    - !ssm /infra/SynapseProdAwsAccountId
+    - !ssm /infra/SynapseDevAwsAccountId
+    - !ssm /infra/SynapseDwAwsAccountId
+    - !ssm /infra/SageItAwsAccountId
+    - !ssm /infra/OrganizationsAwsAccountId
+    - !ssm /infra/SandboxAwsAccountId
+    - !ssm /infra/SecuritycentralAwsAccountId
+    - !ssm /infra/ItSandboxAwsAccountId
+    - !ssm /infra/ImagecentralAwsAccountId
+    - !ssm /infra/TransitAwsAccountId
+    - !ssm /infra/ScipoolProdAwsAccountId
+    - "465877038949"    # org-sagebase-scipooldev
+    - "423819316185"    # org-sagebase-strides
