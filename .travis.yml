@@ -14,6 +14,7 @@ install:
   - npm install
   - pip install pre-commit assume sceptre sceptre-ssm-resolver sceptre-date-resolver
   - pip install git+git://github.com/Sceptre/sceptre-file-resolver.git
+  - pip install git+git://github.com/zaro0508/sceptre-identity-resolver.git
 before_script:
   - mkdir -p ~/.aws
   - echo -e "[profile orgman-servicerole]\nregion=us-east-1\nsource_profile=orgman-serviceuser\nrole_arn=$CiServiceRoleArn" > ~/.aws/config
