@@ -1,0 +1,4 @@
+template_path: iam-policies.yaml
+stack_name: iam-policies
+dependencies:
+  - prod/essentials.yaml

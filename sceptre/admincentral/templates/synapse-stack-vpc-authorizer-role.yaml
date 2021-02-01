@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create an authorizer role to authorize create/accept of a VPCPeering for a given AWS account
+Parameters:
+  VpcPeeringRequesterAwsAccountId:
+    Type: String
+    NoEcho: true
+    Description: The AWS account running the Sophos-VPN
+    AllowedPattern: '[0-9]*'
+    ConstraintDescription: Must be account number without dashes
+Resources:
+  VPCPeeringAuthorizerRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Ref VpcPeeringRequesterAwsAccountId
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: VPCAuthorizer
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ec2:AcceptVpcPeeringConnection'
+                Resource:
+                  - '*'
+Outputs:
+  VPCPeeringAuthorizerRoleArn:
+    Description: Cross Account Role ARN
+    Value: !GetAtt VPCPeeringAuthorizerRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-VPCPeeringAuthorizerRole'

@@ -1,0 +1,7 @@
+template_path: VPCPeer.yaml
+stack_name: peering-synapsedev
+parameters:
+  PeerVPC: vpc-1362e468
+  PeerVPCOwner: !ssm /infra/SynapseDevAwsAccountId
+  PeerVPCCIDR: 10.11.0.0/16
+  PeerRoleName: essentials-VPCPeeringAuthorizerRole-ANWU0AZR9EZ7

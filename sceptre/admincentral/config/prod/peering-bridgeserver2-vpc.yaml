@@ -1,0 +1,7 @@
+template_path: VPCPeer.yaml
+stack_name: peering-bridgeserver2-vpc
+parameters:
+  PeerVPC: vpc-0818659c21d92f2a3
+  PeerVPCOwner: !ssm /infra/BridgeProdAwsAccountId
+  PeerVPCCIDR: 172.32.0.0/16
+  PeerRoleName: bridge-VPCPeeringAuthorizerRole-1XKEYVXHDOYI5

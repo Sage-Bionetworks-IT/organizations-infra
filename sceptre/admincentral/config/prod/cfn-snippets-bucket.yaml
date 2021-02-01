@@ -1,0 +1,4 @@
+template_path: cfn-snippets-bucket.yaml
+stack_name: cfn-snippets-bucket
+dependencies:
+  - prod/cfn-s3objects-macro.yaml

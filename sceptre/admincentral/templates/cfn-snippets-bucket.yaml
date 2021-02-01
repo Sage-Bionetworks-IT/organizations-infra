@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: S3Objects
+Description: 'Cloudformation Snippets Bucket'
+Parameters:
+  Department:
+    Description: 'The department for this resource'
+    Type: String
+    AllowedPattern: '^\S*$'
+    ConstraintDescription: 'Must be string with no spaces'
+    Default: 'Platform'
+  Project:
+    Description: 'The name of the project that this resource is used for'
+    Type: String
+    AllowedPattern: '^\S*$'
+    ConstraintDescription: 'Must be string with no spaces'
+    Default: 'Infrastructure'
+  OwnerEmail:
+    Description: 'Email address of the owner of this resource'
+    Type: String
+    AllowedPattern: '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+    ConstraintDescription: 'Must be an acceptable email address syntax(i.e. joe.smith@sagebase.org)'
+    Default: 'it@sagebase.org'
+Resources:
+  # Bucket for cloudformation snippets
+  CloudformationSnippetsBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      AccessControl: PublicRead
+      Tags:
+        - Key: "Department"
+          Value: !Ref Department
+        - Key: "Project"
+          Value: !Ref Project
+        - Key: "OwnerEmail"
+          Value: !Ref OwnerEmail
+  # requires the cloudformation S3 objects macro
+  # https://github.com/Sage-Bionetworks-IT/cfn-s3objects-macro
+  ServiceCatalogSupportSnippet:
+    Type: AWS::S3::Object
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3001
+    Properties:
+      Target:
+        Bucket: !Ref CloudformationSnippetsBucket
+        Key: scipoolprod-sc-lib-infra/support.yaml
+        ContentType: application/json
+        ACL: public-read
+      Body: |-
+        SupportDescription: "Sage IT"
+        SupportEmail: "it@sagebase.org"
+        AcceptLanguage: "en"
+        SupportUrl: "https://sagebionetworks.slack.com/#sageit"
+  ServiceCatalogProductsSnippet:
+    Type: AWS::S3::Object
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3001
+    Properties:
+      Target:
+        Bucket: !Ref CloudformationSnippetsBucket
+        Key: scipool/products.yaml
+        ContentType: application/json
+        ACL: public-read
+      Body: |-
+        Owner: "Sage Bionetworks"
+        Distributor: "Sage Bionetworks"
+        SupportDescription: "Sage Bionetworks Support"
+        SupportEmail: "sc-support@sagebase.org"
+        AcceptLanguage: "en"
+        SupportUrl: "https://www.synapse.org/#!Synapse:syn2580853/discussion/default"
+Outputs:
+  CloudformationSnippetsBucket:
+    Value: !Ref 'CloudformationSnippetsBucket'
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CloudformationSnippetsBucket'
+  CloudformationSnippetsBucketArn:
+    Value: !GetAtt 'CloudformationSnippetsBucket.Arn'
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CloudformationSnippetsBucketArn'

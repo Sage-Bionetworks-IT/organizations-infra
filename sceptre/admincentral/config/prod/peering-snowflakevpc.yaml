@@ -1,0 +1,7 @@
+template_path: VPCPeer.yaml
+stack_name: peering-snowflakevpc
+parameters:
+  PeerVPC: vpc-0317313f5c918456d
+  PeerVPCOwner: !ssm /infra/ScicompAwsAccountId
+  PeerVPCCIDR: 10.25.0.0/16
+  PeerRoleName: essentials-VPCPeeringAuthorizerRole-19X5D81TAK34F

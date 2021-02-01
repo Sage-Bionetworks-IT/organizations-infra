@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: S3Objects
+Description: 'Cloudformation snippets for the Sage service catalog'
+Resources:
+  # requires the cloudformation S3 objects macro
+  # https://github.com/Sage-Bionetworks-IT/cfn-s3objects-macro
+  ScAccountToExportMappping:
+    Type: AWS::S3::Object
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3001
+    Properties:
+      Target:
+        Bucket: !ImportValue
+          'Fn::Sub': '${AWS::Region}-cfn-snippets-bucket-CloudformationSnippetsBucket'
+        Key: scipool-sc-lib-infra/ScAccountToExportMappping.yaml
+        ContentType: application/json
+        ACL: public-read
+      Body: |-
+        "465877038949":   # org-sagebase-scipooldev
+          PrivateSubnet: "us-east-1-cesspoolvpc-PrivateSubnet"
+          PrivateSubnet1: "us-east-1-cesspoolvpc-PrivateSubnet1"
+          VpnSecurityGroup: "us-east-1-cesspoolvpc-VpnSecurityGroup"
+          VPCId: "us-east-1-cesspoolvpc-VPCId"
+          TgwSecurityGroupId: "us-east-1-tgw-spoke-cesspoolvpc-TgwSecurityGroupId"
+        "237179673806":   # org-sagebase-scipoolprod
+          PrivateSubnet: "us-east-1-internalpoolvpc-PrivateSubnet"
+          PrivateSubnet1: "us-east-1-internalpoolvpc-PrivateSubnet1"
+          VpnSecurityGroup: "us-east-1-internalpoolvpc-VpnSecurityGroup"
+          VPCId: "us-east-1-internalpoolvpc-VPCId"
+          TgwSecurityGroupId: "us-east-1-tgw-spoke-scipoolprod-TgwSecurityGroupId"
+        "423819316185":   # org-sagebase-strides
+          PrivateSubnet: "us-east-1-stridespoolvpc-PrivateSubnet"
+          PrivateSubnet1: "us-east-1-stridespoolvpc-PrivateSubnet1"
+          VpnSecurityGroup: "us-east-1-stridespoolvpc-VpnSecurityGroup"
+          VPCId: "us-east-1-stridespoolvpc-VPCId"
+          TgwSecurityGroupId: "us-east-1-tgw-spoke-strides-TgwSecurityGroupId"

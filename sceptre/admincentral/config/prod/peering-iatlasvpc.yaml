@@ -1,0 +1,7 @@
+template_path: VPCPeer.yaml
+stack_name: peering-atlasvpc
+parameters:
+  PeerVPC: "vpc-0e5befad4ce267f67"   # iatlasvpc ID
+  PeerVPCOwner: "055273631518"   # org-sagebase-scicomp account ID
+  PeerVPCCIDR: "10.255.20.0/24"    # iatlasvpc CIDR
+  PeerRoleName: "essentials-VPCPeeringAuthorizerRole-19X5D81TAK34F" #export role name in org-sagebase-scicomp essentials stack
