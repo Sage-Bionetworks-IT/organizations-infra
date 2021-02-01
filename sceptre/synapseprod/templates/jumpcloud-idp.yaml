@@ -1,0 +1,113 @@
+Description: Resources for Jumpcloud IDP
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  SynapseProdAdminMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud synapseprod-admin app"
+  SynapseProdDeveloperMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud synapseprod-developer app"
+  SynapseProdReadOnlyMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud synapseprod-readonly app"
+Resources:
+  SynapseProdAdminSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "synapseprod-admin"
+      Metadata: !Ref SynapseProdAdminMetadata
+      URL: ""
+  SynapseProdAdminSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt SynapseProdAdminSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref SynapseProdAdminSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  SynapseProdDeveloperSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "synapseprod-developer"
+      Metadata: !Ref SynapseProdDeveloperMetadata
+      URL: ""
+  SynapseProdDeveloperSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt SynapseProdDeveloperSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref SynapseProdDeveloperSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  SynapseProdReadOnlySamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "synapseprod-readonly"
+      Metadata: !Ref SynapseProdReadOnlyMetadata
+      URL: ""
+  SynapseProdReadOnlySamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt SynapseProdReadOnlySamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref SynapseProdReadOnlySamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+Outputs:
+  SynapseProdAdminSamlProviderArn:
+    Value: !Ref SynapseProdAdminSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SynapseProdAdminSamlProviderArn'
+  SynapseProdAdminSamlProviderRoleArn:
+    Value: !GetAtt SynapseProdAdminSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SynapseProdAdminSamlProviderRoleArn'
+  SynapseProdDeveloperSamlProviderArn:
+    Value: !Ref SynapseProdDeveloperSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SynapseProdDeveloperSamlProviderArn'
+  SynapseProdDeveloperSamlProviderRoleArn:
+    Value: !GetAtt SynapseProdDeveloperSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SynapseProdDeveloperSamlProviderRoleArn'
+  SynapseProdReadOnlySamlProviderArn:
+    Value: !Ref SynapseProdReadOnlySamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SynapseProdReadOnlySamlProviderArn'
+  SynapseProdReadOnlySamlProviderRoleArn:
+    Value: !GetAtt SynapseProdReadOnlySamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SynapseProdReadOnlySamlProviderRoleArn'
