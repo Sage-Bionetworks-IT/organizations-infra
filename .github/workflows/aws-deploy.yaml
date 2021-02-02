@@ -90,3 +90,30 @@ jobs:
         run: |
           cd sceptre/admincentral
           sceptre launch prod --yes
+  sceptre-itsandbox:
+    needs: org-formation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sceptre sceptre-ssm-resolver sceptre-date-resolver
+          pip install git+git://github.com/Sceptre/sceptre-file-resolver.git
+          pip install git+git://github.com/zaro0508/sceptre-identity-resolver.git
+      - name: Assume AWS Role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::804034162148:role/OrganizationAccountAccessRole
+          role-duration-seconds: 1200
+      - name: Deploy with sceptre
+        run: |
+          cd sceptre/itsandbox
+          sceptre launch prod --yes
