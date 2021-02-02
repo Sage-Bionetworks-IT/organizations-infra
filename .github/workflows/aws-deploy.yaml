@@ -25,7 +25,7 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
           role-duration-seconds: 1200
-          role-session-name: deploy-orgf
+          role-session-name: gha-deploy-orgf
 
       - uses: actions/setup-node@v1
         with:
