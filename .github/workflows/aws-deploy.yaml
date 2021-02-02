@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: pre-commit/action@v2.0.0
-  deploy-orgf:
+  org-formation:
     needs: pre-commit
     runs-on: ubuntu-latest
     steps:
@@ -37,7 +37,7 @@ jobs:
           cd org-formation
           npx org-formation perform-tasks --verbose --print-stack --perform-cleanup organization-tasks.yaml
   sceptre-organizations:
-    needs: deploy-orgf
+    needs: org-formation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -64,7 +64,7 @@ jobs:
           cd sceptre/organizations
           sceptre launch prod --yes
   sceptre-admincentral:
-    needs: deploy-orgf
+    needs: org-formation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -86,6 +86,7 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::745159704268:role/OrganizationAccountAccessRole
           role-duration-seconds: 1200
+          role-skip-session-tagging: true
       - name: Deploy with sceptre
         run: |
           cd sceptre/admincentral
