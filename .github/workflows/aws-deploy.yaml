@@ -86,7 +86,6 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::745159704268:role/OrganizationAccountAccessRole
           role-duration-seconds: 1200
-          role-skip-session-tagging: true
       - name: Deploy with sceptre
         run: |
           cd sceptre/admincentral
