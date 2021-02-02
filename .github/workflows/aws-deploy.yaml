@@ -185,7 +185,7 @@ jobs:
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
-          cd sceptre/scipooldev
+          cd sceptre/scipool
           sceptre launch develop --yes
   sceptre-scipoolprod:
     needs: org-formation
@@ -212,7 +212,7 @@ jobs:
       - name: Deploy with sceptre
         # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
         run: |
-          cd sceptre/scipoolprod
+          cd sceptre/scipool
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
@@ -241,8 +241,9 @@ jobs:
           role-to-assume: arn:aws:iam::423819316185:role/OrganizationAccountAccessRole
           role-duration-seconds: 1200
       - name: Deploy with sceptre
+        # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
         run: |
-          cd sceptre/strides
+          cd sceptre/scipool
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
