@@ -85,7 +85,7 @@ jobs:
     - stage: deploy-sceptre
       name: strides
       script:
-        - cd sceptre/scipool
+        - cd sceptre/strides
         - assume add member --profile orgman-servicerole --role-arn arn:aws:iam::423819316185:role/OrganizationAccountAccessRole && assume switch member
         # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
         - sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
