@@ -1,20 +1,20 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.1.0
+    rev: v3.4.0
     hooks:
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
 -   repo: https://github.com/adrienverge/yamllint
-    rev: v1.23.0
+    rev: v1.25.0
     hooks:
     -   id: yamllint
 -   repo: https://github.com/awslabs/cfn-python-lint
-    rev: v0.33.2
+    rev: v0.44.3
     hooks:
     -   id: cfn-python-lint
         files: templates/.*\.(json|yml|yaml)$
         exclude: templates/.*/lambda-budgets/.*\.(json|yml|yaml)$
 -   repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.7
+    rev: v1.1.9
     hooks:
     -   id: remove-tabs
