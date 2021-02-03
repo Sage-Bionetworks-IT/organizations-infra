@@ -2,7 +2,7 @@ name: aws-deploy
 
 on:
   pull_request:
-    branches: [master]
+    branches: '*'
   push:
     branches: [master]
 
@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: pre-commit/action@v2.0.0
   org-formation:
+    if: github.event_name == 'push'
     needs: pre-commit
     runs-on: ubuntu-latest
     steps:
@@ -49,6 +50,7 @@ jobs:
           cd org-formation
           npx org-formation perform-tasks --verbose --print-stack --perform-cleanup organization-tasks.yaml
   sceptre-organizations:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -81,6 +83,7 @@ jobs:
           cd sceptre/organizations
           sceptre launch prod --yes
   sceptre-admincentral:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -113,6 +116,7 @@ jobs:
           cd sceptre/admincentral
           sceptre launch prod --yes
   sceptre-itsandbox:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -145,6 +149,7 @@ jobs:
           cd sceptre/itsandbox
           sceptre launch prod --yes
   sceptre-sandbox:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -177,6 +182,7 @@ jobs:
           cd sceptre/sandbox
           sceptre launch prod --yes
   sceptre-scicomp:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -209,6 +215,7 @@ jobs:
           cd sceptre/scicomp
           sceptre launch prod --yes
   sceptre-scipooldev:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -242,6 +249,7 @@ jobs:
           cd sceptre/scipool
           sceptre launch develop --yes
   sceptre-scipoolprod:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -280,6 +288,7 @@ jobs:
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch prod --yes
   sceptre-strides:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -318,6 +327,7 @@ jobs:
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch strides --yes
   sceptre-sageit:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -350,6 +360,7 @@ jobs:
           cd sceptre/sageit
           sceptre launch prod --yes
   sceptre-logcentral:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -383,6 +394,7 @@ jobs:
           cd sceptre/logcentral
           sceptre launch prod --yes
   sceptre-synapsedw:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -415,6 +427,7 @@ jobs:
           cd sceptre/synapsedw
           sceptre launch prod --yes
   sceptre-synapseprod:
+    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
