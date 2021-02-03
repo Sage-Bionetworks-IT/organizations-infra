@@ -18,3 +18,15 @@ PasswordPolicy:
     IncludeMasterAccount: true
     Account: '*'
     Region: us-east-1
+
+OrgFormationBuildAccessRole:
+  Type: update-stacks
+  Template: ./org-cross-account-role.yaml
+  StackName: org-formation-build-access-role
+  Parameters:
+    MasterAccountId: !Ref MasterAccount
+  MaxConcurrentStacks: 10
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: us-east-1
