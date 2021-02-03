@@ -1,4 +1,5 @@
-# This is to bootstrap an AWS account.  Login as root user to deploy this template.
+# This is to bootstrap an AWS account with a CI service user and role.
+# Login as root user to deploy this template.
 # Stack name should be 'bootstrap-ci-service-access'
 Description: Create resources to allow continuous integration service access
 AWSTemplateFormatVersion: 2010-09-09
@@ -23,13 +24,13 @@ Resources:
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
-          -
-            Effect: "Allow"
+          - Effect: "Allow"
             Principal:
               AWS:
                 - !GetAtt CiServiceUser.Arn
             Action:
               - "sts:AssumeRole"
+              - "sts:TagSession"
       Path: "/"
   CiServicePolicy:
     Type: "AWS::IAM::Policy"
@@ -38,30 +39,28 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-          -
-            Effect: "Allow"
+          - Effect: "Allow"
             Action: "*"
             Resource: "*"
       Roles:
-        -
-          !Ref CiServiceRole
+        - !Ref CiServiceRole
 Outputs:
   CiServiceUser:
     Value: !Ref CiServiceUser
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-CiUser'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CiServiceUser'
   CiServiceUserArn:
     Value: !GetAtt CiServiceUser.Arn
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-CiUserArn'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CiServiceUserArn'
   CiServiceUserAccessKey:
     Value: !Ref CiServiceUserAccessKey
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-CiUserAccessKey'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CiServiceUserAccessKey'
   CiUserSecretAccessKey:
     Value: !GetAtt CiServiceUserAccessKey.SecretAccessKey
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-CiUserSecretAccessKey'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CiServiceUserSecretAccessKey'
   CiServiceRoleArn:
     Value: !GetAtt CiServiceRole.Arn
     Export:
