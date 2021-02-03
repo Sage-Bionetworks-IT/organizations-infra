@@ -1,0 +1,374 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  Create a clone of the AWS default VPC.
+Parameters:
+  VpcName:
+    Description: The VPC name (i.e. bridge-uat)
+    Type: String
+  VpcSubnetPrefix:
+    Description: The VPC subnet prefix (i.e. 172.19)
+    Type: String
+  VpnCidr:
+    Description: CIDR of the (sophos-utm) VPN
+    Type: String
+    Default: "10.1.0.0/16"
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+Mappings:
+  SubnetConfig:
+    VPC:
+      CIDR: "0.0/16"
+    SubnetUsEast1a:
+      CIDR: "0.0/20"
+    SubnetUsEast1b:
+      CIDR: "16.0/20"
+    SubnetUsEast1c:
+      CIDR: "32.0/20"
+    SubnetUsEast1d:
+      CIDR: "48.0/20"
+    SubnetUsEast1e:
+      CIDR: "64.0/20"
+    SubnetUsEast1f:
+      CIDR: "80.0/20"
+Resources:
+  VPC:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, VPC, CIDR]
+      Tags:
+        -
+          Key: "Name"
+          Value: !Ref VpcName
+        -
+          Key: "Network"
+          Value: "Public"
+  SubnetUsEast1a:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetUsEast1a, CIDR]
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: ""
+  SubnetUsEast1b:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetUsEast1b, CIDR]
+      AvailabilityZone: !Select
+        - 1
+        - Fn::GetAZs: ""
+  SubnetUsEast1c:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetUsEast1c, CIDR]
+      AvailabilityZone: !Select
+        - 2
+        - Fn::GetAZs: ""
+  SubnetUsEast1d:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetUsEast1d, CIDR]
+      AvailabilityZone: !Select
+        - 3
+        - Fn::GetAZs: ""
+  SubnetUsEast1e:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetUsEast1e, CIDR]
+      AvailabilityZone: !Select
+        - 4
+        - Fn::GetAZs: ""
+  SubnetUsEast1f:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetUsEast1f, CIDR]
+      AvailabilityZone: !Select
+        - 5
+        - Fn::GetAZs: ""
+  InternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        -
+          Key: "Name"
+          Value: !Sub '${AWS::StackName}-InternetGateway'
+        -
+          Key: "Network"
+          Value: "Public"
+  GatewayToInternet:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId:
+        Ref: "VPC"
+      InternetGatewayId:
+        Ref: "InternetGateway"
+  PublicRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId:
+        Ref: "VPC"
+      Tags:
+        -
+          Key: "Name"
+          Value: !Sub '${AWS::StackName}-PublicRouteTable'
+        -
+          Key: "Network"
+          Value: "Public"
+  PublicRoute:
+    Type: "AWS::EC2::Route"
+    DependsOn: "GatewayToInternet"
+    Properties:
+      RouteTableId:
+        Ref: "PublicRouteTable"
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId:
+        Ref: "InternetGateway"
+  PublicSubnetRouteTableAssociation1:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1a"
+      RouteTableId:
+        Ref: "PublicRouteTable"
+  PublicSubnetRouteTableAssociation2:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1b"
+      RouteTableId:
+        Ref: "PublicRouteTable"
+  PublicSubnetRouteTableAssociation3:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1c"
+      RouteTableId:
+        Ref: "PublicRouteTable"
+  PublicSubnetRouteTableAssociation4:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1d"
+      RouteTableId:
+        Ref: "PublicRouteTable"
+  PublicSubnetRouteTableAssociation5:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1e"
+      RouteTableId:
+        Ref: "PublicRouteTable"
+  PublicSubnetRouteTableAssociation6:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1f"
+      RouteTableId:
+        Ref: "PublicRouteTable"
+  PublicNetworkAcl:
+    Type: "AWS::EC2::NetworkAcl"
+    Properties:
+      VpcId:
+        Ref: "VPC"
+      Tags:
+        -
+          Key: "Name"
+          Value: !Sub '${AWS::StackName}-PublicNetworkAcl'
+        -
+          Key: "Network"
+          Value: "Public"
+  InboundHTTPPublicNetworkAclEntry:
+    Type: "AWS::EC2::NetworkAclEntry"
+    Properties:
+      NetworkAclId:
+        Ref: "PublicNetworkAcl"
+      RuleNumber: 100
+      Protocol: -1
+      RuleAction: "allow"
+      Egress: false
+      CidrBlock: "0.0.0.0/0"
+      PortRange:
+        From: 0
+        To: 65535
+  OutboundPublicNetworkAclEntry:
+    Type: "AWS::EC2::NetworkAclEntry"
+    Properties:
+      NetworkAclId:
+        Ref: "PublicNetworkAcl"
+      RuleNumber: 100
+      Protocol: -1
+      RuleAction: "allow"
+      Egress: true
+      CidrBlock: "0.0.0.0/0"
+      PortRange:
+        From: 0
+        To: 65535
+  PublicSubnetNetworkAclAssociation1a:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1a"
+      NetworkAclId:
+        Ref: "PublicNetworkAcl"
+  PublicSubnetNetworkAclAssociation1b:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1b"
+      NetworkAclId:
+        Ref: "PublicNetworkAcl"
+  PublicSubnetNetworkAclAssociation1c:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1c"
+      NetworkAclId:
+        Ref: "PublicNetworkAcl"
+  PublicSubnetNetworkAclAssociation1d:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1d"
+      NetworkAclId:
+        Ref: "PublicNetworkAcl"
+  PublicSubnetNetworkAclAssociation1e:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1e"
+      NetworkAclId:
+        Ref: "PublicNetworkAcl"
+  PublicSubnetNetworkAclAssociation1f:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetUsEast1f"
+      NetworkAclId:
+        Ref: "PublicNetworkAcl"
+  VpnSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security Group for VPN
+      VpcId:
+        Ref: "VPC"
+      SecurityGroupIngress:
+        - CidrIp: !Ref VpnCidr
+          FromPort: -1
+          ToPort: -1
+          IpProtocol: "-1"
+          Description: "Allow all VPN traffic"
+      # CF does not support removing all rules, workaround is to add a pointless rule
+      SecurityGroupEgress:
+        - CidrIp: "0.0.0.0/0"
+          FromPort: -1
+          ToPort: -1
+          IpProtocol: "-1"
+Outputs:
+  VPCId:
+    Description: "VPCId of the newly created VPC"
+    Value:
+      Ref: "VPC"
+    Export:
+      Name:
+        !Join ['-', [!Ref 'AWS::Region', !Sub '${AWS::StackName}', 'VPCId']]
+  VpcCidr:
+    Description: "VPC CIDR of the newly created VPC"
+    Value: !GetAtt
+      - VPC
+      - CidrBlock
+    Export:
+      Name:
+        !Join ['-', [!Ref 'AWS::Region', !Sub '${AWS::StackName}', 'VpcCidr']]
+  PublicSubnets:
+    Value: !Join
+      - ','
+      - - !Ref SubnetUsEast1a
+        - !Ref SubnetUsEast1b
+        - !Ref SubnetUsEast1c
+        - !Ref SubnetUsEast1d
+        - !Ref SubnetUsEast1e
+        - !Ref SubnetUsEast1f
+    Export:
+      Name:
+        !Join ['-', [!Ref 'AWS::Region', !Sub '${AWS::StackName}', 'PublicSubnets']]
+  AvailabilityZones:
+    Value: !Join
+      - ','
+      - - !GetAtt
+          - SubnetUsEast1a
+          - AvailabilityZone
+        - !GetAtt
+          - SubnetUsEast1b
+          - AvailabilityZone
+        - !GetAtt
+          - SubnetUsEast1c
+          - AvailabilityZone
+        - !GetAtt
+          - SubnetUsEast1d
+          - AvailabilityZone
+        - !GetAtt
+          - SubnetUsEast1e
+          - AvailabilityZone
+        - !GetAtt
+          - SubnetUsEast1f
+          - AvailabilityZone
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AvailabilityZones'
+  PublicRouteTable:
+    Description: "Route table Id for public subnets"
+    Value: !Ref PublicRouteTable
+    Export:
+      Name:
+        !Join ['-', [!Ref 'AWS::Region', !Sub '${AWS::StackName}', 'PublicRouteTable']]
+  VpcDefaultSecurityGroup:
+    Description: "VPC DefaultSecurityGroup Id"
+    Value: {"Fn::GetAtt": ["VPC", "DefaultSecurityGroup"]}
+    Export:
+      Name:
+        !Join ['-', [!Ref 'AWS::Region', !Sub '${AWS::StackName}', 'VpcDefaultSecurityGroup']]
+  InternetGateway:
+    Description: "The internet gateway"
+    Value: !Ref InternetGateway
+    Export:
+      Name:
+        !Join ['-', [!Ref 'AWS::Region', !Sub '${AWS::StackName}', 'InternetGateway']]
+  VpnSecurityGroup:
+    Description: "VPN Security Group Id "
+    Value: !Ref VpnSecurityGroup
+    Export:
+      Name:
+        !Join ['-', [!Ref 'AWS::Region', !Sub '${AWS::StackName}', 'VpnSecurityGroup']]

@@ -1,0 +1,94 @@
+Description: Essential resources common to all AWS accounts
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  # Bucket for lambda artifacts
+  AWSS3LambdaArtifactsBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: PublicRead
+  AWSIAMS3LambdaArtifactsBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref AWSS3LambdaArtifactsBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Sid: "AllowPublicRead"
+            Effect: "Allow"
+            Principal:
+              AWS: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "arn:aws:s3:::${AWSS3LambdaArtifactsBucket}/*"
+  # KMS Keys
+  AWSKmsInfraKey:
+    Type: "AWS::KMS::Key"
+    Properties:
+      Description: !Join
+        - '-'
+        - - !Ref AWS::StackName
+          - "InfraKey"
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Sid: "Allow administration of the key"
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !Join
+                  - ''
+                  - - 'arn:aws:iam::'
+                    - !Ref "AWS::AccountId"
+                    - ':root'
+                - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
+            Action:
+              - "kms:Create*"
+              - "kms:Describe*"
+              - "kms:Enable*"
+              - "kms:List*"
+              - "kms:Put*"
+              - "kms:Update*"
+              - "kms:Revoke*"
+              - "kms:Disable*"
+              - "kms:Get*"
+              - "kms:Delete*"
+              - "kms:ScheduleKeyDeletion"
+              - "kms:CancelKeyDeletion"
+            Resource: "*"
+          -
+            Sid: "Allow use of the key"
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
+            Action:
+              - "kms:Encrypt"
+              - "kms:Decrypt"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:DescribeKey"
+            Resource: "*"
+  AWSKmsInfraKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Join
+        - ''
+        - - 'alias/'
+          - !Ref AWS::StackName
+          - '/InfraKey'
+      TargetKeyId: !Ref AWSKmsInfraKey
+Outputs:
+  AWSS3LambdaArtifactsBucket:
+    Value: !Ref AWSS3LambdaArtifactsBucket
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-LambdaArtifactsBucket'
+  AWSKmsInfraKey:
+    Value: !Ref AWSKmsInfraKey
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-InfraKey'
+  AWSKmsInfraKeyAlias:
+    Value: !Ref AWSKmsInfraKeyAlias
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-InfraKeyAlias'

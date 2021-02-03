@@ -1,0 +1,11 @@
+template_path: bridge.yaml
+stack_name: bridge
+dependencies:
+  - prod/essentials.yaml
+parameters:
+  AwsAccount: prod
+  AwsDefaultVpcId: "vpc-9c70bbf9"
+  NewRelicAccountId: "754728514883"
+  NewRelicExternalId: !ssm /infra/NewRelicExternalId
+  OperatorEmail: bridgeops@sagebase.org
+  VpcPeeringRequesterAwsAccountId: !ssm /infra/VpcPeeringRequesterAwsAccountId

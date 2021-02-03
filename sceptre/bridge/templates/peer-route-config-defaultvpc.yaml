@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Configure the VPC to VPN routes to allow the VPN to direct traffic to
+  the VPC.  The peering connection
+  (https://github.com/Sage-Bionetworks/admincentral-infra/blob/master/templates/VPCPeer.yaml)
+  must be setup before deploying this template.
+Metadata: {}
+Parameters:
+  PeeringConnectionId:
+    Description: The peering connection to the VPN (i.e. pcx-eb02e083)
+    Type: String
+  VpcPublicRouteTable:
+    Description: Public route table in the VPC (i.e. rtb-f1a9698d)
+    Type: String
+  VpnCidr:
+    Description: The CIDR of the VPN
+    Type: String
+    Default: "10.1.0.0/16"
+    MinLength: '9'
+    MaxLength: '18'
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.0\.0/16'
+Resources:
+  VpnPublicRoute:
+    Type: "AWS::EC2::Route"
+    Properties:
+      RouteTableId: !Ref "VpcPublicRouteTable"
+      DestinationCidrBlock: !Ref "VpnCidr"
+      VpcPeeringConnectionId: !Ref "PeeringConnectionId"
