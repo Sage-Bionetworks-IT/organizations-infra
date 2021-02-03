@@ -1,0 +1,41 @@
+template_path: "transit-gateway.j2"
+stack_name: "sage-tgw"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "prod/unionstationvpc.yaml"
+parameters:
+  VpcId: !stack_output_external unionstationvpc::VPCId
+  SubnetIds:
+    - !stack_output_external unionstationvpc::PrivateSubnet
+    - !stack_output_external unionstationvpc::PrivateSubnet1
+    - !stack_output_external unionstationvpc::PrivateSubnet2
+sceptre_user_data:
+  TgwSpokes:
+    # org-sagebase-itsandbox
+    dustbunnyvpc:
+      AccountId: "804034162148"
+    # org-sagebase-sandbox
+    sandcastlevpc:
+      AccountId: "563295687221"
+    # org-sagebase-scicomp
+    computevpc:
+      AccountId: "055273631518"
+    snowflakevpc:
+      AccountId: "055273631518"
+    iatlasvpc:
+      AccountId: "055273631518"
+    # org-sagebase-scipooldev
+    cesspoolvpc:
+      AccountId: "465877038949"
+    # org-sagebase-scipoolprod
+    internalpoolvpc:
+      AccountId: "237179673806"
+    # org-sagebase-strides
+    stridespoolvpc:
+      AccountId: "423819316185"
+    # org-sagebase-bridgeprod
+    BridgeServer2-vpc:
+      AccountId: "649232250620"

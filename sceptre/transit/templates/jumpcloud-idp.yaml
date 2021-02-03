@@ -1,0 +1,71 @@
+Description: Resources for Jumpcloud IDP
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  TransitAdminMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud transit-admin SSO"
+  TransitVpnMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud transitvpn SSO"
+  TransitVpnSspMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud transitvpnssp SSO"
+Resources:
+  TransitAdminSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "transit-admin"
+      Metadata: !Ref TransitAdminMetadata
+      URL: ""
+  TransitAdminSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt TransitAdminSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref TransitAdminSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  TransitVpnSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "transitvpn"
+      Metadata: !Ref TransitVpnMetadata
+      URL: ""
+  TransitVpnSspSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "transitvpnssp"
+      Metadata: !Ref TransitVpnSspMetadata
+      URL: ""
+Outputs:
+  TransitAdminSamlProviderArn:
+    Value: !Ref TransitAdminSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TransitAdminSamlProviderArn'
+  TransitAdminSamlProviderRoleArn:
+    Value: !GetAtt TransitAdminSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TransitAdminSamlProviderRoleArn'
+  TransitVpnSamlProviderArn:
+    Value: !Ref TransitVpnSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TransitVpnSamlProviderArn'
+  TransitVpnSspSamlProviderArn:
+    Value: !Ref TransitVpnSspSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TransitVpnSspSamlProviderArn'

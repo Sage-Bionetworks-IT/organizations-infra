@@ -1,0 +1,38 @@
+template_path: "transit-gateway-routes.j2"
+stack_name: "sage-tgw-routes"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "prod/sage-tgw.yaml"
+parameters:
+  TransitGatewayId: !stack_output_external sage-tgw::TransitGatewayId
+  VpcRouteTableId: !stack_output_external unionstationvpc::PrivateRouteTable
+sceptre_user_data:
+  TgwSpokes:
+    # org-sagebase-itsandbox
+    dustbunnyvpc:
+      CIDR: "10.29.0.0/16"
+    # org-sagebase-sandbox
+    sandcastlevpc:
+      CIDR: "10.23.0.0/16"
+    # org-sagebase-scicomp
+    computevpc:
+      CIDR: "10.5.0.0/16"
+    snowflakevpc:
+      CIDR: "10.25.0.0/16"
+    iatlasvpc:
+      CIDR: "10.255.20.0/24"
+    # org-sagebase-scipooldev
+    cesspoolvpc:
+      CIDR: "10.31.0.0/16"
+    # org-sagebase-scipoolprod
+    internalpoolvpc:
+      CIDR: "10.41.0.0/16"
+    # org-sagebase-strides
+    stridespoolvpc:
+      CIDR: "10.49.0.0/16"
+    # org-sagebase-bridgeprod
+    BridgeServer2-vpc:
+      CIDR: "172.32.0.0/16"
