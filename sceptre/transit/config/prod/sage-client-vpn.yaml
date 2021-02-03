@@ -1,0 +1,77 @@
+template_path: "client-vpn.j2"
+stack_name: "sage-client-vpn"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "prod/jumpcloud-idp.yaml"
+  - "prod/unionstationvpc.yaml"
+parameters:
+  ClientCidrBlock: "10.100.0.0/16"
+  VpnSamlProviderArn: !stack_output_external jumpcloud-idp::TransitVpnSamlProviderArn
+  VpnSspSamlProviderArn: !stack_output_external jumpcloud-idp::TransitVpnSspSamlProviderArn
+  VpcId: !stack_output_external unionstationvpc::VPCId
+  ConnectionLogGroup: "/aws/client-vpn/sage-client-vpn"
+  # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
+  # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
+  ServerCertificateArn: "arn:aws:acm:us-east-1:153370007719:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6"
+sceptre_user_data:
+  SubnetIds:
+    - !stack_output_external unionstationvpc::PrivateSubnet
+    - !stack_output_external unionstationvpc::PrivateSubnet1
+    - !stack_output_external unionstationvpc::PrivateSubnet2
+  TgwSpokes:
+    # "10.50.0.0/16" (unionstationvpc) route automatically setup by the VPN endpoint association
+    # AccessGroups must match Jumpcloud groups
+
+    # org-sagebase-itsandbox
+    dustbunnyvpc:
+      CIDR: "10.29.0.0/16"
+      AccessGroups:
+        - "admin"
+    # org-sagebase-sandbox
+    sandcastlevpc:
+      CIDR: "10.23.0.0/16"
+      AccessGroups:
+        - "admin"
+        - "aws-scicomp-developers"
+    # org-sagebase-scicomp
+    computevpc:
+      CIDR: "10.5.0.0/16"
+      AccessGroups:
+        - "admin"
+        - "aws-scicomp-developers"
+    snowflakevpc:
+      CIDR: "10.25.0.0/16"
+      AccessGroups:
+        - "admin"
+        - "aws-scicomp-developers"
+    iatlasvpc:
+      CIDR: "10.255.20.0/24"
+      AccessGroups:
+        - "admin"
+    # org-sagebase-scipooldev
+    cesspoolvpc:
+      CIDR: "10.31.0.0/16"
+      AccessGroups:
+        - "admin"
+        - "aws-scicomp-developers"
+    # org-sagebase-scipoolprod
+    internalpoolvpc:
+      CIDR: "10.41.0.0/16"
+      AccessGroups:
+        - "admin"
+        - "aws-scicomp-developers"
+    # org-sagebase-strides
+    stridespoolvpc:
+      CIDR: "10.49.0.0/16"
+      AccessGroups:
+        - "admin"
+        - "aws-scicomp-developers"
+    # org-sagebase-bridgeprod
+    BridgeServer2-vpc:
+      CIDR: "172.32.0.0/16"
+      AccessGroups:
+        - "admin"
+        - "aws-bridgeprod-admins"
