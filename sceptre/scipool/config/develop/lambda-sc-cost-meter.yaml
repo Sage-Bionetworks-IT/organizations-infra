@@ -6,4 +6,4 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 hooks:
   before_launch:
-    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-sc-cost-meter/master/lambda-sc-cost-meter.yaml --create-dirs -o templates/remote/lambda-sc-cost-meter.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-sc-cost-meter/master/lambda-sc-cost-meter.yaml -N -P templates/remote"

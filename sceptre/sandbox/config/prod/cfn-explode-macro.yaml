@@ -4,4 +4,4 @@ dependencies:
   - "prod/bootstrap.yaml"
 hooks:
   before_launch:
-    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-explode-macro/master/cfn-explode-macro.yaml --create-dirs -o templates/remote/cfn-explode-macro.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-explode-macro/master/cfn-explode-macro.yaml -N -P templates/remote"
