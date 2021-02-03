@@ -180,6 +180,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/itsandbox
+          sceptre launch staging --yes
           sceptre launch prod --yes
   sceptre-sandbox:
     if: github.event_name == 'push'
