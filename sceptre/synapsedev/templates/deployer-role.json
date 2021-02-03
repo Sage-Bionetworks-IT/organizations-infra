@@ -1,0 +1,63 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "The deployer role and instance profile",
+    "Resources": {
+        "SynapseDeploymentPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "SynapseDeploymentPolicy",
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {"Effect": "Allow", "Action": "s3:*", "Resource": "*"},
+                        {"Effect": "Allow", "Action": "sns:*", "Resource": "*"},
+                        {"Effect": "Allow", "Action": "rds:*", "Resource": "*"},
+                        {"Effect": "Allow", "Action": "ec2:*", "Resource": "*"},
+                        {"Effect": "Allow", "Action": "cloudwatch:*", "Resource": "*"},
+                        {"Effect": "Allow", "Action": "elasticbeanstalk:*", "Resource": "*"},
+                        {"Effect": "Allow", "Action": "route53:*", "Resource": "*"},
+                        {"Effect": "Allow", "Action": "cloudformation:*", "Resource": "*"},
+                        {"Effect": "Allow", "Action": ["iam:CreateRole", "iam:DeleteRole"], "Resource": "*"},
+                        {"Effect": "Allow", "Action": ["iam:CreateInstanceProfile", "iam:DeleteInstanceProfile"], "Resource": "*"}
+                    ]
+                },
+                "Roles": [
+                    {"Ref": "SynapseDeploymentRole"}
+                ]
+            }
+        },
+        "SynapseDeploymentRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [{
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": ["ec2.amazonaws.com"]
+                        },
+                        "Action": ["sts:AssumeRole"]
+                    }]
+                },
+                "Path": "/"
+            }
+        },
+        "SynapseDeploymentInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Roles": [
+                    {"Ref": "SynapseDeploymentRole"}
+                ],
+                "Path": "/"
+            }
+        }
+    },
+    "Outputs": {
+        "SynapseDeploymentRole": {
+            "Value": {"Fn::GetAtt": ["SynapseDeploymentRole", "Arn"]},
+            "Export": {
+                "Name": {"Fn::Sub": "${AWS::Region}-${AWS::StackName}-SynapseDeploymentRole"}
+            }
+        }
+    }
+}

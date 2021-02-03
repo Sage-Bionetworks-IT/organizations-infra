@@ -1,0 +1,5 @@
+# resources for supporting client integration tests in synapse dev account
+
+# http://docs.synapse.org/articles/custom_storage_location.html
+template_path: client-integration-test-resources.yaml
+stack_name: client-integration-test-resources

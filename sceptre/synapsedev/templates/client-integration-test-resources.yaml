@@ -1,0 +1,128 @@
+Description: |
+  Creates resources associated with running client integration tests.
+  Creates an S3 bucket to serve as a external storage location as well
+  as an IAM user with access to that bucket.
+
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  BucketName:
+    Type: String
+    Description: (Optional) the name of the S3 bucket to be created
+    Default: ''
+  AwsAccountId:
+    Type: String
+    Description: |
+      (Optional) The AWS account id in which the Synapse stack is running that will interact with this bucket.
+      Defaults to the AWS account id running this template.
+    Default: ''
+  UserName:
+    Type: String
+    Description: |
+      (Optional) IAM username for an IAM account to create that will have access to (only) the created bucket.
+    Default: ''
+  LifecycleDataExpirationDays:
+    Type: Number
+    Description: Number of days (from creation) when objects are deleted from S3.
+    Default: 7
+
+Conditions:
+  HasBucketName: !Not [!Equals [!Ref BucketName, ""]]
+  HasAccountId: !Not [!Equals [!Ref AwsAccountId, ""]]
+  HasUserName: !Not [!Equals [!Ref UserName, ""]]
+
+Resources:
+
+  # an S3 bucket configured such that it can be used as a custom Synapse external storage location
+  ExternalBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !If [HasBucketName, !Ref BucketName, !Ref 'AWS::NoValue']
+      CorsConfiguration:
+        CorsRules:
+          - Id: SynapseExternalBucketCORSRule
+            AllowedHeaders: ['*']
+            AllowedOrigins: ['*']
+            AllowedMethods: [GET, POST, PUT, HEAD]
+            MaxAge: 3000
+
+      # a bucket configured through this template is meant for running integration tests
+      # and its data is ephemeral, so we can aggressively expire anything left behind
+      # after running a test.
+      LifecycleConfiguration:
+        Rules:
+          - Id: DataLifecycleRule
+            Status: Enabled
+            ExpirationInDays: !Ref LifecycleDataExpirationDays
+
+  # IAM user with access to resources in this template (i.e. the S3 bucket)
+  ClientTestUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !If [HasUserName, !Ref UserName, !Ref 'AWS::NoValue']
+
+  ClientTestUserPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: synapse-client-test-policy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:*
+            Resource:
+              - !Sub "${ExternalBucket.Arn}"
+              - !Sub "${ExternalBucket.Arn}/*"
+      Users:
+        - !Ref ClientTestUser
+
+  ClientTestUserAccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName:
+        !Ref ClientTestUser
+
+  ExternalBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ExternalBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Sid: ReadAccess
+            Effect: Allow
+            Principal:
+              AWS: !If [HasAccountId, !Ref AwsAccountId, !Ref "AWS::AccountId"]
+            Action: s3:ListBucket*
+            Resource: !GetAtt ExternalBucket.Arn
+          -
+            Sid: WriteAccess
+            Effect: Allow
+            Principal:
+              AWS: !If [HasAccountId, !Ref AwsAccountId, !Ref "AWS::AccountId"]
+            Action:
+              - s3:*Object*
+              - s3:*MultipartUpload*
+            Resource: !Sub "${ExternalBucket.Arn}/*"
+
+Outputs:
+  ExternalBucket:
+    Value: !Ref ExternalBucket
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ExternalBucket'
+
+  ClientTestUserArn:
+    Value: !GetAtt ClientTestUser.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ClientTestUserArn'
+
+  # this will output the access key secret and it will be viewable by anyone who can view
+  # the cloudforomation stack outputs. however this user only has access to the specific
+  # bucket, which will only contain ephemeral test generated data and nothing sensitive.
+  ClientTestUserAccessKeyId:
+    Value:
+      !Ref ClientTestUserAccessKey
+  ClientTestUserSecret:
+    Value: !GetAtt ClientTestUserAccessKey.SecretAccessKey

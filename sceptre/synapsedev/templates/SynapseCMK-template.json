@@ -1,0 +1,341 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "The master encryption key used to encypt/decypt all Synapse master secrets",
+    "Parameters": {
+        "Stack": {
+            "Description": "The stack",
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "SynapseDeploymentRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/",
+                "Policies": [
+                    {
+                        "PolicyName": "SynapseDeploymentPolicy",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "s3:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "sns:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "sqs:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "cloudsearch:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "ses:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "rds:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "ec2:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "elasticloadbalancing:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "autoscaling:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "cloudwatch:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "elasticbeanstalk:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "route53:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "cloudformation:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "iam:CreateRole",
+                                        "iam:DeleteRole",
+                                        "iam:UpdateRole",
+                                        "iam:GetRole",
+                                        "iam:PassRole",
+                                        "iam:CreateRolePolicy",
+                                        "iam:DeleteRolePolicy",
+                                        "iam:PutRolePolicy",
+                                        "iam:CreateInstanceProfile",
+                                        "iam:DeleteInstanceProfile",
+                                        "iam:GetInstanceProfile",
+                                        "iam:RemoveRoleFromInstanceProfile",
+                                        "iam:AddRoleToInstanceProfile"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "secretsmanager:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "kms:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "waf-regional:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "vpc:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "firehose:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "kinesis:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "es:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "glue:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "cloudfront:*"
+                                    ],
+                                    "Resource": "*"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "SynapseDeploymentInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Roles": [
+                    {
+                        "Ref": "SynapseDeploymentRole"
+                    }
+                ],
+                "Path": "/"
+            }
+        },
+        "SynapseCMK": {
+            "Type": "AWS::KMS::Key",
+            "Properties": {
+                "Description": "The master encryption key used to encypt/decrypt all Synapse master secrets",
+                "EnableKeyRotation": false,
+                "KeyPolicy": {
+                    "Version": "2012-10-17",
+                    "Id": "key-default-1",
+                    "Statement": [
+                        {
+                            "Sid": "Allow administration of the key",
+                            "Effect": "Deny",
+                            "Principal": {
+                                "AWS": "*"
+                            },
+                            "Action": [
+                                "kms:*"
+                            ],
+                            "Resource": "*",
+                            "Condition": {
+                                "StringNotLike": {
+                                    "aws:userid": [
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    {
+                                                        "Fn::GetAtt": [
+                                                            "SynapseDeploymentRole",
+                                                            "RoleId"
+                                                        ]
+                                                    },
+                                                    ":*"
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    {
+                                                        "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleId"
+                                                    },
+                                                    ":*"
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "Ref": "AWS::AccountId"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "Sid": "Allow root administration of the key",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": [
+                                    {
+                                        "Fn::GetAtt": [
+                                            "SynapseDeploymentRole",
+                                            "Arn"
+                                        ]
+                                    },
+                                    {
+                                        "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn"
+                                    },
+                                    {
+                                        "Fn::Join": [
+                                            "",
+                                            [
+                                                "arn:aws:iam::",
+                                                {
+                                                    "Ref": "AWS::AccountId"
+                                                },
+                                                ":root"
+                                            ]
+                                        ]
+                                    }
+                                ]
+                            },
+                            "Action": [
+                                "kms:*"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                }
+            }
+        },
+        "SynapseCMKAlias": {
+            "Type": "AWS::KMS::Alias",
+            "Properties": {
+                "AliasName": {
+                    "Fn::Join": [
+                        "/",
+                        [
+                            "alias",
+                            {
+                                "Ref": "Stack"
+                            },
+                            "synapse"
+                        ]
+                    ]
+                },
+                "TargetKeyId": {
+                    "Ref": "SynapseCMK"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "SynapseDeploymentRoleArn": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "SynapseDeploymentRole",
+                    "Arn"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::Region}-${AWS::StackName}-SynapseDeploymentRoleArn"
+                }
+            }
+        },
+        "SynapseDeploymentRoleId": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "SynapseDeploymentRole",
+                    "RoleId"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::Region}-${AWS::StackName}-SynapseDeploymentRoleId"
+                }
+            }
+        }
+    }
+}
