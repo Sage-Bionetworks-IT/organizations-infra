@@ -1,0 +1,102 @@
+# Template ref: https://theithollow.com/2018/04/02/protect-your-aws-accounts-with-guardduty/
+AWSTemplateFormatVersion: 2010-09-09
+Description: GuardDuty master with CloudWatch Event Rule and SNS Topic
+Parameters:
+  BridgeProdAwsAccountId:
+    Type: String
+    NoEcho: true
+  SynapseProdAwsAccountId:
+    Type: String
+    NoEcho: true
+  LogcentralAwsAccountId:
+    Type: String
+    NoEcho: true
+  ScicompAwsAccountId:
+    Type: String
+    NoEcho: true
+  ScipoolProdAwsAccountId:
+    Type: String
+    NoEcho: true
+  StridesAwsAccountId:
+    Type: String
+    NoEcho: true
+  OperatorEmail:
+    Type: String
+    Description: Email for Guard duty findings
+Resources:
+  GDDetector:
+    Type: 'AWS::GuardDuty::Detector'
+    Properties:
+      Enable: true
+  GDSNSTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      DisplayName: !Join
+        - '-'
+        - - GuardDuty
+          - SNSTopic
+      TopicName: !Join
+        - '-'
+        - - GuardDuty
+          - SNSTopic
+  GDCWEvent:
+    Type: 'AWS::Events::Rule'
+    Properties:
+      Description: GuardDuty Event Rule
+      EventPattern:
+        source:
+          - aws.guardduty
+        detail-type:
+          - GuardDuty Finding
+      State: ENABLED
+      Targets:
+        - Arn: !Ref GDSNSTopic
+          Id: TargetGuardDutySNSTopic
+  GuardDutySubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      Endpoint: !Ref OperatorEmail
+      Protocol: email
+      TopicArn: !Ref GDSNSTopic
+  GDBridgeProdMember:
+    Type: 'AWS::GuardDuty::Member'
+    Properties:
+      DetectorId: !Ref GDDetector
+      Email: bridgeit@sagebase.org
+      MemberId: !Ref BridgeProdAwsAccountId
+      Status: Invited
+  GDSynapseProdMember:
+    Type: 'AWS::GuardDuty::Member'
+    Properties:
+      DetectorId: !Ref GDDetector
+      Email: platform@sagebase.org
+      MemberId: !Ref SynapseProdAwsAccountId
+      Status: Invited
+  GDLogcentralMember:
+    Type: 'AWS::GuardDuty::Member'
+    Properties:
+      DetectorId: !Ref GDDetector
+      Email: aws.logcentral@sagebase.org
+      MemberId: !Ref LogcentralAwsAccountId
+      Status: Invited
+  GDScicompMember:
+    Type: 'AWS::GuardDuty::Member'
+    Properties:
+      DetectorId: !Ref GDDetector
+      Email: aws.scicomp@sagebase.org
+      MemberId: !Ref ScicompAwsAccountId
+      Status: Invited
+  GDScipoolProdMember:
+    Type: 'AWS::GuardDuty::Member'
+    Properties:
+      DetectorId: !Ref GDDetector
+      Email: aws.scipoolprod@sagebase.org
+      MemberId: !Ref ScipoolProdAwsAccountId
+      Status: Invited
+  GDStridesMember:
+    Type: 'AWS::GuardDuty::Member'
+    Properties:
+      DetectorId: !Ref GDDetector
+      Email: aws.strides@sagebase.org
+      MemberId: !Ref StridesAwsAccountId
+      Status: Invited
