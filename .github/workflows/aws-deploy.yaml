@@ -180,7 +180,6 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/itsandbox
-          sceptre launch staging --yes
           sceptre launch prod --yes
   sceptre-sandbox:
     if: github.event_name == 'push'
@@ -389,9 +388,13 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::797640923903:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
-      - name: Deploy with sceptre
+      - name: Deploy staging with sceptre
         run: |
-          cd sceptre/sageit
+          cd $GITHUB_WORKSPACE/sceptre/sageit
+          sceptre launch staging --yes
+      - name: Deploy prod with sceptre
+        run: |
+          cd $GITHUB_WORKSPACE/sceptre/sageit
           sceptre launch prod --yes
   sceptre-logcentral:
     if: github.event_name == 'push'
