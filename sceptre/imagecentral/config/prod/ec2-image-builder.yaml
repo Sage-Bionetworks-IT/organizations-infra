@@ -1,0 +1,4 @@
+template_path: "ec2-image-builder.yaml"
+stack_name: "ec2-image-builder"
+dependencies:
+  - "prod/service-linked-roles.yaml"

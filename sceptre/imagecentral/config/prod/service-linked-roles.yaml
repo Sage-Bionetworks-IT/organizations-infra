@@ -1,0 +1,4 @@
+template_path: "service-linked-roles.yaml"
+stack_name: "service-linked-roles"
+dependencies:
+  - "prod/bootstrap.yaml"

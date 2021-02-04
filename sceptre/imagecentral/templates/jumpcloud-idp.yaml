@@ -1,0 +1,78 @@
+Description: Resources for Jumpcloud IDP
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  ImagecentralAdminMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud imagecentral-admin app"
+  ImagecentralImageLibrarianMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud imagecentral-image-librarian app"
+Resources:
+  ImagecentralAdminSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "imagecentral-admin"
+      Metadata: !Ref ImagecentralAdminMetadata
+      URL: ""
+  ImagecentralAdminSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt ImagecentralAdminSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref ImagecentralAdminSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  ImagecentralImageLibrarianSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "imagecentral-image-librarian"
+      Metadata: !Ref ImagecentralImageLibrarianMetadata
+      URL: ""
+  # Role to allow image librarians to run packer and deploy AMIs
+  ImagecentralImageLibrarianSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt ImagecentralImageLibrarianSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref ImagecentralImageLibrarianSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+Outputs:
+  ImagecentralAdminSamlProviderArn:
+    Value: !Ref ImagecentralAdminSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ImagecentralAdminSamlProviderArn'
+  ImagecentralAdminSamlProviderRoleArn:
+    Value: !GetAtt ImagecentralAdminSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ImagecentralAdminSamlProviderRoleArn'
+  ImagecentralImageLibrarianSamlProviderArn:
+    Value: !Ref ImagecentralImageLibrarianSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ImagecentralImageLibrarianSamlProviderArn'
+  ImagecentralImageLibrarianSamlProviderRoleArn:
+    Value: !GetAtt ImagecentralImageLibrarianSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ImagecentralImageLibrarianSamlProviderRoleArn'
