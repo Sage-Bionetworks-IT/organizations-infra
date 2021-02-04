@@ -1,0 +1,335 @@
+Description: Setup IAM policies, groups and accounts
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  InitNewUserPassword:
+    Type: String
+    NoEcho: true
+Resources:
+  # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
+  # Therefore you must do the following before deleting them from this file:
+  # 1. Detach or remove the following user resources: login profile, attached
+  #    MFA device, access-keys, ssh-keys, and policies.
+  # 2. Detach the user from all groups.
+  AWSIAMXavierSchildwachterUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: x.schildwachter@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+        - !Ref AWSIAMBillingManagersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMKhaiDoUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: khai.do@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+        - !Ref AWSIAMBillingManagersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMBruceHoffUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: bruce.hoff@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMJayHodgsonUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: jay.hodgson@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMJohnHillUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: john.hill@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMJordanKiangUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: jordan.kiang@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+  AWSIAMMikeKellenUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: mike.kellen@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMBillingManagersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMZimingDongUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: ziming.dong@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMDwayneJengUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: dwayne.jeng@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMAaronHaydenUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: aaron.hayden@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMMarcoMarascaUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: marco.marasca@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMNickGrosenbacherUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: nick.grosenbacher@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+
+  AWSIAMDeveloperUsersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+        - arn:aws:iam::aws:policy/IAMReadOnlyAccess
+        - !Ref AWSIAMDevelopersDeployRightsPolicy
+
+  AWSIAMDevelopersDeployRightsPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - "iam:CreateRole"
+              - "iam:DeleteRole"
+              - "iam:UpdateRole"
+              - "iam:GetRole"
+              - "iam:PassRole"
+              - "iam:CreateRolePolicy"
+              - "iam:DeleteRolePolicy"
+              - "iam:PutRolePolicy"
+              - "iam:CreateInstanceProfile"
+              - "iam:DeleteInstanceProfile"
+              - "iam:GetInstanceProfile"
+              - "iam:RemoveRoleFromInstanceProfile"
+              - "iam:AddRoleToInstanceProfile"
+              - "iam:AttachRolePolicy"
+            Resource: "*"
+
+  AWSIAMAdminRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !GetAtt AWSIAMXavierSchildwachterUser.Arn
+                - !GetAtt AWSIAMKhaiDoUser.Arn
+                - !GetAtt AWSIAMAaronHaydenUser.Arn
+                - !GetAtt AWSIAMMarcoMarascaUser.Arn
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+  AWSIAMOrganizationsFullAccessPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "organizations:*"
+            Resource: "*"
+  AWSIAMAdminRolePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "admin"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "*"
+            Resource: "*"
+      Roles:
+        -
+          !Ref AWSIAMAdminRole
+  AWSIAMAllUsersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - !Ref AWSIAMEnforceMfaPolicy
+  AWSIAMBillingManagersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/job-function/Billing
+        - !Ref AWSIAMOrganizationsFullAccessPolicy
+  # policy to enforce MFA
+  AWSIAMEnforceMfaPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowAllUsersToListAccounts
+            Effect: Allow
+            Action:
+              - 'iam:ListAccountAliases'
+              - 'iam:ListUsers'
+              - 'iam:GetAccountSummary'
+            Resource: '*'
+          - Sid: AllowIndividualUserToSeeAndManageOnlyTheirOwnAccountInformation
+            Effect: Allow
+            Action:
+              - 'iam:ChangePassword'
+              - 'iam:CreateAccessKey'
+              - 'iam:CreateLoginProfile'
+              - 'iam:DeleteAccessKey'
+              - 'iam:DeleteLoginProfile'
+              - 'iam:GetAccountPasswordPolicy'
+              - 'iam:GetLoginProfile'
+              - 'iam:ListAccessKeys'
+              - 'iam:UpdateAccessKey'
+              - 'iam:UpdateLoginProfile'
+              - 'iam:ListSigningCertificates'
+              - 'iam:DeleteSigningCertificate'
+              - 'iam:UpdateSigningCertificate'
+              - 'iam:UploadSigningCertificate'
+              - 'iam:ListSSHPublicKeys'
+              - 'iam:GetSSHPublicKey'
+              - 'iam:DeleteSSHPublicKey'
+              - 'iam:UpdateSSHPublicKey'
+              - 'iam:UploadSSHPublicKey'
+            Resource: !Join
+              - ''
+              - - 'arn:aws:iam::'
+                - !Ref AWS::AccountId
+                - ':user/${aws:username}'
+          - Sid: AllowIndividualUserToListOnlyTheirOwnMFA
+            Effect: Allow
+            Action:
+              - 'iam:ListVirtualMFADevices'
+              - 'iam:ListMFADevices'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':mfa/*'
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':user/${aws:username}'
+          - Sid: AllowIndividualUserToManageTheirOwnMFA
+            Effect: Allow
+            Action:
+              - 'iam:CreateVirtualMFADevice'
+              - 'iam:DeleteVirtualMFADevice'
+              - 'iam:RequestSmsMfaRegistration'
+              - 'iam:FinalizeSmsMfaRegistration'
+              - 'iam:EnableMFADevice'
+              - 'iam:ResyncMFADevice'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':mfa/${aws:username}'
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':user/${aws:username}'
+          - Sid: AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA
+            Effect: Allow
+            Action:
+              - 'iam:DeactivateMFADevice'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':mfa/${aws:username}'
+              - !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref AWS::AccountId
+                  - ':user/${aws:username}'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': 'true'
+#          - Sid: BlockAnyAccessOtherThanAboveUnlessSignedInWithMFA
+#            Effect: Deny
+#            NotAction: 'iam:*'
+#            Resource: '*'
+#            Condition:
+#              BoolIfExists:
+#                'aws:MultiFactorAuthPresent': 'false'
+Outputs:
+  AWSIAMEnforceMfaPolicy:
+    Value: !Ref AWSIAMEnforceMfaPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-EnforceMfaPolicy'
+  AWSIAMAdminRoleArn:
+    Value: !GetAtt AWSIAMAdminRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AWSIAMAdminRoleArn'
+  AWSIAMAdminRoleId:
+    Value: !GetAtt AWSIAMAdminRole.RoleId
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AWSIAMAdminRoleId'
