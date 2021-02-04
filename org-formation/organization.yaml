@@ -56,7 +56,7 @@ Organization:
         - !Ref SageITAccount
         - !Ref MasterAccount
         - !Ref LogCentralAccount
-        - !Ref SecurityCentralAccountt
+        - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
         - !Ref ITSandboxAccount
 
@@ -181,7 +181,7 @@ Organization:
         Department: Platform
         Project: Infrastructure
 
-  SecurityCentralAccountt:
+  SecurityCentralAccount:
     Type: OC::ORG::Account
     Properties:
       AccountName: aws-securitycentral
