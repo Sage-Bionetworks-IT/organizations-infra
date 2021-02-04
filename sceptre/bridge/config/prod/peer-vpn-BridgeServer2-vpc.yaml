@@ -1,0 +1,12 @@
+template_path: remote/peer-route-config.yaml
+stack_name: peer-vpn-BridgeServer2-vpc
+dependencies:
+  - prod/BridgeServer2-vpc.yaml
+parameters:
+  PeeringConnectionId: pcx-0779dd51dcc40d00e
+  VpcPublicRouteTable: rtb-03ea8549c4444bf3a
+  VpcPrivateRouteTable: rtb-0e8854efafd1cb53f
+  VpnCidr: 10.1.0.0/16
+hooks:
+  before_launch:
+    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/peer-route-config.yaml --create-dirs -o templates/remote/peer-route-config.yaml"
