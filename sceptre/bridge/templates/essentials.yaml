@@ -37,11 +37,8 @@ Resources:
             Effect: "Allow"
             Principal:
               AWS:
-                - !Join
-                  - ''
-                  - - 'arn:aws:iam::'
-                    - !Ref "AWS::AccountId"
-                    - ':root'
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+                - !ImportValue us-east-1-bootstrap-TravisUserArn
                 - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
             Action:
               - "kms:Create*"
@@ -62,6 +59,8 @@ Resources:
             Effect: "Allow"
             Principal:
               AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+                - !ImportValue us-east-1-bootstrap-TravisUserArn
                 - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
             Action:
               - "kms:Encrypt"
