@@ -1,0 +1,12 @@
+template_path: "remote/essentials.yaml"
+stack_name: "essentials"
+dependencies:
+  - "prod/bootstrap.yaml"
+parameters:
+  OperatorEmail: "aws.imagecentral@sagebase.org"
+  VpcPeeringRequesterAwsAccountId: "745159704268"
+hooks:
+  before_create:
+    - !cmd "curl https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/essentials.yaml --create-dirs -o templates/remote/essentials.yaml"
+  before_update:
+    - !cmd "curl https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/essentials.yaml --create-dirs -o templates/remote/essentials.yaml"

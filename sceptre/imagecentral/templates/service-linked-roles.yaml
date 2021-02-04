@@ -1,0 +1,30 @@
+# A service-linked role is a unique type of IAM role that is linked directly to an AWS service.
+# Service-linked roles are predefined by the service and include all the permissions that the
+# service requires to call other AWS services on your behalf.
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Provision AWS service linked roles
+Resources:
+  # Role to grant EC2 Image Builder to manage building AMIs, only the Image Builder can assume this role.
+  # https://docs.aws.amazon.com/imagebuilder/latest/userguide/image-builder-service-linked-role.html
+  AWSServiceRoleForEc2ImageBuilder:
+    Type: "AWS::IAM::ServiceLinkedRole"
+    Properties:
+      AWSServiceName: "imagebuilder.amazonaws.com"
+      Description: "Allows EC2 Image Builder to call AWS services on your behalf."
+  # Role to grant License Manager to manage licenses on EC2 image builder, only the License Manager can assume this roles.
+  # https://docs.aws.amazon.com/license-manager/latest/userguide/using-service-linked-roles.html
+  AWSServiceRoleForLicenseManager:
+    Type: "AWS::IAM::ServiceLinkedRole"
+    Properties:
+      AWSServiceName: "license-manager.amazonaws.com"
+      Description: "SLR for the AWS License Manager"
+Outputs:
+  AWSServiceRoleForEc2ImageBuilder:
+    Value: !Ref AWSServiceRoleForEc2ImageBuilder
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AWSServiceRoleForEc2ImageBuilder'
+  AWSServiceRoleForLicenseManager:
+    Value: !Ref AWSServiceRoleForLicenseManager
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AWSServiceRoleForLicenseManager'
