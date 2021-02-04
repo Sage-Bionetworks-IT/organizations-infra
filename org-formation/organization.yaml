@@ -57,7 +57,7 @@ Organization:
         - !Ref MasterAccount
         - !Ref LogCentralAccount
         - !Ref SecurityCentralAccountt
-        - !Ref AMIRepositoryAccount
+        - !Ref ImageCentralAccount
         - !Ref ITSandboxAccount
 
   TestOU:
@@ -192,7 +192,7 @@ Organization:
         Department: Platform
         Project: Infrastructure
 
-  AMIRepositoryAccount:
+  ImageCentralAccount:
     Type: OC::ORG::Account
     Properties:
       AccountName: AMI Repository
