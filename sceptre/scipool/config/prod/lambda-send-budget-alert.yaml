@@ -10,4 +10,4 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 hooks:
   before_launch:
-    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-send-budget-alert/master/lambda-send-budget-alert.yaml --create-dirs -o templates/remote/lambda-send-budget-alert.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-send-budget-alert/master/lambda-send-budget-alert.yaml -N -P templates/remote"

@@ -8,4 +8,4 @@ dependencies:
   - prod/bootstrap.yaml
 hooks:
   before_launch:
-    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-actions-provider/master/cfn-cr-sc-actions-provider.yaml --create-dirs -o templates/remote/cfn-cr-sc-actions-provider.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-actions-provider/master/cfn-cr-sc-actions-provider.yaml -N -P templates/remote"

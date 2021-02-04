@@ -13,4 +13,4 @@ parameters:
   OidcClientId: '100055'
 hooks:
   before_launch:
-    - !cmd "curl https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/master/cfn-cr-alb-rule.yaml --create-dirs -o templates/remote/cfn-cr-alb-rule.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/master/cfn-cr-alb-rule.yaml -N -P templates/remote"
