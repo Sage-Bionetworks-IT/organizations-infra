@@ -66,7 +66,7 @@ ItKmsKey:
   StackName: it-kms-key
   MaxConcurrentStacks: 10
   Parameters:
-    AliasName: alias/itkey
+    AliasName: alias/it-infra
     AdminPrincipalArns:
       - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
       - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationFormationBuildAccessRole'
