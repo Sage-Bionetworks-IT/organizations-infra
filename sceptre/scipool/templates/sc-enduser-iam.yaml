@@ -11,7 +11,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
         - !Ref SCEnduserExpandedPolicy
-        - !Ref CFNDenyGetTemplateSummaryPolicy
+        - !Ref ScCloudformationPolicy
         - !Ref SCEnduserRemoteAccessPolicy
       Path: /
       AssumeRolePolicyDocument:
@@ -30,7 +30,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
         - !Ref SCEnduserExpandedPolicy
-        - !Ref CFNDenyGetTemplateSummaryPolicy
+        - !Ref ScCloudformationPolicy
         - !Ref SCEnduserRemoteAccessPolicy
       Path: /
       AssumeRolePolicyDocument:
@@ -84,17 +84,22 @@ Resources:
             Condition:
               StringLike:
                 "ssm:ResourceTag/aws::ssmmessages:session-id": "${aws:userid}"
-  CFNDenyGetTemplateSummaryPolicy:
+  ScCloudformationPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Properties:
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-          -
-            Effect: Deny
+          - Effect: Deny
+            Sid: DenyCfnTemplateSummary
             Action:
               # Deny this action to hide secrets
               - cloudformation:GetTemplateSummary
+            Resource: "*"
+          - Effect: Allow
+            Sid: AllowCfnChangeSets
+            Action:
+              - "cloudformation:*ChangeSet*"
             Resource: "*"
 Outputs:
   EndUserRoleId:

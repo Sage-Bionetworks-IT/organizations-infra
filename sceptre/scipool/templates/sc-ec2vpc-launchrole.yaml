@@ -56,7 +56,7 @@ Resources:
                   - "cloudformation:SetStackPolicy"
                   - "cloudformation:ValidateTemplate"
                   - "cloudformation:UpdateStack"
-                  - "cloudformation:CreateChangeSet"
+                  - "cloudformation:*ChangeSet*"
                   - "s3:GetObject"
                   - "lambda:InvokeFunction"
                 Resource: '*'
