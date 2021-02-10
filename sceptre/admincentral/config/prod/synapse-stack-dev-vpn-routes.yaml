@@ -5,4 +5,4 @@ parameters:
   PeerVPCCIDR: 10.24.0.0/16
   # Peering connection setup by the Synapse VPC stack builder
   # Note: Synapse stacks request the peering from the spoke
-  VPCPeeringConnectionId: pcx-0b00451f9c327705c
+  VPCPeeringConnectionId: pcx-0d28b52d2cad54578
