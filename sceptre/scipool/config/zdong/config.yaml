@@ -1,0 +1,5 @@
+internal_portfolio_vpcname: 'cesspoolvpc'
+infra_repo: 'https://raw.githubusercontent.com/zimingd/organizations-infra/'
+infra_branch: 'master/sceptre/scipool/'
+library_repo: 'https://raw.githubusercontent.com/zimingd/service-catalog-library/'
+library_branch: 'master/'
