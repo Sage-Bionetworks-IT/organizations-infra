@@ -29,8 +29,8 @@ __Note__: master-profile is a profile that can assume the account's `organizatio
 __Note__: member-profile is a profile that can assume the member account's `OrganizationAccountAccessRole` role
 
 ### Automation
-We have setup Github actions to automate deployments to the AWS management and all member accounts.
-The deployment runs on every merge to the master branch.
+We have setup [Github actions](https://github.com/Sage-Bionetworks-IT/organizations-infra/actions) to automate
+deployments to the AWS management and all member accounts. The deployment runs on every merge to the master branch.
 
 Org-formation manages deployments to specific accounts using
 [organization Bindings](https://github.com/org-formation/org-formation-cli/blob/master/docs/cloudformation-resources.md#organizationbinding-where-to-create-which-resource)
