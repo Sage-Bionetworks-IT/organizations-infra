@@ -175,6 +175,11 @@
                                     "Effect": "Allow",
                                     "Action": "logs:*",
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "ses:*",
+                                    "Resource": "*"
                                 }
                             ]
                         }
