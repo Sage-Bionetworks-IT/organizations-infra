@@ -1,5 +1,9 @@
 # Overview
-Install, configure and manage the AWS organizations account.
+Install, configure and manage the AWS organizations management account
+and all its member accounts.
+
+We use a combination of [org-formation][1] and [sceptre][2] to deploy AWS cloud resources
+using [cloudformation][4].
 
 ## Deployments
 
@@ -9,17 +13,29 @@ Deploy resources to master and all member accounts
 
 * install [nodejs][3]
 * cd org-formation
-* npx org-formation print-tasks --profile master-profile --verbose --print-stack organization-tasks.yaml
+* run 'npm install'
+* run `npx org-formation process-tasks --profile master-profile --verbose --print-stack organization-tasks.yaml`
+
+__Note__: master-profile is a profile that can assume the account's `organizations-admin` role
 
 ### sceptre
 
-Deploy resources to master and all member accounts
+* create a python 3.x [virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+* run `pip install sceptre sceptre-ssm-resolver sceptre-date-resolver git+git://github.com/Sceptre/sceptre-file-resolver.git`
+* cd sceptre/_folder_  (i.e. sceptre/sandbox)
+* uncomment `# profile: {{ var.profile | default("default") }}` in config/configs.yaml
+* run `sceptre --var "profile=member-profile" --var "region=us-east-1" launch prod/AccountAlertTopics.yaml`
 
-* install [lerna][4]
-* cd sceptre
-* npx lerna run deploy --stream
+__Note__: member-profile is a profile that can assume the member account's `OrganizationAccountAccessRole` role
 
-We use lerna to recursively execute deployment `scripts` (in package.json files) in all sub directories.
+### Automation
+We have setup Github actions to automate deployments to the AWS management and all member accounts.
+The deployment runs on every merge to the master branch.
+
+Org-formation manages deployments to specific accounts using
+[organization Bindings](https://github.com/org-formation/org-formation-cli/blob/master/docs/cloudformation-resources.md#organizationbinding-where-to-create-which-resource)
+
+Sceptre manages deployments to specific accounts with designated config folders (i.e. config/dev or config/prod).
 
 
 ## Contributions
@@ -56,4 +72,4 @@ and passes them to the cloudformation stack on deployment.
 [1]: https://github.com/org-formation/org-formation-cli
 [2]: https://github.com/Sceptre/sceptre
 [3]: https://nodejs.org/en/download/package-manager/
-[4]: https://lerna.js.org/
+[4]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html
