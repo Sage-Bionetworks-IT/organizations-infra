@@ -59,3 +59,20 @@ SceptreLambdaBucket:
     IncludeMasterAccount: true
     Account: '*'
     Region: us-east-1
+
+ItKmsKey:
+  Type: update-stacks
+  Template: ./kms-key.yaml
+  StackName: it-kms-key
+  MaxConcurrentStacks: 10
+  Parameters:
+    AliasName: alias/it-infra
+    AdminPrincipalArns:
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationFormationBuildAccessRole'
+    UserPrincipalArns:
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationFormationBuildAccessRole'
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: us-east-1
