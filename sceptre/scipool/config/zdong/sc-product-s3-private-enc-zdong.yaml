@@ -4,8 +4,8 @@ stack_tags:
   Department: "Platform"
   Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
-# dependencies:
-#   - "develop/sc-portfolio-s3-basic.yaml"
+dependencies:
+  - "develop/sc-portfolio-s3-basic.yaml"
 parameters:
   RepoRootURL: "{{stack_group_config.library_repo}}"
   StackDatetime: !date
