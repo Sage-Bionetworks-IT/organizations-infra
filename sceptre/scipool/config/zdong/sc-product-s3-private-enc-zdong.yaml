@@ -4,10 +4,13 @@ stack_tags:
   Department: "Platform"
   Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
-dependencies:
-  - "develop/sc-portfolio-s3-basic.yaml"
+# dependencies:
+#   - "develop/sc-portfolio-s3-basic.yaml"
 parameters:
-  RepoRootURL: "https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}"
+  RepoRootURL: "{{stack_group_config.library_repo}}"
   StackDatetime: !date
   ProductName: "zdong Test encrypted bucket"
-  PorfolioName: "zdong S3 test Porfolio"
+  #PorfolioName: "zdong S3 test Porfolio"
+hooks:
+  before_launch:
+    - !cmd "curl -L {{stack_group_config.infra_repo}}/{{stack_group_config.infra_branch}}/templates/sc-product-s3-private-enc-zdong.yaml --create-dirs -o templates/remote/sc-product-s3-private-enc-zdong.yaml"
