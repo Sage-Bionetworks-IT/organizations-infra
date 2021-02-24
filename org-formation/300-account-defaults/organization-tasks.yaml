@@ -10,7 +10,7 @@ CommunityEc2EbsEncryptionDefaultsRP:
 
 Ec2EbsEncryptionDefaults:
   Type: update-stacks
-  Template: ./ec2-ebs-encryption.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/EC2/ec2-ebs-encryption.yaml
   DependsOn: CommunityEc2EbsEncryptionDefaultsRP
   StackName: account-default-ec2-ebs-encryption
   MaxConcurrentStacks: 10
@@ -31,7 +31,7 @@ CommunityEc2NoDefaultVpcRP:
 
 Ec2NoVpcDefaults:
   Type: update-stacks
-  Template: ./ec2-no-default-vpc.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/VPC/ec2-no-default-vpc.yaml
   DependsOn: CommunityEc2NoDefaultVpcRP
   StackName: ec2-no-default-vpc
   MaxConcurrentStacks: 10
@@ -42,7 +42,7 @@ Ec2NoVpcDefaults:
 
 SceptreCloudformationBucket:
   Type: update-stacks
-  Template: ./public-bucket.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/S3/public-bucket.yaml
   StackName: sceptre-cloudformation-bucket
   MaxConcurrentStacks: 10
   DefaultOrganizationBinding:
@@ -52,7 +52,7 @@ SceptreCloudformationBucket:
 
 SceptreLambdaBucket:
   Type: update-stacks
-  Template: ./public-bucket.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/S3/public-bucket.yaml
   StackName: sceptre-lambda-bucket
   MaxConcurrentStacks: 10
   DefaultOrganizationBinding:
@@ -62,7 +62,7 @@ SceptreLambdaBucket:
 
 ItKmsKey:
   Type: update-stacks
-  Template: ./kms-key.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/KMS/kms-key.yaml
   StackName: it-kms-key
   MaxConcurrentStacks: 10
   Parameters:
