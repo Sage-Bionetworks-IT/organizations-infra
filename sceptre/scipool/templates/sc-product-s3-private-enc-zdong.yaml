@@ -56,7 +56,7 @@ Resources:
         - Description: 'TESTING NEW STACK WITH IP RESTRICTION - zdong'
           Info:
             LoadTemplateFromURL: !Sub '${RepoRootURL}/SC-240/s3/sc-s3-encrypted-ra.yaml'
-          Name: 'SC-240'
+          Name: 'v2.4.0'
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:
