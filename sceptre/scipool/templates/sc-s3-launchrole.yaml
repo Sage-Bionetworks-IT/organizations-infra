@@ -44,6 +44,8 @@ Resources:
                   - "iam:TagRole"
                   - "lambda:CreateFunction"
                   - "lambda:DeleteFunction"
+                  - "lambda:GetFunctionConfiguration"
+                  - "lambda:AddPermission"
                   - "cloudformation:DescribeStackResource"
                   - "cloudformation:DescribeStackResources"
                   - "cloudformation:GetTemplate"
@@ -59,6 +61,7 @@ Resources:
                   - "cloudformation:ValidateTemplate"
                   - "cloudformation:UpdateStack"
                   - "cloudformation:*ChangeSet*"
+                  - "SNS:Subscribe"
                 Resource: '*'
 Outputs:
   LaunchRoleArn:
