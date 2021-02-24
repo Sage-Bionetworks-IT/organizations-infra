@@ -28,6 +28,8 @@ Resources:
                 Action:
                   - "servicecatalog:ListServiceActionsForProvisioningArtifact"
                   - "servicecatalog:ExecuteprovisionedProductServiceAction"
+                  - "iam:CreatePolicy"
+                  - "iam:DeletePolicy"
                   - "iam:ListRolePolicies"
                   - "iam:ListPolicies"
                   - "iam:DeleteRole"
@@ -37,6 +39,7 @@ Resources:
                   - "iam:CreateRole"
                   - "iam:DetachRolePolicy"
                   - "iam:AttachRolePolicy"
+                  - "iam:PutRolePolicy"
                   - "iam:TagRole"
                   - "cloudformation:DescribeStackResource"
                   - "cloudformation:DescribeStackResources"
