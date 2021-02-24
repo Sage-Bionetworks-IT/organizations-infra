@@ -41,6 +41,8 @@ Resources:
                   - "iam:AttachRolePolicy"
                   - "iam:PutRolePolicy"
                   - "iam:TagRole"
+                  - "lambda:CreateFunction"
+                  - "lambda:DeleteFunction"
                   - "cloudformation:DescribeStackResource"
                   - "cloudformation:DescribeStackResources"
                   - "cloudformation:GetTemplate"
