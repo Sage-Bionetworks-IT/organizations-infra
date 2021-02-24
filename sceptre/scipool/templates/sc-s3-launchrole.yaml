@@ -29,6 +29,7 @@ Resources:
                   - "servicecatalog:ListServiceActionsForProvisioningArtifact"
                   - "servicecatalog:ExecuteprovisionedProductServiceAction"
                   - "iam:CreatePolicy"
+                  - "iam:GetPolicy"
                   - "iam:DeletePolicy"
                   - "iam:ListRolePolicies"
                   - "iam:ListPolicies"
