@@ -10,7 +10,7 @@ CommunityIamPasswordPolicyRP:
 
 PasswordPolicy:
   Type: update-stacks
-  Template: ./password-policy.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/ORG/password-policy.yaml
   DependsOn: CommunityIamPasswordPolicyRP
   StackName: baseline-password-policy
   MaxConcurrentStacks: 10
@@ -21,7 +21,7 @@ PasswordPolicy:
 
 OrgFormationBuildAccessRole:
   Type: update-stacks
-  Template: ./org-cross-account-role.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/org-cross-account-role.yaml
   StackName: org-formation-build-access-role
   Parameters:
     MasterAccountId: !Ref MasterAccount
