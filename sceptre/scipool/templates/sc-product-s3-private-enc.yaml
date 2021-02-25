@@ -53,6 +53,10 @@ Resources:
           Info:
             LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.10/s3/sc-s3-encrypted-ra.yaml'
           Name: 'v1.1.10'
+        - Description: 'Include option to restrict bucket downloads to same region'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/1.1.15/s3/sc-s3-encrypted-ra.yaml'
+          Name: 'v1.1.15'
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:
