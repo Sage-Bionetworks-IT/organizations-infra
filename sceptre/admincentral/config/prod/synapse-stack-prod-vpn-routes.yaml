@@ -1,0 +1,8 @@
+template_path: synapse-stack-vpn-routes.yaml
+stack_name: synapse-stack-prod-vpn-routes
+parameters:
+  # CIDR for the new Synapse prod stack
+  PeerVPCCIDR: 10.20.0.0/16
+  # Peering connection setup by the Synapse VPC stack builder
+  # Note: Synapse stacks request the peering from the spoke
+  VPCPeeringConnectionId: pcx-0ac676457c9136c8e
