@@ -42,10 +42,12 @@ Resources:
                   - "iam:AttachRolePolicy"
                   - "iam:PutRolePolicy"
                   - "iam:TagRole"
+                  - "iam:ListPolicyVersions"
                   - "lambda:CreateFunction"
                   - "lambda:DeleteFunction"
                   - "lambda:GetFunctionConfiguration"
                   - "lambda:AddPermission"
+                  - "lambda:RemovePermission"
                   - "cloudformation:DescribeStackResource"
                   - "cloudformation:DescribeStackResources"
                   - "cloudformation:GetTemplate"
@@ -62,6 +64,7 @@ Resources:
                   - "cloudformation:UpdateStack"
                   - "cloudformation:*ChangeSet*"
                   - "SNS:Subscribe"
+                  - "SNS:Unsubscribe"
                 Resource: '*'
 Outputs:
   LaunchRoleArn:
