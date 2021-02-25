@@ -6,6 +6,8 @@ We use a combination of [org-formation][1] and [sceptre][2] to deploy AWS cloud 
 using [cloudformation][4].
 
 ## Deployments
+We [boostrapped](./org-formation/000-bootstrap/README.md)
+our AWS management account before deployments can happen.
 
 ### org-formation
 
