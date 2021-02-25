@@ -41,6 +41,7 @@ Resources:
                   - "iam:DetachRolePolicy"
                   - "iam:AttachRolePolicy"
                   - "iam:PutRolePolicy"
+                  - "iam:DeleteRolePolicy"
                   - "iam:TagRole"
                   - "iam:ListPolicyVersions"
                   - "lambda:CreateFunction"
