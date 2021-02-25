@@ -29,6 +29,7 @@ Resources:
                   - "servicecatalog:ListServiceActionsForProvisioningArtifact"
                   - "servicecatalog:ExecuteprovisionedProductServiceAction"
                   - "iam:CreatePolicy"
+                  - "iam:GetPolicy"
                   - "iam:DeletePolicy"
                   - "iam:ListRolePolicies"
                   - "iam:ListPolicies"
@@ -40,7 +41,14 @@ Resources:
                   - "iam:DetachRolePolicy"
                   - "iam:AttachRolePolicy"
                   - "iam:PutRolePolicy"
+                  - "iam:DeleteRolePolicy"
                   - "iam:TagRole"
+                  - "iam:ListPolicyVersions"
+                  - "lambda:CreateFunction"
+                  - "lambda:DeleteFunction"
+                  - "lambda:GetFunctionConfiguration"
+                  - "lambda:AddPermission"
+                  - "lambda:RemovePermission"
                   - "cloudformation:DescribeStackResource"
                   - "cloudformation:DescribeStackResources"
                   - "cloudformation:GetTemplate"
@@ -56,6 +64,8 @@ Resources:
                   - "cloudformation:ValidateTemplate"
                   - "cloudformation:UpdateStack"
                   - "cloudformation:*ChangeSet*"
+                  - "SNS:Subscribe"
+                  - "SNS:Unsubscribe"
                 Resource: '*'
 Outputs:
   LaunchRoleArn:
