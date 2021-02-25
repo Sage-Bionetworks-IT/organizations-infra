@@ -27,6 +27,7 @@ Organization:
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref SandboxAccount
+        - !Ref TThyerAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
