@@ -57,11 +57,11 @@ Resources:
           Info:
             LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.9/s3/sc-s3-synapse-ra.yaml'
           Name: 'v1.1.9'
-        - Description: !Sub 'Include params in mapping. Last updated at ${StackDatetime}.'
+        - Description: !Sub 'Include params in mapping.'
           Info:
             LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.10/s3/sc-s3-synapse-ra.yaml'
           Name: 'v1.1.10'
-        - Description: 'Include option to restrict bucket downloads to same region'
+        - Description: 'Include option to restrict bucket downloads to same region. Last updated at ${StackDatetime}.'
           Info:
             LoadTemplateFromURL: !Sub '${RepoRootURL}/1.1.15/s3/sc-s3-synapse-ra.yaml'
           Name: 'v1.1.15'
