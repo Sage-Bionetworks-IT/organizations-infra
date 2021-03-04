@@ -8,6 +8,8 @@ Resources:
   #    MFA device, access-keys, ssh-keys, and policies.
   # 2. Detach the user from all groups.
   # EC2 instance role to deploy portals
+  AWSIAMGithubActionUser:
+    Type: AWS::IAM::User
   AWSIAMPortalDeployerPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -56,7 +58,8 @@ Resources:
           -
             Effect: Allow
             Principal:
-              Service: ec2.amazonaws.com
+              - Service: ec2.amazonaws.com
+              - AWS: !GetAtt AWSIAMGithubActionUser.Arn
             Action:
               - sts:AssumeRole
       Path: /
