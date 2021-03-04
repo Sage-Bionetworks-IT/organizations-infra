@@ -1,0 +1,8 @@
+template_path: remote/service-account.yaml
+stack_name: gha-svc-account
+parameters:
+  ServiceUserPolicies:
+    ["arn:aws:iam::797640923903:role/accounts-AWSIAMPortalDeployerRole-17FJXSP3DEYFM"]
+hooks:
+  before_launch:
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/service-account.yaml -N -P templates/remote"
