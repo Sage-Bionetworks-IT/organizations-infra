@@ -1,0 +1,14 @@
+
+# A service account for https://github.com/nlpsandbox/aws-cloudformation
+NlpSandboxServiceAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/service-account.yaml
+  StackName: NlpSandboxServiceAccount
+  MaxConcurrentStacks: 10
+  Parameters:
+    ServiceUserPolicies:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref SandboxAccount
+    Region: us-east-1

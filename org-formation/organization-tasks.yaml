@@ -31,3 +31,7 @@ Baseline:
 AccountDefaults:
   Type: include
   Path: ./300-account-defaults/organization-tasks.yaml
+
+AccountAccess:
+  Type: include
+  Path: ./600-access/organization-tasks.yaml
