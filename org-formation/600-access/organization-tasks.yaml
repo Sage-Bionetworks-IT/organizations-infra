@@ -2,7 +2,7 @@
 # A service account for https://github.com/nlpsandbox/aws-cloudformation
 NlpSandboxServiceAccount:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/service-account.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.1/templates/IAM/service-account.yaml
   StackName: NlpSandboxServiceAccount
   MaxConcurrentStacks: 10
   Parameters:
