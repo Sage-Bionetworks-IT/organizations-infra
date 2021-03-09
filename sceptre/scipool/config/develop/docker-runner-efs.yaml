@@ -1,0 +1,7 @@
+template_path: remote/efs.yaml
+stack_name: docker-runner-efs
+dependencies:
+  - develop/bootstrap.yaml
+hooks:
+  before_launch:
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/EFS/efs.yaml -N -P templates/remote"
