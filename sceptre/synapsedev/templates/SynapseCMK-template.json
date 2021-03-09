@@ -180,6 +180,13 @@
                                         "cloudfront:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "sts:AssumeRole"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }
@@ -247,6 +254,28 @@
                                         },
                                         {
                                             "Ref": "AWS::AccountId"
+                                        },
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    {
+                                                        "Fn::ImportValue": "us-east-1-jumpcloud-idp-SynapseDevDeveloperSamlProviderRoleId"
+                                                    },
+                                                    ":*"
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    {
+                                                        "Fn::ImportValue": "us-east-1-jumpcloud-idp-SynapseDevAdminSamlProviderRoleId"
+                                                    },
+                                                    ":*"
+                                                ]
+                                            ]
                                         }
                                     ]
                                 }
@@ -277,6 +306,12 @@
                                                 ":root"
                                             ]
                                         ]
+                                    },
+                                    {
+                                        "Fn::ImportValue": "us-east-1-jumpcloud-idp-SynapseDevDeveloperSamlProviderRoleArn"
+                                    },
+                                    {
+                                        "Fn::ImportValue": "us-east-1-jumpcloud-idp-SynapseDevAdminSamlProviderRoleArn"
                                     }
                                 ]
                             },
