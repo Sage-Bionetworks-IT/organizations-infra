@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Scheduled Jobs Portfolio for Service Catalog
+Parameters:
+  PortfolioProvider:
+    Type: String
+    Description: Provider Name
+    Default: Sage Bionetworks
+  PorfolioName:
+    Type: String
+    Description: Portfolio Name
+    Default: Lambda Portfolio
+  PorfolioDescription:
+    Type: String
+    Description: Portfolio Description
+    Default: Portfolio of Lambda products
+Resources:
+  SCScheduledJobsPortfolio:
+    Type: AWS::ServiceCatalog::Portfolio
+    Properties:
+      ProviderName: !Ref 'PortfolioProvider'
+      Description: !Ref 'PorfolioDescription'
+      DisplayName: !Ref 'PorfolioName'
+  LinkEndusersRole:
+    Type: AWS::ServiceCatalog::PortfolioPrincipalAssociation
+    Properties:
+      PrincipalARN: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-enduser-iam-ServiceCatalogEndusers-RoleArn'
+      PortfolioId: !Ref 'SCScheduledJobsPortfolio'
+      PrincipalType: IAM
+Outputs:
+  SCScheduledJobsPortfolioId:
+    Value: !Ref SCScheduledJobsPortfolio
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SCScheduledJobsPortfolioId'
