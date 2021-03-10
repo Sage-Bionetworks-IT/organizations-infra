@@ -12,5 +12,7 @@ NlpSandboxServiceAccount:
       - arn:aws:iam::aws:policy/AmazonS3FullAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
-    Account: !Ref SandboxAccount
+    Account:
+      - !Ref SandboxAccount
+      - !Ref ScicompAccount
     Region: us-east-1
