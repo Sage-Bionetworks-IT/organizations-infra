@@ -1,0 +1,4 @@
+template_path: "sc-lambda-launchrole.yaml"
+stack_name: "sc-lambda-launchrole"
+dependencies:
+  - "prod/essentials.yaml"

@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda ServiceCatalog product
+Parameters:
+  RepoRootURL:
+    Type: String
+    Description: Root url for the repo containing the product templates.
+  ProductName:
+    Type: String
+    Description: Name of the product that will be visible to the end user
+    Default: 'Lambda: Docker Runner'
+  StackDatetime:
+    Type: String
+    Description: Last updated date and time of product
+    Default: ''
+  ReplaceProvisioningArtifacts:
+    Type: String
+    Description: "Whether to keep or replace the provisioning artifact identifier on update"
+    Default: 'false'
+Resources:
+  LambdaProduct:
+    Type: AWS::ServiceCatalog::CloudFormationProduct
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002
+            - E3003
+            - W2001
+    Properties:
+      Name: !Ref ProductName
+      Description: "This product provisions a lambda to execute a docker image"
+      ProvisioningArtifactParameters:
+        # StackDatetime is used to force this template to pick updated nested stack code.  Add it to
+        # the description to force cloudformation to update the stack with the latest code.
+        - Description: !Sub 'Baseline version. Last updated at ${StackDatetime}.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.16/lambda/docker-runner.yaml'
+          Name: 'v1.1.16'
+      'Fn::Transform':
+        Name: 'AWS::Include'
+        Parameters:
+          # source: https://github.com/Sage-Bionetworks/admincentral-infra/blob/master/templates/cfn-snippets-bucket.yaml
+          Location: "s3://cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz/scipool/products.yaml"
+      ReplaceProvisioningArtifacts: !Ref ReplaceProvisioningArtifacts
+  AssociateLambda:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-lambda-SCLambdaPortfolioId'
+      ProductId: !Ref 'LambdaProduct'
+  ConstraintLambda:
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    DependsOn: AssociateLambda
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-lambda-SCLambdaPortfolioId'
+      ProductId: !Ref 'LambdaProduct'
+      RoleArn: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-lambda-launchrole-LaunchRoleArn'
+Outputs:
+  ProductId:
+    Value: !Ref 'LambdaProduct'
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProductId'

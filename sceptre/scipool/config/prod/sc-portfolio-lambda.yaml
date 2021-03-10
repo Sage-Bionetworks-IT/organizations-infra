@@ -1,0 +1,8 @@
+template_path: "sc-portfolio-lambda.yaml"
+stack_name: "sc-portfolio-lambda"
+dependencies:
+  - "prod/sc-lambda-launchrole.yaml"
+  - "prod/sc-enduser-iam.yaml"
+parameters:
+  PorfolioName: "Sage Lambda Porfolio"
+  PorfolioDescription: "Lambda Products for Sage Bionetworks staff"
