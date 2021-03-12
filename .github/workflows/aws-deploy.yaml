@@ -48,7 +48,7 @@ jobs:
       - name: Deploy with org-formation
         run: |
           cd org-formation
-          npx org-formation perform-tasks --verbose --print-stack --perform-cleanup organization-tasks.yaml
+          npx org-formation perform-tasks --verbose --print-stack --perform-cleanup _tasks.yaml
   sceptre-organizations:
     if: github.event_name == 'push'
     needs: org-formation
