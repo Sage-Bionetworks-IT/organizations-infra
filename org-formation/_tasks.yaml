@@ -20,18 +20,34 @@
 #   /organization-parameters.yml <-- contains global parameter values that can be included
 #   /organization.yml <-- contains your organization model
 
+Parameters:
+  <<: !Include './_parameters.yaml'
+
 OrganizationUpdate:
   Type: update-organization
   Template: ./organization.yaml
 
+Types:
+  Type: include
+  DependsOn: [ OrganizationUpdate ]
+  Path: ./005-types/_tasks.yaml
+
+SeviceControlPolicies:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./010-scps/_tasks.yaml
+
 Baseline:
   Type: include
+  DependsOn: [ Types ]
   Path: ./200-baseline/organization-tasks.yaml
 
 AccountDefaults:
   Type: include
+  DependsOn: [ Types ]
   Path: ./300-account-defaults/organization-tasks.yaml
 
 AccountAccess:
   Type: include
+  DependsOn: [ Types ]
   Path: ./600-access/organization-tasks.yaml
