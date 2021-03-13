@@ -1,0 +1,13 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+PreventDisableGuardDuty:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-guardduty.yaml
+  StackName: !Sub '${resourcePrefix}-prevent-disable-guardduty'
+  MaxConcurrentStacks: 10
+  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  Parameters:
+    targetIds: [ !Ref OrganizationRoot ]

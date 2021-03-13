@@ -1,0 +1,7 @@
+template_path: remote/efs.yaml
+stack_name: docker-runner-efs
+dependencies:
+  - develop/bootstrap.yaml
+hooks:
+  before_launch:
+    - !cmd "wget https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/EFS/efs.yaml -N -P templates/remote"
