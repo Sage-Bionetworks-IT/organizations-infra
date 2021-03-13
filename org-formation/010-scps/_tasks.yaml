@@ -54,4 +54,4 @@ DenyAllRegionsOutsideUs:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref PlatformOU ]
+    targetIds: [ !Ref OrganizationRoot ]
