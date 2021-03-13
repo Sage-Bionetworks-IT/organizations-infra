@@ -32,10 +32,6 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: Platform
-      ServiceControlPolicies:
-        - !Ref Prevent-disable-guarddutySCP
-        - !Ref Prevent-disable-config-rulesSCP
-        - !Ref Prevent-disable-cloudtrailSCP
       OrganizationalUnits:
         - !Ref SynapseOU
         - !Ref BridgeOU
@@ -44,11 +40,6 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: IT
-      ServiceControlPolicies:
-        - !Ref Prevent-disable-guarddutySCP
-        - !Ref Restrict-regionstous-eastandus-westSCP
-        - !Ref Prevent-disable-config-rulesSCP
-        - !Ref Prevent-disable-cloudtrailSCP
       OrganizationalUnits: !Ref TestOU
       Accounts:
         - !Ref TransitAccount
