@@ -33,3 +33,25 @@ PreventDisableCloudwatchConfigs:
     IncludeMasterAccount: true
   Parameters:
     targetIds: [ !Ref OrganizationRoot ]
+
+DenyAllRegionsOutsideUsEast1:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/deny-all-regions-outside-us-east-1.yaml
+  StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us-east-1'
+  MaxConcurrentStacks: 10
+  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  Parameters:
+    targetIds: [ !Ref ScienceOU ]
+
+DenyAllRegionsOutsideUs:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/deny-all-regions-outside-us.yaml
+  StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us'
+  MaxConcurrentStacks: 10
+  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  Parameters:
+    targetIds: [ !Ref PlatformOU ]
