@@ -42,12 +42,6 @@ NlpSandboxServiceAccount:
                 "Resource": "*"
             },
             {
-                "Sid": "elb",
-                "Effect": "Allow",
-                "Action": "elasticloadbalancing:*",
-                "Resource": "*"
-            },
-            {
                 "Sid": "s3",
                 "Effect": "Allow",
                 "Action": [
