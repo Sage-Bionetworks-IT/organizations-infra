@@ -43,7 +43,7 @@ DenyAllRegionsOutsideUsEast1:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref TestOU ]
+    targetIds: [ !Ref ITOU, !Ref ScipoolDevAccount, !Ref ScipoolProdAccount, !Ref ScicompAccount]
 
 DenyAllRegionsOutsideUs:
   Type: update-stacks
