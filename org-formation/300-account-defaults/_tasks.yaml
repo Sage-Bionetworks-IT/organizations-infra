@@ -1,12 +1,3 @@
-CommunityEc2EbsEncryptionDefaultsRP:
-  Type: register-type
-  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-ec2-ebsencryptiondefaults-0.1.0.zip
-  ResourceType: 'Community::Organizations::EbsEncryptionDefaults'
-  MaxConcurrentTasks: 10
-  OrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
-    Region: us-east-1
 
 Ec2EbsEncryptionDefaults:
   Type: update-stacks
@@ -15,16 +6,6 @@ Ec2EbsEncryptionDefaults:
   StackName: account-default-ec2-ebs-encryption
   MaxConcurrentStacks: 10
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
-    Region: us-east-1
-
-CommunityEc2NoDefaultVpcRP:
-  Type: register-type
-  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-organizations-nodefaultvpc-0.1.0.zip
-  ResourceType: 'Community::Organizations::NoDefaultVPC'
-  MaxConcurrentTasks: 10
-  OrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
     Region: us-east-1
