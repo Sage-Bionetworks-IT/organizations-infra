@@ -135,3 +135,6 @@ sceptre/**/templates/remote/
 
 # lerna
 lerna-debug.log
+
+# ofn
+.printed-stacks/

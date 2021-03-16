@@ -40,14 +40,14 @@ SeviceControlPolicies:
 Baseline:
   Type: include
   DependsOn: [ Types ]
-  Path: ./200-baseline/organization-tasks.yaml
+  Path: ./200-baseline/_tasks.yaml
 
 AccountDefaults:
   Type: include
   DependsOn: [ Types ]
-  Path: ./300-account-defaults/organization-tasks.yaml
+  Path: ./300-account-defaults/_tasks.yaml
 
 AccountAccess:
   Type: include
   DependsOn: [ Types ]
-  Path: ./600-access/organization-tasks.yaml
+  Path: ./600-access/_tasks.yaml
