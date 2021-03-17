@@ -48,7 +48,7 @@ NlpSandboxServiceAccount:
                     "s3:PutObject"
                 ],
                 "Resource": [
-                    "arn:aws:s3:::bootstrap-awss3cloudformationbucket-z6hnifi9i3p/*"
+                    "arn:aws:s3:::bootstrap-awss3cloudformationbucket-*"
                 ]
             },
             {
