@@ -7,6 +7,7 @@ Ec2EbsEncryptionDefaults:
   MaxConcurrentStacks: 10
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
+    ExcludeAccount: !Ref ImageCentralAccount
     Account: '*'
     Region: us-east-1
 
