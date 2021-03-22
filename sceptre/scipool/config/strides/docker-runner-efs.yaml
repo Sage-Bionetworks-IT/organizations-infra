@@ -1,7 +1,7 @@
-template_path: remote/efs.yaml
-stack_name: docker-runner-efs
+template_path: remote/efs-vpc.yaml
+stack_name: docker-runner-vpc
 dependencies:
   - strides/bootstrap.yaml
 hooks:
   before_launch:
-    - !cmd "wget https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/EFS/efs.yaml -N -P templates/remote"
+    - !cmd "wget https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/VPC/efs-vpc.yaml -N -P templates/remote"
