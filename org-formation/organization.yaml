@@ -50,6 +50,7 @@ Organization:
         - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
         - !Ref ITSandboxAccount
+        - !Ref ContainerCentralAccount
 
   TestOU:
     Type: OC::ORG::OrganizationalUnit
@@ -245,6 +246,16 @@ Organization:
       AccountId: '563295687221'
       RootEmail: aws.sandbox@sagebase.org
       Alias: org-sagebase-sandbox
+      Tags:
+        Department: Platform
+        Project: Infrastructure
+
+  ContainerCentralAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: ContainerCentralAccount
+      RootEmail: aws-containercentral@sagebase.org
+      Alias: org-sagebase-containercentral
       Tags:
         Department: Platform
         Project: Infrastructure
