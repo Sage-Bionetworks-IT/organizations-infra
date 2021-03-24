@@ -27,7 +27,7 @@ Organization:
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref SandboxAccount
-        - !Ref TThyerAccount
+        - !Ref MobileHealthDataEngineeringAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -248,4 +248,14 @@ Organization:
       Alias: org-sagebase-sandbox
       Tags:
         Department: Platform
+        Project: Infrastructure
+
+  MobileHealthDataEngineeringAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: mobilehealth-dataengineering
+      RootEmail: aws-mobilehealth-dataengineering@sagebase.org
+      Alias: org-sagebase-mobilehealth-dataengineering
+      Tags:
+        Department: SysBio
         Project: Infrastructure
