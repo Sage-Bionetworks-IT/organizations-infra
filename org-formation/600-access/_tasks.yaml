@@ -13,13 +13,13 @@ AccessOrganizationsAdmin:
     IncludeMasterAccount: true
     Account: !Ref MasterAccount
 
-JumpcloudMobileHealthDataEngineeringAdmin:
+JCMobileHealthDataEngineeringAdmin:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
-  StackName: jc-access-mobilehealth-dataengineering-admin
+  StackName: jc-mobilehealth-dataengineering-admin
   MaxConcurrentStacks: 10
   Parameters:
-    MetadataDocument: !ReadFile ./MetadataDocuments/MobileHealthDataEngineering-admin.xml
+    MetadataDocument: !ReadFile ./MetadataDocuments/mobilehealth-dataengineering-admin.xml
     SamlProviderName: mobilehealth-dataengineering-admin
     SamlProviderPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
