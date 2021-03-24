@@ -12,6 +12,20 @@ AccessOrganizationsAdmin:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: !Ref MasterAccount
+
+JumpcloudMobileHealthDataEngineeringAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  StackName: jc-access-mobilehealth-dataengineering-admin
+  MaxConcurrentStacks: 10
+  Parameters:
+    MetadataDocument: !ReadFile ./MetadataDocuments/MobileHealthDataEngineering-admin.xml
+    SamlProviderName: mobilehealth-dataengineering-admin
+    SamlProviderPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref MobileHealthDataEngineeringAccount
     Region: us-east-1
 
 # A service account for https://github.com/nlpsandbox/aws-cloudformation
