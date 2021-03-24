@@ -27,6 +27,7 @@ Organization:
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref SandboxAccount
+        - !Ref NlpSandboxAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -247,4 +248,14 @@ Organization:
       Alias: org-sagebase-sandbox
       Tags:
         Department: Platform
+        Project: Infrastructure
+
+  NlpSandboxAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: NlpSandboxAccount
+      RootEmail: aws-nlpsandbox@sagebase.org
+      Alias: org-sagebase-nlpsandbox
+      Tags:
+        Department: CompOnc
         Project: Infrastructure
