@@ -8,4 +8,4 @@ parameters:
   Resource: "arn:aws:s3:::essentials-awss3cloudtrailbucket-1jz6pf8dzid7r"
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/sumologic-role.yaml -N -P templates/remote"
+    - !cmd "wget {{stack_group_config.aws_infra_url}}/master/sumologic-role.yaml -N -P templates/remote"

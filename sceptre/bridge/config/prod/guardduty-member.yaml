@@ -7,4 +7,4 @@ parameters:
   InvitationId: 7eb3d07072c3f8d9e77c87e161fe3137
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/GuardDutyMember.yaml -N -P templates/remote"
+    - !cmd "wget {{stack_group_config.aws_infra_url}}/master/GuardDutyMember.yaml -N -P templates/remote"

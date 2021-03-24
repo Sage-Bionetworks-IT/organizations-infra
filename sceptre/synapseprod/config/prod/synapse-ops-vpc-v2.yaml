@@ -7,4 +7,4 @@ parameters:
   PublicSubnetZones: "us-east-1c,us-east-1d,us-east-1e"
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/vpc.yaml -N -P templates/remote"
+    - !cmd "wget {{stack_group_config.aws_infra_url}}/master/vpc.yaml -N -P templates/remote"

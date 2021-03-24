@@ -4,3 +4,4 @@ region: {{ var.region | default("us-east-1") }}
 template_bucket_name: bootstrap-awss3cloudformationbucket-1n3izilcxyb3d
 template_key_prefix: {{ environment_variable.GITHUB_REF | default("testing") }}
 admincentral_cf_bucket: "bootstrap-awss3cloudformationbucket-19qromfd235z9"
+aws_infra_url: "https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra"
