@@ -6,7 +6,7 @@ PreventDisableGuardDuty:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-guardduty.yaml
   StackName: !Sub '${resourcePrefix}-prevent-disable-guardduty'
   MaxConcurrentStacks: 10
-  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
@@ -17,7 +17,7 @@ PreventDisableCloudtrail:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-cloudtrail.yaml
   StackName: !Sub '${resourcePrefix}-prevent-disable-cloudtrail'
   MaxConcurrentStacks: 10
-  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
@@ -28,7 +28,7 @@ PreventDisableCloudwatchConfigs:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-cloudwatch-configs.yaml
   StackName: !Sub '${resourcePrefix}-prevent-disable-cloudwatch-configs'
   MaxConcurrentStacks: 10
-  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
@@ -39,7 +39,7 @@ DenyAllRegionsOutsideUsEast1:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/deny-all-regions-outside-us-east-1.yaml
   StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us-east-1'
   MaxConcurrentStacks: 10
-  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
@@ -50,7 +50,7 @@ DenyAllRegionsOutsideUs:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/deny-all-regions-outside-us.yaml
   StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us'
   MaxConcurrentStacks: 10
-  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:

@@ -1,3 +1,5 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
 
 PasswordPolicy:
   Type: update-stacks
@@ -8,7 +10,7 @@ PasswordPolicy:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
-    Region: us-east-1
+    Region: !Ref primaryRegion
 
 OrgFormationBuildAccessRole:
   Type: update-stacks
@@ -20,4 +22,4 @@ OrgFormationBuildAccessRole:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
-    Region: us-east-1
+    Region: !Ref primaryRegion

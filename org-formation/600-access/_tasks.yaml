@@ -1,3 +1,5 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
 
 AccessOrganizationsAdmin:
   Type: update-stacks
@@ -12,6 +14,7 @@ AccessOrganizationsAdmin:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: !Ref MasterAccount
+    Region: !Ref primaryRegion
 
 JCMobileHealthDataEngineeringAdmin:
   Type: update-stacks
@@ -26,7 +29,7 @@ JCMobileHealthDataEngineeringAdmin:
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account: !Ref MobileHealthDataEngineeringAccount
-    Region: us-east-1
+    Region: !Ref primaryRegion
 
 # A service account for https://github.com/nlpsandbox/aws-cloudformation
 NlpSandboxServiceAccount:
@@ -42,4 +45,4 @@ NlpSandboxServiceAccount:
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account: !Ref SandboxAccount
-    Region: us-east-1
+    Region: !Ref primaryRegion
