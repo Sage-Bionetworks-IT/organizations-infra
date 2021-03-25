@@ -45,7 +45,6 @@ Organization:
       Accounts:
         - !Ref TransitAccount
         - !Ref AdminCentralAccount
-        - !Ref SageITAccount
         - !Ref MasterAccount
         - !Ref LogCentralAccount
         - !Ref SecurityCentralAccount
