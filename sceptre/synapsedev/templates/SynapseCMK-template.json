@@ -188,6 +188,13 @@
                                         "sts:AssumeRole"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }
