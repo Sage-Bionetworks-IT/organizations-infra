@@ -1,6 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09-OC'
 Description: Manage AWS organizations with master account
 
+Parameters:
+  <<: !Include './_parameters.yaml'
+
 Organization:
   MasterAccount:
     Type: OC::ORG::MasterAccount
@@ -259,5 +262,5 @@ Organization:
       Tags:
         Department: SysBio
         Project: Infrastructure
-        budget-alarm-threshold: 300
-        budget-alarm-threshold-email-recipient: it@sagebase.org
+        budget-alarm-threshold: 200
+        budget-alarm-threshold-email-recipient: !Ref budgetOwnerEmail

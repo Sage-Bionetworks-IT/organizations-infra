@@ -16,3 +16,7 @@ allRegions:
   Type: List<String>
   Default:
     - us-east-1
+
+budgetOwnerEmail:
+  Type: String
+  Default: bruce.hoff@sagebase.org
