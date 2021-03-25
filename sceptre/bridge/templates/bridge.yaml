@@ -63,16 +63,6 @@ Resources:
               - 's3:DeleteObject'
             Effect: Allow
             Resource: "arn:aws:s3:::ios-apps.sagebridge.org/*"
-  # resources for logging services
-  AWSIAMSumoLogicUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      Groups:
-        - !Ref AWSIAMLoggingServiceGroup
-  AWSIAMSumoLogicUserAccessKey:
-    Type: 'AWS::IAM::AccessKey'
-    Properties:
-      UserName: !Ref AWSIAMSumoLogicUser
   IAMLoggingServiceManagedPolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
@@ -582,14 +572,6 @@ Outputs:
     Value: !Ref AwsDefaultVpcId
     Export:
       Name: !Sub '${AWS::StackName}-AwsDefaultVpcId'
-  AWSIAMSumoLogicUser:
-    Value: !Ref AWSIAMSumoLogicUser
-    Export:
-      Name: !Sub '${AWS::StackName}-SumoLogicUser'
-  AWSIAMSumoLogicUserAccessKey:
-    Value: !Ref AWSIAMSumoLogicUserAccessKey
-    Export:
-      Name: !Sub '${AWS::StackName}-SumoLogicUserAccessKey'
   AWSS3CloudtrailBucket:
     Value: !Ref AWSS3CloudtrailBucket
     Export:
