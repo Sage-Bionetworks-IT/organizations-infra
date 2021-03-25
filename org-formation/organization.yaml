@@ -1,9 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09-OC'
 Description: Manage AWS organizations with master account
 
-Parameters:
-  <<: !Include './_parameters.yaml'
-
 Organization:
   MasterAccount:
     Type: OC::ORG::MasterAccount
