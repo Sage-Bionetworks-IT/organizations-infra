@@ -263,4 +263,4 @@ Organization:
         Department: SysBio
         Project: Infrastructure
         budget-alarm-threshold: 200
-        budget-alarm-threshold-email-recipient: !Ref budgetOwnerEmail
+        budget-alarm-threshold-email-recipient: tess.thyer@sagebase.org
