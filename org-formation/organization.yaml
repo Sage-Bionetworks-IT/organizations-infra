@@ -259,3 +259,5 @@ Organization:
       Tags:
         Department: SysBio
         Project: Infrastructure
+        budget-alarm-threshold: 300
+        budget-alarm-threshold-email-recipient: it@sagebase.org
