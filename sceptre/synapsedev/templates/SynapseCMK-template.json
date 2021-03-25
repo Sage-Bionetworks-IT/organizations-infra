@@ -114,7 +114,8 @@
                                         "iam:DeleteInstanceProfile",
                                         "iam:GetInstanceProfile",
                                         "iam:RemoveRoleFromInstanceProfile",
-                                        "iam:AddRoleToInstanceProfile"
+                                        "iam:AddRoleToInstanceProfile",
+                                        "iam:CreateServiceLinkedRole"
                                     ],
                                     "Resource": "*"
                                 },
