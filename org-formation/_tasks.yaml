@@ -21,6 +21,11 @@ Budgets:
   DependsOn: [ Types ]
   Path: ./040-budgets/_tasks.yaml
 
+Cloudtrail:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./060-cloud-trail/_tasks.yaml
+
 Baseline:
   Type: include
   DependsOn: [ Types ]
