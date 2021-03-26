@@ -1,5 +1,5 @@
 Parameters:
-  <<: !Include '../_parameters.yml'
+  <<: !Include '../_parameters.yaml'
 
 BudgetAlarms:
   Type: update-stacks
