@@ -1,0 +1,18 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+CloudTrail:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/Cloudtrail/cloudtrail-trail.yaml
+  StackName: !Sub '${resourcePrefix}-cloudtrail'
+  StackDescription: CloudTrail
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: '*'
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    LogArchiveBinding:
+      Account: !Ref LogCentralAccount
+  TerminationProtection: true
+  Parameters:
+    bucketName: !Sub '${resourcePrefix}-cloudtrail-${CurrentAccount.AccountId}'
