@@ -37,6 +37,11 @@ SeviceControlPolicies:
   DependsOn: [ Types ]
   Path: ./010-scps/_tasks.yaml
 
+Budgets:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./040-budgets/_tasks.yaml
+
 Baseline:
   Type: include
   DependsOn: [ Types ]
