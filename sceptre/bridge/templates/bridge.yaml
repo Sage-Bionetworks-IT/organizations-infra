@@ -25,10 +25,6 @@ Parameters:
     Description: The AWS account running the Sophos-VPN
     AllowedPattern: '[0-9]*'
     ConstraintDescription: Must be account number without dashes
-  CentralCloudtrailBucket:
-    Type: String
-    Description: The central S3 bucket where AWS CloudTrail send logs to.
-    Default: essentials-awss3cloudtrailbucket-1jz6pf8dzid7r
 Conditions:
   CreateProdResources: !Equals [ !Ref AwsAccount, prod ]
 Resources:
@@ -265,21 +261,6 @@ Resources:
       Path: "/"
       ManagedPolicyArns:
         - !Ref AWSIAMCloudtrailLogManagedPolicy
-  AWSCloudtrailTrail:
-    DependsOn:
-      - AWSIAMS3CloudtrailBucketPolicy
-      - AWSSNSCloudtrailTopicPolicy
-    Type: "AWS::CloudTrail::Trail"
-    Properties:
-      CloudWatchLogsLogGroupArn: !GetAtt AWSLogsCloudtrailLogGroup.Arn
-      CloudWatchLogsRoleArn: !GetAtt AWSIAMCloudtrailLogRole.Arn
-      # send all logs to cloudtrail bucket in AWS logcentral account
-      S3BucketName: !Ref CentralCloudtrailBucket
-      SnsTopicName: !GetAtt AWSSNSCloudtrailTopic.TopicName
-      IsLogging: true
-      EnableLogFileValidation: true
-      IncludeGlobalServiceEvents: true
-      IsMultiRegionTrail: true
   # AWS Config service, https://github.com/awslabs/aws-cloudformation-templates/blob/master/aws/services/Config/Config.yaml
   AWSConfigConfigurationRecorder:
     Type: AWS::Config::ConfigurationRecorder
@@ -346,22 +327,6 @@ Resources:
           - Effect: Allow
             Action: config:Put*
             Resource: '*'
-  # https://docs.aws.amazon.com/config/latest/developerguide/cloudtrail-enabled.html
-  AWSConfigCloudtrailEnabledConfigRule:
-    Type: 'AWS::Config::ConfigRule'
-    DependsOn: AWSConfigConfigurationRecorder
-    Properties:
-      Description: Checks whether AWS CloudTrail is enabled.
-      InputParameters:
-        # logs and data are in AWS logcentral account
-        s3BucketName: !Ref CentralCloudtrailBucket
-        snsTopicArn: !Ref AWSSNSCloudtrailTopic
-        cloudWatchLogsLogGroupArn: !GetAtt AWSLogsCloudtrailLogGroup.Arn
-      Scope: {}
-      Source:
-        Owner: AWS
-        SourceIdentifier: CLOUD_TRAIL_ENABLED
-      MaximumExecutionFrequency: TwentyFour_Hours
   # dynamodb monitoring resources
   AWSSNSDynamoTopic:
     Type: "AWS::SNS::Topic"
