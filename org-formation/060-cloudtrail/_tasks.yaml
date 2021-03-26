@@ -1,9 +1,9 @@
 Parameters:
-  <<: !Include '../_parameters.yml'
+  <<: !Include '../_parameters.yaml'
 
 CloudTrail:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/Cloudtrail/cloud-trail.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/Cloudtrail/cloudtrail-trail.yaml
   StackName: !Sub '${resourcePrefix}-cloudtrail'
   StackDescription: CloudTrail
   DefaultOrganizationBindingRegion: !Ref primaryRegion
