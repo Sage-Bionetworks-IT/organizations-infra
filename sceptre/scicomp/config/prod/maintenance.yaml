@@ -1,0 +1,9 @@
+template_path: remote/maintenance.yaml
+stack_name: prod-default-maintenance-window
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+hooks:
+  before_launch:
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/maintenance.yaml -N -P templates/remote"
