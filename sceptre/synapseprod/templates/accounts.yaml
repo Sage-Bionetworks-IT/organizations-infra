@@ -40,6 +40,7 @@ Resources:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
         - !Ref AWSIAMBillingManagersGroup
+        - !Ref AWSIAMAnalyticsUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
