@@ -258,3 +258,5 @@ Organization:
       Tags:
         Department: SysBio
         Project: Infrastructure
+        budget-alarm-threshold: 20000
+        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org
