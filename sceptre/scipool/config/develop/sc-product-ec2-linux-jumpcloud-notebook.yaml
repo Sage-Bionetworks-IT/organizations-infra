@@ -7,6 +7,7 @@ stack_tags:
 dependencies:
   - "develop/sc-portfolio-ec2.yaml"
   - "develop/sc-ec2-actions.yaml"
+  - "develop/sc-product-ec2-linux-jumpcloud-notebook-write-to-ssm-policy.yaml"
 parameters:
   RepoRootURL: "https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}"
   StackDatetime: !date

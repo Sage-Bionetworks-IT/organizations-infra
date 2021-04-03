@@ -8,6 +8,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEC2FullAccess
         - arn:aws:iam::aws:policy/AmazonSSMFullAccess
+        - !Ref ScCreateKmsKeyPolicy
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -60,6 +61,20 @@ Resources:
                   - "s3:GetObject"
                   - "lambda:InvokeFunction"
                 Resource: '*'
+  ScCreateKmsKeyPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Sid: AllowCreateKMS
+            Action:
+              - kms:CreateKey
+              - kms:CreateAlias
+              - kms:TagResource
+              - kms:DeleteAlias
+            Resource: "*"
 Outputs:
   LaunchRoleArn:
     Value: !GetAtt SCEC2LaunchRole.Arn

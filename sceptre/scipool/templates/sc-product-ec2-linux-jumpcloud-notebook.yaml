@@ -80,10 +80,14 @@ Resources:
           Info:
             LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.13/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
           Name: 'v1.1.13'
-        - Description: !Sub 'Restore set_env_var. Last updated at ${StackDatetime}.'
+        - Description: 'Restore set_env_var.'
           Info:
             LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.14/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
           Name: 'v1.1.14'
+        - Description: !Sub 'Synapse Credential passthrough. Last updated at ${StackDatetime}.'
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.16/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
+          Name: 'v1.1.16'
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:
