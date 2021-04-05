@@ -1,0 +1,8 @@
+template_path: "sc-kms-key.yaml"
+stack_name: "sc-lambda-runner-kms-key"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "develop/jumpcloud-idp.yaml"

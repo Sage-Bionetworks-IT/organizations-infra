@@ -6,6 +6,10 @@ Parameters:
   AdminRoleArn:
     Type: String
     Description: ARN of the Administrator Role for a particular account
+    Default: ""
+
+Conditions:
+  HasAdminRoleArn: !Not [!Equals [!Ref AdminRoleArn, ""]]
 
 Resources:
 
@@ -51,7 +55,7 @@ Resources:
               AWS:
                 - !ImportValue
                     'Fn::Sub': '${AWS::Region}-bootstrap-CfServiceRoleArn'
-                - !Ref AdminRoleArn
+                - !If [HasAdminRoleArn, !Ref AdminRoleArn, !Ref 'AWS::NoValue']
             Action:
               - "kms:Create*"
               - "kms:Describe*"
