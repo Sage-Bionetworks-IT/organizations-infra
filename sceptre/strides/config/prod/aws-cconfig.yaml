@@ -1,0 +1,12 @@
+template_path: "aws-config.yaml"
+stack_name: "aws-config"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "prod/cloudtrail.yaml"
+parameters:
+  OperatorEmail: "aws.strides@sagebase.org"
+  LogCentralBucket: "essentials-awss3configbucket-9n8wjykhvr5z"  # bucket in org-sagebase-logcentral account
+  LocalCloudtrailBucket: !stack_output_external cloudtrail::S3CloudtrailBucket
