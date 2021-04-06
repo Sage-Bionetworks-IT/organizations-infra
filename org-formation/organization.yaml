@@ -28,8 +28,7 @@ Organization:
         - !Ref ScicompAccount
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringAccount
-        - !Ref NextflowWorkflowsSharedDevAccount
-        - !Ref NextflowWorkflowsSharedProdAccount
+        - !Ref NextflowWorkflowsProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
