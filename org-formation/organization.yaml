@@ -263,24 +263,12 @@ Organization:
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org
 
-  NextflowWorkflowsSharedDevAccount:
+  NextflowWorkflowsProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: nextflow-workflows-shared-dev
+      AccountName: nextflow-workflows-prod
       RootEmail: aws-nextflow-workflows@sagebase.org
-      Alias: org-sagebase-nextflow-workflows-shared-dev
-      Tags:
-        Department: CompOnc
-        Project: Infrastructure
-        budget-alarm-threshold: 10000
-        budget-alarm-threshold-email-recipient: aws-nextflow-workflows@sagebase.org
-
-  NextflowWorkflowsSharedProdAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: nextflow-workflows-shared-prod
-      RootEmail: aws-nextflow-workflows@sagebase.org
-      Alias: org-sagebase-nextflow-workflows-shared-prod
+      Alias: org-sagebase-nextflow-workflows-prod
       Tags:
         Department: CompOnc
         Project: Infrastructure
