@@ -29,6 +29,7 @@ Organization:
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringAccount
         - !Ref NextflowWorkflowsProdAccount
+        - !Ref NextflowWorkflowsDevAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -273,3 +274,15 @@ Organization:
         Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-nextflow-workflows@sagebase.org
+
+  NextflowWorkflowsDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: nextflow-workflows-dev
+      RootEmail: aws-nextflow-workflows-dev@sagebase.org
+      Alias: org-sagebase-nextflow-workflows-dev
+      Tags:
+        Department: CompOnc
+        Project: Infrastructure
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-nextflow-workflows-dev@sagebase.org
