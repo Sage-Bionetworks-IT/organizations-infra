@@ -15,44 +15,39 @@ Resources:
       PendingWindowInDays: 7
       EnableKeyRotation: true
       KeyPolicy:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
+        Id: !Sub ${AWS::StackName}-KmsKey
         Statement:
-          - Sid: "Key administrators"
-            Effect: "Allow"
-            Principal:
-              AWS: !Ref KeyAdminArns
-            Action:
-              - "kms:Delete*"
-              - "kms:Cancel*"
-              - "kms:Describe*"
-              - "kms:Disable*"
-              - "kms:Enable*"
-              - "kms:Generate*"
-              - "kms:Get*"
-              - "kms:Update*"
-              - "kms:List*"
-              - "kms:Put*"
-              - "kms:Revoke*"
-              - "kms:Retire*"
-              - "kms:*Resource*"
-              - "kms:Import*"
-              - "kms:Connect*"
-              - "kms:Disconnect*"
-              - "kms:Schedule*"
-              - "kms:Cancel*"
-              - "kms:Verify"
-              - "kms:Sign"
-            Resource: "*"
-          - Sid: "Key users"
-            Effect: "Allow"
-            Principal:
-              AWS: !Ref KeyUserArns
-            Action:
-              - "kms:*Decrypt*"
-              - "kms:*Encrypt*"
-              - "kms:GenerateDataKey*"
-              - "kms:DescribeKey"
-            Resource: "*"
+        - Sid: Allow administration of the key
+          Effect: Allow
+          Principal:
+            AWS: !Ref KeyAdminArns
+          Action:
+            - kms:Create*
+            - kms:Describe*
+            - kms:Enable*
+            - kms:List*
+            - kms:Put*
+            - kms:Update*
+            - kms:Revoke*
+            - kms:Disable*
+            - kms:Get*
+            - kms:Delete*
+            - kms:ScheduleKeyDeletion
+            - kms:CancelKeyDeletion
+          Resource: '*'
+        - Sid: Allow use of the key
+          Effect: Allow
+          Principal:
+            AWS: !Ref KeyUserArns
+          Action:
+            - kms:DescribeKey
+            - kms:Encrypt
+            - kms:Decrypt
+            - kms:ReEncrypt*
+            - kms:GenerateDataKey
+            - kms:GenerateDataKeyWithoutPlaintext
+          Resource: '*'
   KmsKeyAlias:
     Type: AWS::KMS::Alias
     Properties:

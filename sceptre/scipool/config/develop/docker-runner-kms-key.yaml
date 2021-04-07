@@ -6,9 +6,10 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "develop/jumpcloud-idp.yaml"
+  - "develop/docker-runner-efs.yaml"
 parameters:
   KeyAdminArns:
-    - arn:aws:iam::804034162148:root
-    - !stack_output_external jumpcloud-idp::ItsandboxAdminSamlProviderRoleArn
+    - arn:aws:iam::465877038949:root
+    - !stack_output_external jumpcloud-idp::ScipooldevAdminSamlProviderRoleArn
   KeyUserArns:
     - !stack_output_external bootstrap::AWSIAMCfServiceRoleArn
