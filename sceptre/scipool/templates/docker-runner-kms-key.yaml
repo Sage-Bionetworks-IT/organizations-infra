@@ -1,3 +1,5 @@
+# This policy is mostly copied from aws docs examples
+# https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-example
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Docker runner KMS key for Service Catalog
 Parameters:
