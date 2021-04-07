@@ -195,6 +195,20 @@
                                         "logs:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "state:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "event:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }
