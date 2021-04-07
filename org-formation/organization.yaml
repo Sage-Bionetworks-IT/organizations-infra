@@ -254,8 +254,8 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: NlpSandboxAccount
-      RootEmail: support@nlpsandbox.io
+      RootEmail: aws-nlpsandbox@sagebase.org
       Alias: org-sagebase-nlpsandbox
       Tags:
         Department: CompOnc
-        Project: Infrastructure
+        Project: NLP-Challenge
