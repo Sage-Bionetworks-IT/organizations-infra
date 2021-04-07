@@ -1,3 +1,35 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+AccessOrganizationsAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  StackName: access-organizations-admin
+  MaxConcurrentStacks: 10
+  Parameters:
+    MetadataDocument: !ReadFile ./MetadataDocuments/organizations-admin.xml
+    SamlProviderName: organizations-admin
+    SamlProviderPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: !Ref MasterAccount
+    Region: !Ref primaryRegion
+
+JCMobileHealthDataEngineeringAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  StackName: jc-mobilehealth-dataengineering-admin
+  MaxConcurrentStacks: 10
+  Parameters:
+    MetadataDocument: !ReadFile ./MetadataDocuments/mobilehealth-dataengineering-admin.xml
+    SamlProviderName: mobilehealth-dataengineering-admin
+    SamlProviderPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref MobileHealthDataEngineeringAccount
+    Region: !Ref primaryRegion
 
 # A service account for https://github.com/nlpsandbox/aws-cloudformation
 NlpSandboxServiceAccount:
@@ -13,4 +45,4 @@ NlpSandboxServiceAccount:
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account: !Ref SandboxAccount
-    Region: us-east-1
+    Region: !Ref primaryRegion

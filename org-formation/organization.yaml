@@ -18,16 +18,24 @@ Organization:
     Properties:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
 
-  ScienceOU:
+  ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: science
+      OrganizationalUnitName: ScienceDev
       Accounts:
         - !Ref ScipoolDevAccount
+        - !Ref SandboxAccount
+        - !Ref MobileHealthDataEngineeringAccount
+        - !Ref SageITAccount
+        - !Ref NlpSandboxAccount
+
+  ScienceProdOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ScienceProd
+      Accounts:
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
-        - !Ref SandboxAccount
-        - !Ref NlpSandboxAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -37,25 +45,29 @@ Organization:
         - !Ref SynapseOU
         - !Ref BridgeOU
 
-  ITOU:
+  ItDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: IT
-      OrganizationalUnits: !Ref TestOU
+      OrganizationalUnitName: ItDev
+
+  ItProdOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ItProd
       Accounts:
         - !Ref TransitAccount
         - !Ref AdminCentralAccount
-        - !Ref SageITAccount
         - !Ref MasterAccount
         - !Ref LogCentralAccount
         - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
-        - !Ref ITSandboxAccount
 
-  TestOU:
+  PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: test
+      OrganizationalUnitName: PolicyStaging
+      Accounts:
+        - !Ref ITSandboxAccount
 
   SynapseOU:
     Type: OC::ORG::OrganizationalUnit
@@ -259,3 +271,15 @@ Organization:
       Tags:
         Department: CompOnc
         Project: NLP-Challenge
+
+  MobileHealthDataEngineeringAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: mobilehealth-dataengineering
+      RootEmail: aws-mobilehealth-dataengineering@sagebase.org
+      Alias: org-sagebase-mobilehealth-dataengineering
+      Tags:
+        Department: SysBio
+        Project: Infrastructure
+        budget-alarm-threshold: 20000
+        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org

@@ -23,9 +23,8 @@ Resources:
       cfn-lint:
         config:
           ignore_checks:
-            - E3002
-            - E3003
-            - W2001
+            - E3002  # missing `owner` property error -> it's inside of included products.yaml
+            - E3003  # invalid property `Fn::Transform` error -> cfn-lint bug
     Properties:
       Name: !Ref ProductName
       Description: This product builds one Microsoft Windows EC2 instance with

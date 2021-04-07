@@ -34,7 +34,7 @@ OrganizationsPolicyRp:
   MaxConcurrentTasks: 100
   OrganizationBinding:
     IncludeMasterAccount: true
-    Region: us-east-1 # Only compatible to us-east-1 region
+    Region: !Ref primaryRegion # Only compatible to us-east-1 region
 
 AccountPublicAccessBlockRp:
   Type: register-type
@@ -53,7 +53,7 @@ OrganizationsDelegatedAdminRp:
   MaxConcurrentTasks: 100
   OrganizationBinding:
     IncludeMasterAccount: true
-    Region: us-east-1 # Only compatible to us-east-1 region
+    Region: !Ref primaryRegion # Only compatible to us-east-1 region
 
 EnableAWSServiceRp:
   Type: register-type
@@ -62,7 +62,7 @@ EnableAWSServiceRp:
   MaxConcurrentTasks: 100
   OrganizationBinding:
     IncludeMasterAccount: true
-    Region: us-east-1 # Only compatible to us-east-1 region
+    Region: !Ref primaryRegion # Only compatible to us-east-1 region
 
 PasswordPolicyRp:
   Type: register-type

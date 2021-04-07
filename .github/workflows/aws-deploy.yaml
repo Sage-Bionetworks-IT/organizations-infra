@@ -45,10 +45,10 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: npm install
-      - name: Deploy with org-formation
-        run: |
-          cd org-formation
-          npx org-formation perform-tasks --verbose --print-stack --perform-cleanup _tasks.yaml
+      - name: Validate ofn templates
+        run: npm run validate-tasks
+      - name: Deploy with ofn
+        run: npm run ci-perform-tasks
   sceptre-organizations:
     if: github.event_name == 'push'
     needs: org-formation
