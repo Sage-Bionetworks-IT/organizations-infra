@@ -18,16 +18,23 @@ Organization:
     Properties:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
 
-  ScienceOU:
+  ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: science
+      OrganizationalUnitName: ScienceDev
       Accounts:
         - !Ref ScipoolDevAccount
-        - !Ref ScipoolProdAccount
-        - !Ref ScicompAccount
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringAccount
+        - !Ref SageITAccount
+
+  ScienceProdOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ScienceProd
+      Accounts:
+        - !Ref ScipoolProdAccount
+        - !Ref ScicompAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -37,11 +44,15 @@ Organization:
         - !Ref SynapseOU
         - !Ref BridgeOU
 
-  ITOU:
+  ItDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: IT
-      OrganizationalUnits: !Ref TestOU
+      OrganizationalUnitName: ItDev
+
+  ItProdOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ItProd
       Accounts:
         - !Ref TransitAccount
         - !Ref AdminCentralAccount
@@ -49,12 +60,13 @@ Organization:
         - !Ref LogCentralAccount
         - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
-        - !Ref ITSandboxAccount
 
-  TestOU:
+  PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: test
+      OrganizationalUnitName: PolicyStaging
+      Accounts:
+        - !Ref ITSandboxAccount
 
   SynapseOU:
     Type: OC::ORG::OrganizationalUnit
