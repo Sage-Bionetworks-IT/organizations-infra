@@ -32,7 +32,7 @@ PreventDisableCloudwatchConfigs:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref TestOU ]
+    targetIds: [ !Ref PolicyStagingOU ]
 
 DenyAllRegionsOutsideUsEast1:
   Type: update-stacks
@@ -43,7 +43,7 @@ DenyAllRegionsOutsideUsEast1:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref ITOU, !Ref ScipoolDevAccount, !Ref ScipoolProdAccount, !Ref ScicompAccount]
+    targetIds: [ !Ref ItProdOU, !Ref ScienceProdOU]
 
 DenyAllRegionsOutsideUs:
   Type: update-stacks
