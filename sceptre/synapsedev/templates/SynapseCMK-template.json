@@ -114,7 +114,8 @@
                                         "iam:DeleteInstanceProfile",
                                         "iam:GetInstanceProfile",
                                         "iam:RemoveRoleFromInstanceProfile",
-                                        "iam:AddRoleToInstanceProfile"
+                                        "iam:AddRoleToInstanceProfile",
+                                        "iam:CreateServiceLinkedRole"
                                     ],
                                     "Resource": "*"
                                 },
@@ -185,6 +186,13 @@
                                     "Effect": "Allow",
                                     "Action": [
                                         "sts:AssumeRole"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:*"
                                     ],
                                     "Resource": "*"
                                 }
