@@ -199,14 +199,14 @@
                                 {
                                     "Effect": "Allow",
                                     "Action": [
-                                        "state:*"
+                                        "states:*"
                                     ],
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
                                     "Action": [
-                                        "event:*"
+                                        "events:*"
                                     ],
                                     "Resource": "*"
                                 }
