@@ -35,7 +35,6 @@ Organization:
       Accounts:
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
-        - !Ref SandboxAccount
         - !Ref iAtlasProdAccount
 
   PlatformOU:
