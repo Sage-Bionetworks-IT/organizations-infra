@@ -1,18 +1,18 @@
 
-JumpcloudiAtlasAdmin:
+JumpcloudiAtlasProdAdmin:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
   DependsOn: CommunityIamSamlProviderRP
-  StackName: jc-access-iatlas-admin
+  StackName: jc-access-iatlas-prod-admin
   MaxConcurrentStacks: 10
   Parameters:
-    MetadataDocument: !ReadFile ./MetadataDocuments/iatlas-admin.xml
-    SamlProviderName: iatlas-admin
+    MetadataDocument: !ReadFile ./MetadataDocuments/iatlas-prod-admin.xml
+    SamlProviderName: iatlas-prod-admin
     SamlProviderPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
-    Account: !Ref iAtlasAccount
+    Account: !Ref iAtlasProdAccount
     Region: us-east-1
 
 # A service account for https://github.com/nlpsandbox/aws-cloudformation
