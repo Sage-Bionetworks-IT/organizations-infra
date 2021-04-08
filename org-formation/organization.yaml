@@ -35,11 +35,8 @@ Organization:
       Accounts:
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
-<<<<<<< HEAD
-=======
         - !Ref SandboxAccount
         - !Ref iAtlasProdAccount
->>>>>>> 21024ab... [IT-1124] Create account for iAtlas project
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
