@@ -36,6 +36,7 @@ Organization:
       Accounts:
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
+        - !Ref iAtlasProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -273,6 +274,18 @@ Organization:
         Project: Infrastructure
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org
+
+  iAtlasProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: iAtlasProdAccount
+      RootEmail: aws-iatlas-prod@sagebase.org
+      Alias: org-sagebase-iatlas-prod
+      Tags:
+        Department: CompOnc
+        Project: iAtlas
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-iatlas-prod@sagebase.org
 
   WorkflowsNextflowDevAccount:
     Type: OC::ORG::Account
