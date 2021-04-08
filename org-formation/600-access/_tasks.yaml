@@ -62,3 +62,18 @@ NlpSandboxServiceAccount:
     IncludeMasterAccount: false
     Account: !Ref SandboxAccount
     Region: !Ref primaryRegion
+
+JCWorkflowsNextflowProdAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  StackName: jc-workflows-nextflow-prod-admin
+  MaxConcurrentStacks: 10
+  Parameters:
+    MetadataDocument: !ReadFile ./MetadataDocuments/workflows-nextflow-prod-admin.xml
+    SamlProviderName: workflows-nextflow-prod-admin
+    SamlProviderPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref WorkflowsNextflowProdAccount
+    Region: us-east-1
