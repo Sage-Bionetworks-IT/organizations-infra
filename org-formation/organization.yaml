@@ -291,10 +291,10 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: workflows-nextflow-dev
-      RootEmail: aws-nextflow-workflows-dev@sagebase.org
+      RootEmail: aws-workflows-nextflow-dev@sagebase.org
       Alias: org-sagebase-workflows-nextflow-dev
       Tags:
         Department: CompOnc
         Project: imCORE
         budget-alarm-threshold: 10000
-        budget-alarm-threshold-email-recipient: aws-nextflow-workflows-dev@sagebase.org
+        budget-alarm-threshold-email-recipient: aws-workflows-nextflow-dev@sagebase.org
