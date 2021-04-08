@@ -35,7 +35,7 @@ Organization:
       Accounts:
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
-        - !Ref NextflowWorkflowsProdAccount
+        - !Ref WorkflowsNextflowProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -274,14 +274,14 @@ Organization:
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org
 
-  NextflowWorkflowsProdAccount:
+  WorkflowsNextflowProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: nextflow-workflows-prod
+      AccountName: workflows-nextflow-prod
       RootEmail: aws-nextflow-workflows@sagebase.org
-      Alias: org-sagebase-nextflow-workflows-prod
+      Alias: org-sagebase-workflows-nextflow-prod
       Tags:
         Department: CompOnc
-        Project: Infrastructure
+        Project: imCORE
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-nextflow-workflows@sagebase.org
