@@ -1,0 +1,24 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'config'
+
+# Enable AWS Config in all member accounts and send Findings and Config history to the centralized s3 bucket in the archive account
+ConfigBase:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/Config/config.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-base'
+  StackDescription: AWS Config - Base
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+  OrganizationBindings:
+    LogArchiveBinding:
+      Account: !Ref LogCentralAccount
+  Parameters:
+    resourcePrefix: !Ref resourcePrefix
+    bucketName: !Sub '${resourcePrefix}-${appName}-${CurrentAccount.AccountId}'
