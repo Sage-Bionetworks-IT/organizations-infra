@@ -5,7 +5,6 @@ PasswordPolicy:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/ORG/password-policy.yaml
   StackName: baseline-password-policy
-  MaxConcurrentStacks: 10
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
@@ -17,7 +16,6 @@ OrgFormationBuildAccessRole:
   StackName: org-formation-build-access-role
   Parameters:
     MasterAccountId: !Ref MasterAccount
-  MaxConcurrentStacks: 10
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
