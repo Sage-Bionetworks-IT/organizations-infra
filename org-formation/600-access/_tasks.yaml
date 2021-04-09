@@ -5,7 +5,6 @@ AccessOrganizationsAdmin:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
   StackName: access-organizations-admin
-  MaxConcurrentStacks: 10
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/organizations-admin.xml
     SamlProviderName: organizations-admin
@@ -20,7 +19,6 @@ JCMobileHealthDataEngineeringAdmin:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-mobilehealth-dataengineering-admin
-  MaxConcurrentStacks: 10
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/mobilehealth-dataengineering-admin.xml
     SamlProviderName: mobilehealth-dataengineering-admin
@@ -36,7 +34,6 @@ JumpcloudiAtlasProdAdmin:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
   DependsOn: CommunityIamSamlProviderRP
   StackName: jc-access-iatlas-prod-admin
-  MaxConcurrentStacks: 10
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/iatlas-prod-admin.xml
     SamlProviderName: iatlas-prod-admin
@@ -52,7 +49,6 @@ NlpSandboxServiceAccount:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/service-account.yaml
   StackName: NlpSandboxServiceAccount
-  MaxConcurrentStacks: 10
   Parameters:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AmazonEC2FullAccess
