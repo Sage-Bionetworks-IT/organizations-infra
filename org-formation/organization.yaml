@@ -271,6 +271,8 @@ Organization:
       Tags:
         Department: CompOnc
         Project: NLP-Challenge
+        budget-alarm-threshold: 20000
+        budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
   MobileHealthDataEngineeringAccount:
     Type: OC::ORG::Account
