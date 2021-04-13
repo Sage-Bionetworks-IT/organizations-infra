@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="JumpCloud">
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIFjTCCA3WgAwIBAgIVAM4UgQUDJoXkf3nStrFNBNCCu155MA0GCSqGSIb3DQEBCwUAMH4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDTzEQMA4GA1UEBxMHQm91bGRlcjEZMBcGA1UEChMQU2FnZSBCaW9uZXR3b3JrczEZMBcGA1UECxMQSnVtcENsb3VkU0FNTElkUDEaMBgGA1UEAxMRSnVtcENsb3VkU0FNTFVzZXIwHhcNMjEwNDA5MDU0NjE3WhcNMjYwNDA5MDU0NjE3WjB+MQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ08xEDAOBgNVBAcTB0JvdWxkZXIxGTAXBgNVBAoTEFNhZ2UgQmlvbmV0d29ya3MxGTAXBgNVBAsTEEp1bXBDbG91ZFNBTUxJZFAxGjAYBgNVBAMTEUp1bXBDbG91ZFNBTUxVc2VyMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAyxCw5aWrje1/byojEl1wvaTBaLiUuW+FBOb1IcWqpcP0xS8WOVvacGIFmRiypuf1weYWZjKoY31YMYYIgc1mDYp6Xrt9CfAZhvs9eXISNGTVsFf9+bwzo/0rtkSAQkfBG0jHeZb+Fz1nCetxDP3Eo8SbFf14nQY5Y8c12Bh0sDy+lr/qsoKVsnmqZG/fcl5iSuAa3oPkSoSImbrJqleg7+iFrDf2OtJPZbZSOucXVSv2yRGz93RbISwpcwSraM5RsdAIiR+4aB3HYaI1A4glBQxmIutOWdEmnUUHcnG5K/rXzsdevL+LPz76FA9BWMy/weEfv9fcjXBUQFJCgZH6nNdH5q8LJ2O2vNi3BjlnsvwkIVK9CFku30EstrD0kkrMDsshKBYBQPpxR4O+92UPZQTgRn6bwIigUog0V9l8mjgeHfv579w4k2avmQ6qORSRxPMi3gyWuvm2/8mFJWwcqsQr6XkZeAxDJPw1Sj+qpmZPktUPABxOGou2CNqWDt3n0mqsLq/UenefMXGy8MR/PtLWlB2CKWGarv5Xhw5kxGPRab3+9kvOjgZhIqYpN51Y0SN5NTAqL14uzppeXGzYBI4iG1idggTTSM+Q8DMMixkb5P02tMv44MM5856FaQ/hEA8cSjUNV7ejW0ZQh+Yp79h32ExZaroHjFNbX6wrP7cCAwEAAaMCMAAwDQYJKoZIhvcNAQELBQADggIBAL7flQQTsXQlTFXoMsa6k9EISNxqRV6z7NslrnneCHJMSxCGyE/1BDkXVujO1QAWXtC1Pml9CpJqeSpzhh7y0MYwHnVcEVRMXKhO7uHhnh/SqTNUg4XHpx+Qebd0ncaYOCXDtkjjwqbrfzbe2SiAghyymeTgM+d83oZ5hoFon2Z8J4IUieqj6DL0I6gU+lYO/fACOn35I5pfjwrOGNigSenNn7eiNoJo9KPLkVOVUkYqSctkWtImb1YnNA7M4MOQwuP/XTWCrh0fTjLew/NxCufLQ8TlRZzXCq6q7nZ/RPqSzOoaOmCcQYGhLN7MCA7VhxVKZAhqkBLQuXXnVgKd392aJ8R4i6RTSgGT9lE+WMYeoR2sphSq7likUUcbcxzH8YQA4NyFtTnMLyRJ1r0ztXsnfkkLkrk8gTM8op1yLeVL1ECRCzv+6J6VB4uKqSTLyYTnyiz8TDitqnoZM/pTjnyUcB4AW7uOAZE9B/tSKnxEmzU04aBZUf0souMeOux5trIumdkIL2u5Xzeb8zhWrLlJwWTym0Yea0lupRq+fj3Dmlb055kNmEXf0bqoWgsG7g3voxQz+ilou7qf26m7A5RfJOfImHGjDTRILTJdQCoIDDXEwiMukBiTSfiPaePrLH3M9CeY46m2c2pzRMvoFBFPH9uhnDu5drQiaFUrBFcS</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sso.jumpcloud.com/saml2/workflows-nextflow-prod-admin"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sso.jumpcloud.com/saml2/workflows-nextflow-prod-admin"/>
+    </md:IDPSSODescriptor>
+</md:EntityDescriptor>
