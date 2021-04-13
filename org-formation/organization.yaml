@@ -27,6 +27,7 @@ Organization:
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringAccount
         - !Ref SageITAccount
+        - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
 
   ScienceProdOU:
@@ -263,6 +264,18 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+
+  NlpSandboxAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: NlpSandboxAccount
+      RootEmail: aws-nlpsandbox@sagebase.org
+      Alias: org-sagebase-nlpsandbox
+      Tags:
+        Department: CompOnc
+        Project: NLP-Challenge
+        budget-alarm-threshold: 20000
+        budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
   MobileHealthDataEngineeringAccount:
     Type: OC::ORG::Account
