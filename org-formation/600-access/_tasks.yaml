@@ -77,7 +77,7 @@ JCWorkflowsNextflowDevAdmin:
 WorkflowsNextflowCIServiceAccounts:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/service-account.yaml
-  StackName: workflows-nextflow-ci-service-accounts
+  StackName: workflows-nextflow-ci-service-account
   Parameters:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
