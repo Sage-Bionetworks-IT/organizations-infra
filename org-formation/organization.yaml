@@ -26,7 +26,6 @@ Organization:
         - !Ref ScipoolDevAccount
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringAccount
-        - !Ref SageITAccount
         - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
 
@@ -39,14 +38,15 @@ Organization:
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
         - !Ref WorkflowsNextflowProdAccount
+#              StridesPoolAccount must be managed outside of orgf but should have parity with this OU
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: Platform
       OrganizationalUnits:
-        - !Ref SynapseOU
-        - !Ref BridgeOU
+        - !Ref SynapseProdOU
+        - !Ref BridgeProdOU
 
   ItDevOU:
     Type: OC::ORG::OrganizationalUnit
@@ -64,6 +64,7 @@ Organization:
         - !Ref LogCentralAccount
         - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
+        - !Ref SageITAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -72,22 +73,34 @@ Organization:
       Accounts:
         - !Ref ITSandboxAccount
 
-  SynapseOU:
+  SynapseProdOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: synapse
+      OrganizationalUnitName: SynapseProd
       Accounts:
-        - !Ref SynapseDevAccount
         - !Ref SynapseDWAccount
         - !Ref SynapseProdAccount
 
-  BridgeOU:
+  SynapseDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: bridge
+      OrganizationalUnitName: SynapseDev
+      Accounts:
+        - !Ref SynapseDevAccount
+
+  BridgeProdOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: BridgeProd
+      Accounts:
+        - !Ref BridgeProdAccount
+
+  BridgeDevOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: BridgeDev
       Accounts:
         - !Ref BridgeDevAccount
-        - !Ref BridgeProdAccount
 
   BridgeDevAccount:
     Type: OC::ORG::Account
