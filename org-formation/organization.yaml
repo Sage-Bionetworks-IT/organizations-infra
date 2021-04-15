@@ -18,16 +18,27 @@ Organization:
     Properties:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
 
-  ScienceOU:
+  ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: science
+      OrganizationalUnitName: ScienceDev
       Accounts:
         - !Ref ScipoolDevAccount
-        - !Ref ScipoolProdAccount
-        - !Ref ScicompAccount
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringAccount
+        - !Ref SageITAccount
+        - !Ref NlpSandboxAccount
+        - !Ref WorkflowsNextflowDevAccount
+
+  ScienceProdOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ScienceProd
+      Accounts:
+        - !Ref ScipoolProdAccount
+        - !Ref ScicompAccount
+        - !Ref iAtlasProdAccount
+        - !Ref WorkflowsNextflowProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -37,11 +48,15 @@ Organization:
         - !Ref SynapseOU
         - !Ref BridgeOU
 
-  ITOU:
+  ItDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: IT
-      OrganizationalUnits: !Ref TestOU
+      OrganizationalUnitName: ItDev
+
+  ItProdOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ItProd
       Accounts:
         - !Ref TransitAccount
         - !Ref AdminCentralAccount
@@ -49,12 +64,13 @@ Organization:
         - !Ref LogCentralAccount
         - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
-        - !Ref ITSandboxAccount
 
-  TestOU:
+  PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: test
+      OrganizationalUnitName: PolicyStaging
+      Accounts:
+        - !Ref ITSandboxAccount
 
   SynapseOU:
     Type: OC::ORG::OrganizationalUnit
@@ -249,6 +265,18 @@ Organization:
         Department: Platform
         Project: Infrastructure
 
+  NlpSandboxAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: NlpSandboxAccount
+      RootEmail: aws-nlpsandbox@sagebase.org
+      Alias: org-sagebase-nlpsandbox
+      Tags:
+        Department: CompOnc
+        Project: NLP-Challenge
+        budget-alarm-threshold: 20000
+        budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
+
   MobileHealthDataEngineeringAccount:
     Type: OC::ORG::Account
     Properties:
@@ -260,3 +288,39 @@ Organization:
         Project: Infrastructure
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org
+
+  iAtlasProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: iAtlasProdAccount
+      RootEmail: aws-iatlas-prod@sagebase.org
+      Alias: org-sagebase-iatlas-prod
+      Tags:
+        Department: CompOnc
+        Project: iAtlas
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-iatlas-prod@sagebase.org
+
+  WorkflowsNextflowProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: workflows-nextflow-prod
+      RootEmail: aws-workflows-nextflow-prod@sagebase.org
+      Alias: org-sagebase-workflows-nextflow-prod
+      Tags:
+        Department: CompOnc
+        Project: imCORE
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-workflows-nextflow-prod@sagebase.org
+
+  WorkflowsNextflowDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: workflows-nextflow-dev
+      RootEmail: aws-workflows-nextflow-dev@sagebase.org
+      Alias: org-sagebase-workflows-nextflow-dev
+      Tags:
+        Department: CompOnc
+        Project: imCORE
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-workflows-nextflow-dev@sagebase.org
