@@ -273,7 +273,7 @@ Organization:
       Alias: org-sagebase-nlpsandbox
       Tags:
         Department: CompOnc
-        Project: NLP-Challenge
+        Project: NLP-Sandbox
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
