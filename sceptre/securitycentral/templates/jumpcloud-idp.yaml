@@ -20,6 +20,7 @@ Resources:
       RoleName: !GetAtt SecuritycentralAdminSamlProvider.Name
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
+        - !Ref SecurityResponsePolicy
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -30,6 +31,17 @@ Resources:
             Condition:
               StringEquals:
                 "SAML:aud": "https://signin.aws.amazon.com/saml"
+  SecurityResponsePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - guardduty:ArchiveFindings
+            Resource:
+              - "*"
 Outputs:
   SecuritycentralAdminSamlProviderArn:
     Value: !Ref SecuritycentralAdminSamlProvider
