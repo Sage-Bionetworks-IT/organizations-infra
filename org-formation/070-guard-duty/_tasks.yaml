@@ -21,7 +21,7 @@ GuardDuty:
     Account: !Ref accountId
   OrganizationBindings:
     LogArchiveBinding:
-      Account: !Ref LogCentralAccount
+      Account: !Ref LogArchiveAccount
     MemberBinding:
       Account: '*'
       IncludeMasterAccount: true
