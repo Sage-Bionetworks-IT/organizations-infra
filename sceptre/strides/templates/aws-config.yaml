@@ -101,7 +101,6 @@ Resources:
     Type: "AWS::Logs::LogGroup"
     Properties:
       LogGroupName: !Sub '/aws/config/${AWS::StackName}.log'
-      RetentionInDays: 90
 
   ####### Cloudtrail Rules #######
 

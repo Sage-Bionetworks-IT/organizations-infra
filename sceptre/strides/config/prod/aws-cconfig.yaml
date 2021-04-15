@@ -8,5 +8,5 @@ dependencies:
   - "prod/cloudtrail.yaml"
 parameters:
   OperatorEmail: "aws.strides@sagebase.org"
-  LogCentralBucket: "essentials-awss3configbucket-9n8wjykhvr5z"  # bucket in org-sagebase-logcentral account
+  LogCentralBucket: "sagebase-cloudtrail-231505186444"  # bucket in org-sagebase-logcentral account
   LocalCloudtrailBucket: !stack_output_external cloudtrail::S3CloudtrailBucket

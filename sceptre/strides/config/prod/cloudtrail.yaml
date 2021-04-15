@@ -6,4 +6,4 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 parameters:
   OperatorEmail: "aws.strides@sagebase.org"
-  LogCentralBucket: "essentials-awss3cloudtrailbucket-1jz6pf8dzid7r"  # bucket in org-sagebase-logcentral account
+  LogCentralBucket: "sagebase-cloudtrail-231505186444"  # bucket in org-sagebase-logcentral account

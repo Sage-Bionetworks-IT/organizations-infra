@@ -11,7 +11,6 @@ Resources:
     Type: "AWS::Logs::LogGroup"
     Properties:
       LogGroupName: !Sub '/aws/cloudtrail/${AWS::StackName}.log'
-      RetentionInDays: 90
   S3CloudtrailBucket:
     Type: "AWS::S3::Bucket"
   S3CloudtrailBucketPolicy:
