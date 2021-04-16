@@ -1,0 +1,20 @@
+Description: Allows writing to SSM Parameter Store to save incomming Synapse JWT token
+
+Resources:
+  WriteToSSMPolicy:
+      Type: AWS::IAM::ManagedPolicy
+      Properties:
+        Description: Allows writing to SSM Parameter Store to save incomming Synapse JWT token
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - ssm:PutParameter
+              Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/service-catalog/synapse/cred/*"
+
+Outputs:
+    WriteToSSMArn:
+      Value: !Ref WriteToSSMPolicy
+      Export:
+        Name: !Sub '${AWS::Region}-${AWS::StackName}-WriteToSSMPolicy'

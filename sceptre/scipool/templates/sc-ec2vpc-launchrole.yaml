@@ -8,6 +8,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEC2FullAccess
         - arn:aws:iam::aws:policy/AmazonSSMFullAccess
+        - !Ref ScCreateKmsKeyPolicy
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -60,6 +61,28 @@ Resources:
                   - "s3:GetObject"
                   - "lambda:InvokeFunction"
                 Resource: '*'
+  ScCreateKmsKeyPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Sid: AllowCreateKMSKey
+            Action:
+              - kms:CreateKey
+              - kms:TagResource
+              # kms:DeleteKey is enabled on the policy for the individual key
+            Resource: "*" # key name is auto-generated
+            # See: https://docs.aws.amazon.com/kms/latest/developerguide/control-access-overview.html
+          - Effect: Allow
+            Sid: AllowManageKMSAlias
+            Action:
+              - kms:CreateAlias
+              - kms:DeleteAlias
+            Resource: !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/service-catalog/synapse/cred/*"
+
+
 Outputs:
   LaunchRoleArn:
     Value: !GetAtt SCEC2LaunchRole.Arn
