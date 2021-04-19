@@ -39,7 +39,7 @@ DenyAllRegionsOutsideUsEast1:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref ItDevOU, !Ref ItProdOU, !Ref ScienceProdOU ]
+    targetIds: [ !Ref ScienceProdOU ]
 
 DenyAllRegionsOutsideUs:
   Type: update-stacks
@@ -49,4 +49,4 @@ DenyAllRegionsOutsideUs:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref ScienceDevOU  ]
+    targetIds: [ !Ref ScienceDevOU, !Ref ItDevOU, !Ref ItProdOU  ]
