@@ -1,0 +1,70 @@
+# This policy is mostly copied from aws docs examples
+# https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-example
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Docker runner KMS key for Service Catalog
+Parameters:
+  KeyUserArns:
+    Type: CommaDelimitedList
+    Description: List of user/role ARNs that can use the key
+  KeyAdminArns:
+    Type: CommaDelimitedList
+    Description: List of user/role ARNs that can administrate the key
+Resources:
+  KmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub '${AWS::StackName}-KmsKey'
+      PendingWindowInDays: 7
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: '2012-10-17'
+        Id: !Sub ${AWS::StackName}-KmsKey
+        Statement:
+        - Sid: Allow administration of the key
+          Effect: Allow
+          Principal:
+            AWS: !Ref KeyAdminArns
+          Action:
+            - kms:Create*
+            - kms:Describe*
+            - kms:Enable*
+            - kms:List*
+            - kms:Put*
+            - kms:Update*
+            - kms:Revoke*
+            - kms:Disable*
+            - kms:Get*
+            - kms:Delete*
+            - kms:ScheduleKeyDeletion
+            - kms:CancelKeyDeletion
+          Resource: '*'
+        - Sid: Allow use of the key
+          Effect: Allow
+          Principal:
+            AWS: !Ref KeyUserArns
+          Action:
+            - kms:DescribeKey
+            - kms:Encrypt
+            - kms:Decrypt
+            - kms:ReEncrypt*
+            - kms:GenerateDataKey
+            - kms:GenerateDataKeyWithoutPlaintext
+          Resource: '*'
+  KmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub 'alias/${AWS::StackName}/KmsKey'
+      TargetKeyId: !Ref KmsKey
+Outputs:
+  KmsKey:
+    Value: !Ref KmsKey
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-KmsKey'
+  KmsKeyAlias:
+    Value: !Ref KmsKeyAlias
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-KmsKeyAlias'
+  KmsKeyArn:
+    Value: !GetAtt KmsKey.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-KmsKeyArn'
