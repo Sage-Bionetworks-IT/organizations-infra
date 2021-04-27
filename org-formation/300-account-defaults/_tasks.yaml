@@ -3,7 +3,7 @@ Parameters:
 
 Ec2EbsEncryptionDefaults:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/EC2/ec2-ebs-encryption.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/EC2/ec2-ebs-encryption.yaml
   StackName: account-default-ec2-ebs-encryption
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -13,7 +13,7 @@ Ec2EbsEncryptionDefaults:
 
 Ec2NoVpcDefaults:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/VPC/ec2-no-default-vpc.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/VPC/ec2-no-default-vpc.yaml
   StackName: ec2-no-default-vpc
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -22,7 +22,7 @@ Ec2NoVpcDefaults:
 
 SceptreCloudformationBucket:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/S3/public-bucket.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/S3/public-bucket.yaml
   StackName: sceptre-cloudformation-bucket
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -31,7 +31,7 @@ SceptreCloudformationBucket:
 
 SceptreLambdaBucket:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/S3/public-bucket.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/S3/public-bucket.yaml
   StackName: sceptre-lambda-bucket
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -40,7 +40,7 @@ SceptreLambdaBucket:
 
 ItKmsKey:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/KMS/kms-key.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/KMS/kms-key.yaml
   StackName: it-kms-key
   Parameters:
     AliasName: alias/it-infra

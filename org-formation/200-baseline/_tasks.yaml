@@ -3,7 +3,7 @@ Parameters:
 
 PasswordPolicy:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/ORG/password-policy.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/ORG/password-policy.yaml
   StackName: baseline-password-policy
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -12,7 +12,7 @@ PasswordPolicy:
 
 OrgFormationBuildAccessRole:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/org-cross-account-role.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/org-cross-account-role.yaml
   StackName: org-formation-build-access-role
   Parameters:
     MasterAccountId: !Ref MasterAccount
