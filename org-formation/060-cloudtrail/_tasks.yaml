@@ -1,6 +1,17 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
+LogCentralCloudwatchTrailLog:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/Cloudwatch/cloudwatch-log.yaml
+  StackName: !Sub '${resourcePrefix}-cloudwatch-log'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref LogCentralAccount
+  TerminationProtection: true
+  Parameters:
+    RetentionInDays: 3653
+
 CloudwatchTrailLog:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/Cloudwatch/cloudwatch-log.yaml
@@ -9,11 +20,12 @@ CloudwatchTrailLog:
   DefaultOrganizationBinding:
     Account: '*'
     IncludeMasterAccount: true
+    ExcludeAccount: !Ref LogCentralAccount
   TerminationProtection: true
 
 CloudTrail:
   Type: update-stacks
-  DependsOn: [ "CloudwatchTrailLog" ]
+  DependsOn: [ "MasterCloudwatchTrailLog", "MemberCloudwatchTrailLog" ]
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/Cloudtrail/cloudtrail-trail.yaml
   StackName: !Sub '${resourcePrefix}-cloudtrail'
   StackDescription: CloudTrail
