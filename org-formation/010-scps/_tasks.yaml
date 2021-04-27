@@ -1,17 +1,6 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
-# all OUs (not including the root OU)
-AllOUs: &All-OUs
-  - !Ref ItDevOU
-  - !Ref ItProdOU
-  - !Ref ScienceDevOU
-  - !Ref ScienceProdOU
-  - !Ref PlatformOU
-  - !Ref PolicyStagingOU
-  - !Ref SynapseOU
-  - !Ref BridgeOU
-
 PreventDisableGuardDuty:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-guardduty.yaml
@@ -20,7 +9,15 @@ PreventDisableGuardDuty:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: *All-OUs
+    targetIds:
+      - !Ref ItDevOU
+      - !Ref ItProdOU
+      - !Ref ScienceDevOU
+      - !Ref ScienceProdOU
+      - !Ref PlatformOU
+      - !Ref PolicyStagingOU
+      - !Ref SynapseOU
+      - !Ref BridgeOU
 
 PreventDisableCloudtrail:
   Type: update-stacks
@@ -30,7 +27,15 @@ PreventDisableCloudtrail:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: *All-OUs
+    targetIds:
+      - !Ref ItDevOU
+      - !Ref ItProdOU
+      - !Ref ScienceDevOU
+      - !Ref ScienceProdOU
+      - !Ref PlatformOU
+      - !Ref PolicyStagingOU
+      - !Ref SynapseOU
+      - !Ref BridgeOU
 
 PreventDisableCloudwatchConfigs:
   Type: update-stacks
