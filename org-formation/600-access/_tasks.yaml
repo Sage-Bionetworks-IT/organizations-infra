@@ -32,7 +32,6 @@ JCMobileHealthDataEngineeringAdmin:
 JumpcloudiAtlasProdAdmin:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
-  DependsOn: CommunityIamSamlProviderRP
   StackName: jc-access-iatlas-prod-admin
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/iatlas-prod-admin.xml
