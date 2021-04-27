@@ -1,0 +1,13 @@
+template_path: docker-runner.yaml
+stack_name: docker-runner
+stack_tags:
+  Department: Platform
+  Project: Infrastructure
+  OwnerEmail: it@sagebase.org
+parameters:
+#  ImageUri: "465877038949.dkr.ecr.us-east-1.amazonaws.com/docker-lambda:latest"
+#  ImageUri: "public.ecr.aws/w7i3y7i3/kd-test:latest" #sandbox
+  ImageUri: "public.ecr.aws/r8s5o2s2/kd-test:latest"
+  SynapsePAT: "kdsynpat2"
+dependencies:
+  - develop/docker-runner-kms-key.yaml

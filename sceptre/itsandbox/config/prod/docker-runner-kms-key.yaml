@@ -1,0 +1,14 @@
+template_path: "docker-runner-kms-key.yaml"
+stack_name: "docker-runner-kms-key"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "develop/jumpcloud-idp.yaml"
+parameters:
+  KeyAdminArns:
+    - arn:aws:iam::804034162148:root
+    - !stack_output_external jumpcloud-idp::ItsandboxAdminSamlProviderRoleArn
+  KeyUserArns:
+    - !stack_output_external bootstrap::AWSIAMCfServiceRoleArn
