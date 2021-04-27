@@ -12,6 +12,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   OrganizationRoot:
     Type: OC::ORG::OrganizationRoot
@@ -99,6 +100,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   BridgeProdAccount:
     Type: OC::ORG::Account
@@ -110,6 +112,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   SynapseDevAccount:
     Type: OC::ORG::Account
@@ -121,6 +124,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   SynapseDWAccount:
     Type: OC::ORG::Account
@@ -132,6 +136,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   SynapseProdAccount:
     Type: OC::ORG::Account
@@ -143,6 +148,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   TransitAccount:
     Type: OC::ORG::Account
@@ -154,6 +160,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   AdminCentralAccount:
     Type: OC::ORG::Account
@@ -165,6 +172,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   SageITAccount:
     Type: OC::ORG::Account
@@ -176,6 +184,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   LogCentralAccount:
     Type: OC::ORG::Account
@@ -187,6 +196,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 3653
 
   SecurityCentralAccount:
     Type: OC::ORG::Account
@@ -198,6 +208,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   ImageCentralAccount:
     Type: OC::ORG::Account
@@ -209,6 +220,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   ITSandboxAccount:
     Type: OC::ORG::Account
@@ -220,6 +232,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   ScipoolDevAccount:
     Type: OC::ORG::Account
@@ -231,6 +244,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   ScipoolProdAccount:
     Type: OC::ORG::Account
@@ -242,6 +256,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   ScicompAccount:
     Type: OC::ORG::Account
@@ -253,6 +268,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   SandboxAccount:
     Type: OC::ORG::Account
@@ -264,6 +280,7 @@ Organization:
       Tags:
         Department: Platform
         Project: Infrastructure
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   NlpSandboxAccount:
     Type: OC::ORG::Account
@@ -276,6 +293,7 @@ Organization:
         Project: NLP-Sandbox
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   MobileHealthDataEngineeringAccount:
     Type: OC::ORG::Account
@@ -288,6 +306,7 @@ Organization:
         Project: Infrastructure
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   iAtlasProdAccount:
     Type: OC::ORG::Account
@@ -300,6 +319,7 @@ Organization:
         Project: iAtlas
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-iatlas-prod@sagebase.org
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   WorkflowsNextflowProdAccount:
     Type: OC::ORG::Account
@@ -312,6 +332,7 @@ Organization:
         Project: imCORE
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-prod@sagebase.org
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   WorkflowsNextflowDevAccount:
     Type: OC::ORG::Account
@@ -324,3 +345,4 @@ Organization:
         Project: imCORE
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-dev@sagebase.org
+        CloudwatchCloudTrailLogRetentionPeriod: 90
