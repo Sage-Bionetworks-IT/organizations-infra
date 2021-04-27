@@ -1,6 +1,17 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
+# all OUs (not including the root OU)
+AllOUs: &All-OUs
+  - !Ref ItDevOU
+  - !Ref ItProdOU
+  - !Ref ScienceDevOU
+  - !Ref ScienceProdOU
+  - !Ref PlatformOU
+  - !Ref PolicyStagingOU
+  - !Ref SynapseOU
+  - !Ref BridgeOU
+
 PreventDisableGuardDuty:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-guardduty.yaml
@@ -9,7 +20,7 @@ PreventDisableGuardDuty:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref OrganizationRoot ]
+    targetIds: *All-OUs
 
 PreventDisableCloudtrail:
   Type: update-stacks
@@ -19,7 +30,7 @@ PreventDisableCloudtrail:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref OrganizationRoot ]
+    targetIds: *All-OUs
 
 PreventDisableCloudwatchConfigs:
   Type: update-stacks
@@ -29,7 +40,8 @@ PreventDisableCloudwatchConfigs:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref PolicyStagingOU ]
+    targetIds:
+      - !Ref PolicyStagingOU
 
 DenyAllRegionsOutsideUsEast1:
   Type: update-stacks
@@ -39,7 +51,10 @@ DenyAllRegionsOutsideUsEast1:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref ItDevOU, !Ref ItProdOU, !Ref ScienceProdOU ]
+    targetIds:
+      - !Ref ItDevOU
+      - !Ref ItProdOU
+      - !Ref ScienceProdOU
 
 DenyAllRegionsOutsideUs:
   Type: update-stacks
@@ -49,4 +64,5 @@ DenyAllRegionsOutsideUs:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   Parameters:
-    targetIds: [ !Ref ScienceDevOU  ]
+    targetIds:
+      - !Ref ScienceDevOU
