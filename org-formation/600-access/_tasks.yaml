@@ -3,7 +3,7 @@ Parameters:
 
 AccessOrganizationsAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: access-organizations-admin
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/organizations-admin.xml
@@ -17,7 +17,7 @@ AccessOrganizationsAdmin:
 
 JCMobileHealthDataEngineeringAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-mobilehealth-dataengineering-admin
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/mobilehealth-dataengineering-admin.xml
@@ -31,7 +31,7 @@ JCMobileHealthDataEngineeringAdmin:
 
 JumpcloudiAtlasProdAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-access-iatlas-prod-admin
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/iatlas-prod-admin.xml
@@ -46,7 +46,7 @@ JumpcloudiAtlasProdAdmin:
 # A service account for https://github.com/nlpsandbox/aws-cloudformation
 NlpSandboxServiceAccount:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/service-account.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
   StackName: NlpSandboxServiceAccount
   Parameters:
     ManagedPolicyArns:
@@ -60,7 +60,7 @@ NlpSandboxServiceAccount:
 
 JCWorkflowsNextflowDevAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-workflows-nextflow-dev-admin
   MaxConcurrentStacks: 10
   Parameters:
@@ -75,7 +75,7 @@ JCWorkflowsNextflowDevAdmin:
 
 WorkflowsNextflowCIServiceAccounts:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/service-account.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
   StackName: workflows-nextflow-ci-service-account
   Parameters:
     ManagedPolicyArns:
@@ -89,7 +89,7 @@ WorkflowsNextflowCIServiceAccounts:
 
 JCWorkflowsNextflowProdAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-workflows-nextflow-prod-admin
   MaxConcurrentStacks: 10
   Parameters:
@@ -104,7 +104,7 @@ JCWorkflowsNextflowProdAdmin:
 
 JCNlpSandboxAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-nlp-sandbox-admin
   MaxConcurrentStacks: 10
   Parameters:
@@ -119,7 +119,7 @@ JCNlpSandboxAdmin:
 
 NlpSandboxCIServiceAccounts:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/service-account.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
   StackName: nlp-sandbox-ci-service-account
   Parameters:
     ManagedPolicyArns:
