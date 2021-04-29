@@ -13,6 +13,5 @@ CloudTrail:
   OrganizationBindings:
     LogArchiveBinding:
       Account: !Ref LogCentralAccount
-  TerminationProtection: true
   Parameters:
     bucketName: !Sub '${resourcePrefix}-cloudtrail-${CurrentAccount.AccountId}'
