@@ -15,7 +15,6 @@ GuardDuty:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/GuardDuty/guard-duty.yaml
   StackName: !Sub '${resourcePrefix}-${appName}'
   StackDescription: GuardDuty - Base
-  TerminationProtection: true
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref accountId
@@ -43,7 +42,6 @@ GuardDutyTrustedIpsBucket:
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref accountId
-  TerminationProtection: true
   Parameters:
     resourcePrefix: !Ref resourcePrefix
     bucketName: !Sub '${resourcePrefix}-${appName}-trusted-ips'
@@ -68,7 +66,6 @@ GuardDutyExtension:
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref accountId
-  TerminationProtection: true
   Parameters:
     resourcePrefix: !Ref resourcePrefix
     detectorId: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
