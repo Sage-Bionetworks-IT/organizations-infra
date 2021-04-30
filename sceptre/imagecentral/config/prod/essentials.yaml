@@ -3,7 +3,6 @@ stack_name: "essentials"
 dependencies:
   - "prod/bootstrap.yaml"
 parameters:
-  OperatorEmail: "aws.imagecentral@sagebase.org"
   VpcPeeringRequesterAwsAccountId: "745159704268"
 hooks:
   before_create:
