@@ -95,36 +95,11 @@ Resources:
                   - !Ref AWS::Region
                   - '-'
                   - !Ref AWS::AccountId
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3CloudtrailBucket
-                  - '/*'
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref AWSS3CloudtrailBucket
   AWSIAMLoggingServiceGroup:
     Type: 'AWS::IAM::Group'
     Properties:
       ManagedPolicyArns:
         - !Ref IAMLoggingServiceManagedPolicy
-  AWSIAMNewRelicRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          -
-            Effect: "Allow"
-            Principal:
-              Service:
-                - "cloudtrail.amazonaws.com"
-            Action:
-              - "sts:AssumeRole"
-      Path: "/"
-      ManagedPolicyArns:
-        - !Ref AWSIAMCloudtrailLogManagedPolicy
   # resources for app monitoring services
   AWSIAMNewRelicBudgetPolicy:
     Type: "AWS::IAM::Policy"
@@ -162,12 +137,8 @@ Resources:
       Path: /
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
-  # resources for cloudtrail
-  AWSLogsCloudtrailLogGroup:
-    Type: "AWS::Logs::LogGroup"
-    Properties:
-      LogGroupName: !Sub '/aws/cloudtrail/${AWS::StackName}.log'
-      RetentionInDays: 90
+  # ofn manages cloudtrail now. we keep legacy bucket to retain the old data
+  # https://github.com/Sage-Bionetworks-IT/organizations-infra/tree/master/org-formation/060-cloudtrail
   AWSS3CloudtrailBucket:
     Metadata:
       cfn-lint:
@@ -177,156 +148,10 @@ Resources:
     DeletionPolicy: Retain
     Type: "AWS::S3::Bucket"
     Properties: {}
-  AWSIAMS3CloudtrailBucketPolicy:
-    Type: "AWS::S3::BucketPolicy"
-    Properties:
-      Bucket: !Ref AWSS3CloudtrailBucket
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          -
-            Sid: "AWSCloudTrailAclCheck"
-            Effect: "Allow"
-            Principal:
-              Service: "cloudtrail.amazonaws.com"
-            Action: "s3:GetBucketAcl"
-            Resource:
-              !Sub |-
-                arn:aws:s3:::${AWSS3CloudtrailBucket}
-          -
-            Sid: "AWSCloudTrailWrite"
-            Effect: "Allow"
-            Principal:
-              Service: "cloudtrail.amazonaws.com"
-            Action: "s3:PutObject"
-            Resource:
-              !Sub |-
-                arn:aws:s3:::${AWSS3CloudtrailBucket}/AWSLogs/${AWS::AccountId}/*
-            Condition:
-              StringEquals:
-                s3:x-amz-acl: "bucket-owner-full-control"
-  AWSSNSCloudtrailTopic:
-    Type: "AWS::SNS::Topic"
-    Properties:
-      Subscription:
-        -
-          Endpoint: !Ref OperatorEmail
-          Protocol: email
-  AWSSNSCloudtrailTopicPolicy:
-    Type: "AWS::SNS::TopicPolicy"
-    Properties:
-      Topics:
-        - !Ref AWSSNSCloudtrailTopic
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          -
-            Sid: "CloudtrailTopicPolicy"
-            Effect: "Allow"
-            Principal:
-              Service: "cloudtrail.amazonaws.com"
-            Resource: "*"
-            Action: "SNS:Publish"
-  AWSIAMCloudtrailLogManagedPolicy:
-    Type: "AWS::IAM::ManagedPolicy"
-    Properties:
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Sid: AWSCloudTrailCreateLogStream
-            Effect: Allow
-            Action:
-              - 'logs:CreateLogStream'
-            Resource:
-              - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${AWSLogsCloudtrailLogGroup}:log-stream:${AWS::AccountId}_CloudTrail_${AWS::Region}*'
-          - Sid: AWSCloudTrailPutLogEvents
-            Effect: Allow
-            Action:
-              - 'logs:PutLogEvents'
-            Resource:
-              - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${AWSLogsCloudtrailLogGroup}:log-stream:${AWS::AccountId}_CloudTrail_${AWS::Region}*'
-  AWSIAMCloudtrailLogRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          -
-            Effect: "Allow"
-            Principal:
-              Service:
-                - "cloudtrail.amazonaws.com"
-            Action:
-              - "sts:AssumeRole"
-      Path: "/"
-      ManagedPolicyArns:
-        - !Ref AWSIAMCloudtrailLogManagedPolicy
-  # AWS Config service, https://github.com/awslabs/aws-cloudformation-templates/blob/master/aws/services/Config/Config.yaml
-  AWSConfigConfigurationRecorder:
-    Type: AWS::Config::ConfigurationRecorder
-    Properties:
-      RecordingGroup:
-        AllSupported: true
-        IncludeGlobalResourceTypes: true
-      RoleARN: !GetAtt [AWSIAMConfigRole, Arn]
-  AWSConfigDeliveryChannel:
-    Type: AWS::Config::DeliveryChannel
-    Properties:
-      ConfigSnapshotDeliveryProperties:
-        DeliveryFrequency: Six_Hours
-      # Send log and data to AWS logcentral account
-      S3BucketName: "essentials-awss3configbucket-9n8wjykhvr5z"
+  # ofn manages aws config now. we keep legacy bucket to retain the old data
+  # https://github.com/Sage-Bionetworks-IT/organizations-infra/tree/master/org-formation/80-aws-config-inventory
   AWSS3ConfigBucket:
     Type: AWS::S3::Bucket
-  AWSSnsConfigTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      Subscription:
-        -
-          Endpoint: !Ref OperatorEmail
-          Protocol: email
-  AWSSnsConfigTopicPolicy:
-    Type: AWS::SNS::TopicPolicy
-    Properties:
-      PolicyDocument:
-        Id: ConfigTopicPolicy
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service: config.amazonaws.com
-          Action: SNS:Publish
-          Resource: '*'
-      Topics: [!Ref 'AWSSnsConfigTopic']
-  AWSIAMConfigRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service: [config.amazonaws.com]
-          Action: ['sts:AssumeRole']
-      ManagedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSConfigRole']
-      Policies:
-      - PolicyName: root
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          - Effect: Allow
-            Action: s3:GetBucketAcl
-            Resource: !Join ['', ['arn:aws:s3:::', !Ref 'AWSS3ConfigBucket']]
-          - Effect: Allow
-            Action: s3:PutObject
-            Resource: !Join ['', ['arn:aws:s3:::', !Ref 'AWSS3ConfigBucket', /AWSLogs/,
-                !Ref 'AWS::AccountId', /*]]
-            Condition:
-              StringEquals:
-                s3:x-amz-acl: bucket-owner-full-control
-          - Effect: Allow
-            Action: config:Put*
-            Resource: '*'
   # dynamodb monitoring resources
   AWSSNSDynamoTopic:
     Type: "AWS::SNS::Topic"
@@ -555,10 +380,6 @@ Outputs:
     Value: !Ref AWSIAMSumoLogicUserAccessKey
     Export:
       Name: !Sub '${AWS::StackName}-SumoLogicUserAccessKey'
-  AWSS3CloudtrailBucket:
-    Value: !Ref AWSS3CloudtrailBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-CloudtrailBucket'
   AWSS3AndroidAppBucketWebsiteURL:
     Condition: CreateProdResources
     Value: !GetAtt AWSS3AndroidAppBucket.WebsiteURL
