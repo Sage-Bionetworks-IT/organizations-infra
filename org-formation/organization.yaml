@@ -10,8 +10,7 @@ Organization:
       RootEmail: aws.organizations@sagebase.org
       Alias: org-sagebase-organizations
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   OrganizationRoot:
     Type: OC::ORG::OrganizationRoot
@@ -97,8 +96,7 @@ Organization:
       RootEmail: bridge.dev@sagebase.org
       Alias: org-sagebase-bridgedevelop
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   BridgeProdAccount:
     Type: OC::ORG::Account
@@ -108,8 +106,7 @@ Organization:
       RootEmail: bridgeIT@sagebase.org
       Alias: org-sagebase-bridgeprod
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   SynapseDevAccount:
     Type: OC::ORG::Account
@@ -119,8 +116,7 @@ Organization:
       RootEmail: synapse.dev@sagebase.org
       Alias: org-sagebase-synapsedev
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   SynapseDWAccount:
     Type: OC::ORG::Account
@@ -130,8 +126,7 @@ Organization:
       RootEmail: synapse.dw@sagebase.org
       Alias: org-sagebase-synapsedw
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   SynapseProdAccount:
     Type: OC::ORG::Account
@@ -141,8 +136,7 @@ Organization:
       RootEmail: platform@sagebase.org
       Alias: org-sagebase-synapseprod
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   TransitAccount:
     Type: OC::ORG::Account
@@ -152,8 +146,7 @@ Organization:
       RootEmail: aws.transit@sagebase.org
       Alias: org-sagebase-transit
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   AdminCentralAccount:
     Type: OC::ORG::Account
@@ -163,8 +156,7 @@ Organization:
       RootEmail: aws.admincentral@sagebase.org
       Alias: org-sagebase-admincentral
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   SageITAccount:
     Type: OC::ORG::Account
@@ -174,8 +166,7 @@ Organization:
       RootEmail: aws-it@sagebase.org
       Alias: org-sagebase-sageit
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   LogCentralAccount:
     Type: OC::ORG::Account
@@ -185,8 +176,8 @@ Organization:
       RootEmail: aws.logcentral@sagebase.org
       Alias: org-sagebase-logcentral
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
+        CloudwatchCloudTrailLogRetentionPeriod: 3653
 
   SecurityCentralAccount:
     Type: OC::ORG::Account
@@ -196,8 +187,7 @@ Organization:
       RootEmail: aws.securitycentral@sagebase.org
       Alias: org-sagebase-securitycentral
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   ImageCentralAccount:
     Type: OC::ORG::Account
@@ -207,8 +197,7 @@ Organization:
       RootEmail: aws.amirepo@sagebase.org
       Alias: org-sagebase-imagecentral
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   ITSandboxAccount:
     Type: OC::ORG::Account
@@ -218,8 +207,7 @@ Organization:
       RootEmail: aws.itsandbox@sagebase.org
       Alias: org-sagebase-itsandbox
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   ScipoolDevAccount:
     Type: OC::ORG::Account
@@ -229,8 +217,7 @@ Organization:
       RootEmail: aws.scipooldev@sagebase.org
       Alias: org-sagebase-scipooldev
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   ScipoolProdAccount:
     Type: OC::ORG::Account
@@ -240,8 +227,7 @@ Organization:
       RootEmail: aws.scipoolprod@sagebase.org
       Alias: org-sagebase-scipoolprod
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   ScicompAccount:
     Type: OC::ORG::Account
@@ -251,8 +237,7 @@ Organization:
       RootEmail: aws.scicomp@sagebase.org
       Alias: org-sagebase-scicomp
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   SandboxAccount:
     Type: OC::ORG::Account
@@ -262,8 +247,7 @@ Organization:
       RootEmail: aws.sandbox@sagebase.org
       Alias: org-sagebase-sandbox
       Tags:
-        Department: Platform
-        Project: Infrastructure
+        <<: !Include ./_default_org_tags.yaml
 
   NlpSandboxAccount:
     Type: OC::ORG::Account
@@ -272,6 +256,7 @@ Organization:
       RootEmail: aws-nlpsandbox@sagebase.org
       Alias: org-sagebase-nlpsandbox
       Tags:
+        <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: NLP-Sandbox
         budget-alarm-threshold: 20000
@@ -284,6 +269,7 @@ Organization:
       RootEmail: aws-mobilehealth-dataengineering@sagebase.org
       Alias: org-sagebase-mobilehealth-dataengineering
       Tags:
+        <<: !Include ./_default_org_tags.yaml
         Department: SysBio
         Project: Infrastructure
         budget-alarm-threshold: 20000
@@ -296,6 +282,7 @@ Organization:
       RootEmail: aws-iatlas-prod@sagebase.org
       Alias: org-sagebase-iatlas-prod
       Tags:
+        <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: iAtlas
         budget-alarm-threshold: 2000
@@ -308,6 +295,7 @@ Organization:
       RootEmail: aws-workflows-nextflow-prod@sagebase.org
       Alias: org-sagebase-workflows-nextflow-prod
       Tags:
+        <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: imCORE
         budget-alarm-threshold: 10000
@@ -320,6 +308,7 @@ Organization:
       RootEmail: aws-workflows-nextflow-dev@sagebase.org
       Alias: org-sagebase-workflows-nextflow-dev
       Tags:
+        <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: imCORE
         budget-alarm-threshold: 10000
