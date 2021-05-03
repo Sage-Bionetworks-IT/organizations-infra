@@ -9,7 +9,6 @@ CloudwatchTrailLog:
   DefaultOrganizationBinding:
     Account: '*'
     IncludeMasterAccount: true
-  TerminationProtection: true
   Parameters:
     RetentionInDays: !GetAtt CurrentAccount.Tags.CloudwatchCloudTrailLogRetentionPeriod
 
