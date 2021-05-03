@@ -3,7 +3,6 @@ stack_name: essentials
 dependencies:
   - prod/bootstrap.yaml
 parameters:
-  OperatorEmail: aws.admincentral@sagebase.org
   VpcPeeringRequesterAwsAccountId: !ssm /infra/AdmincentralAwsAccountId
   LambdaBucketVersioning: Enabled
 hooks:
