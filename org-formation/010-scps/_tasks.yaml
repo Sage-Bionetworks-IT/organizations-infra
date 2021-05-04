@@ -37,6 +37,17 @@ PreventDisableCloudtrail:
       - !Ref SynapseOU
       - !Ref BridgeOU
 
+PreventDisableCloudwatchConfigs:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-cloudwatch-configs.yaml
+  StackName: !Sub '${resourcePrefix}-prevent-disable-cloudwatch-configs'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  Parameters:
+    targetIds:
+      - !Ref PolicyStagingOU
+
 DenyAllRegionsOutsideUsEast1:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/SCP/deny-all-regions-outside-us-east-1.yaml
