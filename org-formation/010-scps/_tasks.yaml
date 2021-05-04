@@ -1,54 +1,41 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
-# temporarily disable SCP to fix up guardduty & cloudtrail
+PreventDisableGuardDuty:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-guardduty.yaml
+  StackName: !Sub '${resourcePrefix}-prevent-disable-guardduty'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  Parameters:
+    targetIds:
+      - !Ref ItDevOU
+      - !Ref ItProdOU
+      - !Ref ScienceDevOU
+      - !Ref ScienceProdOU
+      - !Ref PlatformOU
+      - !Ref PolicyStagingOU
+      - !Ref SynapseOU
+      - !Ref BridgeOU
 
-#PreventDisableGuardDuty:
-#  Type: update-stacks
-#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-guardduty.yaml
-#  StackName: !Sub '${resourcePrefix}-prevent-disable-guardduty'
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    IncludeMasterAccount: true
-#  Parameters:
-#    targetIds:
-#      - !Ref ItDevOU
-#      - !Ref ItProdOU
-#      - !Ref ScienceDevOU
-#      - !Ref ScienceProdOU
-#      - !Ref PlatformOU
-#      - !Ref PolicyStagingOU
-#      - !Ref SynapseOU
-#      - !Ref BridgeOU
-#
-#PreventDisableCloudtrail:
-#  Type: update-stacks
-#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-cloudtrail.yaml
-#  StackName: !Sub '${resourcePrefix}-prevent-disable-cloudtrail'
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    IncludeMasterAccount: true
-#  Parameters:
-#    targetIds:
-#      - !Ref ItDevOU
-#      - !Ref ItProdOU
-#      - !Ref ScienceDevOU
-#      - !Ref ScienceProdOU
-#      - !Ref PlatformOU
-#      - !Ref PolicyStagingOU
-#      - !Ref SynapseOU
-#      - !Ref BridgeOU
-#
-#PreventDisableCloudwatchConfigs:
-#  Type: update-stacks
-#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-cloudwatch-configs.yaml
-#  StackName: !Sub '${resourcePrefix}-prevent-disable-cloudwatch-configs'
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    IncludeMasterAccount: true
-#  Parameters:
-#    targetIds:
-#      - !Ref PolicyStagingOU
+PreventDisableCloudtrail:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-cloudtrail.yaml
+  StackName: !Sub '${resourcePrefix}-prevent-disable-cloudtrail'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  Parameters:
+    targetIds:
+      - !Ref ItDevOU
+      - !Ref ItProdOU
+      - !Ref ScienceDevOU
+      - !Ref ScienceProdOU
+      - !Ref PlatformOU
+      - !Ref PolicyStagingOU
+      - !Ref SynapseOU
+      - !Ref BridgeOU
 
 DenyAllRegionsOutsideUsEast1:
   Type: update-stacks
