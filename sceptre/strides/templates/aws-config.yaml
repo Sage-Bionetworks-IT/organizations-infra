@@ -9,6 +9,14 @@ Parameters:
   LocalCloudtrailBucket:
     Type: String
     Description: The S3 bucket in local AWS account containing cloudtrail logs.
+  RetentionInDays:
+    Type: Number
+    Description: >-
+      The number of days to retain the log events in the specified log group. Possible values are:
+      1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, and 3653.
+    Default: 90
+    MinValue: 1
+    MaxValue: 3653
 Resources:
   # AWS Config service, https://github.com/awslabs/aws-cloudformation-templates/blob/master/aws/services/Config/Config.yaml
   ConfigConfigurationRecorder:
@@ -101,6 +109,7 @@ Resources:
     Type: "AWS::Logs::LogGroup"
     Properties:
       LogGroupName: !Sub '/aws/config/${AWS::StackName}.log'
+      RetentionInDays: !Ref RetentionInDays
 
   ####### Cloudtrail Rules #######
 
