@@ -46,7 +46,14 @@ PreventDisableCloudwatchConfigs:
     IncludeMasterAccount: true
   Parameters:
     targetIds:
+      - !Ref ItDevOU
+      - !Ref ItProdOU
+      - !Ref ScienceDevOU
+      - !Ref ScienceProdOU
+      - !Ref PlatformOU
       - !Ref PolicyStagingOU
+      - !Ref SynapseOU
+      - !Ref BridgeOU
 
 DenyAllRegionsOutsideUsEast1:
   Type: update-stacks
