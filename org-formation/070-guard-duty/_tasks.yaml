@@ -30,11 +30,11 @@ GuardDuty:
       IncludeMasterAccount: false
     AllBinding:
       Account:
+        - !Ref accountId
         - !Ref BridgeProdAccount
         - !Ref ScicompAccount
         - !Ref ScipoolProdAccount
         - !Ref SynapseProdAccount
-        - !Ref accountId
       IncludeMasterAccount: false
   Parameters:
     resourcePrefix: !Ref resourcePrefix
