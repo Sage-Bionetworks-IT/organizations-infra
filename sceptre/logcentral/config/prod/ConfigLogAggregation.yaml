@@ -1,0 +1,7 @@
+template_path: ConfigLogAggregation.j2
+stack_name: ConfigLogAggregation
+sceptre_user_data:
+  stackname: !stack_name
+  config_bucket: !stack_output_external sagebase-cloudtrail::sagebaseDashcloudtrailDashCloudTrailBucket
+  accounts:
+    - "423819316185"   # org-sagebase-strides
