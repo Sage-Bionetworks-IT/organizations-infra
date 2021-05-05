@@ -34,7 +34,7 @@ GuarDuty:
 AwsConfigInventory:
   Type: include
   DependsOn: [ Types ]
-  Path: ./templates/080-aws-config-inventory/_tasks.yml
+  Path: ./080-aws-config-inventory/_tasks.yml
 
 Baseline:
   Type: include
