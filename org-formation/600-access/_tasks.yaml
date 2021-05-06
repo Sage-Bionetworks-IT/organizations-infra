@@ -143,6 +143,10 @@ NlpSandboxCIServiceAccounts:
       - !Ref NlpSandboxAccount
     Region: us-east-1
 
+# =====================================================================================================
+# Some of our accounts, like org-sagebase-strides, are not part of the Sage organziation therefore we need
+# to manage them as external entities. To allow strides account to send cloudtrail and config artifcats to
+# logcentral account we need to setup external access to the master buckets.
 AwsCloudtrailExternalAccountAccess:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Cloudtrail/CloudtrailLogAccess.njk
@@ -172,3 +176,4 @@ AwsConfigExternalAccountAccess:
     Account:
       - !Ref LogCentralAccount
     Region: us-east-1
+# ========================================================================================================
