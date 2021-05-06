@@ -270,13 +270,13 @@ Resources:
             Condition:
               Bool:
                 'aws:MultiFactorAuthPresent': 'true'
-          - Sid: BlockAnyAccessOtherThanAboveUnlessSignedInWithMFA
-            Effect: Deny
-            NotAction: 'iam:*'
-            Resource: '*'
-            Condition:
-              BoolIfExists:
-                'aws:MultiFactorAuthPresent': 'false'
+#         - Sid: BlockAnyAccessOtherThanAboveUnlessSignedInWithMFA
+#           Effect: Deny
+#           NotAction: 'iam:*'
+#           Resource: '*'
+#           Condition:
+#             BoolIfExists:
+#               'aws:MultiFactorAuthPresent': 'false'
 Outputs:
   AWSIAMEnforceMfaPolicy:
     Value: !Ref AWSIAMEnforceMfaPolicy
