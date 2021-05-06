@@ -145,7 +145,7 @@ NlpSandboxCIServiceAccounts:
 
 AwsCloudtrailExternalAccountAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Cloudtrail/CloudtrailLogAggregation.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Cloudtrail/CloudtrailLogAccess.njk
   StackName: aws-cloudtrail-ext-access
   TemplateContext:
     stackname: aws-cloudtrail-ext-access
@@ -160,7 +160,7 @@ AwsCloudtrailExternalAccountAccess:
 
 AwsConfigExternalAccountAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Config/ConfigLogAggregation.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Config/ConfigLogAccess.njk
   StackName: aws-config-ext-access
   TemplateContext:
     stackname: aws-config-ext-access
