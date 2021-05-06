@@ -142,3 +142,33 @@ NlpSandboxCIServiceAccounts:
     Account:
       - !Ref NlpSandboxAccount
     Region: us-east-1
+
+AwsCloudtrailExternalAccountAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Cloudtrail/CloudtrailLogAggregation.njk
+  StackName: aws-cloudtrail-ext-access
+  TemplateContext:
+    stackname: aws-cloudtrail-ext-access
+    cloudtrail_bucket: !CopyValue [ !Sub '${resourcePrefix}-cloudtrail-${LogCentralAccount}' ]
+    accounts:
+      - "423819316185"    # org-sagebase-strides
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref LogCentralAccount
+    Region: us-east-1
+
+AwsConfigExternalAccountAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Config/ConfigLogAggregation.njk
+  StackName: aws-config-ext-access
+  TemplateContext:
+    stackname: aws-config-ext-access
+    cloudtrail_bucket: !CopyValue [ !Sub '${resourcePrefix}-config-${LogCentralAccount}' ]
+    accounts:
+      - "423819316185"    # org-sagebase-strides
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref LogCentralAccount
+    Region: us-east-1
