@@ -32,7 +32,7 @@ Parameters:
 
 SsoAdministrator:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-admin'
   StackDescription: 'Full permission role used by Admin group within whole organization'
   TerminationProtection: false
@@ -52,7 +52,7 @@ SsoAdministrator:
 
 SsoAdministratorSupporter:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-admin-supporter'
   StackDescription: 'Full permission role used by Supporter group within Production organizational units'
   TerminationProtection: false
@@ -71,7 +71,7 @@ SsoAdministratorSupporter:
 
 SsoWriter:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-writer'
   StackDescription: 'Read and Write role used by Supporter group within Production organizational units'
   TerminationProtection: false
@@ -92,7 +92,7 @@ SsoWriter:
 
 SsoDeveloper:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-developer'
   StackDescription: 'Read and Write role used by Developer group within SDLC organizational units'
   TerminationProtection: false
@@ -114,7 +114,7 @@ SsoDeveloper:
 
 SsoAuditor:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-auditor'
   StackDescription: 'Audit role used by Auditor group within whole organization'
   TerminationProtection: false
@@ -133,7 +133,7 @@ SsoAuditor:
 
 SsoViewer:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-viewer'
   StackDescription: 'Read-only role used by Admin group within whole organization'
   TerminationProtection: false
@@ -153,7 +153,7 @@ SsoViewer:
 
 SsoViewerSupporter:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-viewer-supporter'
   StackDescription: 'Read-only role used by Supporter group within Production organizational units'
   TerminationProtection: false
