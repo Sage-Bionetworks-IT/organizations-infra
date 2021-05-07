@@ -36,17 +36,17 @@
                             "Statement": [
                                 {
                                     "Effect": "Allow",
-                                    "Action": "s3:*",
+                                    "Action": "autoscaling:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": "sns:*",
+                                    "Action": "cloudformation:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": "sqs:*",
+                                    "Action": "cloudfront:*",
                                     "Resource": "*"
                                 },
                                 {
@@ -56,12 +56,7 @@
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": "ses:*",
-                                    "Resource": "*"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": "rds:*",
+                                    "Action": "cloudwatch:*",
                                     "Resource": "*"
                                 },
                                 {
@@ -71,32 +66,32 @@
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": "elasticloadbalancing:*",
-                                    "Resource": "*"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": "autoscaling:*",
-                                    "Resource": "*"
-                                },
-                                {
-                                    "Effect": "Allow",
-                                    "Action": "cloudwatch:*",
-                                    "Resource": "*"
-                                },
-                                {
-                                    "Effect": "Allow",
                                     "Action": "elasticbeanstalk:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": "route53:*",
+                                    "Action": "elasticloadbalancing:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": "cloudformation:*",
+                                    "Action": "es:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "events:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "firehose:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "glue:*",
                                     "Resource": "*"
                                 },
                                 {
@@ -115,99 +110,85 @@
                                         "iam:GetInstanceProfile",
                                         "iam:RemoveRoleFromInstanceProfile",
                                         "iam:AddRoleToInstanceProfile",
-                                        "iam:CreateServiceLinkedRole"
+                                        "iam:CreateServiceLinkedRole",
+                                        "iam:ListRoleTags",
+                                        "iam:TagRole",
+                                        "iam:UntagRole",
+                                        "iam:ListUserTags",
+                                        "iam:TagUser",
+                                        "iam:UntagUser",
+                                        "iam:GetRolePolicy"
                                     ],
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "secretsmanager:*"
-                                    ],
+                                    "Action": "kinesis:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "kms:*"
-                                    ],
+                                    "Action": "kms:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "waf-regional:*"
-                                    ],
+                                    "Action": "logs:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "vpc:*"
-                                    ],
+                                    "Action": "rds:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "firehose:*"
-                                    ],
+                                    "Action": "route53:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "kinesis:*"
-                                    ],
+                                    "Action": "s3:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "es:*"
-                                    ],
+                                    "Action": "secretsmanager:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "glue:*"
-                                    ],
+                                    "Action": "ses:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "cloudfront:*"
-                                    ],
+                                    "Action": "sns:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "sts:AssumeRole"
-                                    ],
+                                    "Action": "sqs:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "logs:*"
-                                    ],
+                                    "Action": "states:*",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "states:*"
-                                    ],
+                                    "Action": "sts:AssumeRole",
                                     "Resource": "*"
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "events:*"
-                                    ],
+                                    "Action": "vpc:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "waf-regional:*",
                                     "Resource": "*"
                                 }
                             ]
