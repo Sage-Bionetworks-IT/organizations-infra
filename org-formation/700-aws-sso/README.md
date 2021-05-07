@@ -10,7 +10,7 @@ Follow these instructions to setup AWS SSO and integrate it with Jumpcloud IDP
 1. Login to AWS console as admin.
 2. Goto SSO console and [Enable SSO](https://docs.aws.amazon.com/singlesignon/latest/userguide/step1.html).
 3. Goto SSO settings and [disable MFA](https://docs.aws.amazon.com/singlesignon/latest/userguide/how-to-disable-mfa.html)
-   because we already require MFA on our IDP.  
+   because we already require MFA on our IDP.
 4. Setup JC IDP integration with SSO using the
    [JC instructions](https://support.jumpcloud.com/support/s/article/Single-Sign-On-SSO-With-AWS-SSO)
 5. Copy the "AWS SSO Sign-in URL" from AWS SAML 2.0 authentication and paste it into the JC SSO setting "Login URL"
