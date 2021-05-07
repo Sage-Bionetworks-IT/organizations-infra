@@ -1,19 +1,21 @@
 ### Purpose of these templates
-The templates in this folder enable [AWS SSO](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html) in the Management account. SSO is used to enable human access to accounts within the organization, both to the console as well as through the cli.
+The templates in this folder enable [AWS SSO](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)
+in the Management account. SSO is used to enable human access to accounts within the organization,
+both to the console as well as through the CLI.
 
-This is one of the few folders that does not come with '**batteries included**' as it requires you to manually create Groups and Users. By default it comes with four profiles:
-1. Auditor: tied to the default policy `arn:aws:iam::aws:policy/SecurityAudit`
-2. Developer: tied to the default policy `arn:aws:iam::aws:policy/PowerUserAccess`
-3. ScienceSupporter: tied to the default policies `arn:aws:iam::aws:policy/PowerUserAccess` and `arn:aws:iam::aws:policy/job-function/ViewOnlyAccess`
-4. Administrator: tied to the default policy `arn:aws:iam::aws:policy/AdministratorAccess`
+#### Setup SSO
 
-You will notice that there are more than 4 tasks, that is because for production access we want to limit the session time to 1 hour, while for non-production it can be 12 hours. This can only be done by deploying different permission sets.
+Follow these instructions to setup AWS SSO and integrate it with Jumpcloud IDP
 
-Some notable resources in this folder:
-
-| Resource | Description |
-| - | - |
-| Managed policies | An example stack to design your own IAM policies to assign to Groups |
-| SSO | Deploys a set of permissions (roles basically) and connects that to groups that you create earlier |
-
-It is recommended to re-use AWS provided policies where possible because of the maintenance benefit. The AWS environment constantly changes and AWS ensures that the managed policies they provide give access to new AWS Services and new actions within existing services.
+1. Login to AWS console as admin
+2. Goto SSO console and Enable SSO
+3. Setup JC IDP integration with SSO using the
+   [JC instructions](https://support.jumpcloud.com/support/s/article/Single-Sign-On-SSO-With-AWS-SSO)
+4. Copy the "AWS SSO Sign-in URL" from AWS SAML 2.0 authentication and paste it into the JC SSO setting "Login URL"
+5. In JC SSO setting "Enable management of User Groups and Group Membership in this application" to allow
+   JC to manage AWS SSO user and groups with SCIM.
+6. In the AWS SSO identity source setting select "Enable automatic provisioning"
+   *Copy the "SCIM endpoint" and "Access Token" from AWS and paste it into the JC SCIM settings "SP base URL" and "SP API Token" fields.
+7. Setup JC users/groups and give access to JC SSO app.
+8. Check that JC users/groups are automatically synced to AWS SSO
+9. Verify that JC app from the JC user login portal has access to the AWS account(s) and can sign into the account from JC.
