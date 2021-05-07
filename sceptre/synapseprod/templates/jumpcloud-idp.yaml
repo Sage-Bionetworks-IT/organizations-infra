@@ -76,6 +76,7 @@ Resources:
       RoleName: !GetAtt SynapseProdReadOnlySamlProvider.Name
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonAthenaFullAccess
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
