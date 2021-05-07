@@ -1,0 +1,171 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'sso'
+
+  # AWS SSO instance ARN
+  instanceArn:
+    Type: String
+    Default: 'arn:aws:sso:::instance/ssoins-7223577c8c0d796e'
+
+  # Principal ID from Identity Provider's group used by administrators
+  adminGroup:
+    Type: String
+    Default: '906769aa66-4b16d4b3-7c9c-44b7-85e0-adbf41dbf49d'
+
+  # Principal ID from Identity Provider's group used by auditors
+  auditorGroup:
+    Type: String
+    Default: '906769aa66-57ea4266-0644-4316-b5a4-fe0108301d30'
+
+  # Principal ID from Identity Provider's group used by developers
+  developerGroup:
+    Type: String
+    Default: '906769aa66-49d7689b-ae36-472b-bc3d-893753529227'
+
+  # Principal ID from Identity Provider's group used by supporters
+  scienceSupporterGroup:
+    Type: String
+    Default: '906769aa66-5d23a723-54f3-4c08-a67b-311e555f4e85'
+
+SsoAdministrator:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-admin'
+  StackDescription: 'Full permission role used by Admin group within whole organization'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref adminGroup
+    permissionSetName: 'Administrator'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
+    sessionDuration: 'PT4H'
+    masterAccountId: !Ref MasterAccount
+
+SsoAdministratorSupporter:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-admin-supporter'
+  StackDescription: 'Full permission role used by Supporter group within Production organizational units'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      OrganizationalUnit:
+        - !Ref ScienceDevOU
+        - !Ref ScienceProdOU
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scienceSupporterGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoWriter:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-writer'
+  StackDescription: 'Read and Write role used by Supporter group within Production organizational units'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      OrganizationalUnit:
+        - !Ref ScienceDevOU
+        - !Ref ScienceProdOU
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scienceSupporterGroup
+    permissionSetName: 'Writer'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
+    sessionDuration: 'PT1H'
+
+SsoDeveloper:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-developer'
+  StackDescription: 'Read and Write role used by Developer group within SDLC organizational units'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      OrganizationalUnit:
+        - !Ref ScienceDevOU
+        - !Ref ScienceProdOU
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref developerGroup
+    permissionSetName: 'Developer'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
+    sessionDuration: 'PT12H'
+
+SsoAuditor:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-auditor'
+  StackDescription: 'Audit role used by Auditor group within whole organization'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref auditorGroup
+    permissionSetName: 'Auditor'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/SecurityAudit' ]
+    sessionDuration: 'PT1H'
+
+SsoViewer:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-viewer'
+  StackDescription: 'Read-only role used by Admin group within whole organization'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref adminGroup
+    permissionSetName: 'Viewer'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess' ]
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
+
+SsoViewerSupporter:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-viewer-supporter'
+  StackDescription: 'Read-only role used by Supporter group within Production organizational units'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      OrganizationalUnit:
+        - !Ref ScienceDevOU
+        - !Ref ScienceProdOU
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scienceSupporterGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]

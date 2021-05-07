@@ -50,3 +50,8 @@ AccountAccess:
   Type: include
   DependsOn: [ Types ]
   Path: ./600-access/_tasks.yaml
+
+AwsSso:
+  Type: include
+  DependsOn: [ Types, SeviceControlPolicies ]
+  Path: ./700-aws-sso/_tasks.yaml
