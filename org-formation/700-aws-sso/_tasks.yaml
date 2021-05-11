@@ -46,25 +46,6 @@ Parameters:
     Type: String
     Default: '906769aa66-8c4034aa-9441-47b2-8770-34422ea4affa'
 
-sandboxAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sandboxAdmin'
-  StackDescription: 'SSO: Administrator role used by sandboxAdmin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SandboxAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref sandboxAdminGroup
-    permissionSetName: 'Administrator'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
-    sessionDuration: 'PT4H'
->>>>>>> efe5dd4... Setup SSO group access to AWS Scicomp account
-
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
