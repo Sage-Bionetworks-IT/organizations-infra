@@ -1,38 +1,10 @@
 Description: Resources for Jumpcloud IDP
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
-  AdmincentralAdminMetadata:
-    Type: String
-    Description: "Public certificate for Jumpcloud admincentral-admin app"
   AdmincentralCfnDeployerMetadata:
     Type: String
     Description: "Public certificate for Jumpcloud admincentral-cfndeployer app"
 Resources:
-  AdmincentralAdminSamlProvider:
-    Type: Custom::SAMLProvider
-    Properties:
-      ServiceToken: !ImportValue
-        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
-      Name: "admincentral-admin"
-      Metadata: !Ref AdmincentralAdminMetadata
-      URL: ""
-  AdmincentralAdminSamlProviderRole:
-    Type: AWS::IAM::Role
-    Properties:
-      MaxSessionDuration: 28800
-      RoleName: !GetAtt AdmincentralAdminSamlProvider.Name
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AdministratorAccess
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Federated: !Ref AdmincentralAdminSamlProvider
-            Action: sts:AssumeRoleWithSAML
-            Condition:
-              StringEquals:
-                "SAML:aud": "https://signin.aws.amazon.com/saml"
   # Role to deploy cloudformation templates and lambdas
   # For Sage IT Image-Librarians and Lambda-Librarians
   AdmincentralCfnDeployerSamlProvider:
@@ -61,14 +33,6 @@ Resources:
               StringEquals:
                 "SAML:aud": "https://signin.aws.amazon.com/saml"
 Outputs:
-  AdmincentralAdminSamlProviderArn:
-    Value: !Ref AdmincentralAdminSamlProvider
-    Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-AdmincentralAdminSamlProviderArn'
-  AdmincentralAdminSamlProviderRoleArn:
-    Value: !GetAtt AdmincentralAdminSamlProviderRole.Arn
-    Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-AdmincentralAdminSamlProviderRoleArn'
   AdmincentralCfnDeployerSamlProviderArn:
     Value: !Ref AdmincentralCfnDeployerSamlProvider
     Export:
