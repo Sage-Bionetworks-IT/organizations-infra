@@ -54,6 +54,50 @@ Parameters:
     Type: String
     Default: '906769aa66-73c138f0-c712-4824-a807-7975b6f654fa'
 
+  workflowNextflowDevAdminGroup:     #JC aws-workflow-nextflow-dev-admin
+    Type: String
+    Default: '906769aa66-023cdfaa-15f0-43d9-b823-b74358ceffd7'
+
+  workflowNextflowProdAdminGroup:   #JC aws-workflow-nextflow-prod-admin
+    Type: String
+    Default: '906769aa66-5c67ab0f-1091-48f9-b5b9-37d8b99a446a'
+
+SsoWorkflowNextflowDevAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-admin'
+  StackDescription: 'SSO: Administrator role used by workflow nextflow admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref WorkflowsNextflowDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref workflowNextflowDevAdminGroup
+    permissionSetName: 'Administrator'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
+    sessionDuration: 'PT12H'
+
+SsoWorkflowNextflowProdAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-admin'
+  StackDescription: 'SSO: Administrator role used by workflow nextflow admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref WorkflowsNextflowProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref workflowNextflowProdAdminGroup
+    permissionSetName: 'Administrator'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
+    sessionDuration: 'PT12H'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
