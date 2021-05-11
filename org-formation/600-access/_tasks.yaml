@@ -56,7 +56,7 @@ iAtlasCIServiceAccount:
     Account: !Ref iAtlasProdAccount
     Region: us-east-1
 
-# Setup iAtlas collaborator access for Jon Ryser (genui)
+# Setup iAtlas collaborator access
 iAtlasCollaboratorAccessJRyser:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
