@@ -53,8 +53,8 @@ Parameters:
 SsoMobileHealthDataEngineeringAdmin:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-mobileHealthDataEngineeringAdminGroup'
-  StackDescription: 'SSO: Administrator role used by mobileHealthDataEngineeringAdminGroup group'
+  StackName: !Sub '${resourcePrefix}-${appName}-mobilehealth-dataengineering-admin'
+  StackDescription: 'SSO: Administrator role used by mobileHealth DataEngineering admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
