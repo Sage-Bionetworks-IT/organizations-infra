@@ -59,11 +59,11 @@ iAtlasCIServiceAccount:
 # Setup iAtlas collaborator access for Jon Ryser (genui)
 iAtlasCollaboratorAccessJRyser:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.9/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
   StackName: iatlas-collaborator-access-jryser
   Parameters:
     PrincipalArns:
-      - arn:aws:iam::556856096938:user/ebs_automation
+      - arn:aws:iam::556856096938:user/ebs_automation    # Jon Ryser from GenUI
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
   DefaultOrganizationBinding:
