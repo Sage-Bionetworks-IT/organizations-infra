@@ -40,11 +40,11 @@ Parameters:
     Type: String
     Default: '906769aa66-0133decd-a118-4b53-b5a1-7ca6a3077212'
 
-sandboxDeveloper:
+SsoSandboxDeveloper:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-sandboxDeveloper'
-  StackDescription: 'SSO: Developer role used by sandboxAdmin group'
+  StackDescription: 'SSO: Developer role used by sandboxDeveloper group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -58,7 +58,7 @@ sandboxDeveloper:
     managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
     sessionDuration: 'PT12H'
 
-sandboxAdmin:
+SsoSandboxAdmin:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-sandboxAdmin'
