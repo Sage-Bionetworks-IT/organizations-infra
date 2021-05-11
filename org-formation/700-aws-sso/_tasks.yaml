@@ -47,7 +47,7 @@ sandboxDeveloper:
   StackDescription: 'SSO: Developer role used by sandboxAdmin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref SandboxAccount
@@ -61,11 +61,11 @@ sandboxDeveloper:
 sandboxAdmin:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sandboxDeveloper'
+  StackName: !Sub '${resourcePrefix}-${appName}-sandboxAdmin'
   StackDescription: 'SSO: Administrator role used by sandboxAdmin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref SandboxAccount
