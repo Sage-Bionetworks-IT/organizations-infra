@@ -35,7 +35,7 @@ Parameters:
     Type: String
     Default: '906769aa66-c66c6e77-3904-4bfc-b96d-98315a9bb913'
 
-  # Principal ID from Identity Provider's group used by sandbox developers
+  # Principal ID from Identity Provider's group used by sandbox admins
   sandboxAdminGroup:
     Type: String
     Default: '906769aa66-0133decd-a118-4b53-b5a1-7ca6a3077212'
