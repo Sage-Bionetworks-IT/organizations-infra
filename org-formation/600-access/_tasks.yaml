@@ -57,10 +57,10 @@ iAtlasCIServiceAccount:
     Region: us-east-1
 
 # Setup iAtlas collaborator access
-iAtlasCollaboratorAccessJRyser:
+iAtlasCollaboratorAccess:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
-  StackName: iatlas-collaborator-access-jryser
+  StackName: iatlas-collaborator-access
   Parameters:
     PrincipalArns:
       - arn:aws:iam::556856096938:user/ebs_automation    # Jon Ryser from GenUI
