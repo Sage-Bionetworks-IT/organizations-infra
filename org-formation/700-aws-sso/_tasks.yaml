@@ -118,7 +118,7 @@ Parameters:
     Type: String
     Default: '906769aa66-01abc2a0-764f-447e-b6e7-649dc83bdcda'
 
-  adminCentralDeployersGroup:
+  adminCentralDeployerGroup:
     Type: String
     Default: '906769aa66-f7cda126-3384-4fc0-bf6d-c01a00172e6d'
 
@@ -183,7 +183,7 @@ SsoAdminCentralCfnDeployer:
       Account: !Ref AdminCentralAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref adminCentralDeployersGroup
+    principalId: !Ref adminCentralDeployerGroup
     permissionSetName: 'AdminCentralCfnDeployer'
     managedPolicies: !CopyValue [ !Sub '${primaryRegion}-sso-admincentral-cfn-deployer-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT12H'
