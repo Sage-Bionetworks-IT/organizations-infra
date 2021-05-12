@@ -62,6 +62,7 @@ Parameters:
     Type: String
     Default: '906769aa66-5c67ab0f-1091-48f9-b5b9-37d8b99a446a'
 
+<<<<<<< HEAD
   synapseAdminGroup:      #JC aws-synapse-admins
     Type: String
     Default: '906769aa66-1c66a9b6-ae5e-473c-a51c-4b02918c4454'
@@ -77,6 +78,28 @@ Parameters:
   synapseProdViewerGroup:     #JC aws-synapseprod-viewers
     Type: String
     Default: '906769aa66-f671b9c2-3131-4051-b712-4668914bbfe0'
+
+  imageCentralAmiLibrarianGroup:
+    Type: String
+    Default: '906769aa66-8bfbe918-2d30-467e-9e98-92232e9f8410'
+
+SsoImageCentralAmiLibrarian:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-imagecentral-ami-librarian'
+  StackDescription: 'SSO: deployer role used by imagecentral AMI librarian group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ImageCentralAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref imageCentralAmiLibrarianGroup
+    permissionSetName: 'ImageCentralAmiLibrarian'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AmazonEC2FullAccess' ]
+    sessionDuration: 'PT12H'
 
 SsoAdministrator:
   Type: update-stacks
