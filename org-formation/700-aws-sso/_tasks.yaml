@@ -30,6 +30,50 @@ Parameters:
     Type: String
     Default: '906769aa66-5d23a723-54f3-4c08-a67b-311e555f4e85'
 
+  scicompDeveloperGroup:
+    Type: String
+    Default: '906769aa66-c66c6e77-3904-4bfc-b96d-98315a9bb913'
+
+  scicompViewerGroup:
+    Type: String
+    Default: '906769aa66-4796775f-cf5f-41c2-bfed-40b1d2658a3f'
+
+SsoScicompDeveloper:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-developer'
+  StackDescription: 'SSO: Developer role used by scicomp developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScicompAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scicompDeveloperGroup
+    permissionSetName: 'ScicompDeveloper'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
+    sessionDuration: 'PT12H'
+
+SsoScicompViewer:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-viewer'
+  StackDescription: 'SSO: Viewer role used by scicomp viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScicompAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scicompViewerGroup
+    permissionSetName: 'ScicompViewer'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess' ]
+    sessionDuration: 'PT12H'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
