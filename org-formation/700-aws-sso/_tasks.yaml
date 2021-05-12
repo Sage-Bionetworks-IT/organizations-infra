@@ -120,7 +120,7 @@ Parameters:
 
   adminCentralDeployersGroup:
     Type: String
-    Default: '906769aa66-c66c6e77-3904-4bfc-b96d-98315a9bb913'
+    Default: '906769aa66-f7cda126-3384-4fc0-bf6d-c01a00172e6d'
 
 SsoAdminCentralDeployerPolicy:
   Type: update-stacks
