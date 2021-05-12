@@ -118,6 +118,76 @@ Parameters:
     Type: String
     Default: '906769aa66-01abc2a0-764f-447e-b6e7-649dc83bdcda'
 
+  adminCentralDeployersGroup:
+    Type: String
+    Default: '906769aa66-c66c6e77-3904-4bfc-b96d-98315a9bb913'
+
+SsoAdminCentralDeployerPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/IAM/managed-policy.yaml
+  StackName: sso-admincentral-deployer-policy
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [ "s3:ListAllMyBuckets" ],
+            "Resource": "arn:aws:s3:::*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [ "s3:ListBucket", "s3:GetBucketLocation" ],
+            "Resource": [
+              !Sub 'arn:aws:s3:::${admincentralCloudformationBucket}',
+              !Sub 'arn:aws:s3:::${admincentralLambdaArtifactsBucket}'
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": [ "s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:GetObjectAcl", "s3:DeleteObject" ],
+            "Resource": [
+              "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9",
+              "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw"
+            ]
+          },
+          {
+            "Sid": "ManageServerlessRepo",
+            "Effect": "Allow",
+            "Action": [ "serverlessrepo:*" ],
+            "Resource": [
+              "arn:aws:serverlessrepo:${AWS::Region}:${AWS::AccountId}:applications/*"
+            ]
+          }
+        ]
+      }
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref MasterAccount
+
+SsoAdminCentralDeployer:
+  Type: update-stacks
+  DependsOn: [ SsoAdminCentralDeployerPolicy ]
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-admincentral-deployer'
+  StackDescription: 'SSO: deployer role used by admincental deployer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref AdminCentralAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref adminCentralDeployersGroup
+    permissionSetName: 'adminCentralDeployersGroup'
+    managedPolicies: !CopyValue [ !Sub '${primaryRegion}-sso-admincentral-deployer-policy-ManagedPolicyArn' ]
+    sessionDuration: 'PT12H'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
