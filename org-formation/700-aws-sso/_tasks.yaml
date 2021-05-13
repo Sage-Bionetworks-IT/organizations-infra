@@ -50,6 +50,10 @@ Parameters:
     Type: String
     Default: '906769aa66-e218c196-4107-417d-8b75-c2e81a4aa290'
 
+  nlpSandboxAdminGroup:      #JC aws-nlp-sandbox-admins
+    Type: String
+    Default: '906769aa66-73c138f0-c712-4824-a807-7975b6f654fa'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -277,5 +281,23 @@ SsoMobileHealthDataEngineeringAdmin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref mobileHealthDataEngineeringAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    sessionDuration: 'PT8H'
+
+SsoNlpSandboxAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-nlp-sandbox-admin'
+  StackDescription: 'SSO: Administrator role used by NLP Sandbox Admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref NlpSandboxAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref nlpSandboxAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
     sessionDuration: 'PT8H'
