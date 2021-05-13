@@ -3,9 +3,8 @@ Parameters:
 
 BudgetAlarms:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/Billing/budgets.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/Billing/budgets.yaml
   StackName: !Sub '${resourcePrefix}-billing-alarm'
-  TerminationProtection: false
   DefaultOrganizationBinding:
     Region: !Ref primaryRegion
     AccountsWithTag: budget-alarm-threshold

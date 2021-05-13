@@ -1,0 +1,13 @@
+template_path: remote/lambda-send-budget-alert.yaml
+stack_name: lambda-send-budget-alert
+parameters:
+  SNSTopicARN: !stack_output_external lambda-budgets::BudgetMakerNotificationTopicArn
+  SynapseUserKeyName: '/lambda-send-budget-alert/synapse-username'
+  SynapsePasswordKeyName: '/lambda-send-budget-alert/synapse-password'
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+hooks:
+  before_launch:
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-send-budget-alert/master/lambda-send-budget-alert.yaml -N -P templates/remote"

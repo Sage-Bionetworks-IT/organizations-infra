@@ -50,6 +50,7 @@ Resources:
         - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
   AWSIAMMarcoMarascaUser:
     Type: 'AWS::IAM::User'
     Properties:
