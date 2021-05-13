@@ -118,13 +118,14 @@ Parameters:
     Type: String
     Default: '906769aa66-01abc2a0-764f-447e-b6e7-649dc83bdcda'
 
-  adminCentralDeployerGroup:
+  adminCentralCfnDeployerGroup:   #JC aws-admincentral-cfn-deployers group
     Type: String
     Default: '906769aa66-f7cda126-3384-4fc0-bf6d-c01a00172e6d'
 
 SsoAdminCentralCfnDeployerPolicy:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/IAM/managed-policy.yaml
+#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/IAM/managed-policy.yaml
+  Template: ./managed-policy.yaml
   StackName: sso-admincentral-cfn-deployer-policy
   Parameters:
     PolicyDocument: >-
@@ -174,7 +175,7 @@ SsoAdminCentralCfnDeployer:
   DependsOn: [ SsoAdminCentralCfnDeployerPolicy ]
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-admincentral-cfn-deployer'
-  StackDescription: 'SSO: deployer role used by admincental deployer group'
+  StackDescription: 'SSO: deployer role used by admincental CFN deployer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -183,8 +184,8 @@ SsoAdminCentralCfnDeployer:
       Account: !Ref AdminCentralAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref adminCentralDeployerGroup
-    permissionSetName: 'AdminCentralCfnDeployer'
+    principalId: !Ref adminCentralCfnDeployerGroup
+    permissionSetName: 'CFN Deployer'
     managedPolicies: !CopyValue [ !Sub '${primaryRegion}-sso-admincentral-cfn-deployer-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT12H'
 
