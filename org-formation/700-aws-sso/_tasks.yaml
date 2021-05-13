@@ -38,6 +38,14 @@ Parameters:
     Type: String
     Default: '906769aa66-0133decd-a118-4b53-b5a1-7ca6a3077212'
 
+  scicompViewerGroup:      #JC aws-scicomp-viewers
+    Type: String
+    Default: '906769aa66-4796775f-cf5f-41c2-bfed-40b1d2658a3f'
+
+  scicompDeveloperGroup:   #JC aws-scicomp-developers
+    Type: String
+    Default: '906769aa66-8c4034aa-9441-47b2-8770-34422ea4affa'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -213,3 +221,39 @@ SsoSandboxAdmin:
     principalId: !Ref sandboxAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
     sessionDuration: 'PT4H'
+
+scicompViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-viewer'
+  StackDescription: 'SSO: viewer role used by scicomp viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScicompAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scicompViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+    sessionDuration: 'PT12H'
+
+scicompDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-developer'
+  StackDescription: 'SSO: Developer role used by scicomp developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScicompAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scicompViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    sessionDuration: 'PT8H'
