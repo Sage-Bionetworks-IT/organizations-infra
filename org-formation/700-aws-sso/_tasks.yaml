@@ -102,6 +102,22 @@ Parameters:
     Type: String
     Default: '906769aa66-e7083100-27d4-49bd-8ed2-c588371a1f91'
 
+  scipoolDevAdminGroup:       #JC aws-scipooldev-admins
+    Type: String
+    Default: '906769aa66-5215fbe3-2331-4ea6-9cb3-ee25cdad4cc8'
+
+  scipoolProdAdminGroup:      #JC aws-scipoolprod-admins
+    Type: String
+    Default: '906769aa66-b4f7fcde-028e-4c66-b25d-e9cfaf51c30f'
+
+  scipoolDevCommunityManagerGroup:   #JC aws-scipooldev-community-managers
+    Type: String
+    Default: '906769aa66-e25208e2-9a4a-420b-ab2a-8b880b39dbc3'
+
+  scipoolProdCommunityManagerGroup:  #JC aws-scipoolprod-community-managers
+    Type: String
+    Default: '906769aa66-01abc2a0-764f-447e-b6e7-649dc83bdcda'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -660,6 +676,7 @@ SsoScipoolDevCommunityManager:
           }
         ]
       }
+
 SsoScipoolProdCommunityManager:
   Type: update-stacks
   DependsOn: [ SsoScipoolDevCommunityManager ]
