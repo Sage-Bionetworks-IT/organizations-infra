@@ -82,6 +82,153 @@ Parameters:
     Type: String
     Default: '906769aa66-8bfbe918-2d30-467e-9e98-92232e9f8410'
 
+  bridgeDevAdminGroup:
+    Type: String
+    Default: '906769aa66-9cc57bee-09aa-44f6-83a2-13a6c5a1f9ea'
+
+  bridgeProdAdminGroup:
+    Type: String
+    Default: '906769aa66-a07374c5-95e8-4575-ac6d-735ab2381671'
+
+  bridgeDevDeveloperGroup:
+    Type: String
+    Default: '906769aa66-e3bd9dc2-140a-49b9-96b7-2b7c96690109'
+
+  bridgeProdDeveloperGroup:
+    Type: String
+    Default: '906769aa66-69906933-ccee-48dd-bbb6-a692eec3db9d'
+
+  bridgeProdIosDeveloperGroup:
+    Type: String
+    Default: '906769aa66-e7083100-27d4-49bd-8ed2-c588371a1f91'
+
+SsoBridgeDevAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgedev-admin'
+  StackDescription: 'SSO: admin role used by bridgedev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeDevAdminGroup
+    permissionSetName: 'Administrator'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
+    sessionDuration: 'PT12H'
+
+SsoBridgeProdAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-admin'
+  StackDescription: 'SSO: admin role used by bridgeprod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeProdAdminGroup
+    permissionSetName: 'Administrator'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
+    sessionDuration: 'PT12H'
+
+SsoBridgeDevDeveloper:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgedev-developer'
+  StackDescription: 'SSO: developer role used by bridgedev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeDevDeveloperGroup
+    permissionSetName: 'Developer'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
+    sessionDuration: 'PT12H'
+
+SsoBridgeProdDeveloper:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-developer'
+  StackDescription: 'SSO: developer role used by bridgeprod developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeProdDeveloperGroup
+    permissionSetName: 'Developer'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
+    sessionDuration: 'PT12H'
+
+SsoBridgeIosDeveloperPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/IAM/managed-policy.yaml
+  StackName: sso-bridge-ios-developer-policy
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ListBucketAccess",
+            "Action": [ "s3:ListAllMyBuckets" ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::*"
+          },
+          {
+            "Sid": "LocationBucketAccess",
+            "Action": [ "s3:ListBucket", "s3:GetBucketLocation" ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::ios-apps.sagebridge.org"
+          },
+          {
+            "Sid": "BucketObjectAccess",
+            "Action": [ "s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:GetObjectAcl", "s3:DeleteObject" ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::ios-apps.sagebridge.org/*"
+          }
+        ]
+      }
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref MasterAccount
+
+SsoBridgeProdIosDeveloper:
+  Type: update-stacks
+  DependsOn: [ SsoScipoolCommunityManagerPolicy ]
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-ios-developer'
+  StackDescription: 'SSO: developer role used by bridge prod ios developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeProdIosDeveloperGroup
+    permissionSetName: 'iOS Developer'
+    managedPolicies: !CopyValue [ !Sub '${primaryRegion}-sso-bridge-ios-developer-policy-ManagedPolicyArn' ]
+    sessionDuration: 'PT12H'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
