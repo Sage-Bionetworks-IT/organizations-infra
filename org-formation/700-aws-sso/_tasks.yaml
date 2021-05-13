@@ -30,51 +30,13 @@ Parameters:
     Type: String
     Default: '906769aa66-5d23a723-54f3-4c08-a67b-311e555f4e85'
 
-  # Principal ID from Identity Provider's group used by sandbox developers
-  sandboxDeveloperGroup:
+  sandboxDeveloperGroup:  #JC aws-sandbox-developers
     Type: String
     Default: '906769aa66-c66c6e77-3904-4bfc-b96d-98315a9bb913'
 
-  # Principal ID from Identity Provider's group used by sandbox admins
-  sandboxAdminGroup:
+  sandboxAdminGroup:    #JC aws-sandbox-admins
     Type: String
     Default: '906769aa66-0133decd-a118-4b53-b5a1-7ca6a3077212'
-
-SsoSandboxDeveloper:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sandbox-developer'
-  StackDescription: 'SSO: Developer role used by sandbox developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SandboxAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref sandboxDeveloperGroup
-    permissionSetName: 'Developer'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
-    sessionDuration: 'PT12H'
-
-SsoSandboxAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sandbox-admin'
-  StackDescription: 'SSO: Administrator role used by sandbox admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SandboxAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref sandboxAdminGroup
-    permissionSetName: 'Administrator'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
-    sessionDuration: 'PT4H'
 
 SsoAdministrator:
   Type: update-stacks
@@ -215,3 +177,39 @@ SsoViewerSupporter:
     instanceArn: !Ref instanceArn
     principalId: !Ref scienceSupporterGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoSandboxDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sandbox-developer'
+  StackDescription: 'SSO: Developer role used by sandbox developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SandboxAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref sandboxDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    sessionDuration: 'PT8H'
+
+SsoSandboxAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sandbox-admin'
+  StackDescription: 'SSO: Administrator role used by sandbox admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SandboxAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref sandboxAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    sessionDuration: 'PT4H'
