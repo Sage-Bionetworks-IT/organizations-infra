@@ -50,16 +50,6 @@ Resources:
         - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
-  AWSIAMZimingDongUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: ziming.dong@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
   AWSIAMMarcoMarascaUser:
     Type: 'AWS::IAM::User'
     Properties:
