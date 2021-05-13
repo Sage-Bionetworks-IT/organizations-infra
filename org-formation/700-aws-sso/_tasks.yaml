@@ -279,4 +279,3 @@ SsoMobileHealthDataEngineeringAdmin:
     principalId: !Ref mobileHealthDataEngineeringAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
     sessionDuration: 'PT12H'
-
