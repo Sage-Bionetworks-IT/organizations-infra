@@ -163,7 +163,7 @@ SsoScipoolDevCommunityManager:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref scipoolDevCommunityManagerGroup
-    permissionSetName: 'ScipoolCommunityManager'
+    permissionSetName: 'SC Community Manager'
     managedPolicies: !CopyValue [ !Sub '${primaryRegion}-sso-scipool-community-manager-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT12H'
 
@@ -182,7 +182,7 @@ SsoScipoolProdCommunityManager:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref scipoolProdCommunityManagerGroup
-    permissionSetName: 'ScipoolCommunityManager'
+    permissionSetName: 'SC Community Manager'
     managedPolicies: !CopyValue [ !Sub '${primaryRegion}-sso-scipool-community-manager-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT12H'
 
@@ -200,9 +200,9 @@ SsoScipoolDevAdmin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref scipoolDevAdminGroup
-    permissionSetName: 'ScipoolCommunityManager'
-    managedPolicies: !CopyValue [ !Sub '${primaryRegion}-sso-scipool-community-manager-policy-ManagedPolicyArn' ]
-    sessionDuration: 'PT12H'
+    permissionSetName: 'Administrator'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
+    sessionDuration: 'PT8H'
 
 SsoScipoolProdAdmin:
   Type: update-stacks
@@ -220,7 +220,7 @@ SsoScipoolProdAdmin:
     principalId: !Ref scipoolProdAdminGroup
     permissionSetName: 'Administrator'
     managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
-    sessionDuration: 'PT12H'
+    sessionDuration: 'PT8H'
 
 SsoAdministrator:
   Type: update-stacks
