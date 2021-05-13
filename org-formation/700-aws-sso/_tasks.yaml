@@ -46,7 +46,7 @@ Parameters:
     Type: String
     Default: '906769aa66-8c4034aa-9441-47b2-8770-34422ea4affa'
 
-  mobilehealthDataengineeringAdminGroup:     #JC aws-mobilehealth-dataengineering-admins
+  mobileHealthDataEngineeringAdminGroup:     #JC aws-mobilehealth-dataengineering-admins
     Type: String
     Default: '906769aa66-e218c196-4107-417d-8b75-c2e81a4aa290'
 
