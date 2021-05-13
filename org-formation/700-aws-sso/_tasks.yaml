@@ -78,79 +78,6 @@ Parameters:
     Type: String
     Default: '906769aa66-f671b9c2-3131-4051-b712-4668914bbfe0'
 
-SsoSynapseAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-synapse-admin'
-  StackDescription: 'SSO: admin role used by synapse admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      OrganizationalUnit:
-        - !Ref SynapseOU
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref synapseAdminGroup
-    permissionSetName: 'Administrator'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
-    sessionDuration: 'PT8H'
-
-SsoSynapseDevDeveloper:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-synapsedev-developer'
-  StackDescription: 'SSO: developer role used by synapsedev developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SynapseDevAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref synapseDevDeveloperGroup
-    permissionSetName: 'Developer'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
-    sessionDuration: 'PT12H'
-
-SsoSynapseProdDeveloper:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-synapseprod-developer'
-  StackDescription: 'SSO: developer role used by synapseprod developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SynapseProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref synapseProdDeveloperGroup
-    permissionSetName: 'Developer'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
-    sessionDuration: 'PT12H'
-
-SsoSynapseProdViewer:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-synapseprod-viewer'
-  StackDescription: 'SSO: viewer role used by synapseprod developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SynapseProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref synapseProdViewerGroup
-    permissionSetName: 'Viewer'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess' ]
-    sessionDuration: 'PT12H'
-
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -434,3 +361,76 @@ SsoWorkflowNextflowProdAdmin:
     principalId: !Ref workflowNextflowProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
     sessionDuration: 'PT8H'
+
+SsoSynapseAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-admin'
+  StackDescription: 'SSO: admin role used by synapse admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      OrganizationalUnit:
+        - !Ref SynapseOU
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    sessionDuration: 'PT4H'
+
+SsoSynapseDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsedev-developer'
+  StackDescription: 'SSO: developer role used by synapsedev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    sessionDuration: 'PT8H'
+
+SsoSynapseProdDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-synapseprod-developer'
+  StackDescription: 'SSO: developer role used by synapseprod developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    sessionDuration: 'PT8H'
+
+SsoSynapseProdViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-synapseprod-viewer'
+  StackDescription: 'SSO: viewer role used by synapseprod developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseProdViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+    sessionDuration: 'PT12H'
