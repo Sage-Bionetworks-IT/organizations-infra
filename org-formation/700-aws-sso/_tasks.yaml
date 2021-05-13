@@ -46,6 +46,10 @@ Parameters:
     Type: String
     Default: '906769aa66-8c4034aa-9441-47b2-8770-34422ea4affa'
 
+  mobilehealthDataengineeringAdminGroup:     #JC aws-mobilehealth-dataengineering-admins
+    Type: String
+    Default: '906769aa66-e218c196-4107-417d-8b75-c2e81a4aa290'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -256,4 +260,22 @@ scicompDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref scicompViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    sessionDuration: 'PT8H'
+
+SsoMobileHealthDataEngineeringAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-mobilehealth-dataengineering-admin'
+  StackDescription: 'SSO: Administrator role used by mobileHealth data engineering admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref MobileHealthDataEngineeringAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref mobileHealthDataEngineeringAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
     sessionDuration: 'PT8H'
