@@ -102,126 +102,6 @@ Parameters:
     Type: String
     Default: '906769aa66-e7083100-27d4-49bd-8ed2-c588371a1f91'
 
-  scipoolDevAdminGroup:       #JC aws-scipooldev-admins
-    Type: String
-    Default: '906769aa66-5215fbe3-2331-4ea6-9cb3-ee25cdad4cc8'
-
-  scipoolProdAdminGroup:      #JC aws-scipoolprod-admins
-    Type: String
-    Default: '906769aa66-b4f7fcde-028e-4c66-b25d-e9cfaf51c30f'
-
-  scipoolDevCommunityManagerGroup:   #JC aws-scipooldev-community-managers
-    Type: String
-    Default: '906769aa66-e25208e2-9a4a-420b-ab2a-8b880b39dbc3'
-
-  scipoolProdCommunityManagerGroup:  #JC aws-scipoolprod-community-managers
-    Type: String
-    Default: '906769aa66-01abc2a0-764f-447e-b6e7-649dc83bdcda'
-
-SsoScipoolCommunityManagerPolicy:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/IAM/managed-policy.yaml
-  StackName: sso-scipool-community-manager-policy
-  Parameters:
-    PolicyDocument: >-
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-            "Effect": "Allow",
-            "Action": [
-              "aws-portal:ViewUsage",
-              "aws-portal:ViewBilling",
-              "cur:DescribeReportDefinitions",
-              "cur:PutReportDefinition",
-              "cur:DeleteReportDefinition",
-              "cur:ModifyReportDefinition"
-            ],
-            "Resource": "*"
-          }
-        ]
-      }
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref MasterAccount
-
-SsoScipoolDevCommunityManager:
-  Type: update-stacks
-  DependsOn: [ SsoScipoolCommunityManagerPolicy ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager'
-  StackDescription: 'SSO: community manager role used by scipooldev community manager group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref ScipoolDevAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref scipoolDevCommunityManagerGroup
-    permissionSetName: 'SC Community Manager'
-    managedPolicies: !CopyValue [ !Sub '${primaryRegion}-sso-scipool-community-manager-policy-ManagedPolicyArn' ]
-    sessionDuration: 'PT12H'
-
-SsoScipoolProdCommunityManager:
-  Type: update-stacks
-  DependsOn: [ SsoScipoolCommunityManagerPolicy ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-scipoolprod-community-manager'
-  StackDescription: 'SSO: community manager role used by scipooldev community manager group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref ScipoolProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref scipoolProdCommunityManagerGroup
-    permissionSetName: 'SC Community Manager'
-    managedPolicies: !CopyValue [ !Sub '${primaryRegion}-sso-scipool-community-manager-policy-ManagedPolicyArn' ]
-    sessionDuration: 'PT12H'
-
-SsoScipoolDevAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-scipooldev-admin'
-  StackDescription: 'SSO: admin role used by scipooldev admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref ScipoolDevAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref scipoolDevAdminGroup
-    permissionSetName: 'Administrator'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
-    sessionDuration: 'PT8H'
-
-SsoScipoolProdAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-scipoolprod-community-manager'
-  StackDescription: 'SSO: admin role used by scipoolprod admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref ScipoolProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref scipoolProdAdminGroup
-    permissionSetName: 'Administrator'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
-    sessionDuration: 'PT8H'
-
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -709,3 +589,91 @@ SsoBridgeProdIosDeveloper:
           }
         ]
       }
+
+SsoScipoolDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scipooldev-admin'
+  StackDescription: 'SSO: admin role used by scipooldev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScipoolDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scipoolDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    sessionDuration: 'PT8H'
+
+SsoScipoolProdAdmin:
+  Type: update-stack
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scipoolprod-admin'
+  StackDescription: 'SSO: admin role used by scipoolprod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScipoolProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scipoolProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    sessionDuration: 'PT8H'
+
+SsoScipoolDevCommunityManager:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager'
+  StackDescription: 'SSO: community manager role used by scipooldev community manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScipoolDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scipoolDevCommunityManagerGroup
+    permissionSetName: 'Community-Manager'
+    sessionDuration: 'PT12H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "aws-portal:ViewUsage",
+              "aws-portal:ViewBilling",
+              "cur:DescribeReportDefinitions",
+              "cur:PutReportDefinition",
+              "cur:DeleteReportDefinition",
+              "cur:ModifyReportDefinition"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+SsoScipoolProdCommunityManager:
+  Type: update-stacks
+  DependsOn: [ SsoScipoolDevCommunityManager ]
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scipoolprod-community-manager'
+  StackDescription: 'SSO: community manager role used by scipooldev community manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScipoolProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scipoolProdCommunityManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager-permission-set-arn' ]
+    sessionDuration: 'PT12H'
