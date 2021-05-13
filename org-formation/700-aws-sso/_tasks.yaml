@@ -257,4 +257,3 @@ scicompDeveloper:
     principalId: !Ref scicompViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
     sessionDuration: 'PT8H'
-
