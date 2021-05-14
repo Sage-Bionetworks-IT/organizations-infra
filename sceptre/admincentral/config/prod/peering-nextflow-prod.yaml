@@ -4,4 +4,4 @@ parameters:
   PeerVPC: vpc-0a97baf55ccd9b25b
   PeerVPCOwner: 728882028485
   PeerVPCCIDR: 172.22.0.0/20
-  PeerRoleName: sagebase-vpc-peering-request-AuthorizerRole-EVJX3DOWYVZL 
+  PeerRoleName: sagebase-vpc-peering-request-AuthorizerRole-EVJX3DOWYVZL
