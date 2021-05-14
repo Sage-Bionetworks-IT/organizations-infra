@@ -5,6 +5,6 @@ stack_tags:
   Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
-  - "develop/jumpcloud-idp.yaml"
+  - "develop/bootstrap.yaml"
 parameters:
   AdminRoleArn: !stack_output_external jumpcloud-idp::ScipooldevAdminSamlProviderRoleArn
