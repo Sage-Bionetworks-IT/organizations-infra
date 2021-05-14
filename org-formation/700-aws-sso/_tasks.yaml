@@ -480,7 +480,7 @@ SsoImageCentralAmiLibrarian:
 SsoBridgeDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgedev-admin'
   StackDescription: 'SSO: admin role used by bridgedev admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -498,7 +498,7 @@ SsoBridgeDevAdmin:
 SsoBridgeProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-admin'
   StackDescription: 'SSO: admin role used by bridgeprod admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -516,7 +516,7 @@ SsoBridgeProdAdmin:
 SsoBridgeDevDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgedev-developer'
   StackDescription: 'SSO: developer role used by bridgedev developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -534,7 +534,7 @@ SsoBridgeDevDeveloper:
 SsoBridgeProdDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-developer'
   StackDescription: 'SSO: developer role used by bridgeprod developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -551,7 +551,7 @@ SsoBridgeProdDeveloper:
 
 SsoBridgeProdIosDeveloper:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-ios-developer'
   StackDescription: 'SSO: developer role used by bridge prod ios developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
