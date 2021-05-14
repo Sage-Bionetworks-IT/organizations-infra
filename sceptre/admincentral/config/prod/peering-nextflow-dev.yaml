@@ -1,0 +1,7 @@
+template_path: VPCPeer.yaml
+stack_name: peering-nextflow-dev
+parameters:
+  PeerVPC: vpc-04c1457103adc1fdf
+  PeerVPCOwner: 035458030717
+  PeerVPCCIDR: 172.21.0.0/20
+  PeerRoleName: sagebase-vpc-peering-request-AuthorizerRole-19YBB3AMO0EVX
