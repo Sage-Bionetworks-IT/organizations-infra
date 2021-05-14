@@ -60,9 +60,12 @@ VpcPeeringRequest:
   StackName: !Sub '${resourcePrefix}-vpc-peering-request'
   StackDescription: 'Authorize VPC peering requests'
   Parameters:
-    VpcPeeringRequesterAwsAccountId: '745159704268'
+    VpcPeeringRequesterAwsAccountId: !Ref AdminCentralAccount
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
       - !Ref NlpSandboxAccount
+      - !Ref WorkflowsNextflowDevAccount
+      - !Ref WorkflowsNextflowProdAccount
+      - !Ref MobileHealthDataEngineeringAccount
