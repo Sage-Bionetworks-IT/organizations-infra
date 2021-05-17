@@ -82,6 +82,26 @@ Parameters:
     Type: String
     Default: '906769aa66-8bfbe918-2d30-467e-9e98-92232e9f8410'
 
+  bridgeDevAdminGroup:      #JC aws-bridgedev-admins
+    Type: String
+    Default: '906769aa66-9cc57bee-09aa-44f6-83a2-13a6c5a1f9ea'
+
+  bridgeProdAdminGroup:     #JC aws-bridgeprod-admins
+    Type: String
+    Default: '906769aa66-a07374c5-95e8-4575-ac6d-735ab2381671'
+
+  bridgeDevDeveloperGroup:   #JC aws-bridgedev-developers
+    Type: String
+    Default: '906769aa66-e3bd9dc2-140a-49b9-96b7-2b7c96690109'
+
+  bridgeProdDeveloperGroup:   #JC aws-bridgeprod-developers
+    Type: String
+    Default: '906769aa66-69906933-ccee-48dd-bbb6-a692eec3db9d'
+
+  bridgeProdIosDeveloperGroup:  #JC aws-bridgeprod-ios-developers
+    Type: String
+    Default: '906769aa66-e7083100-27d4-49bd-8ed2-c588371a1f91'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -456,3 +476,116 @@ SsoImageCentralAmiLibrarian:
     permissionSetName: 'AMI-Librarian'
     managedPolicies: [ 'arn:aws:iam::aws:policy/AmazonEC2FullAccess' ]
     sessionDuration: 'PT12H'
+
+SsoBridgeDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgedev-admin'
+  StackDescription: 'SSO: admin role used by bridgedev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    sessionDuration: 'PT4H'
+
+SsoBridgeProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-admin'
+  StackDescription: 'SSO: admin role used by bridgeprod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    sessionDuration: 'PT4H'
+
+SsoBridgeDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgedev-developer'
+  StackDescription: 'SSO: developer role used by bridgedev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    sessionDuration: 'PT8H'
+
+SsoBridgeProdDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-developer'
+  StackDescription: 'SSO: developer role used by bridgeprod developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    sessionDuration: 'PT8H'
+
+SsoBridgeProdIosDeveloper:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-ios-developer'
+  StackDescription: 'SSO: developer role used by bridge prod ios developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BridgeProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeProdIosDeveloperGroup
+    permissionSetName: 'iOS-Developer'
+    sessionDuration: 'PT8H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ListBucketAccess",
+            "Action": [ "s3:ListAllMyBuckets" ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::*"
+          },
+          {
+            "Sid": "LocationBucketAccess",
+            "Action": [ "s3:ListBucket", "s3:GetBucketLocation" ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::ios-apps.sagebridge.org"
+          },
+          {
+            "Sid": "BucketObjectAccess",
+            "Action": [ "s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:GetObjectAcl", "s3:DeleteObject" ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::ios-apps.sagebridge.org/*"
+          }
+        ]
+      }
