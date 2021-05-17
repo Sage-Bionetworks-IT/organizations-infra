@@ -2,5 +2,4 @@
 template_path: "guardduty.yaml"
 stack_name: "guardduty"
 parameters:
-  resourcePrefix: "sagebase"
   accountId: "140124849929"       # org-sagebase-securitycentral

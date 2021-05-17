@@ -1,8 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: GuardDuty - Base
 Parameters:
-  resourcePrefix:
-    Type: String
   accountId:
     Type: String
     Description: The identifier from the account used to manage GuardDuty
