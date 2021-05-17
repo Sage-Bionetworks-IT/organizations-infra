@@ -118,6 +118,10 @@ Parameters:
     Type: String
     Default: '906769aa66-01abc2a0-764f-447e-b6e7-649dc83bdcda'
 
+  adminCentralCfnDeployerGroup:   #JC aws-admincentral-cfn-deployers
+    Type: String
+    Default: '906769aa66-f7cda126-3384-4fc0-bf6d-c01a00172e6d'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -694,3 +698,56 @@ SsoScipoolProdCommunityManager:
     principalId: !Ref scipoolProdCommunityManagerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager-permission-set-arn' ]
     sessionDuration: 'PT12H'
+
+SsoAdminCentralCfnDeployer:
+  Type: update-stacks
+  DependsOn: [ SsoAdminCentralCfnDeployerPolicy ]
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-admincentral-cfn-deployer'
+  StackDescription: 'SSO: deployer role used by admincental CFN deployer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref AdminCentralAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref adminCentralCfnDeployerGroup
+    permissionSetName: 'Cloudformation-Deployer'
+    sessionDuration: 'PT12H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [ "s3:ListAllMyBuckets" ],
+            "Resource": "arn:aws:s3:::*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [ "s3:ListBucket", "s3:GetBucketLocation", "s3:getBucketVersioning" ],
+            "Resource": [
+              "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9",
+              "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": [ "s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:GetObjectAcl", "s3:DeleteObject" ],
+            "Resource": [
+              "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*",
+              "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw/*"
+            ]
+          },
+          {
+            "Sid": "ManageServerlessRepo",
+            "Effect": "Allow",
+            "Action": [ "serverlessrepo:*" ],
+            "Resource": [
+              "arn:aws:serverlessrepo:us-east-1:745159704268:applications/*"
+            ]
+          }
+        ]
+      }
