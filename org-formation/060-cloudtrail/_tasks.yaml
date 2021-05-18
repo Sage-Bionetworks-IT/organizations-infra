@@ -34,7 +34,7 @@ CloudTrail:
 CloudTrailSumoLogicRole:
   Type: update-stacks
   DependsOn: [ "CloudTrail" ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/sumologic-role.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/sumologic-role.yaml
   StackName: !Sub '${resourcePrefix}-cloudtrail-sumologic-role'
   StackDescription: Allow Sumologic to access cloudTrail data
   DefaultOrganizationBindingRegion: !Ref primaryRegion

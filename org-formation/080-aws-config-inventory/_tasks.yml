@@ -25,7 +25,7 @@ ConfigBase:
 ConfigSumoLogicRole:
   Type: update-stacks
   DependsOn: [ "ConfigBase" ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/sumologic-role.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/sumologic-role.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-config-sumologic-role'
   StackDescription: Allow Sumologic to access AWS config data
   DefaultOrganizationBindingRegion: !Ref primaryRegion
