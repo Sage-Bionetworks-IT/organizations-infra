@@ -24,7 +24,7 @@ Follow these instructions to setup AWS SSO and integrate it with Jumpcloud IDP. 
 10. Verify that JC app from the JC user login portal has access to the AWS account(s) and can sign into the
     account from JC.
 
-#### Setup Account Access 
+#### Setup Account Access
 
 Follow these instructions to setup Jumpcloud user access to AWS accounts.
 
