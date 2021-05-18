@@ -86,6 +86,22 @@ NlpSandboxServiceAccount:
     Account: !Ref SandboxAccount
     Region: !Ref primaryRegion
 
+# JumpCloud access for Sage staff working on HTAN infrastructure
+JCHtanDevAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
+  StackName: jc-htan-dev-admin
+  MaxConcurrentStacks: 10
+  Parameters:
+    MetadataDocument: !ReadFile ./MetadataDocuments/htan-dev-admin.xml
+    SamlProviderName: htan-dev-admin
+    SamlProviderPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref HtanDevAccount
+    Region: us-east-1
+
 JCWorkflowsNextflowDevAdmin:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
