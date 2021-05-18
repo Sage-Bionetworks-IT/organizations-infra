@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: GuardDuty - Base
+Description: Associate a Guardduty member with a master account
 Parameters:
   accountId:
     Type: String
