@@ -701,7 +701,6 @@ SsoScipoolProdCommunityManager:
 
 SsoAdminCentralCfnDeployer:
   Type: update-stacks
-  DependsOn: [ SsoAdminCentralCfnDeployerPolicy ]
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-admincentral-cfn-deployer'
   StackDescription: 'SSO: deployer role used by admincental CFN deployer group'
