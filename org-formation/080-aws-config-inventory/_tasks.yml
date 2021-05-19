@@ -26,13 +26,13 @@ ConfigSumoLogicRole:
   Type: update-stacks
   DependsOn: [ "ConfigBase" ]
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/sumologic-role.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-config-sumologic-role'
+  StackName: !Sub '${resourcePrefix}-${appName}-sumologic-role'
   StackDescription: Allow Sumologic to access AWS config data
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref LogCentralAccount
     IncludeMasterAccount: false
   Parameters:
-    ExternalID: !Cmd "aws ssm get-parameters --names /infra/SumologicExternalID --query 'Parameters[0].[Value]' --output text"
+    ExternalID: "us2:00000000001E813D"
     Actions: 's3:GetObject,s3:GetObjectVersion,s3:ListBucketVersions,s3:ListBucket'
     Resource: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-${appName}-base-ConfigAuditBucketArn' ]
