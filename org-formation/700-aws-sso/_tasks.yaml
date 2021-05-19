@@ -122,6 +122,10 @@ Parameters:
     Type: String
     Default: '906769aa66-f7cda126-3384-4fc0-bf6d-c01a00172e6d'
 
+  htanDevAdminGroup:        #JC aws-htan-dev-admins
+    Type: String
+    Default: '906769aa66-8f870ac5-9280-4c19-b477-461592fe92a6'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -750,3 +754,21 @@ SsoAdminCentralCfnDeployer:
           }
         ]
       }
+
+SsoHtanDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-htan-dev-admin'
+  StackDescription: 'SSO: Administrator role used by htan dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref HtanDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref htanDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    sessionDuration: 'PT8H'
