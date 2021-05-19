@@ -55,7 +55,7 @@ GuardDutyConnectStrides:
   Parameters:
     MemberAccountId: "423819316185"           # org-sagebase-strides
     MemberRootEmail: "aws.strides@sagebase.org"
-    MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-DetectorId' ]
+    MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
 
 # bucket that contains the trusted IP addresses that are excluded from GuardDuty findings
 GuardDutyTrustedIpsBucket:
