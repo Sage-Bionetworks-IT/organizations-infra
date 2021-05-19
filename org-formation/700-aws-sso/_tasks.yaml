@@ -330,7 +330,7 @@ scicompDeveloper:
       Account: !Ref ScicompAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref scicompViewerGroup
+    principalId: !Ref scicompDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
     sessionDuration: 'PT8H'
 
