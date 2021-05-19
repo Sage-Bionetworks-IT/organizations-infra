@@ -26,6 +26,7 @@ Organization:
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringAccount
         - !Ref SageITAccount
+        - !Ref HtanDevAccount
         - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
 
@@ -287,6 +288,20 @@ Organization:
         Project: iAtlas
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-iatlas-prod@sagebase.org
+
+  # Provisioner repository: https://github.com/ncihtan/aws-htan-infra
+  HtanDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: htan-dev
+      RootEmail: aws-htan-dev@sagebase.org
+      Alias: org-sagebase-htan-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: CompOnc
+        Project: htan
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-htan-dev@sagebase.org
 
   WorkflowsNextflowProdAccount:
     Type: OC::ORG::Account
