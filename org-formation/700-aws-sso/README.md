@@ -5,7 +5,7 @@ both to the console as well as through the CLI.
 
 #### Setup SSO
 
-Follow these instructions to setup AWS SSO and integrate it with Jumpcloud IDP
+Follow these instructions to setup AWS SSO and integrate it with Jumpcloud IDP. This is a one time setup.
 
 1. Login to AWS console as admin.
 2. Goto SSO console and [Enable SSO](https://docs.aws.amazon.com/singlesignon/latest/userguide/step1.html).
@@ -23,3 +23,23 @@ Follow these instructions to setup AWS SSO and integrate it with Jumpcloud IDP
 9. Check that JC users/groups are automatically synced to AWS SSO
 10. Verify that JC app from the JC user login portal has access to the AWS account(s) and can sign into the
     account from JC.
+
+#### Setup Account Access
+
+Follow these instructions to setup Jumpcloud user access to AWS accounts.
+
+1. Login to Jumpcloud admin console
+2. Create a JC user group
+3. Map the JC user group to the AWS SSO application
+4. Login to the Sage AWS Organization account and goto SSO console.  An SSO user
+   group ID (i.e. 906769aa66-5d23a723-54f3-4c08-a67b-311e555f4e85) will automatically
+   be created for the new group.
+5. Add a new resource to ./_tasks.yaml with the new policy, role and matching AWS SSO group ID.
+6. Deploy the resource.
+7. In JC admin console map users to the JC user group
+
+#### Test AWS Account Access
+
+1. Login to the Jumpcloud user portal with the user that was mapped to the JC user group.
+2. Select applications -> AWS SSO
+3. The account with the role should appear for the user to select.
