@@ -16,7 +16,7 @@ CloudwatchTrailLog:
 CloudTrail:
   Type: update-stacks
   DependsOn: [ "CloudwatchTrailLog" ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Cloudtrail/cloudtrail-trail.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/Cloudtrail/cloudtrail-trail.yaml
   StackName: !Sub '${resourcePrefix}-cloudtrail'
   StackDescription: CloudTrail
   DefaultOrganizationBindingRegion: !Ref primaryRegion
