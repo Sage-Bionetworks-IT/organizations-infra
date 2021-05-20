@@ -300,7 +300,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: htan
-        budget-alarm-threshold: 10000
+        budget-alarm-threshold: 2500
         budget-alarm-threshold-email-recipient: aws-htan-dev@sagebase.org
 
   WorkflowsNextflowProdAccount:
