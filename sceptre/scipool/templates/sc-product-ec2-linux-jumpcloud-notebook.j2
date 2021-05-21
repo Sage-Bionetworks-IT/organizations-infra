@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Notebook Linux EC2 ServiceCatalog product'
+Parameters:
+  ProductName:
+    Type: String
+    Description: Name of the product that will be visible to the end user
+    Default: 'EC2: Ubuntu Linux with Notebook Software'
+  ReplaceProvisioningArtifacts:
+    Type: String
+    Description: "Whether to keep or replace the provisioning artifact identifier on update"
+    Default: 'false'
+Resources:
+  ScEc2LinuxJumpcloudNotebookProduct:
+    Type: AWS::ServiceCatalog::CloudFormationProduct
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002  # missing `owner` property error -> it's inside of included products.yaml
+            - E3003  # invalid property `Fn::Transform` error -> cfn-lint bug
+    Properties:
+      Name: !Ref ProductName
+      Description: This product builds one Linux EC2 instance using an Rstudio
+        AMI based on Ubuntu and maintained by Sage Bionetworks.
+      ProvisioningArtifactParameters:
+        {{ sceptre_user_data.ProvisioningArtifactParameters|indent(8) }}
+      'Fn::Transform':
+        Name: 'AWS::Include'
+        Parameters:
+          # source: https://github.com/Sage-Bionetworks/admincentral-infra/blob/master/templates/cfn-snippets-bucket.yaml
+          Location: "s3://cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz/scipool/products.yaml"
+      ReplaceProvisioningArtifacts: !Ref ReplaceProvisioningArtifacts
+  Associateec2linux:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxJumpcloudNotebookProduct'
+  constraintec2linux:
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    DependsOn: Associateec2linux
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxJumpcloudNotebookProduct'
+      RoleArn: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+  AssociatesExternalPortfolio:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-external-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxJumpcloudNotebookProduct'
+  ConstraintExternalPortfolio:
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    DependsOn: AssociatesExternalPortfolio
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-external-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxJumpcloudNotebookProduct'
+      RoleArn: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+Outputs:
+  ProductId:
+    Value: !Ref 'ScEc2LinuxJumpcloudNotebookProduct'
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProductId'
