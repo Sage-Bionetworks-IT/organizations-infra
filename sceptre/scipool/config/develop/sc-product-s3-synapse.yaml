@@ -41,7 +41,7 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.10/s3/sc-s3-synapse-ra.yaml'
       Name: 'v1.1.10'
-    - Description: !Sub 'Include option to restrict bucket downloads to same region. Last updated at ${StackDatetime}.'
+    - Description: !Sub 'Include option to restrict bucket downloads to same region. {{ range(1, 10000) | random }}'
       Info:
         LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.15/s3/sc-s3-synapse-ra.yaml'
       Name: 'v1.1.15'
