@@ -92,7 +92,6 @@ Organization:
   BridgeDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Bridge Dev
       AccountId: '420786776710'
       RootEmail: bridge.dev@sagebase.org
       Alias: org-sagebase-bridgedevelop
@@ -102,7 +101,6 @@ Organization:
   BridgeProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Bridge IT
       AccountId: '649232250620'
       RootEmail: bridgeIT@sagebase.org
       Alias: org-sagebase-bridgeprod
@@ -112,7 +110,6 @@ Organization:
   SynapseDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Dev Stack
       AccountId: '449435941126'
       RootEmail: synapse.dev@sagebase.org
       Alias: org-sagebase-synapsedev
@@ -122,7 +119,6 @@ Organization:
   SynapseDWAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: SynapseDW
       AccountId: '383874245509'
       RootEmail: synapse.dw@sagebase.org
       Alias: org-sagebase-synapsedw
@@ -132,7 +128,6 @@ Organization:
   SynapseProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Sage Bionetworks Platform
       AccountId: '325565585839'
       RootEmail: platform@sagebase.org
       Alias: org-sagebase-synapseprod
@@ -142,7 +137,6 @@ Organization:
   TransitAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: transit
       AccountId: '153370007719'
       RootEmail: aws.transit@sagebase.org
       Alias: org-sagebase-transit
@@ -152,7 +146,6 @@ Organization:
   AdminCentralAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: AdminCentral
       AccountId: '745159704268'
       RootEmail: aws.admincentral@sagebase.org
       Alias: org-sagebase-admincentral
@@ -162,7 +155,6 @@ Organization:
   SageITAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Sage Bionetworks AWS IT
       AccountId: '797640923903'
       RootEmail: aws-it@sagebase.org
       Alias: org-sagebase-sageit
@@ -172,7 +164,6 @@ Organization:
   LogCentralAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: logcentral
       AccountId: '231505186444'
       RootEmail: aws.logcentral@sagebase.org
       Alias: org-sagebase-logcentral
@@ -183,7 +174,6 @@ Organization:
   SecurityCentralAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: aws-securitycentral
       AccountId: '140124849929'
       RootEmail: aws.securitycentral@sagebase.org
       Alias: org-sagebase-securitycentral
@@ -193,7 +183,6 @@ Organization:
   ImageCentralAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: AMI Repository
       AccountId: '867686887310'
       RootEmail: aws.amirepo@sagebase.org
       Alias: org-sagebase-imagecentral
@@ -203,7 +192,6 @@ Organization:
   ITSandboxAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: it-sandbox
       AccountId: '804034162148'
       RootEmail: aws.itsandbox@sagebase.org
       Alias: org-sagebase-itsandbox
@@ -213,7 +201,6 @@ Organization:
   ScipoolDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: scipooldev
       AccountId: '465877038949'
       RootEmail: aws.scipooldev@sagebase.org
       Alias: org-sagebase-scipooldev
@@ -223,7 +210,6 @@ Organization:
   ScipoolProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: org-sagebase-scipoolprod
       AccountId: '237179673806'
       RootEmail: aws.scipoolprod@sagebase.org
       Alias: org-sagebase-scipoolprod
@@ -233,7 +219,6 @@ Organization:
   ScicompAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: scicomp
       AccountId: '055273631518'
       RootEmail: aws.scicomp@sagebase.org
       Alias: org-sagebase-scicomp
@@ -243,7 +228,6 @@ Organization:
   SandboxAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Sandbox
       AccountId: '563295687221'
       RootEmail: aws.sandbox@sagebase.org
       Alias: org-sagebase-sandbox
@@ -253,7 +237,6 @@ Organization:
   NlpSandboxAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: NlpSandboxAccount
       RootEmail: aws-nlpsandbox@sagebase.org
       Alias: org-sagebase-nlpsandbox
       Tags:
@@ -266,7 +249,6 @@ Organization:
   MobileHealthDataEngineeringAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: mobilehealth-dataengineering
       RootEmail: aws-mobilehealth-dataengineering@sagebase.org
       Alias: org-sagebase-mobilehealth-dataengineering
       Tags:
@@ -279,7 +261,6 @@ Organization:
   iAtlasProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: iAtlasProdAccount
       RootEmail: aws-iatlas-prod@sagebase.org
       Alias: org-sagebase-iatlas-prod
       Tags:
@@ -293,7 +274,6 @@ Organization:
   HtanDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: htan-dev
       RootEmail: aws-htan-dev@sagebase.org
       Alias: org-sagebase-htan-dev
       Tags:
@@ -306,7 +286,6 @@ Organization:
   WorkflowsNextflowProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: workflows-nextflow-prod
       RootEmail: aws-workflows-nextflow-prod@sagebase.org
       Alias: org-sagebase-workflows-nextflow-prod
       Tags:
@@ -319,7 +298,6 @@ Organization:
   WorkflowsNextflowDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: workflows-nextflow-dev
       RootEmail: aws-workflows-nextflow-dev@sagebase.org
       Alias: org-sagebase-workflows-nextflow-dev
       Tags:
