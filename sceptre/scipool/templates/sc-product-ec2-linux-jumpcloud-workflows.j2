@@ -1,17 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'Workflows Linux EC2 ServiceCatalog product'
 Parameters:
-  RepoRootURL:
-    Type: String
-    Description: Root url for the repo containing the product templates.
   ProductName:
     Type: String
     Description: Name of the product that will be visible to the end user
     Default: 'EC2: Ubuntu Linux with Workflow Software'
-  StackDatetime:
-    Type: String
-    Description: Last updated date and time of product
-    Default: ''
   ReplaceProvisioningArtifacts:
     Type: String
     Description: "Whether to keep or replace the provisioning artifact identifier on update"

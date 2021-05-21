@@ -1,17 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Windows EC2 ServiceCatalog product with Jumpcloud integration.
 Parameters:
-  RepoRootURL:
-    Type: String
-    Description: Root url for the repo containing the product templates.
   ProductName:
     Type: String
     Description: Name of the product that will be visible to the end user
     Default: 'EC2: Windows'
-  StackDatetime:
-    Type: String
-    Description: Last updated date and time of product
-    Default: ''
   ReplaceProvisioningArtifacts:
     Type: String
     Description: "Whether to keep or replace the provisioning artifact identifier on update"

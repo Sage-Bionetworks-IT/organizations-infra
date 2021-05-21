@@ -1,4 +1,4 @@
-template_path: "sc-product-ec2-windows-jumpcloud.yaml"
+template_path: "sc-product-ec2-windows-jumpcloud.j2"
 stack_name: "sc-product-ec2-windows-jumpcloud"
 stack_tags:
   Department: "Platform"
@@ -9,36 +9,36 @@ dependencies:
   - "strides/sc-ec2-actions.yaml"
 sceptre_user_data:
   # force cloudformation to update stack by setting a random number to the latest product's description
-  ProvisioningArtifactParameters:
+  ProvisioningArtifactParameters: |
     - Description: 'Baseline version.'
       Info:
-        LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.0.0/ec2/sc-ec2-windows-jumpcloud-v1.0.0.yaml'
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.0.0/ec2/sc-ec2-windows-jumpcloud-v1.0.0.yaml'
       Name: 'v1.0.0'
     - Description: 'Update base AMI and Cloudformation hooks'
       Info:
-        LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.3/ec2/sc-ec2-windows-jumpcloud.yaml'
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.3/ec2/sc-ec2-windows-jumpcloud.yaml'
       Name: 'v1.1.3'
     - Description: 'Use SynapseTagger'
       Info:
-        LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.7/ec2/sc-ec2-windows-jumpcloud.yaml'
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.7/ec2/sc-ec2-windows-jumpcloud.yaml'
       Name: 'v1.1.7'
     - Description: 'Remove VpcName input'
       Info:
-        LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.8/ec2/sc-ec2-windows-jumpcloud.yaml'
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.8/ec2/sc-ec2-windows-jumpcloud.yaml'
       Name: 'v1.1.8'
     - Description: 'Update for strides'
       Info:
-        LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.9/ec2/sc-ec2-windows-jumpcloud.yaml'
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.9/ec2/sc-ec2-windows-jumpcloud.yaml'
       Name: 'v1.1.9'
     - Description: 'Include params in mapping'
       Info:
-        LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.10/ec2/sc-ec2-windows-jumpcloud.yaml'
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.10/ec2/sc-ec2-windows-jumpcloud.yaml'
       Name: 'v1.1.10'
     - Description: 'Fix policies.'
       Info:
-        LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.13/ec2/sc-ec2-windows-jumpcloud.yaml'
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.13/ec2/sc-ec2-windows-jumpcloud.yaml'
       Name: 'v1.1.13'
-    - Description: !Sub 'Restore set_env_var. {{ range(1, 10000) | random }}'
+    - Description:  'Restore set_env_var. {{ range(1, 10000) | random }}'
       Info:
-        LoadTemplateFromURL: !Sub 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.14/ec2/sc-ec2-windows-jumpcloud.yaml'
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.14/ec2/sc-ec2-windows-jumpcloud.yaml'
       Name: 'v1.1.14'

@@ -1,4 +1,4 @@
-template_path: "sc-product-ec2-linux-jumpcloud-workflows.yaml"
+template_path: "sc-product-ec2-linux-jumpcloud-workflows.j2"
 stack_name: "sc-product-ec2-linux-jumpcloud-workflows"
 stack_tags:
   Department: "Platform"
@@ -9,7 +9,7 @@ dependencies:
   - "prod/sc-ec2-actions.yaml"
 sceptre_user_data:
   # force cloudformation to update stack by setting a random number to the latest product's description
-  ProvisioningArtifactParameters:
+  ProvisioningArtifactParameters: |
     - Description: 'Baseline version.'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.0.0/ec2/sc-ec2-linux-jumpcloud-workflows-v1.0.0.yaml'

@@ -1,4 +1,4 @@
-template_path: "sc-product-ec2-linux-jumpcloud-notebook.yaml"
+template_path: "sc-product-ec2-linux-jumpcloud-notebook.j2"
 stack_name: "sc-product-ec2-linux-jumpcloud-notebook"
 stack_tags:
   Department: "Platform"
