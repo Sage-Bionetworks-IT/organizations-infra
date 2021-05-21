@@ -132,7 +132,7 @@ Organization:
   SynapseProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Sage Bionetworks Platform
+      AccountName: org-sagebase-synapseprod
       AccountId: '325565585839'
       RootEmail: platform@sagebase.org
       Alias: org-sagebase-synapseprod
