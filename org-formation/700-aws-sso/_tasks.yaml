@@ -570,8 +570,27 @@ SsoBridgeProdDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref bridgeProdDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    permissionSetName: 'Developer-Deny-Delete-Rds-Dynamo'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
     sessionDuration: 'PT8H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Deny",
+            "Action": [
+              "rds:DeleteDBCluster",
+              "rds:DeleteDBClusterSnapshot",
+              "rds:DeleteDBInstance",
+              "rds:DeleteDBSnapshot",
+              "dynamodb:UpdateTable",
+              "dynamodb:DeleteTable"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
 
 SsoBridgeProdIosDeveloper:
   Type: update-stacks
