@@ -317,7 +317,7 @@ scicompViewer:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref scicompViewerGroup
-    permissionSetName: 'viewer-plus'
+    permissionSetName: 'Viewer-Plus'
     sessionDuration: 'PT12H'
     managedPolicies:
       - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
@@ -325,7 +325,7 @@ scicompViewer:
       - arn:aws:iam::aws:policy/AmazonDocDBReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnlyAccess
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
-      - arn:aws:iam::aws:policy/AWSLambdaReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSLambda_ReadOnlyAccess
 
 scicompDeveloper:
   Type: update-stacks
