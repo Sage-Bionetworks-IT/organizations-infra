@@ -1,48 +1,6 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
-AccessOrganizationsAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
-  StackName: access-organizations-admin
-  Parameters:
-    MetadataDocument: !ReadFile ./MetadataDocuments/organizations-admin.xml
-    SamlProviderName: organizations-admin
-    SamlProviderPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: !Ref MasterAccount
-    Region: !Ref primaryRegion
-
-JCMobileHealthDataEngineeringAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
-  StackName: jc-mobilehealth-dataengineering-admin
-  Parameters:
-    MetadataDocument: !ReadFile ./MetadataDocuments/mobilehealth-dataengineering-admin.xml
-    SamlProviderName: mobilehealth-dataengineering-admin
-    SamlProviderPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account: !Ref MobileHealthDataEngineeringAccount
-    Region: !Ref primaryRegion
-
-JumpcloudiAtlasProdAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
-  StackName: jc-access-iatlas-prod-admin
-  Parameters:
-    MetadataDocument: !ReadFile ./MetadataDocuments/iatlas-prod-admin.xml
-    SamlProviderName: iatlas-prod-admin
-    SamlProviderPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account: !Ref iAtlasProdAccount
-    Region: us-east-1
-
 # A service account for https://github.com/Sage-Bionetworks/iatlas-infra
 iAtlasCIServiceAccount:
   Type: update-stacks
@@ -100,21 +58,6 @@ HtanDevCIServiceAccount:
       - !Ref HtanDevAccount
     Region: us-east-1
 
-JCWorkflowsNextflowDevAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
-  StackName: jc-workflows-nextflow-dev-admin
-  MaxConcurrentStacks: 10
-  Parameters:
-    MetadataDocument: !ReadFile ./MetadataDocuments/workflows-nextflow-dev-admin.xml
-    SamlProviderName: workflows-nextflow-dev-admin
-    SamlProviderPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account: !Ref WorkflowsNextflowDevAccount
-    Region: us-east-1
-
 WorkflowsNextflowCIServiceAccounts:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
@@ -127,36 +70,6 @@ WorkflowsNextflowCIServiceAccounts:
     Account:
       - !Ref WorkflowsNextflowProdAccount
       - !Ref WorkflowsNextflowDevAccount
-    Region: us-east-1
-
-JCWorkflowsNextflowProdAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
-  StackName: jc-workflows-nextflow-prod-admin
-  MaxConcurrentStacks: 10
-  Parameters:
-    MetadataDocument: !ReadFile ./MetadataDocuments/workflows-nextflow-prod-admin.xml
-    SamlProviderName: workflows-nextflow-prod-admin
-    SamlProviderPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account: !Ref WorkflowsNextflowProdAccount
-    Region: us-east-1
-
-JCNlpSandboxAdmin:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
-  StackName: jc-nlp-sandbox-admin
-  MaxConcurrentStacks: 10
-  Parameters:
-    MetadataDocument: !ReadFile ./MetadataDocuments/nlp-sandbox-admin.xml
-    SamlProviderName: nlp-sandbox-admin
-    SamlProviderPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account: !Ref NlpSandboxAccount
     Region: us-east-1
 
 NlpSandboxCIServiceAccounts:
