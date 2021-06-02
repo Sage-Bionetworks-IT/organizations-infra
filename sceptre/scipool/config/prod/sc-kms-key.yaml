@@ -7,4 +7,5 @@ stack_tags:
 dependencies:
   - "prod/bootstrap.yaml"
 parameters:
-  AdminRoleArn: !stack_output_external jumpcloud-idp::ScipoolprodAdminSamlProviderRoleArn
+  # SSO generated admin role
+  AdminRoleArn: "arn:aws:iam::237179673806:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_56cd956ee776e6c0"
