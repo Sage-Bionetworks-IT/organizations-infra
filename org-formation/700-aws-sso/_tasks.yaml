@@ -126,6 +126,10 @@ Parameters:
     Type: String
     Default: '906769aa66-8f870ac5-9280-4c19-b477-461592fe92a6'
 
+  AwsSsmSessionInitiatorGroup:    #JC aws-ssm-session-initiators
+    Type: String
+    Default: '906769aa66-33f17c18-7b59-4aa2-9334-91dfce046f63'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -265,6 +269,67 @@ SsoViewerSupporter:
     instanceArn: !Ref instanceArn
     principalId: !Ref scienceSupporterGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoSsmSessionInitiator:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-ssm-session-accessor'
+  StackDescription: 'Role to allow users to initiate AWS SSM sessions'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account:
+        - !Ref ScipoolDevAccount
+        - !Ref ScipoolProdAccount
+        - !Ref ScicompAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref AwsSsmSessionInitiatorGroup
+    permissionSetName: 'ssm-session-initiator'
+    sessionDuration: 'PT12H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "ssm:StartSession"
+            ],
+            "Resource": "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*",
+            "Condition": {
+              "StringLike": {
+                "ssm:ResourceTag/Protected/AccessApprovedCaller": "${aws:userid}"
+              }
+            }
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "ssm:DescribeSessions",
+              "ssm:GetConnectionStatus",
+              "ssm:DescribeInstanceProperties",
+              "ec2:DescribeInstances"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "ssm:TerminateSession"
+            ],
+            "Resource": "*",
+            "Condition": {
+              "StringLike": {
+                "ssm:ResourceTag/aws::ssmmessages:session-id": "${aws:userid}"
+              }
+            }
+          }
+        ]
+      }
 
 SsoSandboxDeveloper:
   Type: update-stacks
