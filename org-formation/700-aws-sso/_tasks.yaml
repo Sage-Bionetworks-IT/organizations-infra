@@ -505,7 +505,9 @@ SsoImageCentralAmiLibrarian:
     instanceArn: !Ref instanceArn
     principalId: !Ref imageCentralAmiLibrarianGroup
     permissionSetName: 'AMI-Librarian'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/AmazonEC2FullAccess' ]
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/AmazonEC2FullAccess'
+      - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
     sessionDuration: 'PT12H'
 
 SsoBridgeDevAdmin:
