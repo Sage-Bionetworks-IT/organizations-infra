@@ -7,5 +7,7 @@ stack_tags:
 dependencies:
   - "prod/bootstrap.yaml"
 parameters:
-  # SSO generated admin role
-  AdminRoleArn: "arn:aws:iam::237179673806:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_56cd956ee776e6c0"
+  AdminRoleArns:
+    - !stack_output_external bootstrap::AWSIAMCfServiceRoleArn
+    - "arn:aws:sts::237179673806:assumed-role/AWSReservedSSO_Administrator_56cd956ee776e6c0/khai.do@sagebase.org"
+    - "arn:aws:sts::237179673806:assumed-role/AWSReservedSSO_Administrator_56cd956ee776e6c0/x.schildwachter@sagebase.org"

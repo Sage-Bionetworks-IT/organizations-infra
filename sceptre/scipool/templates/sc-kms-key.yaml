@@ -3,9 +3,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Service Catalog KMS Key and IAM policy
 
 Parameters:
-  AdminRoleArn:
-    Type: String
-    Description: ARN of the Administrator Role for a particular account
+  AdminRoleArns:
+    Type: CommaDelimitedList
+    Description: list of role ARNs allowed to administor the kms key
 
 Resources:
 
@@ -48,10 +48,7 @@ Resources:
           - Sid: "Allow administration of the key to CFN service role"
             Effect: "Allow"
             Principal:
-              AWS:
-                - !ImportValue
-                    'Fn::Sub': '${AWS::Region}-bootstrap-CfServiceRoleArn'
-                - !Ref AdminRoleArn
+              AWS: !Ref AdminRoleArns
             Action:
               - "kms:Create*"
               - "kms:Describe*"
