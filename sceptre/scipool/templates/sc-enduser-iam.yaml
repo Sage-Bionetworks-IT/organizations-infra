@@ -67,6 +67,7 @@ Resources:
             Action:
               - ssm:StartSession
             Resource:
+              - !Sub "arn:aws:ssm:*:${AWS::AccountId}:document/AWS-StartSSHSession"
               - !Sub "arn:aws:ssm:*:${AWS::AccountId}:document/AWS-StartInteractiveCommand"
               - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*"
             Condition:
