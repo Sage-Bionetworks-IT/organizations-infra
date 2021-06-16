@@ -3,5 +3,5 @@ stack_name: "sc-enduser-iam"
 dependencies:
   - "strides/essentials.yaml"
 parameters:
-  # InstanceRoleArn from https://github.com/Sage-Bionetworks/synapse-login-aws-infra/blob/develop/templates/app.yaml
+  # InstanceRoleArn from https://github.com/Sage-Bionetworks/synapse-login-aws-infra/blob/prod/templates/app.yaml
   SynapseLoginInstanceRoleArn: !stack_output_external synapse-login-strides::InstanceRoleArn

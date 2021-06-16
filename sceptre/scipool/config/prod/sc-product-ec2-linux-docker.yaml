@@ -1,0 +1,20 @@
+template_path: "sc-product-ec2-linux-docker.j2"
+stack_name: "sc-product-ec2-linux-docker"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "prod/sc-portfolio-ec2.yaml"
+  - "prod/sc-portfolio-ec2-external.yaml"
+  - "prod/sc-ec2-actions.yaml"
+parameters:
+  ProductName: "EC2: Linux Docker"
+  ReplaceProvisioningArtifacts: "true"
+sceptre_user_data:
+  # force cloudformation to update stack by setting a random number to the latest product's description
+  ProvisioningArtifactParameters: |
+    - Description: 'Baseline release. {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.18/ec2/sc-ec2-linux-docker.yaml'
+      Name: 'v1.1.18'
