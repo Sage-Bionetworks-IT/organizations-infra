@@ -66,7 +66,9 @@ Resources:
           - Effect: Allow
             Action:
               - ssm:StartSession
-            Resource: !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*"
+            Resource:
+              - !Sub "arn:aws:ssm:*:${AWS::AccountId}:document/AWS-StartInteractiveCommand"
+              - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*"
             Condition:
               StringLike:
                 "ssm:ResourceTag/Protected/AccessApprovedCaller": "${aws:userid}"
