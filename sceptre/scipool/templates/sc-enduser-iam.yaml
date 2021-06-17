@@ -67,10 +67,10 @@ Resources:
             Action:
               - ssm:StartSession
             Resource:
-              - !Sub "arn:aws:ssm:*:*:document/SSM-SessionManagerRunShell"
-              - !Sub "arn:aws:ssm:*:*:document/AWS-StartSSHSession"
-              - !Sub "arn:aws:ssm:*:*:document/AWS-StartInteractiveCommand"
-              - !Sub "arn:aws:ssm:*:*:document/AWS-StartNonInteractiveCommand"
+              - "arn:aws:ssm:*:*:document/SSM-SessionManagerRunShell"
+              - "arn:aws:ssm:*:*:document/AWS-StartSSHSession"
+              - "arn:aws:ssm:*:*:document/AWS-StartInteractiveCommand"
+              - "arn:aws:ssm:*:*:document/AWS-StartNonInteractiveCommand"
           - Effect: Allow
             Action:
               - ssm:StartSession
