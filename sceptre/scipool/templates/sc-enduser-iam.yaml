@@ -68,6 +68,7 @@ Resources:
               - ssm:StartSession
             Resource:
               - "arn:aws:ssm:*:*:document/SSM-SessionManagerRunShell"
+              - "arn:aws:ssm:*:*:document/AWS-StartPortForwardingSession"
               - "arn:aws:ssm:*:*:document/AWS-StartSSHSession"
               - "arn:aws:ssm:*:*:document/AWS-StartInteractiveCommand"
               - "arn:aws:ssm:*:*:document/AWS-StartNonInteractiveCommand"
