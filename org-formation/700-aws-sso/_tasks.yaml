@@ -143,7 +143,7 @@ SsoAdministrator:
     principalId: !Ref adminGroup
     permissionSetName: 'Administrator'
     managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
-    sessionDuration: 'PT4H'
+    sessionDuration: 'PT8H'
     masterAccountId: !Ref MasterAccount
 
 SsoAdministratorSupporter:
@@ -282,7 +282,6 @@ SsoSandboxDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref sandboxDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoSandboxAdmin:
   Type: update-stacks
@@ -300,7 +299,6 @@ SsoSandboxAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref sandboxAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT4H'
 
 scicompViewer:
   Type: update-stacks
@@ -343,7 +341,6 @@ scicompDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref scicompDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoMobileHealthDataEngineeringAdmin:
   Type: update-stacks
@@ -361,7 +358,6 @@ SsoMobileHealthDataEngineeringAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref mobileHealthDataEngineeringAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoNlpSandboxAdmin:
   Type: update-stacks
@@ -379,7 +375,6 @@ SsoNlpSandboxAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref nlpSandboxAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoWorkflowNextflowDevAdmin:
   Type: update-stacks
@@ -397,7 +392,6 @@ SsoWorkflowNextflowDevAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoWorkflowNextflowProdAdmin:
   Type: update-stacks
@@ -415,7 +409,6 @@ SsoWorkflowNextflowProdAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoSynapseAdmin:
   Type: update-stacks
@@ -434,7 +427,6 @@ SsoSynapseAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT4H'
 
 SsoSynapseDevDeveloper:
   Type: update-stacks
@@ -452,7 +444,6 @@ SsoSynapseDevDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoSynapseProdDeveloper:
   Type: update-stacks
@@ -470,7 +461,6 @@ SsoSynapseProdDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseProdDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoSynapseProdViewer:
   Type: update-stacks
@@ -488,7 +478,6 @@ SsoSynapseProdViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
-    sessionDuration: 'PT12H'
 
 SsoImageCentralAmiLibrarian:
   Type: update-stacks
@@ -526,7 +515,6 @@ SsoBridgeDevAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref bridgeDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT4H'
 
 SsoBridgeProdAdmin:
   Type: update-stacks
@@ -544,7 +532,6 @@ SsoBridgeProdAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref bridgeProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT4H'
 
 SsoBridgeDevDeveloper:
   Type: update-stacks
@@ -562,7 +549,6 @@ SsoBridgeDevDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref bridgeDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoBridgeProdDeveloper:
   Type: update-stacks
@@ -658,7 +644,6 @@ SsoScipoolDevAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref scipoolDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoScipoolProdAdmin:
   Type: update-stacks
@@ -676,7 +661,6 @@ SsoScipoolProdAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref scipoolProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT8H'
 
 SsoScipoolDevCommunityManager:
   Type: update-stacks
@@ -729,7 +713,6 @@ SsoScipoolProdCommunityManager:
     instanceArn: !Ref instanceArn
     principalId: !Ref scipoolProdCommunityManagerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager-permission-set-arn' ]
-    sessionDuration: 'PT12H'
 
 SsoAdminCentralCfnDeployer:
   Type: update-stacks
@@ -799,4 +782,3 @@ SsoHtanDevAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref htanDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-    sessionDuration: 'PT8H'
