@@ -10,4 +10,4 @@ parameters:
   Thresholds: !file_contents templates/strides/lambda-budgets/thresholds.yaml
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-budgets/master/lambda-budgets.yaml -N -P templates/remote"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-budgets/master/lambda-budgets.yaml -O templates/remote/lambda-budgets.yaml"

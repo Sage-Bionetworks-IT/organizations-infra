@@ -11,6 +11,6 @@ parameters:
   SlackChannel: "#infra-notices"
 hooks:
   before_create:
-    - !cmd "wget https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/AccountAlertTopics.yaml -N -P templates/remote"
+    - !cmd "wget https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/AccountAlertTopics.yaml -O templates/remote/AccountAlertTopics.yaml"
   before_update:
-    - !cmd "wget https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/AccountAlertTopics.yaml -N -P templates/remote"
+    - !cmd "wget https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/AccountAlertTopics.yaml -O templates/remote/AccountAlertTopics.yaml"

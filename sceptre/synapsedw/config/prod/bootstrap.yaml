@@ -2,4 +2,4 @@ template_path: remote/bootstrap.yaml
 stack_name: bootstrap
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/bootstrap.yaml -N -P templates/remote"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/bootstrap.yaml -O templates/remote/bootstrap.yaml"

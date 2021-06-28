@@ -81,6 +81,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/organizations
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-transit:
     if: github.event_name == 'push'
@@ -114,6 +115,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/transit
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-admincentral:
     if: github.event_name == 'push'
@@ -147,6 +149,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/admincentral
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-itsandbox:
     if: github.event_name == 'push'
@@ -180,6 +183,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/itsandbox
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-sandbox:
     if: github.event_name == 'push'
@@ -213,6 +217,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/sandbox
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-scicomp:
     if: github.event_name == 'push'
@@ -246,6 +251,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/scicomp
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-strides:
     if: github.event_name == 'push'
@@ -280,6 +286,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/strides
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-scipooldev:
     if: github.event_name == 'push'
@@ -349,6 +356,7 @@ jobs:
         # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
         run: |
           cd sceptre/scipool
+          mkdir -p templates/remote
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
@@ -390,6 +398,7 @@ jobs:
         # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
         run: |
           cd sceptre/scipool
+          mkdir -p templates/remote
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
@@ -427,10 +436,12 @@ jobs:
       - name: Deploy staging with sceptre
         run: |
           cd $GITHUB_WORKSPACE/sceptre/sageit
+          mkdir -p templates/remote
           sceptre launch staging --yes
       - name: Deploy prod with sceptre
         run: |
           cd $GITHUB_WORKSPACE/sceptre/sageit
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-logcentral:
     if: github.event_name == 'push'
@@ -465,6 +476,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/logcentral
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-synapsedw:
     if: github.event_name == 'push'
@@ -498,6 +510,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/synapsedw
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-synapsedev:
     if: github.event_name == 'push'
@@ -531,6 +544,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/synapsedev
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-synapseprod:
     if: github.event_name == 'push'
@@ -564,6 +578,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/synapseprod
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-securitycentral:
     if: github.event_name == 'push'
@@ -597,6 +612,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/securitycentral
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-bridgedev:
     if: github.event_name == 'push'
@@ -630,6 +646,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/bridge
+          mkdir -p templates/remote
           sceptre launch develop --yes
   sceptre-bridgeprod:
     if: github.event_name == 'push'
@@ -663,6 +680,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/bridge
+          mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-imagecentral:
     if: github.event_name == 'push'
@@ -696,4 +714,5 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/imagecentral
+          mkdir -p templates/remote
           sceptre launch prod --yes
