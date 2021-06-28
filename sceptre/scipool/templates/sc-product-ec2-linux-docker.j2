@@ -9,6 +9,11 @@ Parameters:
     Type: String
     Description: "Whether to keep or replace the provisioning artifact identifier on update"
     Default: 'false'
+  DeprecateOldVersions:
+    Type: String
+    Description: "Whether to deprecate all older versions of the product"
+    Default: "true"
+    AllowedValues: ["true", "false"]
 
 Resources:
   scec2linuxproduct:
@@ -60,8 +65,27 @@ Resources:
       ProductId: !Ref 'scec2linuxproduct'
       RoleArn: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+  DeprecateVersions:
+    Type: Custom::DeprecateProductVersions
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-sc-deprecation-provider-DeprecateFunctionArn'
+      ProductId: !Ref 'scec2linuxproduct'
+      ProductName: !GetAtt scec2linuxproduct.ProductName
 Outputs:
   ProductId:
     Value: !Ref 'scec2linuxproduct'
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-ProductId'
+  ProductName:
+    Value: !GetAtt scec2linuxproduct.ProductName
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProductName'
+  ProvisioningArtifactIds:
+    Value: !GetAtt scec2linuxproduct.ProvisioningArtifactIds
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProvisioningArtifactIds'
+  ProvisioningArtifactNames:
+    Value: !GetAtt scec2linuxproduct.ProvisioningArtifactNames
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProvisioningArtifactNames'
