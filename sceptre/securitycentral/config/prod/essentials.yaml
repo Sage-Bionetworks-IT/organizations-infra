@@ -3,7 +3,6 @@ stack_name: essentials
 dependencies:
   - prod/bootstrap.yaml
 parameters:
-  OperatorEmail: aws.securitycentral@sagebase.org
   VpcPeeringRequesterAwsAccountId: !ssm /infra/AdmincentralAwsAccountId
 hooks:
   before_launch:

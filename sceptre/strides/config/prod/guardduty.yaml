@@ -1,0 +1,5 @@
+# setup AWS guard duty member
+template_path: "guardduty.yaml"
+stack_name: "guardduty"
+parameters:
+  accountId: "140124849929"       # org-sagebase-securitycentral

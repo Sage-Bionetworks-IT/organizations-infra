@@ -1,9 +1,22 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
+CloudwatchTrailLog:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Cloudwatch/cloudwatch-log.yaml
+  StackName: !Sub '${resourcePrefix}-cloudwatch-log'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: '*'
+    IncludeMasterAccount: true
+  Parameters:
+    LogGroupName: !Sub '/aws/cloudtrail/${resourcePrefix}-cloudwatch-log.log'
+    RetentionInDays: !GetAtt CurrentAccount.Tags.CloudwatchCloudTrailLogRetentionPeriod
+
 CloudTrail:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/Cloudtrail/cloudtrail-trail.yaml
+  DependsOn: [ "CloudwatchTrailLog" ]
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/Cloudtrail/cloudtrail-trail.yaml
   StackName: !Sub '${resourcePrefix}-cloudtrail'
   StackDescription: CloudTrail
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -13,6 +26,22 @@ CloudTrail:
   OrganizationBindings:
     LogArchiveBinding:
       Account: !Ref LogCentralAccount
-  TerminationProtection: true
   Parameters:
     bucketName: !Sub '${resourcePrefix}-cloudtrail-${CurrentAccount.AccountId}'
+    CloudWatchLogsLogGroupArn: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-log-LogGroupArn' ]
+    CloudWatchLogsRoleArn: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-log-LogRoleArn' ]
+
+CloudTrailSumoLogicRole:
+  Type: update-stacks
+  DependsOn: [ "CloudTrail" ]
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/sumologic-role.yaml
+  StackName: !Sub '${resourcePrefix}-cloudtrail-sumologic-role'
+  StackDescription: Allow Sumologic to access cloudTrail data
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref LogCentralAccount
+    IncludeMasterAccount: false
+  Parameters:
+    ExternalID: "us2:00000000001E813D"
+    Actions: 's3:GetObject,s3:GetObjectVersion,s3:ListBucketVersions,s3:ListBucket'
+    Resource: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudtrail-CloudTrailBucketArn' ]

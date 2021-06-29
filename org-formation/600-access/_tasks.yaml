@@ -3,7 +3,7 @@ Parameters:
 
 AccessOrganizationsAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: access-organizations-admin
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/organizations-admin.xml
@@ -17,7 +17,7 @@ AccessOrganizationsAdmin:
 
 JCMobileHealthDataEngineeringAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-mobilehealth-dataengineering-admin
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/mobilehealth-dataengineering-admin.xml
@@ -31,8 +31,7 @@ JCMobileHealthDataEngineeringAdmin:
 
 JumpcloudiAtlasProdAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
-  DependsOn: CommunityIamSamlProviderRP
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-access-iatlas-prod-admin
   Parameters:
     MetadataDocument: !ReadFile ./MetadataDocuments/iatlas-prod-admin.xml
@@ -44,10 +43,38 @@ JumpcloudiAtlasProdAdmin:
     Account: !Ref iAtlasProdAccount
     Region: us-east-1
 
+# A service account for https://github.com/Sage-Bionetworks/iatlas-infra
+iAtlasCIServiceAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
+  StackName: iatlas-prod-ci-access
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref iAtlasProdAccount
+    Region: us-east-1
+
+# Setup iAtlas collaborator access
+iAtlasCollaboratorAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  StackName: iatlas-collaborator-access
+  Parameters:
+    PrincipalArns:
+      - arn:aws:iam::556856096938:user/ebs_automation    # Jon Ryser from GenUI
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref iAtlasProdAccount
+    Region: us-east-1
+
 # A service account for https://github.com/nlpsandbox/aws-cloudformation
 NlpSandboxServiceAccount:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/service-account.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
   StackName: NlpSandboxServiceAccount
   Parameters:
     ManagedPolicyArns:
@@ -59,9 +86,23 @@ NlpSandboxServiceAccount:
     Account: !Ref SandboxAccount
     Region: !Ref primaryRegion
 
+# Service account for provisioner repository: https://github.com/ncihtan/aws-htan-infra
+HtanDevCIServiceAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
+  StackName: htan-dev-ci-service-account
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref HtanDevAccount
+    Region: us-east-1
+
 JCWorkflowsNextflowDevAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-workflows-nextflow-dev-admin
   MaxConcurrentStacks: 10
   Parameters:
@@ -74,9 +115,23 @@ JCWorkflowsNextflowDevAdmin:
     Account: !Ref WorkflowsNextflowDevAccount
     Region: us-east-1
 
+WorkflowsNextflowCIServiceAccounts:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
+  StackName: workflows-nextflow-ci-service-account
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref WorkflowsNextflowProdAccount
+      - !Ref WorkflowsNextflowDevAccount
+    Region: us-east-1
+
 JCWorkflowsNextflowProdAdmin:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/IAM/jumpcloud-idp.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
   StackName: jc-workflows-nextflow-prod-admin
   MaxConcurrentStacks: 10
   Parameters:
@@ -88,3 +143,64 @@ JCWorkflowsNextflowProdAdmin:
     IncludeMasterAccount: false
     Account: !Ref WorkflowsNextflowProdAccount
     Region: us-east-1
+
+JCNlpSandboxAdmin:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/jumpcloud-idp.yaml
+  StackName: jc-nlp-sandbox-admin
+  MaxConcurrentStacks: 10
+  Parameters:
+    MetadataDocument: !ReadFile ./MetadataDocuments/nlp-sandbox-admin.xml
+    SamlProviderName: nlp-sandbox-admin
+    SamlProviderPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref NlpSandboxAccount
+    Region: us-east-1
+
+NlpSandboxCIServiceAccounts:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
+  StackName: nlp-sandbox-ci-service-account
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref NlpSandboxAccount
+    Region: us-east-1
+
+# =====================================================================================================
+# Some of our accounts, like org-sagebase-strides, are not part of the Sage organziation therefore we need
+# to manage them as external entities. To allow strides account to send cloudtrail and config artifcats to
+# logcentral account we need to setup external access to the master buckets.
+AwsCloudtrailExternalAccountAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.9/templates/Cloudtrail/CloudtrailLogAccess.njk
+  StackName: aws-cloudtrail-ext-access
+  TemplatingContext:
+    cloudtrail_bucket: sagebase-cloudtrail-231505186444
+    accounts:
+      - "423819316185"    # org-sagebase-strides
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref LogCentralAccount
+    Region: us-east-1
+
+AwsConfigExternalAccountAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.9/templates/Config/ConfigLogAccess.njk
+  StackName: aws-config-ext-access
+  TemplatingContext:
+    config_bucket: sagebase-config-231505186444
+    accounts:
+      - "423819316185"    # org-sagebase-strides
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref LogCentralAccount
+    Region: us-east-1
+# ========================================================================================================

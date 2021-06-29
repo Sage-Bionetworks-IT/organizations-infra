@@ -21,31 +21,10 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-  AWSIAMKhaiDoUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: khai.do@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-        - !Ref AWSIAMBillingManagersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
   AWSIAMBruceHoffUser:
     Type: 'AWS::IAM::User'
     Properties:
       UserName: bruce.hoff@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMJayHodgsonUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: jay.hodgson@sagebase.org
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
@@ -66,45 +45,6 @@ Resources:
     Type: 'AWS::IAM::User'
     Properties:
       UserName: jordan.kiang@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-  AWSIAMMikeKellenUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: mike.kellen@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMBillingManagersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMZimingDongUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: ziming.dong@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMDwayneJengUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: dwayne.jeng@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMAaronHaydenUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: aaron.hayden@sagebase.org
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
@@ -186,8 +126,6 @@ Resources:
             Principal:
               AWS:
                 - !GetAtt AWSIAMXavierSchildwachterUser.Arn
-                - !GetAtt AWSIAMKhaiDoUser.Arn
-                - !GetAtt AWSIAMAaronHaydenUser.Arn
                 - !GetAtt AWSIAMMarcoMarascaUser.Arn
             Action:
               - "sts:AssumeRole"
@@ -323,13 +261,13 @@ Resources:
             Condition:
               Bool:
                 'aws:MultiFactorAuthPresent': 'true'
-#          - Sid: BlockAnyAccessOtherThanAboveUnlessSignedInWithMFA
-#            Effect: Deny
-#            NotAction: 'iam:*'
-#            Resource: '*'
-#            Condition:
-#              BoolIfExists:
-#                'aws:MultiFactorAuthPresent': 'false'
+#         - Sid: BlockAnyAccessOtherThanAboveUnlessSignedInWithMFA
+#           Effect: Deny
+#           NotAction: 'iam:*'
+#           Resource: '*'
+#           Condition:
+#             BoolIfExists:
+#               'aws:MultiFactorAuthPresent': 'false'
 Outputs:
   AWSIAMEnforceMfaPolicy:
     Value: !Ref AWSIAMEnforceMfaPolicy

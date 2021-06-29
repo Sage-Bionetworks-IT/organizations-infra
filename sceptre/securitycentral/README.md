@@ -24,13 +24,6 @@ for the account has been setup you can access and view the account using the
 
 *Note - This project depends on CF templates from [aws-infra repo](https://github.com/Sage-Bionetworks/aws-infra).*
 
-## Setup Guard Duty Aggregation
-Steps to guard duty aggregation from source account to Logcentral
- 1. Create a PR to add a member account resource, similar to
-    [GDSynapseProdMember resource](https://github.com/Sage-Bionetworks/securitycentral-infra/blob/master/templates/guardduty-master.yaml)
- 2. Create a PR to add a new [sceptre stack config](https://github.com/Sage-Bionetworks/synapseprod-infra/pull/9)
-    to setup a guard duty member on the source account.
-
 ## Continuous Integration
 We have configured Travis to deploy CF template updates.  Travis deploys using
 [sceptre](https://sceptre.cloudreach.com/latest/about.html)

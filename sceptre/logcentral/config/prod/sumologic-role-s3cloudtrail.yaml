@@ -5,7 +5,7 @@ dependencies:
 parameters:
   ExternalID: !ssm /infra/SumologicExternalID
   Actions: 's3:GetObject,s3:GetObjectVersion,s3:ListBucketVersions,s3:ListBucket'
-  Resource: "arn:aws:s3:::essentials-awss3cloudtrailbucket-1jz6pf8dzid7r"
+  Resource: !stack_output_external essentials::AWSS3CloudtrailBucketArn
 hooks:
   before_launch:
     - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/sumologic-role.yaml -N -P templates/remote"

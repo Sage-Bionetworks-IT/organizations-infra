@@ -1,0 +1,8 @@
+# budget rules per user by synapse team id
+teams:
+  '3412678': # AMPAD_WG_ServiceCatalogUsers
+    amount: '2000'
+    period: ANNUALLY
+    unit: USD
+    community_manager_emails:
+      - 'sc-strides-support@sagebase.org'
