@@ -84,7 +84,12 @@ Resources:
             Action:
               - ssm:DescribeSessions
               - ssm:GetConnectionStatus
+              - ssm:DescribeDocument
+              - ssm:DescribeDocumentParameters
+              - ssm:ListDocuments
               - ssm:DescribeInstanceProperties
+              - ssm:DescribeInstanceInformation
+              - ssm:ListTagsForResource
               - ec2:DescribeInstances
             Resource: "*"
           - Effect: Allow
