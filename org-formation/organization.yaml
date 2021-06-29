@@ -53,7 +53,7 @@ Organization:
     Properties:
       OrganizationalUnitName: ItDev
       OrganizationalUnits:
-        - !Ref PolicyStaging
+        - !Ref PolicyStagingOU
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
