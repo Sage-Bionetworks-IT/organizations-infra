@@ -40,10 +40,18 @@ Organization:
         - !Ref WorkflowsNextflowProdAccount
 #              StridesPoolAccount must be managed outside of orgf but should have parity with this OU
 
-  PlatformOU:
+  PlatformDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
-      OrganizationalUnitName: Platform
+      OrganizationalUnitName: PlatformDev
+      OrganizationalUnits:
+        - !Ref SynapseDevOU
+        - !Ref BridgeDevOU
+
+  PlatformProdOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: PlatformProd
       OrganizationalUnits:
         - !Ref SynapseProdOU
         - !Ref BridgeProdOU

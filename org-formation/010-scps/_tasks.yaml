@@ -14,10 +14,9 @@ PreventDisableGuardDuty:
       - !Ref ItProdOU
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
-      - !Ref PlatformOU
+      - !Ref PlatformDevOU
+      - !Ref PlatformProdOU
       - !Ref PolicyStagingOU
-      - !Ref SynapseOU
-      - !Ref BridgeOU
 
 PreventDisableCloudtrail:
   Type: update-stacks
@@ -32,10 +31,9 @@ PreventDisableCloudtrail:
       - !Ref ItProdOU
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
-      - !Ref PlatformOU
+      - !Ref PlatformDevOU
+      - !Ref PlatformProdOU
       - !Ref PolicyStagingOU
-      - !Ref SynapseOU
-      - !Ref BridgeOU
 
 PreventDisableCloudwatchConfigs:
   Type: update-stacks
@@ -50,10 +48,9 @@ PreventDisableCloudwatchConfigs:
       - !Ref ItProdOU
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
-      - !Ref PlatformOU
+      - !Ref PlatformDevOU
+      - !Ref PlatformProdOU
       - !Ref PolicyStagingOU
-      - !Ref SynapseOU
-      - !Ref BridgeOU
 
 DenyAllRegionsOutsideUsEast1:
   Type: update-stacks
