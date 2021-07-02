@@ -321,6 +321,7 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd sceptre/scipool
+          mkdir -p templates/remote
           sceptre launch develop --yes
   sceptre-scipoolprod:
     if: github.event_name == 'push'
