@@ -6,4 +6,4 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-synapse-tagger/0.1.0/cfn-cr-synapse-tagger.yaml -N -P templates/remote"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-synapse-tagger/0.1.0/cfn-cr-synapse-tagger.yaml -O templates/remote/cfn-cr-synapse-tagger.yaml"
