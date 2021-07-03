@@ -8,6 +8,9 @@ dependencies:
   - "strides/sc-portfolio-ec2.yaml"
   - "strides/sc-ec2-actions.yaml"
   - "strides/sc-product-ec2-linux-notebook-write-to-ssm-policy.yaml"
+parameters:
+  ProvisioningArtifactGuidance: "DEPRECATED"
+  ProvisioningArtifactAction: "ALL_EXCEPT_LATEST"
 sceptre_user_data:
   # force cloudformation to update stack by setting a random number to the latest product's description
   ProvisioningArtifactParameters: |
