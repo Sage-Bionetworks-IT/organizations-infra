@@ -9,6 +9,36 @@ Parameters:
     Type: String
     Description: "Whether to keep or replace the provisioning artifact identifier on update"
     Default: 'false'
+  ProvisioningArtifactActive:
+    Description: >-
+      Indicates whether the product version is active. Inactive provisioning artifacts
+      are invisible to end users. End users cannot launch or update a provisioned product
+      from an inactive provisioning artifact
+    Type: String
+    AllowedValues:
+      - "True"
+      - "False"
+    ConstraintDescription: "Valid values are True|False"
+    Default: "true"
+  ProvisioningArtifactGuidance:
+    Description: 'The value to apply to the product version guidance'
+    Type: String
+    AllowedValues:
+      - "DEFAULT"
+      - "DEPRECATED"
+    ConstraintDescription: "Valid values are DEFAULT|DEPRECATED"
+    Default: "DEFAULT"
+  ProvisioningArtifactAction:
+    Description: >-
+        The action type used to apply ProvisioningArtifactActive and ProvisioningArtifactGuidance
+        to provisioning artifacts. ALL to apply to all artifacts, ALL_EXCEPT_LATEST to apply to
+        all except the latest artifact
+    Type: String
+    AllowedValues:
+      - "ALL"
+      - "ALL_EXCEPT_LATEST"
+    ConstraintDescription: "Valid values are ALL|ALL_EXCEPT_LATEST"
+    DEFAULT: "ALL
 Resources:
   scec2windowsproduct:
     Type: AWS::ServiceCatalog::CloudFormationProduct
@@ -45,6 +75,15 @@ Resources:
       ProductId: !Ref 'scec2windowsproduct'
       RoleArn: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+  UpdateProductVersions:
+    Type: Custom::ProductProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-sc-product-provider-UpdateProvisioningArtifactFunctionArn'
+      ProductId: !Ref scec2linuxproduct
+      ProvisioningArtifactActive: !Ref ProvisioningArtifactActive
+      ProvisioningArtifactGuidance: !Ref ProvisioningArtifactGuidance
+      ProvisioningArtifactAction: !Ref ProvisioningArtifactAction
 Outputs:
   ProductId:
     Value: !Ref 'scec2windowsproduct'
