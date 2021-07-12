@@ -92,6 +92,7 @@ Resources:
   UpdateProductVersions:
     Type: Custom::ProductProvider
     Properties:
+      ReDeploy: '{{ range(1, 10000) | random }}'  # force CFN to redeploy this resource
       ServiceToken: !ImportValue
         'Fn::Sub': '${AWS::Region}-cfn-cr-sc-product-provider-UpdateProvisioningArtifactFunctionArn'
       ProductId: !Ref scec2linuxproduct
