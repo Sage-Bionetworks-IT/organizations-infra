@@ -30,15 +30,15 @@ Parameters:
     Default: "DEFAULT"
   ProvisioningArtifactAction:
     Description: >-
-        The action type used to apply ProvisioningArtifactActive and ProvisioningArtifactGuidance
-        to provisioning artifacts. ALL to apply to all artifacts, ALL_EXCEPT_LATEST to apply to
-        all except the latest artifact
+      The action type used to apply ProvisioningArtifactActive and ProvisioningArtifactGuidance
+      to provisioning artifacts. ALL to apply to all artifacts, ALL_EXCEPT_LATEST to apply to
+      all except the latest artifact
     Type: String
     AllowedValues:
       - "ALL"
       - "ALL_EXCEPT_LATEST"
     ConstraintDescription: "Valid values are ALL|ALL_EXCEPT_LATEST"
-    DEFAULT: "ALL
+    Default: "ALL"
 Resources:
   ScEc2LinuxJumpcloudNotebookProduct:
     Type: AWS::ServiceCatalog::CloudFormationProduct
