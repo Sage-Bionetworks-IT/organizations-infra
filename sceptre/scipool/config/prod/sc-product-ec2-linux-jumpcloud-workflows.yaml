@@ -65,7 +65,11 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.13/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
       Name: 'v1.1.13'
-    - Description: 'Restore set_env_var. {{ range(1, 10000) | random }}'
+    - Description: 'Restore set_env_var.'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.14/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
       Name: 'v1.1.14'
+    - Description: 'Increase EBS volume size limit to 5 TB. {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.19/ec2/sc-ec2-linux-jumpcloud-workflows.yaml'
+      Name: 'v1.1.19'

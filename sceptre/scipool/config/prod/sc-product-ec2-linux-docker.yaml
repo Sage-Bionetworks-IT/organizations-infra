@@ -15,7 +15,11 @@ parameters:
 sceptre_user_data:
   # force cloudformation to update stack by setting a random number to the latest product's description
   ProvisioningArtifactParameters: |
-    - Description: 'Baseline release. {{ range(1, 10000) | random }}'
+    - Description: 'Baseline release.'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.18/ec2/sc-ec2-linux-docker.yaml'
       Name: 'v1.1.18'
+    - Description: 'Increase EBS volume size limit to 5 TB. {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.19/ec2/sc-ec2-linux-docker.yaml'
+      Name: 'v1.1.19'
