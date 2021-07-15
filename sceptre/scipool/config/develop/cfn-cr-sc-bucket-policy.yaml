@@ -1,4 +1,4 @@
-template_path: remote/cfn-cr-sc-bucket-policy-1.0.1.yaml
+template_path: remote/cfn-cr-sc-bucket-policy-1.0.2.yaml
 stack_name: cfn-cr-sc-bucket-policy
 stack_tags:
   Department: "Platform"
@@ -6,4 +6,4 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-bucket-policy/1.0.1/cfn-cr-sc-bucket-policy.yaml -O templates/remote/cfn-cr-sc-bucket-policy-1.0.1.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-bucket-policy/1.0.2/cfn-cr-sc-bucket-policy.yaml -O templates/remote/cfn-cr-sc-bucket-policy-1.0.2.yaml"
