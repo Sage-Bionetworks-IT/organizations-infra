@@ -58,9 +58,25 @@ Parameters:
     Type: String
     Default: '906769aa66-023cdfaa-15f0-43d9-b823-b74358ceffd7'
 
+  workflowNextflowDevDeveloperGroup:
+    Type: String
+    Default: 'TBD'
+
+  workflowNextflowDevViewerGroup:
+    Type: String
+    Default: 'TBD'
+
   workflowNextflowProdAdminGroup:   #JC aws-workflow-nextflow-prod-admin
     Type: String
     Default: '906769aa66-5c67ab0f-1091-48f9-b5b9-37d8b99a446a'
+
+  workflowNextflowProdDeveloperGroup:
+    Type: String
+    Default: 'TBD'
+
+  workflowNextflowProdViewerGroup:
+    Type: String
+    Default: 'TBD'
 
   synapseAdminGroup:      #JC aws-synapse-admins
     Type: String
@@ -393,6 +409,40 @@ SsoWorkflowNextflowDevAdmin:
     principalId: !Ref workflowNextflowDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
+SsoWorkflowNextflowDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-dev-developer'
+  StackDescription: 'SSO: Developer role used by workflow nextflow developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref WorkflowsNextflowDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref workflowNextflowDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoWorkflowNextflowDevViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-dev-viewer'
+  StackDescription: 'SSO: viewer role used by workflow nextflow developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref WorkflowsNextflowDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref workflowNextflowDevViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
 SsoWorkflowNextflowProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -409,6 +459,23 @@ SsoWorkflowNextflowProdAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoWorkflowNextflowProdViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-prod-viewer'
+  StackDescription: 'SSO: viewer role used by workflow nextflow viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref WorkflowsNextflowProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref workflowNextflowProdViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
 SsoSynapseAdmin:
   Type: update-stacks
