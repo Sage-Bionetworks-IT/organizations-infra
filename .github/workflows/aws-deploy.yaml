@@ -22,7 +22,7 @@ jobs:
         uses: BSFishy/pip-action@v1
         with:
           packages: jinja2==3.0.1
-      - name: Checkout jinja linter tool
+      - name: Install jinja linter tool
         run: git clone --single-branch https://github.com/drm/jinja2-lint.git /tmp/jinja2-lint
       - name: Execute jinja linter
         run: find . -type f -name "*.j2" -exec /tmp/jinja2-lint/j2lint.py '{}' +
