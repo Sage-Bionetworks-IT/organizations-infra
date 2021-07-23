@@ -13,6 +13,14 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: pre-commit/action@v2.0.0
+  jinja-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - pip install jinja2
+      - git clone https://github.com/drm/jinja2-lint.git /tmp/jinja2-lint
+      - find . -type f -name "*.j2" -exec /tmp/jinja2-lint/j2lint.py '{}' +
   org-formation:
     if: github.event_name == 'push'
     needs: pre-commit
