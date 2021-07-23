@@ -70,10 +70,6 @@ Parameters:
     Type: String
     Default: '906769aa66-5c67ab0f-1091-48f9-b5b9-37d8b99a446a'
 
-  workflowNextflowProdDeveloperGroup:
-    Type: String
-    Default: 'TBD'
-
   workflowNextflowProdViewerGroup:
     Type: String
     Default: 'TBD'
