@@ -23,7 +23,9 @@ jobs:
       - find . -type f -name "*.j2" -exec /tmp/jinja2-lint/j2lint.py '{}' +
   org-formation:
     if: github.event_name == 'push'
-    needs: pre-commit
+    needs:
+      - pre-commit
+      - jinja-lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
