@@ -60,11 +60,11 @@ Parameters:
 
   workflowNextflowDevDeveloperGroup:
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-4c409d3e-e03d-4f46-aa24-840c977ef9d4'
 
   workflowNextflowDevViewerGroup:
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-eae974c2-3cad-4477-926a-17a2c7ed8e81'
 
   workflowNextflowProdAdminGroup:   #JC aws-workflow-nextflow-prod-admin
     Type: String
@@ -72,7 +72,7 @@ Parameters:
 
   workflowNextflowProdViewerGroup:
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-6cdd2cc1-6d3d-49d8-b105-37c22bb3d402'
 
   synapseAdminGroup:      #JC aws-synapse-admins
     Type: String
