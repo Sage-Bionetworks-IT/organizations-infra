@@ -420,7 +420,8 @@ SsoWorkflowNextflowDevDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowDevDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    permissionSetName: 'Developer-Allow-Resource-Name-Contrained-IAM-Actions'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
     inlinePolicy: >-
       {
           "Version": "2012-10-17",
