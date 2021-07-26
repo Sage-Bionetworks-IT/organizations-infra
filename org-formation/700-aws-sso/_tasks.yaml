@@ -420,7 +420,7 @@ SsoWorkflowNextflowDevDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowDevDeveloperGroup
-    permissionSetName: 'Developer-Nextflow-IAM-Contrained'
+    permissionSetName: 'Developer-IAM-Contrained'
     managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
     inlinePolicy: >-
       {
