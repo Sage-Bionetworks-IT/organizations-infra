@@ -408,7 +408,7 @@ SsoWorkflowNextflowDevAdmin:
 SsoWorkflowNextflowDevDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-dev-developer'
   StackDescription: 'SSO: Developer role used by workflow nextflow developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -422,24 +422,24 @@ SsoWorkflowNextflowDevDeveloper:
     principalId: !Ref workflowNextflowDevDeveloperGroup
     permissionSetName: 'Developer-Allow-Resource-Name-Contrained-IAM-Actions'
     managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
-#    inlinePolicy: >-
-#      {
-#          "Version": "2012-10-17",
-#          "Statement": [
-#              {
-#                  "Sid": "ResourceConstrainedIAM",
-#                  "Effect": "Allow",
-#                  "Action": "iam:*",
-#                  "Resource": [
-#                      "arn:aws:iam::035458030717:user/dev-*",
-#                      "arn:aws:iam::035458030717:role/dev-*",
-#                      "arn:aws:iam::035458030717:group/dev-*",
-#                      "arn:aws:iam::035458030717:instance-profile/dev-*",
-#                      "arn:aws:iam::035458030717:policy/dev-*"
-#                  ]
-#              }
-#          ]
-#      }
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Sid": "ResourceConstrainedIAM",
+                  "Effect": "Allow",
+                  "Action": "iam:*",
+                  "Resource": [
+                      "arn:aws:iam::035458030717:user/dev-*",
+                      "arn:aws:iam::035458030717:role/dev-*",
+                      "arn:aws:iam::035458030717:group/dev-*",
+                      "arn:aws:iam::035458030717:instance-profile/dev-*",
+                      "arn:aws:iam::035458030717:policy/dev-*"
+                  ]
+              }
+          ]
+      }
 
 SsoWorkflowNextflowDevViewer:
   Type: update-stacks
