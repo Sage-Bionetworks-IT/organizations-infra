@@ -24,7 +24,7 @@ Organization:
       Accounts:
         - !Ref ScipoolDevAccount
         - !Ref SandboxAccount
-        - !Ref MobileHealthDataEngineeringAccount
+        - !Ref MobileHealthDataEngineeringDevAccount
         - !Ref SageITAccount
         - !Ref HtanDevAccount
         - !Ref NlpSandboxAccount
@@ -263,18 +263,18 @@ Organization:
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
-  MobileHealthDataEngineeringAccount:
+  MobileHealthDataEngineeringDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: mobilehealth-dataengineering
-      RootEmail: aws-mobilehealth-dataengineering@sagebase.org
-      Alias: org-sagebase-mobilehealth-dataengineering
+      AccountName: org-sagebase-mobilehealth-dataengineering-dev
+      RootEmail: aws-mobilehealth-dataengineering-dev@sagebase.org
+      Alias: org-sagebase-mobilehealth-dataengineering-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
         Department: SysBio
         Project: Infrastructure
         budget-alarm-threshold: 20000
-        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org
+        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-dev@sagebase.org
 
   iAtlasProdAccount:
     Type: OC::ORG::Account
