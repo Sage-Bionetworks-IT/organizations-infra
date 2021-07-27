@@ -365,7 +365,7 @@ SsoMobileHealthDataEngineeringAdmin:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref MobileHealthDataEngineeringAccount
+      Account: !Ref MobileHealthDataEngineeringDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref mobileHealthDataEngineeringAdminGroup
