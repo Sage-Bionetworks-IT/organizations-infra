@@ -35,7 +35,7 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceProd
       Accounts:
-        - !Ref BMGFAccount
+        - !Ref BmgfkiAccount
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
@@ -231,12 +231,12 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
 
-  BMGFAccount:
+  BmgfkiAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: org-sagebase-bmgf
-      RootEmail: aws.bmgf@sagebase.org
-      Alias: org-sagebase-bmgf
+      AccountName: org-sagebase-bmgfki
+      RootEmail: aws.bmgfki@sagebase.org
+      Alias: org-sagebase-bmgfki
       Tags:
         <<: !Include ./_default_org_tags.yaml
 

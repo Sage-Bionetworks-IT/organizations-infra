@@ -138,11 +138,11 @@ Parameters:
     Type: String
     Default: '906769aa66-8f870ac5-9280-4c19-b477-461592fe92a6'
 
-  bmgfAdminGroup:      #JC aws-bmgf-admins
+  bmgfkiAdminGroup:      #JC aws-bmgfki-admins
     Type: String
     Default: ''
 
-  bmgfCommunityManagerGroup:  #JC aws-bmgf-community-managers
+  bmgfkiCommunityManagerGroup:  #JC aws-bmgfki-community-managers
     Type: String
     Default: ''
 
@@ -873,36 +873,36 @@ SsoHtanDevAdmin:
     principalId: !Ref htanDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-SsoBmgfAdmin:
+SsoBmgfkiAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.19/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bmgf-admin'
-  StackDescription: 'SSO: admin role used by BMGF admin group'
+  StackDescription: 'SSO: admin role used by BMGF KI admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref BMGFAccount
+      Account: !Ref BmgfkiAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref bmgfAdminGroup
+    principalId: !Ref bmgfkiAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-SsoBmgfCommunityManager:
+SsoBmgfkiCommunityManager:
   Type: update-stacks
   DependsOn: [ SsoScipoolDevCommunityManager ]
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.19/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-bmgf-community-manager'
-  StackDescription: 'SSO: community manager role used by BMGF community manager group'
+  StackName: !Sub '${resourcePrefix}-${appName}-bmgfki-community-manager'
+  StackDescription: 'SSO: community manager role used by BMGF KI community manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref BMGFAccount
+      Account: !Ref BmgfkiAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref bmgfCommunityManagerGroup
+    principalId: !Ref bmgfkiCommunityManagerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager-permission-set-arn' ]
