@@ -46,9 +46,13 @@ Parameters:
     Type: String
     Default: '906769aa66-8c4034aa-9441-47b2-8770-34422ea4affa'
 
-  mobileHealthDataEngineeringAdminGroup:     #JC aws-mobilehealth-dataengineering-admins
+  mobileHealthDataEngineeringDevAdminGroup:     #JC aws-mobilehealth-dataengineering-admins
     Type: String
     Default: '906769aa66-e218c196-4107-417d-8b75-c2e81a4aa290'
+
+  mobileHealthDataEngineeringProdAdminGroup:
+    Type: String
+    Default: '906769aa66-d82d80f8-3c90-4faf-be30-437e9e60e31f'
 
   nlpSandboxAdminGroup:      #JC aws-nlp-sandbox-admins
     Type: String
@@ -354,11 +358,11 @@ scicompDeveloper:
     principalId: !Ref scicompDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
-SsoMobileHealthDataEngineeringAdmin:
+SsoMobileHealthDataEngineeringDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-mobilehealth-dataengineering-admin'
+  StackName: !Sub '${resourcePrefix}-${appName}-mobilehealth-dataengineering-dev-admin'
   StackDescription: 'SSO: Administrator role used by mobileHealth data engineering admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -368,7 +372,24 @@ SsoMobileHealthDataEngineeringAdmin:
       Account: !Ref MobileHealthDataEngineeringDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref mobileHealthDataEngineeringAdminGroup
+    principalId: !Ref mobileHealthDataEngineeringDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoMobileHealthDataEngineeringProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-mobilehealth-dataengineering-prod-admin'
+  StackDescription: 'SSO: Administrator role used by mobileHealth data engineering admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref MobileHealthDataEngineeringProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref mobileHealthDataEngineeringProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoNlpSandboxAdmin:
