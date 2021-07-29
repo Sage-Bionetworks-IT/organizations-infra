@@ -72,6 +72,7 @@ WorkflowsNextflowCIServiceAccounts:
       - !Ref WorkflowsNextflowDevAccount
     Region: us-east-1
 
+# Service accounts for https://github.com/Sage-Bionetworks-Workflows/aws-workflows-nextflow-infra
 MobileHealthDataEngineeringCIServiceAccounts:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
