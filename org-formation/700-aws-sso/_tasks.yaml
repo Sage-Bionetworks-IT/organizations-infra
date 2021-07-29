@@ -140,11 +140,11 @@ Parameters:
 
   bmgfkiAdminGroup:      #JC aws-bmgfki-admins
     Type: String
-    Default: ''
+    Default: '906769aa66-dfc5248b-3d5d-44ce-81ae-6759ee284e59'
 
   bmgfkiCommunityManagerGroup:  #JC aws-bmgfki-community-managers
     Type: String
-    Default: ''
+    Default: '906769aa66-0a6a0177-d4cf-47e4-a5bc-4ba5297995ff'
 
 SsoAdministrator:
   Type: update-stacks
