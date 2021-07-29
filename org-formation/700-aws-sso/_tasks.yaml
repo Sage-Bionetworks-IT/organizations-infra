@@ -52,7 +52,7 @@ Parameters:
 
   mobileHealthDataEngineeringProdAdminGroup:
     Type: String
-    Default: TBD
+    Default: '906769aa66-d82d80f8-3c90-4faf-be30-437e9e60e31f'
 
   nlpSandboxAdminGroup:      #JC aws-nlp-sandbox-admins
     Type: String
