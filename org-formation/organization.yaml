@@ -281,9 +281,9 @@ Organization:
       Alias: org-sagebase-mobilehealth-dataengineering-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: SysBio
-        Project: Infrastructure
-        budget-alarm-threshold: 20000
+        Department: IBC
+        Project: mobile-toolbox
+        budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-dev@sagebase.org
 
   iAtlasProdAccount:
@@ -321,8 +321,8 @@ Organization:
       Alias: org-sagebase-workflows-nextflow-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CompOnc
-        Project: imCORE
+        Department: IBC
+        Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-prod@sagebase.org
 
@@ -334,7 +334,7 @@ Organization:
       Alias: org-sagebase-workflows-nextflow-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CompOnc
-        Project: imCORE
+        Department: IBC
+        Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-dev@sagebase.org
