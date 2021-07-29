@@ -23,6 +23,7 @@ GuardDuty:
       Account: !Ref LogCentralAccount
     MemberBinding:
       Account:
+        - !Ref BmgfkiAccount
         - !Ref BridgeProdAccount
         - !Ref ScicompAccount
         - !Ref ScipoolProdAccount
@@ -31,6 +32,7 @@ GuardDuty:
     AllBinding:
       Account:
         - !Ref accountId
+        - !Ref BmgfkiAccount
         - !Ref BridgeProdAccount
         - !Ref ScicompAccount
         - !Ref ScipoolProdAccount
