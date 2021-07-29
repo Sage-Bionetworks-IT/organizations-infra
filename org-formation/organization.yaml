@@ -35,6 +35,7 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceProd
       Accounts:
+        - !Ref BmgfkiAccount
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
@@ -227,6 +228,15 @@ Organization:
       AccountId: '237179673806'
       RootEmail: aws.scipoolprod@sagebase.org
       Alias: org-sagebase-scipoolprod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+
+  BmgfkiAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-bmgfki
+      RootEmail: aws.bmgfki@sagebase.org
+      Alias: org-sagebase-bmgfki
       Tags:
         <<: !Include ./_default_org_tags.yaml
 
