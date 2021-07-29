@@ -138,6 +138,14 @@ Parameters:
     Type: String
     Default: '906769aa66-8f870ac5-9280-4c19-b477-461592fe92a6'
 
+  bmgfkiAdminGroup:      #JC aws-bmgfki-admins
+    Type: String
+    Default: ''
+
+  bmgfkiCommunityManagerGroup:  #JC aws-bmgfki-community-managers
+    Type: String
+    Default: ''
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -864,3 +872,37 @@ SsoHtanDevAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref htanDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoBmgfkiAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.19/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bmgf-admin'
+  StackDescription: 'SSO: admin role used by BMGF KI admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BmgfkiAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bmgfkiAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoBmgfkiCommunityManager:
+  Type: update-stacks
+  DependsOn: [ SsoScipoolDevCommunityManager ]
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.19/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bmgfki-community-manager'
+  StackDescription: 'SSO: community manager role used by BMGF KI community manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BmgfkiAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bmgfkiCommunityManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager-permission-set-arn' ]
