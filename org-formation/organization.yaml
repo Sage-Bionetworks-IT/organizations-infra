@@ -40,6 +40,7 @@ Organization:
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
         - !Ref WorkflowsNextflowProdAccount
+        - !Ref MobileHealthDataEngineeringProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -285,6 +286,19 @@ Organization:
         Project: mobile-toolbox
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-dev@sagebase.org
+
+  MobileHealthDataEngineeringProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-mobilehealth-dataengineering-prod
+      RootEmail: aws-mobilehealth-dataengineering-prod@sagebase.org
+      Alias: org-sagebase-mobilehealth-dataengineering-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: IBC
+        Project: Infrastructure
+        budget-alarm-threshold: 20000
+        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-prod@sagebase.org
 
   iAtlasProdAccount:
     Type: OC::ORG::Account
