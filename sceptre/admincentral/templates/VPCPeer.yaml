@@ -120,7 +120,7 @@ Resources:
             - '    return False'
             - '  cfnresponse.send(event, context, cfnresponse.SUCCESS, PayLoad, vpcrequest.id)'
             - '  return PayLoad'
-      Runtime: python2.7
+      Runtime: python3.7
       Timeout: 10
   LambdaExecutionRole:
     Type: 'AWS::IAM::Role'
