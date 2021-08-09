@@ -57,7 +57,7 @@ PreventDisableCloudwatchConfigs:
 
 DenyAllRegionsOutsideUsEast1:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/SCP/deny-all-regions-outside-us-east-1.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.21/templates/SCP/deny-all-regions-outside-us-east-1.yaml
   StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us-east-1'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -70,7 +70,7 @@ DenyAllRegionsOutsideUsEast1:
 
 DenyAllRegionsOutsideUs:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/SCP/deny-all-regions-outside-us.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.21/templates/SCP/deny-all-regions-outside-us.yaml
   StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
