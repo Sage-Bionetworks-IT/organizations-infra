@@ -59,30 +59,16 @@ Resources:
           # source: https://github.com/Sage-Bionetworks/admincentral-infra/blob/master/templates/cfn-snippets-bucket.yaml
           Location: "s3://cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz/scipool/products.yaml"
       ReplaceProvisioningArtifacts: !Ref ReplaceProvisioningArtifacts
-  Associateec2linux:
-    Type: AWS::ServiceCatalog::PortfolioProductAssociation
-    Properties:
-      PortfolioId: !ImportValue
-        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-SCEC2portfolioId'
-      ProductId: !Ref 'scec2linuxproduct'
   constraintec2linux:
     Type: AWS::ServiceCatalog::LaunchRoleConstraint
-    DependsOn: Associateec2linux
     Properties:
       PortfolioId: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-SCEC2portfolioId'
       ProductId: !Ref 'scec2linuxproduct'
       RoleArn: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
-  AssociatesExternalPortfolio:
-    Type: AWS::ServiceCatalog::PortfolioProductAssociation
-    Properties:
-      PortfolioId: !ImportValue
-        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-external-SCEC2portfolioId'
-      ProductId: !Ref 'scec2linuxproduct'
   ConstraintExternalPortfolio:
     Type: AWS::ServiceCatalog::LaunchRoleConstraint
-    DependsOn: AssociatesExternalPortfolio
     Properties:
       PortfolioId: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-external-SCEC2portfolioId'
