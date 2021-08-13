@@ -1,0 +1,14 @@
+# budget rules per user by synapse team id
+teams:
+  '3412679': # ADPortal_ServiceCatalogUsers
+    amount: '100'
+    period: ANNUALLY
+    unit: USD
+    community_manager_emails:
+      - 'sc-support@sagebase.org'
+  '3425028': # 2021 Hack for RARE Participants
+    amount: '100'
+    period: ANNUALLY
+    unit: USD
+    community_manager_emails:
+      - 'robert.allaway@sagebase.org'
