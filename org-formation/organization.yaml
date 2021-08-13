@@ -25,7 +25,6 @@ Organization:
         - !Ref ScipoolDevAccount
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringDevAccount
-        - !Ref SageITAccount
         - !Ref HtanDevAccount
         - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
@@ -73,6 +72,7 @@ Organization:
       Accounts:
         - !Ref ITSandboxAccount
         - !Ref BmgfkiAccount
+        - !Ref SageITAccount
 
   SynapseOU:
     Type: OC::ORG::OrganizationalUnit
