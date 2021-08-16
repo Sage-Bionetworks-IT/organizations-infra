@@ -6,3 +6,4 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "bmgfki/cfn-macro-ssm-param.yaml"
+  - "bmgfki/sc-ec2vpc-launchrole.yaml"

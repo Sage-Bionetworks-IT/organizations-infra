@@ -1,0 +1,10 @@
+template_path: noop.j2
+stack_name: D
+#dependencies:
+#  - prod/A.yaml
+parameters:
+  MyId: "C"
+sceptre_user_data:
+  Names:
+    - Bill
+    - Jason

@@ -1,0 +1,12 @@
+# Instance to test integration with parkmycloud
+template_path: noop.yaml
+stack_name: A
+parameters:
+  MyId: "A"
+
+#parameters:
+#  CanonicalUserId: !rcmd "export AWS_PROFILE=sandbox-admin && aws s3api list-buckets --query Owner.ID --output text"
+#  CanonicalUserId: !rcmd "aws s3api list-buckets --query Owner.ID --output text"
+#  CanonicalUserId: !rcmd
+#    command: "aws s3api list-buckets --query Owner.ID --output text"
+#    profile: "sandbox-admin"

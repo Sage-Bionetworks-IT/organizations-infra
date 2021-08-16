@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: noop template
+Parameters:
+  MyId:
+    Type: String
+
+Resources:
+{% for name in sceptre_user_data.Names %}
+
+    touchNothing{{ name }}:
+      Type: AWS::CloudFormation::WaitConditionHandle
+
+    touchNothing{{ name }}h:
+      Type: AWS::CloudFormation::WaitConditionHandle
+
+{% endfor %}
+
+Outputs:
+  MyId:
+    Value: !Ref MyId
