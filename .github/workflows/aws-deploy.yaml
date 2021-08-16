@@ -377,9 +377,7 @@ jobs:
           cd sceptre/scipool
           mkdir -p templates/remote
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker.yaml
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch prod --yes
   sceptre-stridespool:
@@ -419,9 +417,7 @@ jobs:
           cd sceptre/scipool
           mkdir -p templates/remote
           sceptre delete --yes strides/sc-product-assoc-ec2-linux-docker.yaml
-          sceptre delete --yes strides/sc-product-assoc-ec2-linux-jumpcloud.yaml
           sceptre delete --yes strides/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
-          sceptre delete --yes strides/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
           sceptre delete --yes strides/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch strides --yes
   sceptre-sageit:
