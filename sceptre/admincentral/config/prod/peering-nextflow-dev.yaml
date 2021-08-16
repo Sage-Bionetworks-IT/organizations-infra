@@ -1,7 +1,0 @@
-template_path: VPCPeer.yaml
-stack_name: peering-nextflow-dev
-parameters:
-  PeerVPC: vpc-04c1457103adc1fdf  # workflows-nextflow-dev VPC ID
-  PeerVPCOwner: "035458030717"    # workflows-nextflow-dev account ID
-  PeerVPCCIDR: 172.21.0.0/20      # workflows-nextflow-dev VPC CIDR
-  PeerRoleName: sagebase-vpc-peering-request-AuthorizerRole-19YBB3AMO0EVX   # authorizer role name created by sagebase-vpc-peering-request stack
