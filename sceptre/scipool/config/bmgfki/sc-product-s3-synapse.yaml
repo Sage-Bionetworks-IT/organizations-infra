@@ -1,0 +1,54 @@
+template_path: "sc-product-s3-synapse.j2"
+stack_name: "sc-product-s3-synapse"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "bmgfki/sc-portfolio-s3-basic.yaml"
+parameters:
+  ProvisioningArtifactGuidance: "DEPRECATED"
+  ProvisioningArtifactAction: "ALL_EXCEPT_LATEST"
+sceptre_user_data:
+  # force cloudformation to update stack by setting a random number to the latest product's description
+  ProvisioningArtifactParameters: |
+    - Description: 'Baseline version.'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.0.0/s3/sc-s3-synapse-ra-v1.0.0.yaml'
+      Name: 'v1.0.0'
+    - Description: 'Remove SynapseProdARN parameter.'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.0.1/s3/sc-s3-synapse-ra-v1.0.1.yaml'
+      Name: 'v1.0.1'
+    - Description: 'Fix resource contention bug with S3 custom resources'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.0.2/s3/sc-s3-synapse-ra-v1.0.2.yaml'
+      Name: 'v1.0.2'
+    - Description: 'Allow multiple synapse bucket owners'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.6/s3/sc-s3-synapse-ra.yaml'
+      Name: 'v1.1.6'
+    - Description: 'Use SynapseTagger'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.7/s3/sc-s3-synapse-ra.yaml'
+      Name: 'v1.1.7'
+    - Description: 'Remove VpcName input'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.8/s3/sc-s3-synapse-ra.yaml'
+      Name: 'v1.1.8'
+    - Description: 'Update for strides'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.9/s3/sc-s3-synapse-ra.yaml'
+      Name: 'v1.1.9'
+    - Description: 'Include params in mapping.'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.10/s3/sc-s3-synapse-ra.yaml'
+      Name: 'v1.1.10'
+    - Description:  'Include option to restrict bucket downloads to same region.'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.15/s3/sc-s3-synapse-ra.yaml'
+      Name: 'v1.1.15'
+    - Description:  'Fix cross account access. {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.20/s3/sc-s3-synapse-ra.yaml'
+      Name: 'v1.1.20'
