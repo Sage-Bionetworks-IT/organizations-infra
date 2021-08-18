@@ -33,6 +33,9 @@ sceptre_user_data:
     # org-sagebase-strides
     stridespoolvpc:
       CIDR: "10.49.0.0/16"
+    # org-sagebase-bmgfki
+    gatespoolvpc:
+      CIDR: "10.67.0.0/16"
     # org-sagebase-bridgeprod
     BridgeServer2-vpc:
       CIDR: "172.32.0.0/16"

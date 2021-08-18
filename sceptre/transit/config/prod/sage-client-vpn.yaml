@@ -69,6 +69,12 @@ sceptre_user_data:
       AccessGroups:
         - "admin"
         - "aws-scicomp-developers"
+    # org-sagebase-bmgfki
+    gatesspoolvpc:
+      CIDR: "10.67.0.0/16"
+      AccessGroups:
+        - "admin"
+        - "aws-scicomp-developers"
     # org-sagebase-bridgeprod
     BridgeServer2-vpc:
       CIDR: "172.32.0.0/16"
