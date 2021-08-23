@@ -34,7 +34,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceProd
       Accounts:
-        - !Ref BmgfkiAccount
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
@@ -65,7 +64,6 @@ Organization:
         - !Ref LogCentralAccount
         - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
-        - !Ref SageITAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -73,6 +71,8 @@ Organization:
       OrganizationalUnitName: PolicyStaging
       Accounts:
         - !Ref ITSandboxAccount
+        - !Ref BmgfkiAccount
+        - !Ref SageITAccount
 
   SynapseOU:
     Type: OC::ORG::OrganizationalUnit
