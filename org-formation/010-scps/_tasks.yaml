@@ -15,7 +15,6 @@ PreventDisableGuardDuty:
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
       - !Ref PlatformOU
-      - !Ref PolicyStagingOU
       - !Ref SynapseOU
       - !Ref BridgeOU
 
@@ -33,7 +32,6 @@ PreventDisableCloudtrail:
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
       - !Ref PlatformOU
-      - !Ref PolicyStagingOU
       - !Ref SynapseOU
       - !Ref BridgeOU
 
@@ -51,7 +49,6 @@ PreventDisableCloudwatchConfigs:
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
       - !Ref PlatformOU
-      - !Ref PolicyStagingOU
       - !Ref SynapseOU
       - !Ref BridgeOU
 
