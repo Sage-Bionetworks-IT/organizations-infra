@@ -4,4 +4,4 @@ dependencies:
   - strides/bootstrap.yaml
 hooks:
   before_launch:
-    - !cmd "wget https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/VPC/efs-vpc.yaml -O templates/remote/efs-vpc.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/templates/VPC/efs-vpc.yaml -O templates/remote/efs-vpc.yaml"
