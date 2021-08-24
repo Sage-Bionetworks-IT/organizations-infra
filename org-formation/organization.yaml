@@ -62,7 +62,6 @@ Organization:
         - !Ref AdminCentralAccount
         - !Ref MasterAccount
         - !Ref LogCentralAccount
-        - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
 
   PolicyStagingOU:
@@ -73,6 +72,7 @@ Organization:
         - !Ref ITSandboxAccount
         - !Ref BmgfkiAccount
         - !Ref SageITAccount
+        - !Ref SecurityCentralAccount
 
   SynapseOU:
     Type: OC::ORG::OrganizationalUnit
