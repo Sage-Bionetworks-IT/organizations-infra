@@ -64,7 +64,6 @@ Organization:
         - !Ref MasterAccount
         - !Ref LogCentralAccount
         - !Ref ImageCentralAccount
-        - !Ref SageITAccount
         - !Ref SecurityCentralAccount
 
   PolicyStagingOU:
