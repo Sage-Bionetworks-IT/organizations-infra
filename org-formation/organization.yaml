@@ -22,7 +22,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceDev
       Accounts:
-        - !Ref ScipoolDevAccount
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringDevAccount
         - !Ref HtanDevAccount
@@ -34,8 +33,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceProd
       Accounts:
-        - !Ref BmgfkiAccount
-        - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
         - !Ref WorkflowsNextflowProdAccount
@@ -72,6 +69,15 @@ Organization:
       OrganizationalUnitName: PolicyStaging
       Accounts:
         - !Ref ITSandboxAccount
+
+  ServiceCatalogOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ServiceCatalog
+      Accounts:
+        - !Ref BmgfkiAccount
+        - !Ref ScipoolDevAccount
+        - !Ref ScipoolProdAccount
 
   SynapseOU:
     Type: OC::ORG::OrganizationalUnit
