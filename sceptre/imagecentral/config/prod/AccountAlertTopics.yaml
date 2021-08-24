@@ -10,7 +10,5 @@ parameters:
   SlackWebhookURL: !ssm "/infra/SlackWebhookUrl"
   SlackChannel: "#infra-notices"
 hooks:
-  before_create:
-    - !cmd "wget https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/AccountAlertTopics.yaml -O templates/remote/AccountAlertTopics.yaml"
-  before_update:
+  before_launch:
     - !cmd "wget https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/AccountAlertTopics.yaml -O templates/remote/AccountAlertTopics.yaml"
