@@ -18,4 +18,4 @@ parameters:
   TransitGatewayId: "tgw-0004e7e3454cacac5"
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/transit-gateway-spoke.yaml -O templates/remote/transit-gateway-spoke.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/transit-gateway-spoke.yaml -O templates/remote/transit-gateway-spoke.yaml"
