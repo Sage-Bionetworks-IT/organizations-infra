@@ -284,7 +284,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CNB
         Project: Challenges
-        budget-alarm-threshold: 20000
+        budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: cnb@sagebase.org
 
   MobileHealthDataEngineeringDevAccount:
