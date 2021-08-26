@@ -44,6 +44,21 @@ NlpSandboxServiceAccount:
     Account: !Ref SandboxAccount
     Region: !Ref primaryRegion
 
+# A service account for challenge infrastructure CF repos.
+CnbServiceAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
+  StackName: CnbServiceAccount
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+      - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref SandboxAccount
+    Region: !Ref primaryRegion
+
 # Service account for provisioner repository: https://github.com/ncihtan/aws-htan-infra
 HtanDevCIServiceAccount:
   Type: update-stacks
@@ -98,6 +113,19 @@ NlpSandboxCIServiceAccounts:
     IncludeMasterAccount: false
     Account:
       - !Ref NlpSandboxAccount
+    Region: us-east-1
+
+CnbCIServiceAccounts:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
+  StackName: cnb-ci-service-account
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref CnbAccount
     Region: us-east-1
 
 # =====================================================================================================
