@@ -40,6 +40,7 @@ Organization:
         - !Ref iAtlasProdAccount
         - !Ref WorkflowsNextflowProdAccount
         - !Ref MobileHealthDataEngineeringProdAccount
+        - !Ref CnbAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -272,6 +273,19 @@ Organization:
         Project: NLP-Sandbox
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
+
+  CnbAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: CnbAccount
+      RootEmail: cnb@sagebase.org
+      Alias: org-sagebase-cnb
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: CNB
+        Project: Challenges
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: cnb@sagebase.org
 
   MobileHealthDataEngineeringDevAccount:
     Type: OC::ORG::Account
