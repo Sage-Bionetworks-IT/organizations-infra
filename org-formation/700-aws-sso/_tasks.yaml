@@ -442,7 +442,10 @@ SsoWorkflowNextflowViewerPlus:
             "Action": [
               "sts:AssumeRole"
             ],
-            "Resource": "*"
+            "Resource": [
+              "arn:aws:iam::*-ReadWriteAccessRole",
+              "arn:aws:iam::*-ReadOnlyAccessRole",
+            ]
           }
         ]
       }
