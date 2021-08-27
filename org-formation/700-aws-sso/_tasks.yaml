@@ -62,7 +62,7 @@ Parameters:
     Type: String
     Default: '906769aa66-5c67ab0f-1091-48f9-b5b9-37d8b99a446a'
 
-  workflowNextflowViewerPlusGroup:   #JC aws-workflow-nextflow-viewer-plus
+  workflowNextflowTowerUserGroup:   #JC aws-workflow-nextflow-tower-user
     Type: String
     Default: 'TBD'
 
@@ -414,12 +414,12 @@ SsoWorkflowNextflowProdAdmin:
     principalId: !Ref workflowNextflowProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-SsoWorkflowNextflowViewerPlus:
+SsoWorkflowNextflowTowerUser:
   Type: update-stacks
   DependsOn: SsoViewer
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-viewer-plus'
-  StackDescription: 'SSO: Viewer role used by Nextflow users with the ability to assume other IAM roles'
+  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-tower-user'
+  StackDescription: 'SSO: Viewer role used by Nextflow Tower users with the ability to assume other IAM roles'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
@@ -430,8 +430,8 @@ SsoWorkflowNextflowViewerPlus:
         - !Ref WorkflowsNextflowDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref workflowNextflowViewerPlusGroup
-    permissionSetName: 'ViewerPlusAssumeRole'
+    principalId: !Ref workflowNextflowTowerUserGroup
+    permissionSetName: 'TowerUser'
     managedPolicies: [ 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess' ]
     inlinePolicy: >-
       {
