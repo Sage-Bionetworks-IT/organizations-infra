@@ -62,7 +62,7 @@ Parameters:
     Type: String
     Default: '906769aa66-5c67ab0f-1091-48f9-b5b9-37d8b99a446a'
 
-  workflowNextflowViewerPlusGroup:   #JC aws-workflow-nextflow-viewer-plus-assume-role
+  workflowNextflowViewerPlusGroup:   #JC aws-workflow-nextflow-viewer-plus
     Type: String
     Default: 'TBD'
 
@@ -417,8 +417,8 @@ SsoWorkflowNextflowProdAdmin:
 SsoWorkflowNextflowViewerPlus:
   Type: update-stacks
   DependsOn: SsoViewer
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-viewer-plus-assume-role'
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-viewer-plus'
   StackDescription: 'SSO: Viewer role used by Nextflow users with the ability to assume other IAM roles'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
