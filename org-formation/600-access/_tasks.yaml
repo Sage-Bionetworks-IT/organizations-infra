@@ -60,7 +60,7 @@ HtanDevCIServiceAccount:
 
 WorkflowsNextflowCIServiceAccounts:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.2/templates/IAM/service-account.yaml
   StackName: workflows-nextflow-ci-service-account
   Parameters:
     ManagedPolicyArns:
