@@ -11,11 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
       - uses: pre-commit/action@v2.0.0
+  jinja-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install jinja libraries
+        uses: BSFishy/pip-action@v1
+        with:
+          packages: jinja2==3.0.1
+      - name: Install jinja linter tool
+        run: git clone --single-branch https://github.com/drm/jinja2-lint.git /tmp/jinja2-lint
+      - name: Execute jinja linter
+        run: find . -type f -name "*.j2" -exec /tmp/jinja2-lint/j2lint.py '{}' +
   org-formation:
     if: github.event_name == 'push'
-    needs: pre-commit
+    needs:
+      - pre-commit
+      - jinja-lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -55,10 +76,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -83,50 +104,51 @@ jobs:
           cd sceptre/organizations
           mkdir -p templates/remote
           sceptre launch prod --yes
-  sceptre-transit:
-    if: github.event_name == 'push'
-    needs: org-formation
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
-      - name: Cache python modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install sceptre sceptre-ssm-resolver
-      - name: Assume AWS Role
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-          role-to-assume: arn:aws:iam::153370007719:role/OrganizationFormationBuildAccessRole
-          role-duration-seconds: 1200
-      - name: Deploy with sceptre
-        run: |
-          cd sceptre/transit
-          mkdir -p templates/remote
-          sceptre launch prod --yes
+# Transit Gateway is still work in progress
+#  sceptre-transit:
+#    if: github.event_name == 'push'
+#    needs: org-formation
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Set up Python
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: 3.9
+#      - name: Cache python modules
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.cache/pip
+#          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+#          restore-keys: |
+#            ${{ runner.os }}-pip-
+#      - name: Install dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install sceptre sceptre-ssm-resolver
+#      - name: Assume AWS Role
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
+#          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
+#          aws-region: us-east-1
+#          role-to-assume: arn:aws:iam::153370007719:role/OrganizationFormationBuildAccessRole
+#          role-duration-seconds: 1200
+#      - name: Deploy with sceptre
+#        run: |
+#          cd sceptre/transit
+#          mkdir -p templates/remote
+#          sceptre launch prod --yes
   sceptre-admincentral:
     if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -157,10 +179,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -191,10 +213,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -225,10 +247,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -259,10 +281,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -274,7 +296,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
-          pip install git+git://github.com/Sceptre/sceptre-file-resolver.git
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -294,10 +315,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -309,7 +330,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver sceptre-date-resolver
-          pip install git+git://github.com/Sceptre/sceptre-file-resolver.git
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -329,10 +349,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -344,7 +364,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver sceptre-date-resolver
-          pip install git+git://github.com/Sceptre/sceptre-file-resolver.git
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -358,9 +377,8 @@ jobs:
         run: |
           cd sceptre/scipool
           mkdir -p templates/remote
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
+          sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch prod --yes
   sceptre-stridespool:
@@ -371,10 +389,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -386,7 +404,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver sceptre-date-resolver
-          pip install git+git://github.com/Sceptre/sceptre-file-resolver.git
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -400,21 +417,58 @@ jobs:
         run: |
           cd sceptre/scipool
           mkdir -p templates/remote
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud.yaml
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-workflows.yaml
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
+          sceptre delete --yes strides/sc-product-assoc-ec2-linux-docker.yaml
+          sceptre delete --yes strides/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
+          sceptre delete --yes strides/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch strides --yes
+  sceptre-bmgfki:
+    if: github.event_name == 'push'
+    needs: org-formation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Cache python modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sceptre sceptre-ssm-resolver sceptre-date-resolver
+      - name: Assume AWS Role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::464102568320:role/OrganizationFormationBuildAccessRole
+          role-duration-seconds: 1200
+      - name: Deploy with sceptre
+        # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
+        run: |
+          cd sceptre/scipool
+          mkdir -p templates/remote
+          sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-docker.yaml
+          sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
+          sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
+          sceptre launch bmgfki --yes
   sceptre-sageit:
     if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -450,10 +504,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -485,10 +539,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -519,10 +573,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -553,10 +607,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -587,10 +641,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -621,10 +675,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -655,10 +709,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:
@@ -689,10 +743,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Cache python modules
         uses: actions/cache@v2
         with:

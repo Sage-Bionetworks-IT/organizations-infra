@@ -8,4 +8,4 @@ parameters:
   Resource: !stack_output_external essentials::AWSS3ConfigBucketArn
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/sumologic-role.yaml -O templates/remote/sumologic-role.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/sumologic-role.yaml -O templates/remote/sumologic-role.yaml"

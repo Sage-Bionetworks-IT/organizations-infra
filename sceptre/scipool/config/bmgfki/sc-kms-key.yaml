@@ -1,0 +1,12 @@
+template_path: "sc-kms-key.yaml"
+stack_name: "sc-kms-key"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "bmgfki/bootstrap.yaml"
+parameters:
+  AdminRoleArns:
+    - !stack_output_external bootstrap::AWSIAMCfServiceRoleArn
+    - "arn:aws:iam::464102568320:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_686ebad4f95d49f9"

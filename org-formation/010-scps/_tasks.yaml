@@ -3,7 +3,7 @@ Parameters:
 
 PreventDisableGuardDuty:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-guardduty.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.0/templates/SCP/prevent-disable-guardduty.yaml
   StackName: !Sub '${resourcePrefix}-prevent-disable-guardduty'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -15,13 +15,12 @@ PreventDisableGuardDuty:
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
       - !Ref PlatformOU
-      - !Ref PolicyStagingOU
       - !Ref SynapseOU
       - !Ref BridgeOU
 
 PreventDisableCloudtrail:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-cloudtrail.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.0/templates/SCP/prevent-disable-cloudtrail.yaml
   StackName: !Sub '${resourcePrefix}-prevent-disable-cloudtrail'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -33,13 +32,12 @@ PreventDisableCloudtrail:
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
       - !Ref PlatformOU
-      - !Ref PolicyStagingOU
       - !Ref SynapseOU
       - !Ref BridgeOU
 
 PreventDisableCloudwatchConfigs:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/SCP/prevent-disable-cloudwatch-configs.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.0/templates/SCP/prevent-disable-cloudwatch-configs.yaml
   StackName: !Sub '${resourcePrefix}-prevent-disable-cloudwatch-configs'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -51,13 +49,12 @@ PreventDisableCloudwatchConfigs:
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
       - !Ref PlatformOU
-      - !Ref PolicyStagingOU
       - !Ref SynapseOU
       - !Ref BridgeOU
 
 DenyAllRegionsOutsideUsEast1:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/SCP/deny-all-regions-outside-us-east-1.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.0/templates/SCP/deny-all-regions-outside-us-east-1.yaml
   StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us-east-1'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -70,7 +67,7 @@ DenyAllRegionsOutsideUsEast1:
 
 DenyAllRegionsOutsideUs:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/SCP/deny-all-regions-outside-us.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.0/templates/SCP/deny-all-regions-outside-us.yaml
   StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:

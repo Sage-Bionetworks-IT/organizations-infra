@@ -60,7 +60,7 @@ HtanDevCIServiceAccount:
 
 WorkflowsNextflowCIServiceAccounts:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.2/templates/IAM/service-account.yaml
   StackName: workflows-nextflow-ci-service-account
   Parameters:
     ManagedPolicyArns:
@@ -70,6 +70,21 @@ WorkflowsNextflowCIServiceAccounts:
     Account:
       - !Ref WorkflowsNextflowProdAccount
       - !Ref WorkflowsNextflowDevAccount
+    Region: us-east-1
+
+# Service accounts for https://github.com/Sage-Bionetworks-Workflows/aws-workflows-nextflow-infra
+MobileHealthDataEngineeringCIServiceAccounts:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
+  StackName: mobile-health-dataengineering-ci-service-account
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref MobileHealthDataEngineeringDevAccount
+      - !Ref MobileHealthDataEngineeringProdAccount
     Region: us-east-1
 
 NlpSandboxCIServiceAccounts:

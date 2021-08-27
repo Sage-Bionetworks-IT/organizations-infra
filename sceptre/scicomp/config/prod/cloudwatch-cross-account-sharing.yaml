@@ -5,4 +5,4 @@ parameters:
     - "563295687221"  # org-sagebase-sandbox
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/cloudwatch-cross-account-sharing.yaml -O templates/remote/cloudwatch-cross-account-sharing.yaml"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/cloudwatch-cross-account-sharing.yaml -O templates/remote/cloudwatch-cross-account-sharing.yaml"

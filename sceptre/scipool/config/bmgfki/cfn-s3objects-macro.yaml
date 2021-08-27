@@ -1,0 +1,7 @@
+template_path: "remote/cfn-s3objects-macro.yaml"
+stack_name: "cfn-s3objects-macro"
+dependencies:
+  - "bmgfki/bootstrap.yaml"
+hooks:
+  before_launch:
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-s3objects-macro/master/cfn-s3objects-macro.yaml -O templates/remote/cfn-s3objects-macro.yaml"

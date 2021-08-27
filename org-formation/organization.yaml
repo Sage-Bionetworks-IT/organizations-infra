@@ -24,8 +24,7 @@ Organization:
       Accounts:
         - !Ref ScipoolDevAccount
         - !Ref SandboxAccount
-        - !Ref MobileHealthDataEngineeringAccount
-        - !Ref SageITAccount
+        - !Ref MobileHealthDataEngineeringDevAccount
         - !Ref HtanDevAccount
         - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
@@ -35,10 +34,13 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceProd
       Accounts:
+        - !Ref BmgfkiAccount
         - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
         - !Ref WorkflowsNextflowProdAccount
+        - !Ref MobileHealthDataEngineeringProdAccount
+        - !Ref CnbAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -62,8 +64,8 @@ Organization:
         - !Ref AdminCentralAccount
         - !Ref MasterAccount
         - !Ref LogCentralAccount
-        - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
+        - !Ref SecurityCentralAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -230,6 +232,15 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
 
+  BmgfkiAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-bmgfki
+      RootEmail: aws.bmgfki@sagebase.org
+      Alias: org-sagebase-bmgfki
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+
   ScicompAccount:
     Type: OC::ORG::Account
     Properties:
@@ -263,18 +274,44 @@ Organization:
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
-  MobileHealthDataEngineeringAccount:
+  CnbAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: mobilehealth-dataengineering
-      RootEmail: aws-mobilehealth-dataengineering@sagebase.org
-      Alias: org-sagebase-mobilehealth-dataengineering
+      AccountName: CnbAccount
+      RootEmail: cnb@sagebase.org
+      Alias: org-sagebase-cnb
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: SysBio
+        Department: CNB
+        Project: Challenges
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: cnb@sagebase.org
+
+  MobileHealthDataEngineeringDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-mobilehealth-dataengineering-dev
+      RootEmail: aws-mobilehealth-dataengineering-dev@sagebase.org
+      Alias: org-sagebase-mobilehealth-dataengineering-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: IBC
+        Project: mobile-toolbox
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-dev@sagebase.org
+
+  MobileHealthDataEngineeringProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-mobilehealth-dataengineering-prod
+      RootEmail: aws-mobilehealth-dataengineering-prod@sagebase.org
+      Alias: org-sagebase-mobilehealth-dataengineering-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: IBC
         Project: Infrastructure
         budget-alarm-threshold: 20000
-        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org
+        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-prod@sagebase.org
 
   iAtlasProdAccount:
     Type: OC::ORG::Account
@@ -311,8 +348,8 @@ Organization:
       Alias: org-sagebase-workflows-nextflow-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CompOnc
-        Project: imCORE
+        Department: IBC
+        Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-prod@sagebase.org
 
@@ -324,7 +361,7 @@ Organization:
       Alias: org-sagebase-workflows-nextflow-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CompOnc
-        Project: imCORE
+        Department: IBC
+        Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-dev@sagebase.org

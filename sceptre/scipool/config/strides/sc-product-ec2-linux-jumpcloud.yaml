@@ -10,7 +10,7 @@ dependencies:
   - "strides/sc-portfolio-ec2-external.yaml"
 parameters:
   ProvisioningArtifactGuidance: "DEPRECATED"
-  ProvisioningArtifactAction: "ALL_EXCEPT_LATEST"
+  ProvisioningArtifactAction: "ALL"
 sceptre_user_data:
   # force cloudformation to update stack by setting a random number to the latest product's description
   ProvisioningArtifactParameters: |
@@ -54,7 +54,7 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.13/ec2/sc-ec2-linux-jumpcloud.yaml'
       Name: 'v1.1.13'
-    - Description: !Sub 'Restore set_env_vars. {{ range(1, 10000) | random }}'
+    - Description: 'Restore set_env_vars. {{ range(1, 10000) | random }}'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.14/ec2/sc-ec2-linux-jumpcloud.yaml'
       Name: 'v1.1.14'

@@ -54,16 +54,6 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-  AWSIAMJordanKiangUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: jordan.kiang@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
   AWSIAMJohnHillUser:
     Type: 'AWS::IAM::User'
     Properties:
