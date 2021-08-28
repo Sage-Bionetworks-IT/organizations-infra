@@ -514,10 +514,11 @@ SsoWorkflowNextflowProdAdmin:
 
 SsoWorkflowNextflowTowerUser:
   Type: update-stacks
-  DependsOn: SsoViewer
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-tower-user'
-  StackDescription: 'SSO: Viewer role used by Nextflow Tower users with the ability to assume other IAM roles'
+  StackDescription: >-
+    SSO: Viewer role that is also used for assuming 
+    project-specific roles with additional access
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
@@ -531,22 +532,6 @@ SsoWorkflowNextflowTowerUser:
     principalId: !Ref workflowNextflowTowerUserGroup
     permissionSetName: 'TowerUser'
     managedPolicies: [ 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess' ]
-    inlinePolicy: >-
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-            "Effect": "Allow",
-            "Action": [
-              "sts:AssumeRole"
-            ],
-            "Resource": [
-              "arn:aws:iam::*-ReadWriteAccessRole",
-              "arn:aws:iam::*-ReadOnlyAccessRole",
-            ]
-          }
-        ]
-      }
 
 SsoWorkflowNextflowProdViewer:
   Type: update-stacks
