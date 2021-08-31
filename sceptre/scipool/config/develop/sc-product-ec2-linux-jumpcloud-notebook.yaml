@@ -65,7 +65,11 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.14/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
       Name: 'v1.1.14'
-    - Description: 'Synapse Credential passthrough. {{ range(1, 10000) | random }}'
+    - Description: 'Synapse Credential passthrough.'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.17/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
       Name: 'v1.1.17'
+    - Description: 'Allow more simultaneously open files. Reduce instance types. {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.21/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
+      Name: 'v1.1.21'
