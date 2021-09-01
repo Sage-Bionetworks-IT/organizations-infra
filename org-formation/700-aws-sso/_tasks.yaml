@@ -487,6 +487,8 @@ SsoWorkflowNextflowTowerViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowTowerViewerGroup
     permissionSetName: 'TowerViewer'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
     inlinePolicy: >-
       {
         "Version": "2012-10-17",
