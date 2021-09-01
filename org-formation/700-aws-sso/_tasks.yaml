@@ -66,15 +66,11 @@ Parameters:
     Type: String
     Default: '906769aa66-4c409d3e-e03d-4f46-aa24-840c977ef9d4'
 
-  workflowNextflowDevViewerGroup:
-    Type: String
-    Default: '906769aa66-eae974c2-3cad-4477-926a-17a2c7ed8e81'
-
   workflowNextflowProdAdminGroup:   #JC aws-workflow-nextflow-prod-admin
     Type: String
     Default: '906769aa66-5c67ab0f-1091-48f9-b5b9-37d8b99a446a'
 
-  workflowNextflowProdViewerGroup:
+  workflowNextflowTowerViewerGroup:   #JC aws-workflow-nextflow-tower-viewer
     Type: String
     Default: '906769aa66-6cdd2cc1-6d3d-49d8-b105-37c22bb3d402'
 
@@ -474,22 +470,92 @@ SsoWorkflowNextflowDevDeveloper:
           ]
       }
 
-SsoWorkflowNextflowDevViewer:
+SsoWorkflowNextflowTowerViewer:
   Type: update-stacks
-  DependsOn: SsoViewer
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-dev-viewer'
-  StackDescription: 'SSO: viewer role used by workflow nextflow developer group'
+  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-tower-viewer'
+  StackDescription: 'SSO: Limited viewer role used by workflow nextflow tower viewer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref WorkflowsNextflowDevAccount
+      Account:
+        - !Ref WorkflowsNextflowDevAccount
+        - !Ref WorkflowsNextflowProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref workflowNextflowDevViewerGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+    principalId: !Ref workflowNextflowTowerViewerGroup
+    permissionSetName: 'TowerViewer'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "TowerViewOnlyAccess",
+            "Action": [
+              "autoscaling:Describe*",
+              "batch:ListJobs",
+              "cloudformation:List*",
+              "cloudformation:DescribeStacks",
+              "cloudtrail:DescribeTrails",
+              "cloudtrail:LookupEvents",
+              "cloudwatch:List*",
+              "cloudwatch:Get*",
+              "ec2:DescribeAccountAttributes",
+              "ec2:DescribeAddresses",
+              "ec2:DescribeAvailabilityZones",
+              "ec2:DescribeBundleTasks",
+              "ec2:DescribeClassicLinkInstances",
+              "ec2:DescribeConversionTasks",
+              "ec2:DescribeCustomerGateways",
+              "ec2:DescribeDhcpOptions",
+              "ec2:DescribeExportTasks",
+              "ec2:DescribeFlowLogs",
+              "ec2:DescribeHost*",
+              "ec2:DescribeIdentityIdFormat",
+              "ec2:DescribeIdFormat",
+              "ec2:DescribeImage*",
+              "ec2:DescribeImport*",
+              "ec2:DescribeInstance*",
+              "ec2:DescribeInternetGateways",
+              "ec2:DescribeKeyPairs",
+              "ec2:DescribeMovingAddresses",
+              "ec2:DescribeNatGateways",
+              "ec2:DescribeNetwork*",
+              "ec2:DescribePlacementGroups",
+              "ec2:DescribePrefixLists",
+              "ec2:DescribeRegions",
+              "ec2:DescribeReserved*",
+              "ec2:DescribeRouteTables",
+              "ec2:DescribeSecurityGroups",
+              "ec2:DescribeSnapshot*",
+              "ec2:DescribeSpot*",
+              "ec2:DescribeSubnets",
+              "ec2:DescribeTags",
+              "ec2:DescribeVolume*",
+              "ec2:DescribeVpc*",
+              "ec2:DescribeVpnGateways",
+              "ecs:List*",
+              "ecs:Describe*",
+              "elasticloadbalancing:DescribeListeners",
+              "elasticloadbalancing:DescribeLoadBalancers",
+              "elasticloadbalancing:DescribeTargetGroups",
+              "elasticfilesystem:DescribeFileSystems",
+              "elasticloadbalancing:DescribeInstanceHealth",
+              "elasticloadbalancing:DescribeTargetHealth",
+              "fsx:DescribeFileSystems",
+              "iam:List*",
+              "iam:GetAccountSummary",
+              "iam:GetLoginProfile",
+              "lambda:List*",
+              "logs:Describe*",
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+          }
+        ]
+      }
 
 SsoWorkflowNextflowProdAdmin:
   Type: update-stacks
@@ -507,23 +573,6 @@ SsoWorkflowNextflowProdAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
-SsoWorkflowNextflowProdViewer:
-  Type: update-stacks
-  DependsOn: SsoViewer
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-prod-viewer'
-  StackDescription: 'SSO: viewer role used by workflow nextflow viewer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref WorkflowsNextflowProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref workflowNextflowProdViewerGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
 SsoSynapseAdmin:
   Type: update-stacks
