@@ -472,7 +472,7 @@ SsoWorkflowNextflowDevDeveloper:
 
 SsoWorkflowNextflowTowerViewer:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.2/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-tower-viewer'
   StackDescription: 'SSO: Limited viewer role used by workflow nextflow tower viewer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
