@@ -551,7 +551,7 @@ SsoWorkflowNextflowTowerViewer:
               "iam:GetAccountSummary",
               "iam:GetLoginProfile",
               "lambda:List*",
-              "logs:Describe*",
+              "logs:Describe*"
             ],
             "Effect": "Allow",
             "Resource": "*"
