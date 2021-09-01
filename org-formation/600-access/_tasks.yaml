@@ -115,7 +115,7 @@ NlpSandboxCIServiceAccounts:
       - !Ref NlpSandboxAccount
     Region: us-east-1
 
-CnbCIServiceAccounts:
+CnbCIServiceAccount:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
   StackName: cnb-ci-service-account
@@ -126,7 +126,7 @@ CnbCIServiceAccounts:
     IncludeMasterAccount: false
     Account:
       - !Ref CnbAccount
-    Region: us-east-1
+    Region: !Ref primaryRegion
 
 # =====================================================================================================
 # Some of our accounts, like org-sagebase-strides, are not part of the Sage organziation therefore we need
