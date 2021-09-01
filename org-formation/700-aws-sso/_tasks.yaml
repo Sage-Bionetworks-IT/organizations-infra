@@ -480,7 +480,7 @@ SsoWorkflowNextflowTowerViewer:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: 
+      Account:
         - !Ref WorkflowsNextflowDevAccount
         - !Ref WorkflowsNextflowProdAccount
   Parameters:
