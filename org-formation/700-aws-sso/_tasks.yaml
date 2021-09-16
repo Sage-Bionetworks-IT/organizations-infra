@@ -698,7 +698,7 @@ SsoKubernetesDeveloper:
                   "Resource": "*",
                   "Condition": {
                       "StringEquals": {
-                          "iam:PassedToService": "eks.amazonaws.com"
+                          "iam:PassedToService": "arn:aws:iam::563295687221:role/accounts-EksServiceRole-MU4BSZOHRHCG"
                       }
                   }
               }
