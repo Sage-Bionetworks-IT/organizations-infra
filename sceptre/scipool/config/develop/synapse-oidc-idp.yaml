@@ -10,4 +10,4 @@ parameters:
   ThumbprintList: "9e99a48a9960b14926bb7f3b02e22da2b0ab7280"
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-oidc-idp/master/cfn-cr-oidc-idp.yaml -N -P templates/remote"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-oidc-idp/master/cfn-cr-oidc-idp.yaml -O templates/remote/cfn-cr-oidc-idp.yaml"

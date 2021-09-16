@@ -1,0 +1,87 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: S3 private encrypted ServiceCatalog product. (fdp-1p4da46rq)
+Parameters:
+  ProductName:
+    Type: String
+    Description: Name of the product that will be visible to the end user
+    Default: 'S3: Private Encrypted Bucket'
+  ProvisioningArtifactActive:
+    Description: >-
+      Indicates whether the product version is active. Inactive provisioning artifacts
+      are invisible to end users. End users cannot launch or update a provisioned product
+      from an inactive provisioning artifact
+    Type: String
+    AllowedValues:
+      - "True"
+      - "False"
+    ConstraintDescription: "Valid values are True|False"
+    Default: "True"
+  ProvisioningArtifactGuidance:
+    Description: 'The value to apply to the product version guidance'
+    Type: String
+    AllowedValues:
+      - "DEFAULT"
+      - "DEPRECATED"
+    ConstraintDescription: "Valid values are DEFAULT|DEPRECATED"
+    Default: "DEFAULT"
+  ProvisioningArtifactAction:
+    Description: >-
+      The action type used to apply ProvisioningArtifactActive and ProvisioningArtifactGuidance
+      to provisioning artifacts. ALL to apply to all artifacts, ALL_EXCEPT_LATEST to apply to
+      all except the latest artifact
+    Type: String
+    AllowedValues:
+      - "ALL"
+      - "ALL_EXCEPT_LATEST"
+    ConstraintDescription: "Valid values are ALL|ALL_EXCEPT_LATEST"
+    Default: "ALL"
+Resources:
+  scs3product:
+    Type: AWS::ServiceCatalog::CloudFormationProduct
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002  # missing `owner` property error -> it's inside of included products.yaml
+            - E3003  # invalid property `Fn::Transform` error -> cfn-lint bug
+    Properties:
+      Name: !Ref ProductName
+      Description: This product builds an AWS S3 bucket encrypted with private
+        access accessible from any source.
+      ProvisioningArtifactParameters:
+        {{ sceptre_user_data.ProvisioningArtifactParameters|indent(8) }}
+      'Fn::Transform':
+        Name: 'AWS::Include'
+        Parameters:
+          Location: "s3://cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz/scipool/products.yaml"
+      ReplaceProvisioningArtifacts: true
+  Associates3:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-s3-basic-SCS3portfolioId'
+      ProductId: !Ref scs3product
+  constraintec2linux:
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    DependsOn: Associates3
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-s3-basic-SCS3portfolioId'
+      ProductId: !Ref 'scs3product'
+      RoleArn: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-s3-launchrole-LaunchRoleArn'
+  UpdateProductVersions:
+    Type: Custom::ProductProvider
+    Properties:
+      ReDeploy: '{{ range(1, 1000000) | random }}'  # force CFN to redeploy this resource
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-sc-product-provider-UpdateProvisioningArtifactFunctionArn'
+      ProductId: !Ref scs3product
+      ProvisioningArtifactActive: !Ref ProvisioningArtifactActive
+      ProvisioningArtifactGuidance: !Ref ProvisioningArtifactGuidance
+      ProvisioningArtifactAction: !Ref ProvisioningArtifactAction
+Outputs:
+  ProductId:
+    Value: !Ref 'scs3product'
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProductId'

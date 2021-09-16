@@ -9,4 +9,4 @@ parameters:
   VpnCidr: 10.1.0.0/16
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/peer-route-config.yaml -N -P templates/remote"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/peer-route-config.yaml -O templates/remote/peer-route-config.yaml"

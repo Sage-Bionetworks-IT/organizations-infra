@@ -1,0 +1,2 @@
+template_path: alb-notebook-access-logsbucket.yaml
+stack_name: alb-notebook-access-logsbucket

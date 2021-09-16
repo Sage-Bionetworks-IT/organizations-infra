@@ -22,9 +22,8 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceDev
       Accounts:
-        - !Ref ScipoolDevAccount
         - !Ref SandboxAccount
-        - !Ref MobileHealthDataEngineeringAccount
+        - !Ref MobileHealthDataEngineeringDevAccount
         - !Ref HtanDevAccount
         - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
@@ -34,19 +33,11 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceProd
       Accounts:
-        - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
         - !Ref WorkflowsNextflowProdAccount
-#              StridesPoolAccount must be managed outside of orgf but should have parity with this OU
-
-  PlatformDevOU:
-    Type: OC::ORG::OrganizationalUnit
-    Properties:
-      OrganizationalUnitName: PlatformDev
-      OrganizationalUnits:
-        - !Ref SynapseDevOU
-        - !Ref BridgeDevOU
+        - !Ref MobileHealthDataEngineeringProdAccount
+        - !Ref CnbAccount
 
   PlatformProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -72,9 +63,9 @@ Organization:
         - !Ref AdminCentralAccount
         - !Ref MasterAccount
         - !Ref LogCentralAccount
-        - !Ref SecurityCentralAccount
         - !Ref ImageCentralAccount
         - !Ref SageITAccount
+        - !Ref SecurityCentralAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -83,7 +74,16 @@ Organization:
       Accounts:
         - !Ref ITSandboxAccount
 
-  SynapseProdOU:
+  ServiceCatalogOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ServiceCatalog
+      Accounts:
+        - !Ref BmgfkiAccount
+        - !Ref ScipoolDevAccount
+        - !Ref ScipoolProdAccount
+
+  SynapseOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: SynapseProd
@@ -115,7 +115,7 @@ Organization:
   BridgeDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Bridge Dev
+      AccountName: org-sagebase-bridgedevelop
       AccountId: '420786776710'
       RootEmail: bridge.dev@sagebase.org
       Alias: org-sagebase-bridgedevelop
@@ -125,7 +125,7 @@ Organization:
   BridgeProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Bridge IT
+      AccountName: org-sagebase-bridgeprod
       AccountId: '649232250620'
       RootEmail: bridgeIT@sagebase.org
       Alias: org-sagebase-bridgeprod
@@ -135,7 +135,7 @@ Organization:
   SynapseDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Dev Stack
+      AccountName: org-sagebase-synapsedev
       AccountId: '449435941126'
       RootEmail: synapse.dev@sagebase.org
       Alias: org-sagebase-synapsedev
@@ -145,7 +145,7 @@ Organization:
   SynapseDWAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: SynapseDW
+      AccountName: org-sagebase-synapsedw
       AccountId: '383874245509'
       RootEmail: synapse.dw@sagebase.org
       Alias: org-sagebase-synapsedw
@@ -165,7 +165,7 @@ Organization:
   TransitAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: transit
+      AccountName: org-sagebase-transit
       AccountId: '153370007719'
       RootEmail: aws.transit@sagebase.org
       Alias: org-sagebase-transit
@@ -175,7 +175,7 @@ Organization:
   AdminCentralAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: AdminCentral
+      AccountName: org-sagebase-admincentral
       AccountId: '745159704268'
       RootEmail: aws.admincentral@sagebase.org
       Alias: org-sagebase-admincentral
@@ -185,7 +185,7 @@ Organization:
   SageITAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Sage Bionetworks AWS IT
+      AccountName: org-sagebase-sageit
       AccountId: '797640923903'
       RootEmail: aws-it@sagebase.org
       Alias: org-sagebase-sageit
@@ -195,7 +195,7 @@ Organization:
   LogCentralAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: logcentral
+      AccountName: org-sagebase-logcentral
       AccountId: '231505186444'
       RootEmail: aws.logcentral@sagebase.org
       Alias: org-sagebase-logcentral
@@ -206,7 +206,7 @@ Organization:
   SecurityCentralAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: aws-securitycentral
+      AccountName: org-sagebase-securitycentral
       AccountId: '140124849929'
       RootEmail: aws.securitycentral@sagebase.org
       Alias: org-sagebase-securitycentral
@@ -216,7 +216,7 @@ Organization:
   ImageCentralAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: AMI Repository
+      AccountName: org-sagebase-imagecentral
       AccountId: '867686887310'
       RootEmail: aws.amirepo@sagebase.org
       Alias: org-sagebase-imagecentral
@@ -226,7 +226,7 @@ Organization:
   ITSandboxAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: it-sandbox
+      AccountName: org-sagebase-itsandbox
       AccountId: '804034162148'
       RootEmail: aws.itsandbox@sagebase.org
       Alias: org-sagebase-itsandbox
@@ -236,7 +236,7 @@ Organization:
   ScipoolDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: scipooldev
+      AccountName: org-sagebase-scipooldev
       AccountId: '465877038949'
       RootEmail: aws.scipooldev@sagebase.org
       Alias: org-sagebase-scipooldev
@@ -253,10 +253,19 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
 
+  BmgfkiAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-bmgfki
+      RootEmail: aws.bmgfki@sagebase.org
+      Alias: org-sagebase-bmgfki
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+
   ScicompAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: scicomp
+      AccountName: org-sagebase-scicomp
       AccountId: '055273631518'
       RootEmail: aws.scicomp@sagebase.org
       Alias: org-sagebase-scicomp
@@ -266,7 +275,7 @@ Organization:
   SandboxAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: Sandbox
+      AccountName: org-sagebase-sandbox
       AccountId: '563295687221'
       RootEmail: aws.sandbox@sagebase.org
       Alias: org-sagebase-sandbox
@@ -286,18 +295,44 @@ Organization:
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
-  MobileHealthDataEngineeringAccount:
+  CnbAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: mobilehealth-dataengineering
-      RootEmail: aws-mobilehealth-dataengineering@sagebase.org
-      Alias: org-sagebase-mobilehealth-dataengineering
+      AccountName: CnbAccount
+      RootEmail: cnb@sagebase.org
+      Alias: org-sagebase-cnb
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: SysBio
+        Department: CNB
+        Project: Challenges
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: cnb@sagebase.org
+
+  MobileHealthDataEngineeringDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-mobilehealth-dataengineering-dev
+      RootEmail: aws-mobilehealth-dataengineering-dev@sagebase.org
+      Alias: org-sagebase-mobilehealth-dataengineering-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: IBC
+        Project: mobile-toolbox
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-dev@sagebase.org
+
+  MobileHealthDataEngineeringProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-mobilehealth-dataengineering-prod
+      RootEmail: aws-mobilehealth-dataengineering-prod@sagebase.org
+      Alias: org-sagebase-mobilehealth-dataengineering-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: IBC
         Project: Infrastructure
         budget-alarm-threshold: 20000
-        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering@sagebase.org
+        budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-prod@sagebase.org
 
   iAtlasProdAccount:
     Type: OC::ORG::Account
@@ -334,8 +369,8 @@ Organization:
       Alias: org-sagebase-workflows-nextflow-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CompOnc
-        Project: imCORE
+        Department: IBC
+        Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-prod@sagebase.org
 
@@ -347,7 +382,7 @@ Organization:
       Alias: org-sagebase-workflows-nextflow-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CompOnc
-        Project: imCORE
+        Department: IBC
+        Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-dev@sagebase.org

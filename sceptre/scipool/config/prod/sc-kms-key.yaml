@@ -5,6 +5,9 @@ stack_tags:
   Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
-  - "prod/jumpcloud-idp.yaml"
+  - "prod/bootstrap.yaml"
 parameters:
-  AdminRoleArn: !stack_output_external jumpcloud-idp::ScipoolprodAdminSamlProviderRoleArn
+  AdminRoleArns:
+    - !stack_output_external bootstrap::AWSIAMCfServiceRoleArn
+    - "arn:aws:sts::237179673806:assumed-role/AWSReservedSSO_Administrator_56cd956ee776e6c0/khai.do@sagebase.org"
+    - "arn:aws:sts::237179673806:assumed-role/AWSReservedSSO_Administrator_56cd956ee776e6c0/x.schildwachter@sagebase.org"

@@ -5,7 +5,6 @@ stack_tags:
   Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 parameters:
-  TransitAdminMetadata: !file_contents idp/jumpcloud/transit-admin.xml
   TransitVpnMetadata: !file_contents idp/jumpcloud/transitvpn.xml
   TransitVpnSspMetadata: !file_contents idp/jumpcloud/transitvpnssp.xml
 dependencies:

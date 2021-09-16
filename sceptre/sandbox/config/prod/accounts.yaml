@@ -2,4 +2,3 @@ template_path: accounts.yaml
 stack_name: accounts
 dependencies:
   - prod/essentials.yaml
-  - prod/iam-policies.yaml

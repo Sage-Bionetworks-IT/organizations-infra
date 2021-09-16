@@ -6,4 +6,4 @@ parameters:
   PMCExternalID: !ssm /infra/PMCExternalID
 hooks:
   before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/master/ParkMyCloud.yaml -N -P templates/remote"
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/ParkMyCloud.yaml -O templates/remote/ParkMyCloud.yaml"
