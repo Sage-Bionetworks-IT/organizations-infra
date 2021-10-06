@@ -1,7 +1,9 @@
 template_path: remote/lambda-sc-bucket-cleanup.yaml
 stack_name: lambda-sc-bucket-cleanup
 parameters:
+  ArchivedPeriod: "2"
   EnableSchedule: "true"
+  Schedule: "rate(1 day)"
 stack_tags:
   Department: "Platform"
   Project: "Infrastructure"
