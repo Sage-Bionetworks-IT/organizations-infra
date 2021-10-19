@@ -28,6 +28,8 @@ GuardDuty:
         - !Ref ScicompAccount
         - !Ref ScipoolProdAccount
         - !Ref SynapseProdAccount
+        - !Ref WorkflowsNextflowDevAccount
+        - !Ref WorkflowsNextflowProdAccount
       IncludeMasterAccount: false
     AllBinding:
       Account:
@@ -37,6 +39,8 @@ GuardDuty:
         - !Ref ScicompAccount
         - !Ref ScipoolProdAccount
         - !Ref SynapseProdAccount
+        - !Ref WorkflowsNextflowDevAccount
+        - !Ref WorkflowsNextflowProdAccount
       IncludeMasterAccount: false
   Parameters:
     resourcePrefix: !Ref resourcePrefix
