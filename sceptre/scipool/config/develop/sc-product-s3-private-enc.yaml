@@ -41,7 +41,11 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.23/s3/sc-s3-encrypted-ra.yaml'
       Name: 'v1.1.23'
-    - Description:  'Enable intelligent tiering. {{ range(1, 10000) | random }}'
+    - Description:  'Enable intelligent tiering.'
       Info:
         LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.24/s3/sc-s3-encrypted-ra.yaml'
       Name: 'v1.1.24'
+    - Description:  'Remove option to add arbitrary IAM ARN. {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL:  'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.25/s3/sc-s3-encrypted-ra.yaml'
+      Name: 'v1.1.25'
