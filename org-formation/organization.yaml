@@ -22,7 +22,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceDev
       Accounts:
-        - !Ref ScipoolDevAccount
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringDevAccount
         - !Ref HtanDevAccount
@@ -34,8 +33,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceProd
       Accounts:
-        - !Ref BmgfkiAccount
-        - !Ref ScipoolProdAccount
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
         - !Ref WorkflowsNextflowProdAccount
@@ -73,6 +70,15 @@ Organization:
       OrganizationalUnitName: PolicyStaging
       Accounts:
         - !Ref ITSandboxAccount
+
+  ServiceCatalogOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ServiceCatalog
+      Accounts:
+        - !Ref BmgfkiAccount
+        - !Ref ScipoolDevAccount
+        - !Ref ScipoolProdAccount
 
   SynapseOU:
     Type: OC::ORG::OrganizationalUnit
@@ -350,7 +356,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
-        budget-alarm-threshold: 10000
+        budget-alarm-threshold: 3000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-prod@sagebase.org
 
   WorkflowsNextflowDevAccount:
@@ -363,5 +369,5 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
-        budget-alarm-threshold: 10000
+        budget-alarm-threshold: 3000
         budget-alarm-threshold-email-recipient: aws-workflows-nextflow-dev@sagebase.org

@@ -54,6 +54,7 @@ Resources:
             Action:
               - organizations:DescribeOrganization
               - servicecatalog:DescribeProvisionedProduct
+              - cloudwatch:GetMetricData  # access to EC2 monitoring info
             Resource: "*"
   SCEnduserRemoteAccessPolicy:
     Type: AWS::IAM::ManagedPolicy

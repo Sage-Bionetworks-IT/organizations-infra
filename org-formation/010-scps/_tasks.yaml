@@ -1,22 +1,23 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
-PreventDisableGuardDuty:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.0/templates/SCP/prevent-disable-guardduty.yaml
-  StackName: !Sub '${resourcePrefix}-prevent-disable-guardduty'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  Parameters:
-    targetIds:
-      - !Ref ItDevOU
-      - !Ref ItProdOU
-      - !Ref ScienceDevOU
-      - !Ref ScienceProdOU
-      - !Ref PlatformOU
-      - !Ref SynapseOU
-      - !Ref BridgeOU
+#PreventDisableGuardDuty:
+#  Type: update-stacks
+#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.0/templates/SCP/prevent-disable-guardduty.yaml
+#  StackName: !Sub '${resourcePrefix}-prevent-disable-guardduty'
+#  DefaultOrganizationBindingRegion: !Ref primaryRegion
+#  DefaultOrganizationBinding:
+#    IncludeMasterAccount: true
+#  Parameters:
+#    targetIds:
+#      - !Ref ItDevOU
+#      - !Ref ItProdOU
+#      - !Ref ScienceDevOU
+#      - !Ref ScienceProdOU
+#      - !Ref PlatformOU
+#      - !Ref SynapseOU
+#      - !Ref BridgeOU
+#      - !Ref ServiceCatalogOU
 
 PreventDisableCloudtrail:
   Type: update-stacks
@@ -34,6 +35,7 @@ PreventDisableCloudtrail:
       - !Ref PlatformOU
       - !Ref SynapseOU
       - !Ref BridgeOU
+      - !Ref ServiceCatalogOU
 
 PreventDisableCloudwatchConfigs:
   Type: update-stacks
@@ -51,6 +53,7 @@ PreventDisableCloudwatchConfigs:
       - !Ref PlatformOU
       - !Ref SynapseOU
       - !Ref BridgeOU
+      - !Ref ServiceCatalogOU
 
 DenyAllRegionsOutsideUsEast1:
   Type: update-stacks
@@ -75,3 +78,4 @@ DenyAllRegionsOutsideUs:
   Parameters:
     targetIds:
       - !Ref ScienceDevOU
+      - !Ref ServiceCatalogOU

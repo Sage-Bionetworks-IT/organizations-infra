@@ -1,0 +1,13 @@
+template_path: remote/lambda-sc-bucket-cleanup.yaml
+stack_name: lambda-sc-bucket-cleanup
+parameters:
+  ArchivedPeriod: "2"
+  EnableSchedule: "true"
+  Schedule: "rate(1 day)"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+hooks:
+  before_launch:
+    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-sc-bucket-cleanup/1.0.2/lambda-sc-bucket-cleanup.yaml -O templates/remote/lambda-sc-bucket-cleanup.yaml"
