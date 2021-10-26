@@ -1,4 +1,5 @@
-template_path: VPCPeer.yaml
+template:
+  path: VPCPeer.yaml
 stack_name: peering-nlpsandbox
 parameters:
   PeerVPC: vpc-0f809761f28e9e350    # nlpsandbox VPC ID

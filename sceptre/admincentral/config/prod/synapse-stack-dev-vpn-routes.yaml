@@ -1,4 +1,5 @@
-template_path: synapse-stack-vpn-routes.yaml
+template:
+  path: synapse-stack-vpn-routes.yaml
 stack_name: synapse-stack-dev-vpn-routes
 parameters:
   # CIDR for the new Synapse dev stack
