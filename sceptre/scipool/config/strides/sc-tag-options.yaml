@@ -1,5 +1,6 @@
 # Tag options for internal Sage teams
-template_path: "sc-tag-options.j2"
+template:
+  path: "sc-tag-options.j2"
 stack_name: "sc-tag-options"
 stack_tags:
   Department: "Platform"

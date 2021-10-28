@@ -1,4 +1,6 @@
-template_path: remote/peer-route-config.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/peer-route-config.yaml
 stack_name: peer-vpn-cesspoolvpc
 dependencies:
   - develop/cesspoolvpc.yaml
@@ -7,6 +9,3 @@ parameters:
   VpcPrivateRouteTable: "rtb-094f2336c06807361"
   VpcPublicRouteTable: "rtb-036d799b77abcd1fb"
   VpnCidr: "10.1.0.0/16"
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/peer-route-config.yaml -O templates/remote/peer-route-config.yaml"

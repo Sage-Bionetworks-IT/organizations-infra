@@ -1,4 +1,5 @@
-template_path: "sc-ec2-actions.yaml"
+template:
+  path: "sc-ec2-actions.yaml"
 stack_name: "sc-ec2-actions"
 dependencies:
   - "strides/sc-enduser-iam.yaml"

@@ -1,4 +1,6 @@
-template_path: remote/cfn-cr-alb-rule.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/master/cfn-cr-alb-rule.yaml
 stack_name: cfn-cr-alb-rule
 stack_tags:
   Department: "Platform"
@@ -11,6 +13,3 @@ parameters:
   OidcTokenEndpoint: 'https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token'
   OidcUserInfoEndpoint: 'https://repo-prod.prod.sagebase.org/auth/v1/oauth2/userinfo'
   OidcClientId: '100055'
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/master/cfn-cr-alb-rule.yaml -O templates/remote/cfn-cr-alb-rule.yaml"

@@ -1,4 +1,5 @@
-template_path: alb-notebook-access.yaml
+template:
+  path: alb-notebook-access.yaml
 stack_name: alb-notebook-access
 dependencies:
   - prod/alb-notebook-access-logsbucket.yaml

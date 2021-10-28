@@ -1,4 +1,5 @@
-template_path: "cfn-ssm-param-policy.yaml"
+template:
+  path: "cfn-ssm-param-policy.yaml"
 stack_name: "cfn-ssm-param-policy"
 stack_tags:
   Department: "Platform"
