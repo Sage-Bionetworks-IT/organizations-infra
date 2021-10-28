@@ -1,4 +1,6 @@
-template_path: remote/vpc.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/vpc.yaml
 stack_name: defaultvpc
 dependencies:
   - prod/bootstrap.yaml
@@ -7,6 +9,3 @@ parameters:
   PrivateSubnetZones: "us-east-1c, us-east-1d, us-east-1e"
   PublicSubnetZones: "us-east-1c, us-east-1d, us-east-1e"
   VpcName: sagedefaultvpc
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/vpc.yaml -O templates/remote/vpc.yaml"

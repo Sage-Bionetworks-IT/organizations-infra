@@ -1,7 +1,6 @@
-template_path: "remote/cfn-explode-macro.yaml"
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-explode-macro/master/cfn-explode-macro.yaml
 stack_name: "cfn-explode-macro"
 dependencies:
   - "prod/bootstrap.yaml"
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-explode-macro/master/cfn-explode-macro.yaml -O templates/remote/cfn-explode-macro.yaml"

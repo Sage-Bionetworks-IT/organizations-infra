@@ -1,4 +1,6 @@
-template_path: remote/peer-route-config.yaml
+template:
+  type: http
+  url: remote/peer-route-config.yaml
 stack_name: peer-vpc-admincentral
 parameters:
   PeeringConnectionId: pcx-3f28d957

@@ -1,4 +1,6 @@
-template_path: "remote/transit-gateway-spoke.yaml"
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/transit-gateway-spoke.yaml
 stack_name: "tgw-spoke-sandcastlevpc"
 stack_tags:
   Department: "Platform"
@@ -16,6 +18,3 @@ parameters:
     - !stack_output_external sandcastlevpc::PrivateSubnet2
   # shared TGW, https://github.com/Sage-Bionetworks/transit-infra/blob/master/templates/transit-gateway.j2
   TransitGatewayId: "tgw-0004e7e3454cacac5"
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/transit-gateway-spoke.yaml -O templates/remote/transit-gateway-spoke.yaml"
