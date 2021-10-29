@@ -7,5 +7,7 @@ stack_tags:
 parameters:
   StridesAdminMetadata: !file_contents idp/jumpcloud/strides-admin.xml
   StridesCommunityMgrMetadata: !file_contents idp/jumpcloud/strides-communitymgr.xml
+  StridesViewernMetadata: !file_contents idp/jumpcloud/strides-viewer.xml
+  StridesAuditorMetadata: !file_contents idp/jumpcloud/strides-auditor.xml
 dependencies:
   - "strides/cfn-cr-saml-provider.yaml"
