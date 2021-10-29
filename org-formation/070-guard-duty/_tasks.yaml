@@ -23,36 +23,24 @@ GuardDuty:
       Account: !Ref LogCentralAccount
     MemberBinding:
       Account:
-        - !Ref BmgfkiAccount
-        - !Ref BridgeProdAccount
-        - !Ref CnbAccount
-        - !Ref HtanDevAccount
-        - !Ref iAtlasProdAccount
-        - !Ref MobileHealthDataEngineeringDevAccount
-        - !Ref MobileHealthDataEngineeringProdAccount
-        - !Ref NlpSandboxAccount
-        - !Ref ScicompAccount
-        - !Ref ScipoolProdAccount
-        - !Ref SynapseProdAccount
-        - !Ref WorkflowsNextflowDevAccount
-        - !Ref WorkflowsNextflowProdAccount
+        - !Ref BridgeOU
+        - !Ref ItProdOU
+        - !Ref PolicyStagingOU
+        - !Ref ServiceCatalogOU
+        - !Ref ScienceDevOU
+        - !Ref ScienceProdOU
+        - !Ref SynapseOU
       IncludeMasterAccount: false
     AllBinding:
       Account:
         - !Ref accountId
-        - !Ref BmgfkiAccount
-        - !Ref BridgeProdAccount
-        - !Ref CnbAccount
-        - !Ref HtanDevAccount
-        - !Ref iAtlasProdAccount
-        - !Ref MobileHealthDataEngineeringDevAccount
-        - !Ref MobileHealthDataEngineeringProdAccount
-        - !Ref NlpSandboxAccount
-        - !Ref ScicompAccount
-        - !Ref ScipoolProdAccount
-        - !Ref SynapseProdAccount
-        - !Ref WorkflowsNextflowDevAccount
-        - !Ref WorkflowsNextflowProdAccount
+        - !Ref BridgeOU
+        - !Ref ItProdOU
+        - !Ref PolicyStagingOU
+        - !Ref ServiceCatalogOU
+        - !Ref ScienceDevOU
+        - !Ref ScienceProdOU
+        - !Ref SynapseOU
       IncludeMasterAccount: false
   Parameters:
     resourcePrefix: !Ref resourcePrefix
