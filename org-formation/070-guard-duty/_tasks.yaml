@@ -25,6 +25,12 @@ GuardDuty:
       Account:
         - !Ref BmgfkiAccount
         - !Ref BridgeProdAccount
+        - !Ref CnbAccount
+        - !Ref HtanDevAccount
+        - !Ref iAtlasProdAccount
+        - !Ref MobileHealthDataEngineeringDevAccount
+        - !Ref MobileHealthDataEngineeringProdAccount
+        - !Ref NlpSandboxAccount
         - !Ref ScicompAccount
         - !Ref ScipoolProdAccount
         - !Ref SynapseProdAccount
@@ -36,6 +42,12 @@ GuardDuty:
         - !Ref accountId
         - !Ref BmgfkiAccount
         - !Ref BridgeProdAccount
+        - !Ref CnbAccount
+        - !Ref HtanDevAccount
+        - !Ref iAtlasProdAccount
+        - !Ref MobileHealthDataEngineeringDevAccount
+        - !Ref MobileHealthDataEngineeringProdAccount
+        - !Ref NlpSandboxAccount
         - !Ref ScicompAccount
         - !Ref ScipoolProdAccount
         - !Ref SynapseProdAccount
