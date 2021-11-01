@@ -1,4 +1,5 @@
-template_path: "sc-enduser-iam.yaml"
+template:
+  path: "sc-enduser-iam.yaml"
 stack_name: "sc-enduser-iam"
 dependencies:
   - "prod/essentials.yaml"

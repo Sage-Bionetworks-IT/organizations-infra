@@ -1,4 +1,5 @@
-template_path: "sc-s3-launchrole.yaml"
+template:
+  path: "sc-s3-launchrole.yaml"
 stack_name: "sc-s3-launchrole"
 dependencies:
   - "strides/essentials.yaml"

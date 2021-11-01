@@ -1,4 +1,5 @@
-template_path: "sc-kms-key.yaml"
+template:
+  path: "sc-kms-key.yaml"
 stack_name: "sc-kms-key"
 stack_tags:
   Department: "Platform"

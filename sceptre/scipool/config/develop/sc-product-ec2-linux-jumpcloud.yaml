@@ -1,4 +1,5 @@
-template_path: "sc-product-ec2-linux-jumpcloud.j2"
+template:
+  path: "sc-product-ec2-linux-jumpcloud.j2"
 stack_name: "sc-product-ec2-linux-jumpcloud"
 stack_tags:
   Department: "Platform"

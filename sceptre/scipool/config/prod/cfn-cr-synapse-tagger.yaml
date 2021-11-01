@@ -1,9 +1,8 @@
-template_path: remote/cfn-cr-synapse-tagger.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-synapse-tagger/0.1.0/cfn-cr-synapse-tagger.yaml
 stack_name: cfn-cr-synapse-tagger
 stack_tags:
   Department: "Platform"
   Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-synapse-tagger/0.1.0/cfn-cr-synapse-tagger.yaml -O templates/remote/cfn-cr-synapse-tagger.yaml"

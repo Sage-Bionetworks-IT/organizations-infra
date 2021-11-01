@@ -1,4 +1,5 @@
-template_path: "sc-product-ec2-linux-notebook-write-to-ssm-policy.yaml"
+template:
+  path: "sc-product-ec2-linux-notebook-write-to-ssm-policy.yaml"
 stack_name: "sc-product-ec2-linux-notebook-write-to-ssm-policy"
 stack_tags:
   Department: "Platform"
