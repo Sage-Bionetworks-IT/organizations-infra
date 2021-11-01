@@ -1,4 +1,5 @@
-template_path: s3webredirect.yaml
+template:
+  path: s3webredirect.yaml
 stack_name: bsmnredirect
 stack_tags:
   Department: IT

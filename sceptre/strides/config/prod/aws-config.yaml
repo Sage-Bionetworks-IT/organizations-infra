@@ -1,4 +1,5 @@
-template_path: "aws-config.yaml"
+template:
+  path: "aws-config.yaml"
 stack_name: "aws-config"
 stack_tags:
   Department: "Platform"

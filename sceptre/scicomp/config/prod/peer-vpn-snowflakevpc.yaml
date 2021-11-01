@@ -1,10 +1,9 @@
-template_path: remote/peer-route-config.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/peer-route-config.yaml
 stack_name: peer-vpn-snowflakevpc
 parameters:
   PeeringConnectionId: pcx-08470a7f8d2a734e7
   VpcPrivateRouteTable: rtb-01e3641c8ed3c91c6
   VpcPublicRouteTable: rtb-020046b1a7632fb61
   VpnCidr: 10.1.0.0/16
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/peer-route-config.yaml -O templates/remote/peer-route-config.yaml"

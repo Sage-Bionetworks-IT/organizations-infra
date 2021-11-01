@@ -1,4 +1,6 @@
-template_path: remote/s3-redirector.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/s3-redirector.yaml
 stack_name: vpn-sageit-org-redirector
 dependencies:
   - prod/sageit-org-acm-cert.yaml
@@ -16,6 +18,3 @@ parameters:
   TargetHostName: "self-service.clientvpn.amazonaws.com"
   # and a path to our specific config
   TargetKey: "endpoints/cvpn-endpoint-055bd9db65af09d63"
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/s3-redirector.yaml -O templates/remote/s3-redirector.yaml"

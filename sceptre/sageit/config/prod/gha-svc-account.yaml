@@ -1,4 +1,6 @@
-template_path: remote/service-account.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/IAM/service-account.yaml
 stack_name: gha-svc-account
 parameters:
   PolicyDocument: >-
@@ -22,6 +24,3 @@ parameters:
         }
       ]
     }
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/IAM/service-account.yaml -O templates/remote/service-account.yaml"
