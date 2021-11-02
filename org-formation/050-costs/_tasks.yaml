@@ -1,0 +1,18 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+AnomalyDetectorServices:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.3/templates/Cost/anomaly-detector-services.yaml
+  StackName: !Sub '${resourcePrefix}-anomaly-detector-services'
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
+  Parameters:
+    Subscribers: [
+      {
+        "Type": "EMAIL",
+        "Address": !GetAtt CurrentAccount.RootEmail
+      }
+    ]
