@@ -160,7 +160,7 @@ Outputs:
   StridesAuditorSamlProviderArn:
     Value: !Ref StridesAuditorSamlProvider
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesViewerSamlProviderArn'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesAuditorSamlProviderArn'
   StridesAuditorSamlProviderRoleArn:
     Value: !GetAtt StridesAuditorSamlProviderRole.Arn
     Export:
