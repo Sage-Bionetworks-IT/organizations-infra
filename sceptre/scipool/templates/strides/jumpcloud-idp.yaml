@@ -112,7 +112,7 @@ Resources:
     Properties:
       ServiceToken: !ImportValue
         'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
-      Name: "strides-viewer"
+      Name: "strides-auditor"
       Metadata: !Ref StridesAuditorMetadata
       URL: ""
   StridesAuditorSamlProviderRole:
