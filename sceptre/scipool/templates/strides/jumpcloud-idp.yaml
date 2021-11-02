@@ -3,10 +3,16 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   StridesAdminMetadata:
     Type: String
-    Description: "Public certificate for Jumpcloud AWS app"
+    Description: "Public certificate for the admin Jumpcloud AWS app"
   StridesCommunityMgrMetadata:
     Type: String
     Description: "Public certificate for the community manager Jumpcloud AWS app"
+  StridesViewerMetadata:
+    Type: String
+    Description: "Public certificate for the viewer Jumpcloud AWS app"
+  StridesAuditorMetadata:
+    Type: String
+    Description: "Public certificate for the auditor Jumpcloud AWS app"
 
 Resources:
   StridesAdminSamlProvider:
@@ -76,7 +82,56 @@ Resources:
               - cur:DeleteReportDefinition
               - cur:ModifyReportDefinition
             Resource: "*"
-
+  StridesViewerSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "strides-viewer"
+      Metadata: !Ref StridesViewerMetadata
+      URL: ""
+  StridesViewerSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt StridesViewerSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref StridesViewerSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  StridesAuditorSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "strides-viewer"
+      Metadata: !Ref StridesAuditorMetadata
+      URL: ""
+  StridesAuditorSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt StridesAuditorSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/SecurityAudit
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref StridesAuditorSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
 Outputs:
   StridesAdminSamlProviderArn:
     Value: !Ref StridesAdminSamlProvider
@@ -94,3 +149,19 @@ Outputs:
     Value: !GetAtt StridesCommunityMgrSamlProviderRole.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesCommunityMgrSamlProviderRoleArn'
+  StridesViewerSamlProviderArn:
+    Value: !Ref StridesViewerSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesViewerSamlProviderArn'
+  StridesViewerSamlProviderRoleArn:
+    Value: !GetAtt StridesViewerSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesViewerSamlProviderRoleArn'
+  StridesAuditorSamlProviderArn:
+    Value: !Ref StridesAuditorSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesViewerSamlProviderArn'
+  StridesAuditorSamlProviderRoleArn:
+    Value: !GetAtt StridesAuditorSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-StridesAuditorSamlProviderRoleArn'
