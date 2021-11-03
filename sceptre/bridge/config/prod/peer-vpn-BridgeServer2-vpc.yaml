@@ -1,4 +1,5 @@
-template_path: remote/peer-route-config.yaml
+template:
+  path: remote/peer-route-config.yaml
 stack_name: peer-vpn-BridgeServer2-vpc
 dependencies:
   - prod/BridgeServer2-vpc.yaml

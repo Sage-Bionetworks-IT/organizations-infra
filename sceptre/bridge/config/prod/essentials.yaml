@@ -1,4 +1,5 @@
-template_path: essentials.yaml
+template:
+  path: essentials.yaml
 stack_name: essentials
 dependencies:
   - prod/bootstrap.yaml
