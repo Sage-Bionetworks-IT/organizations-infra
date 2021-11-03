@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/transit-gateway-spoke.yaml 
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/transit-gateway-spoke.yaml
 stack_name: "tgw-spoke-BridgeServer2-vpc"
 stack_tags:
   Department: "Platform"
