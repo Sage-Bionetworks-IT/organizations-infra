@@ -519,7 +519,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install git+https://github.com/Sceptre/sceptre.git@5c0ab39 sceptre-ssm-resolver
-          pip install git+git://github.com/zaro0508/sceptre-identity-resolver.git
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
