@@ -1,4 +1,5 @@
-template_path: bridge.yaml
+template:
+  path: bridge.yaml
 stack_name: bridge
 dependencies:
   - prod/essentials.yaml

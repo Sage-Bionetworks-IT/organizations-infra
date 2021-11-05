@@ -1,4 +1,5 @@
-template_path: peer-route-config-defaultvpc.yaml
+template:
+  path: peer-route-config-defaultvpc.yaml
 stack_name: peer-vpn-bridge-prod
 dependencies:
   - prod/bridge.yaml

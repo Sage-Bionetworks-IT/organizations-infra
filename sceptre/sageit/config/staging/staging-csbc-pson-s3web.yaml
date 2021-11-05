@@ -1,4 +1,6 @@
-template_path: remote/managed-s3WebCloudfront.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/managed-s3WebCloudfront.yaml
 stack_name: staging-csbc-pson-s3webcf
 parameters:
   DomainName: csbc-pson.synapse.org
@@ -7,6 +9,3 @@ parameters:
   Department: Oncology
   Project: CSBC-PSON
   OwnerEmail: michael.lee@sagebionetworks.org
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/managed-s3WebCloudfront.yaml -O templates/remote/managed-s3WebCloudfront.yaml"
