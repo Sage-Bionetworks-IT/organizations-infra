@@ -1,6 +1,6 @@
 template:
   type: http
-  path: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/peer-route-config.yaml
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/peer-route-config.yaml
 stack_name: peer-vpn-BridgeServer2-vpc
 dependencies:
   - prod/BridgeServer2-vpc.yaml
