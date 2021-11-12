@@ -46,6 +46,10 @@ Parameters:
     Type: String
     Default: '906769aa66-8c4034aa-9441-47b2-8770-34422ea4affa'
 
+  scicompAdminGroup:   #JC aws-scicomp-admins
+    Type: String
+    Default: '906769aa66-0aaf81c0-55bd-4469-b8a0-b645ae00a9fa'
+
   mobileHealthDataEngineeringDevAdminGroup:     #JC aws-mobilehealth-dataengineering-dev-admins
     Type: String
     Default: '906769aa66-e218c196-4107-417d-8b75-c2e81a4aa290'
@@ -365,6 +369,23 @@ scicompDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref scicompDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+scicompAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-admin'
+  StackDescription: 'SSO: Administrator role used by scicomp admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScicompAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scicompAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoMobileHealthDataEngineeringDevAdmin:
   Type: update-stacks
