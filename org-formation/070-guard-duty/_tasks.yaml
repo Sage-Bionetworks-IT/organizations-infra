@@ -23,24 +23,28 @@ GuardDuty:
       Account: !Ref LogCentralAccount
     MemberBinding:
       Account:
-        - !Ref BmgfkiAccount
-        - !Ref BridgeProdAccount
-        - !Ref ScicompAccount
-        - !Ref ScipoolProdAccount
-        - !Ref SynapseProdAccount
-        - !Ref WorkflowsNextflowDevAccount
-        - !Ref WorkflowsNextflowProdAccount
+        - !Ref TransitAccount
+        - !Ref AdminCentralAccount
+        - !Ref ImageCentralAccount
+      OrganizationalUnit:
+        - !Ref BridgeOU
+        - !Ref ServiceCatalogOU
+        - !Ref ScienceDevOU
+        - !Ref ScienceProdOU
+        - !Ref SynapseOU
       IncludeMasterAccount: false
     AllBinding:
       Account:
         - !Ref accountId
-        - !Ref BmgfkiAccount
-        - !Ref BridgeProdAccount
-        - !Ref ScicompAccount
-        - !Ref ScipoolProdAccount
-        - !Ref SynapseProdAccount
-        - !Ref WorkflowsNextflowDevAccount
-        - !Ref WorkflowsNextflowProdAccount
+        - !Ref TransitAccount
+        - !Ref AdminCentralAccount
+        - !Ref ImageCentralAccount
+      OrganizationalUnit:
+        - !Ref BridgeOU
+        - !Ref ServiceCatalogOU
+        - !Ref ScienceDevOU
+        - !Ref ScienceProdOU
+        - !Ref SynapseOU
       IncludeMasterAccount: false
   Parameters:
     resourcePrefix: !Ref resourcePrefix
