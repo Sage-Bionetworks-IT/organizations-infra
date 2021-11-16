@@ -25,7 +25,6 @@ GuardDuty:
       Account:
         - !Ref BridgeOU
         - !Ref ItProdOU
-        - !Ref PolicyStagingOU
         - !Ref ServiceCatalogOU
         - !Ref ScienceDevOU
         - !Ref ScienceProdOU
@@ -36,7 +35,6 @@ GuardDuty:
         - !Ref accountId
         - !Ref BridgeOU
         - !Ref ItProdOU
-        - !Ref PolicyStagingOU
         - !Ref ServiceCatalogOU
         - !Ref ScienceDevOU
         - !Ref ScienceProdOU
