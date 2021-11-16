@@ -23,8 +23,11 @@ GuardDuty:
       Account: !Ref LogCentralAccount
     MemberBinding:
       Account:
+        - !Ref TransitAccount
+        - !Ref AdminCentralAccount
+        - !Ref ImageCentralAccount
+      OrganizationalUnit:
         - !Ref BridgeOU
-        - !Ref ItProdOU
         - !Ref ServiceCatalogOU
         - !Ref ScienceDevOU
         - !Ref ScienceProdOU
@@ -33,8 +36,11 @@ GuardDuty:
     AllBinding:
       Account:
         - !Ref accountId
+        - !Ref TransitAccount
+        - !Ref AdminCentralAccount
+        - !Ref ImageCentralAccount
+      OrganizationalUnit:
         - !Ref BridgeOU
-        - !Ref ItProdOU
         - !Ref ServiceCatalogOU
         - !Ref ScienceDevOU
         - !Ref ScienceProdOU
