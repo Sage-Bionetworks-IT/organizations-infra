@@ -90,7 +90,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -125,7 +125,7 @@ jobs:
 #      - name: Install dependencies
 #        run: |
 #          python -m pip install --upgrade pip
-#          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+#          pip install sceptre sceptre-ssm-resolver
 #      - name: Assume AWS Role
 #        uses: aws-actions/configure-aws-credentials@v1
 #        with:
@@ -159,7 +159,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -193,7 +193,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -227,7 +227,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -261,7 +261,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -295,7 +295,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -329,7 +329,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -363,7 +363,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -403,7 +403,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -441,7 +441,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -479,7 +479,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -518,7 +518,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -552,7 +552,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -586,7 +586,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -620,7 +620,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -654,7 +654,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -688,7 +688,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -722,7 +722,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -756,7 +756,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/Sceptre/sceptre.git@9822736 sceptre-ssm-resolver
+          pip install sceptre sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
