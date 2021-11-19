@@ -23,7 +23,7 @@ iAtlasCollaboratorAccess:
     PrincipalArns:
       - arn:aws:iam::556856096938:user/ebs_automation    # Jon Ryser from GenUI
     ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess
+      - arn:aws:iam::aws:policy/ReadOnlyAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account: !Ref iAtlasProdAccount
