@@ -1,0 +1,4 @@
+template:
+  type: http
+  url: https://raw.githubusercontent.com/awslabs/aws-cloudformation-templates/master/aws/services/CloudFormation/MacrosExamples/PyPlate/python.yaml
+stack_name: PyPlate
