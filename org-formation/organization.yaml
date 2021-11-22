@@ -63,6 +63,7 @@ Organization:
         - !Ref LogCentralAccount
         - !Ref ImageCentralAccount
         - !Ref SecurityCentralAccount
+        - !Ref SageITAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
