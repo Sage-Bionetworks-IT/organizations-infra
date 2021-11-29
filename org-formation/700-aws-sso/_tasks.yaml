@@ -150,6 +150,10 @@ Parameters:
     Type: String
     Default: '906769aa66-911ad81b-8331-4670-a8eb-d53c63d6a0e1'
 
+  tbCoughCollabGroup:
+    Type: String
+    Default: TBD # supplied by IT after they add to JC
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -997,4 +1001,21 @@ SsoCnbAdmin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref cnbAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoTbCoughCollabAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.19/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-tb-cough-collab-admin'
+  StackDescription: 'SSO: Administrator role used by TB Cough Collaboratory admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref TbCoughCollaboratoryAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref tbCoughCollabGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
