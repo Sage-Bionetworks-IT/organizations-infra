@@ -1,6 +1,0 @@
-template:
-  type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/VPC/efs-vpc.yaml
-stack_name: docker-runner-vpc
-dependencies:
-  - strides/bootstrap.yaml
