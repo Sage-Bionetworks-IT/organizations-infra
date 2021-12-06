@@ -23,7 +23,7 @@ Resources:
       ProvisioningArtifactParameters:
         - Description: Baseline version. Last updated
           Info:
-            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.27/lambda/docker-runner.yaml'
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.27/batch/sc-batch-fargate.yaml'
           Name: 'v1.1.27'
       'Fn::Transform':
         Name: 'AWS::Include'
@@ -34,17 +34,17 @@ Resources:
     Type: AWS::ServiceCatalog::PortfolioProductAssociation
     Properties:
       PortfolioId: !ImportValue
-        'Fn::Sub': '${AWS::Region}-sc-portfolio-lambda-SCLambdaPortfolioId'
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-scheduled-jobs-SCScheduledJobsPortfolioId'
       ProductId: !Ref 'ScheduledJobsProduct'
   ConstrainAccess:
     Type: AWS::ServiceCatalog::LaunchRoleConstraint
     DependsOn: AssociatePortfolio
     Properties:
       PortfolioId: !ImportValue
-        'Fn::Sub': '${AWS::Region}-sc-portfolio-lambda-SCLambdaPortfolioId'
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-scheduled-jobs-SCScheduledJobsPortfolioId'
       ProductId: !Ref 'ScheduledJobsProduct'
       RoleArn: !ImportValue
-        'Fn::Sub': '${AWS::Region}-sc-lambda-launchrole-LaunchRoleArn'
+        'Fn::Sub': '${AWS::Region}-sc-scheduled-jobs-launchrole-LaunchRoleArn'
 Outputs:
   ProductId:
     Value: !Ref 'ScheduledJobsProduct'

@@ -8,11 +8,11 @@ Parameters:
   PorfolioName:
     Type: String
     Description: Portfolio Name
-    Default: Lambda Portfolio
+    Default: Scheduled Jobs Portfolio
   PorfolioDescription:
     Type: String
     Description: Portfolio Description
-    Default: Portfolio of Lambda products
+    Default: Portfolio of Scheduled Jobs products
 Resources:
   SCScheduledJobsPortfolio:
     Type: AWS::ServiceCatalog::Portfolio
