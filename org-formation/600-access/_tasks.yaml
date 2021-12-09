@@ -70,6 +70,7 @@ WorkflowsNextflowCIServiceAccounts:
     Account:
       - !Ref WorkflowsNextflowProdAccount
       - !Ref WorkflowsNextflowDevAccount
+      - !Ref SandboxAccount
     Region: us-east-1
 
 # Service accounts for https://github.com/Sage-Bionetworks-Workflows/aws-workflows-nextflow-infra
