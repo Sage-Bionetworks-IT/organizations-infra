@@ -1,5 +1,5 @@
 template:
-  path: "strides/jumpcloud-idp.yaml"
+  path: "jumpcloud-idp.yaml"
 stack_name: "jumpcloud-idp"
 stack_tags:
   Department: "Platform"
@@ -11,4 +11,4 @@ parameters:
   StridesViewerMetadata: !file_contents idp/jumpcloud/strides-viewer.xml
   StridesAuditorMetadata: !file_contents idp/jumpcloud/strides-auditor.xml
 dependencies:
-  - "strides/cfn-cr-saml-provider.yaml"
+  - "prod/cfn-cr-saml-provider.yaml"
