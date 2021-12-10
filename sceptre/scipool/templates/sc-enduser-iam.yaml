@@ -10,6 +10,7 @@ Resources:
       RoleName: ServiceCatalogEndusers
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
         - !Ref SCEnduserExpandedPolicy
         - !Ref ScCloudformationPolicy
         - !Ref SCEnduserRemoteAccessPolicy
