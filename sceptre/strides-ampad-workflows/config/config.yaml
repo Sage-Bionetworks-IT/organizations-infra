@@ -1,0 +1,6 @@
+project_code: "sage-bionetworks"
+# profile: {{ var.profile | default("default") }}
+region: {{ var.region | default("us-east-1") }}
+template_key_prefix: {{ environment_variable.GITHUB_REF | default("testing") }}
+template_bucket_name: "bootstrap-awss3cloudformationbucket-1v7wez3y6vq8y"
+admincentral_cf_bucket: "bootstrap-awss3cloudformationbucket-19qromfd235z9"
