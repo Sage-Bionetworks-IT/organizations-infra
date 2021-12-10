@@ -50,8 +50,10 @@ GuardDuty:
     resourcePrefix: !Ref resourcePrefix
     accountId: !Ref accountId
 
-# one off association for Guardduty in org-sagebase-strides account because it's not in the Sage ORG
-# the other half of this Guardduty association is in ../sceptre/strides
+# ==================================================================================================
+# one off associations for Guardduty in AWS accounts that are not in the Sage ORG
+
+# For org-sagebase-strides, the other half of this Guardduty association is in ../sceptre/strides
 GuardDutyConnectStrides:
   Type: update-stacks
   Template: ./GuardDutyExternalConnect.yaml
@@ -66,6 +68,23 @@ GuardDutyConnectStrides:
     MemberAccountId: "423819316185"           # org-sagebase-strides
     MemberRootEmail: "aws.strides@sagebase.org"
     MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
+
+# For org-sagebase-strides-ampad-workflows, the other half of this Guardduty association is in ../sceptre/strides-ampad-workflows
+GuardDutyConnectStridesAmpadWorkflows:
+  Type: update-stacks
+  Template: ./GuardDutyExternalConnect.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-connect-stridesampadworkflows'
+  StackDescription: Associate an external Guardduty member account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref accountId
+  Parameters:
+    MemberAccountId: "751556145034"           # strides-ampad-workflows
+    MemberRootEmail: "aws.strides-ampad-workflows@sagebase.org"
+    MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
+# ==================================================================================================
 
 # bucket that contains the trusted IP addresses that are excluded from GuardDuty findings
 GuardDutyTrustedIpsBucket:
