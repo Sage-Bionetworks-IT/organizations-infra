@@ -1,8 +1,0 @@
-template:
-  type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.4/IAM/org-cross-account-role.yaml
-stack_name: "bootstrap-cross-account-role"
-dependencies:
-  - "prod/bootstrap.yaml"
-parameters:
-  MasterAccountId: "531805629419"  # org-sagebase-organizations
