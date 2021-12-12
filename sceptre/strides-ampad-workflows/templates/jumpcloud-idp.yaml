@@ -14,7 +14,7 @@ Resources:
     Properties:
       ServiceToken: !ImportValue
         'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
-      Name: "strides-amapad-workflows-admin"
+      Name: "strides-ampad-workflows-admin"
       Metadata: !Ref AdminMetadata
       URL: ""
   AdminSamlProviderRole:
@@ -40,7 +40,7 @@ Resources:
     Properties:
       ServiceToken: !ImportValue
         'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
-      Name: "strides-amapad-workflows-auditor"
+      Name: "strides-ampad-workflows-auditor"
       Metadata: !Ref AuditorMetadata
       URL: ""
   AuditorSamlProviderRole:
