@@ -336,7 +336,7 @@ jobs:
           aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::423819316185:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::751556145034:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
