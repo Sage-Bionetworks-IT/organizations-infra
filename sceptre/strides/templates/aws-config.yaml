@@ -73,10 +73,14 @@ Resources:
           Statement:
           - Effect: Allow
             Action: s3:GetBucketAcl
-            Resource: !Sub 'arn:aws:s3:::${S3ConfigBucket}'
+            Resource:
+              - !Sub 'arn:aws:s3:::${S3ConfigBucket}'
+              - !Sub 'arn:aws:s3:::${LogCentralBucket}'
           - Effect: Allow
             Action: s3:PutObject
-            Resource: !Sub 'arn:aws:s3:::${S3ConfigBucket}/AWSLogs/${AWS::AccountId}/*'
+            Resource:
+              - !Sub 'arn:aws:s3:::${S3ConfigBucket}/AWSLogs/${AWS::AccountId}/*'
+              - !Sub 'arn:aws:s3:::${LogCentralBucket}/AWSLogs/${AWS::AccountId}/*'
             Condition:
               StringEquals:
                 s3:x-amz-acl: bucket-owner-full-control
