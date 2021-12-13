@@ -129,8 +129,8 @@ CnbCIServiceAccount:
     Region: !Ref primaryRegion
 
 # =====================================================================================================
-# Some of our accounts, like org-sagebase-strides, are not part of the Sage organziation therefore we need
-# to manage them as external entities. To allow strides account to send cloudtrail and config artifcats to
+# Some of our accounts, like org-sagebase-strides, are not part of the Sage organization therefore we need
+# to manage them as external entities. To allow strides account to send cloudtrail and config artifacts to
 # logcentral account we need to setup external access to the master buckets.
 AwsCloudtrailExternalAccountAccess:
   Type: update-stacks
@@ -140,6 +140,7 @@ AwsCloudtrailExternalAccountAccess:
     cloudtrail_bucket: sagebase-cloudtrail-231505186444
     accounts:
       - "423819316185"    # org-sagebase-strides
+      - "751556145034"    # org-sagebase-strides-ampad-workflows
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
@@ -154,6 +155,7 @@ AwsConfigExternalAccountAccess:
     config_bucket: sagebase-config-231505186444
     accounts:
       - "423819316185"    # org-sagebase-strides
+      - "751556145034"    # org-sagebase-strides-ampad-workflows
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
