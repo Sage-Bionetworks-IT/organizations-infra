@@ -309,6 +309,40 @@ jobs:
           cd sceptre/strides
           mkdir -p templates/remote
           sceptre launch prod --yes
+  sceptre-strides-ampad-workflows:
+    if: github.event_name == 'push'
+    needs: org-formation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Cache python modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sceptre sceptre-ssm-resolver
+      - name: Assume AWS Role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::751556145034:role/OrganizationFormationBuildAccessRole
+          role-duration-seconds: 1200
+      - name: Deploy with sceptre
+        run: |
+          cd sceptre/strides-ampad-workflows
+          mkdir -p templates/remote
+          sceptre launch prod --yes
   sceptre-scipooldev:
     if: github.event_name == 'push'
     needs: org-formation

@@ -1,0 +1,79 @@
+Description: Resources for Jumpcloud IDP
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  AdminMetadata:
+    Type: String
+    Description: "Public certificate for the admin Jumpcloud AWS app"
+  AuditorMetadata:
+    Type: String
+    Description: "Public certificate for the auditor Jumpcloud AWS app"
+
+Resources:
+  AdminSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "strides-ampad-workflows-admin"
+      Metadata: !Ref AdminMetadata
+      URL: ""
+  AdminSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt AdminSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+        - arn:aws:iam::aws:policy/job-function/Billing
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref AdminSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  AuditorSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "strides-ampad-workflows-auditor"
+      Metadata: !Ref AuditorMetadata
+      URL: ""
+  AuditorSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt AuditorSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/SecurityAudit
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref AuditorSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+Outputs:
+  AdminSamlProviderArn:
+    Value: !Ref AdminSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AdminSamlProviderArn'
+  AdminSamlProviderRoleArn:
+    Value: !GetAtt AdminSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AdminSamlProviderRoleArn'
+  AuditorSamlProviderArn:
+    Value: !Ref AuditorSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AuditorSamlProviderArn'
+  AuditorSamlProviderRoleArn:
+    Value: !GetAtt AuditorSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AuditorSamlProviderRoleArn'
