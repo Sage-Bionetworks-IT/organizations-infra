@@ -18,6 +18,15 @@ Resources:
       Value: {{ project }}
 {% endfor %}
 
+{% for CostCenter in sceptre_user_data.CostCenters %}
+  {{ CostCenter.replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
+    Type: AWS::ServiceCatalog::TagOption
+    Properties:
+      Active: true
+      Key: "CostCenter"
+      Value: {{ CostCenter }}
+{% endfor %}
+
 {% for id in sceptre_user_data.ProductIDs %}
   {% for department in sceptre_user_data.Departments %}
   {{ department.replace('.','').replace('-','').replace('_','').replace('/','') }}TagAssociationProd{{ id.split('-')[1] }}:
@@ -33,6 +42,13 @@ Resources:
       ResourceId: "{{ id }}"
       TagOptionId: !Ref "{{ project.replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
   {% endfor %}
+  {% for CostCenter in sceptre_user_data.CostCenters %}
+  {{ CostCenter.replace('.','').replace('-','').replace('_','').replace('/','') }}TagAssociationProd{{ id.split('-')[1] }}:
+    Type: AWS::ServiceCatalog::TagOptionAssociation
+    Properties:
+      ResourceId: "{{ id }}"
+      TagOptionId: !Ref "{{ project.replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
+  {% endfor %}
 {% endfor %}
 
 Outputs:
@@ -47,4 +63,9 @@ Outputs:
     Value: !Ref "{{ project.replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
     Export:
       Name: !Sub "${AWS::Region}-${AWS::StackName}-{{ project.replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
+{% for CostCenter in sceptre_user_data.CostCenters %}
+  {{ CostCenter.replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag:
+    Value: !Ref "{{ CostCenter.replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
+    Export:
+      Name: !Sub "${AWS::Region}-${AWS::StackName}-{{ CostCenter.replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
 {% endfor %}
