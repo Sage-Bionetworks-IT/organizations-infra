@@ -63,6 +63,7 @@ Outputs:
     Value: !Ref "{{ project.replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
     Export:
       Name: !Sub "${AWS::Region}-${AWS::StackName}-{{ project.replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
+{% endfor %}
 {% for CostCenter in sceptre_user_data.CostCenters %}
   {{ CostCenter.replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag:
     Value: !Ref "{{ CostCenter.replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
