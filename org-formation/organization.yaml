@@ -356,8 +356,6 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
-        budget-alarm-threshold: 3000
-        budget-alarm-threshold-email-recipient: aws-workflows-nextflow-prod@sagebase.org
 
   WorkflowsNextflowDevAccount:
     Type: OC::ORG::Account
@@ -369,5 +367,3 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
-        budget-alarm-threshold: 3000
-        budget-alarm-threshold-email-recipient: aws-workflows-nextflow-dev@sagebase.org
