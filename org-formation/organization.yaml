@@ -356,6 +356,8 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
+        # More granular budget alerts (compute, storage, and other) deployed here:
+        # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
   WorkflowsNextflowDevAccount:
     Type: OC::ORG::Account
@@ -367,3 +369,5 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
+        # More granular budget alerts (compute, storage, and other) deployed here:
+        # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
