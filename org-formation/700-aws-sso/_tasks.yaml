@@ -842,6 +842,7 @@ SsoScipoolDevCommunityManager:
     instanceArn: !Ref instanceArn
     principalId: !Ref scipoolDevCommunityManagerGroup
     permissionSetName: 'Community-Manager'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AWSSupportAccess' ]
     sessionDuration: 'PT12H'
     inlinePolicy: >-
       {
