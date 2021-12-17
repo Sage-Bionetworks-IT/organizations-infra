@@ -6,7 +6,7 @@ Resources:
     Properties:
       RoleName: SCScheduledJobsLaunchRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonLambdaFullAccess
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccesss
         - arn:aws:iam::aws:policy/AWSBatchFullAccess
       AssumeRolePolicyDocument:
         Version: 2012-10-17
