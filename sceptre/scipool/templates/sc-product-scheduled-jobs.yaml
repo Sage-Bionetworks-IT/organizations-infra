@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Scheduled Jobs ServiceCatalog product
+Parameters:
+  RepoRootURL:
+    Type: String
+    Description: Root url for the repo containing the product templates.
+  ProductName:
+    Type: String
+    Description: Name of the product that will be visible to the end user
+    Default: 'Scheduled Jobs'
+Resources:
+  ScheduledJobsProduct:
+    Type: AWS::ServiceCatalog::CloudFormationProduct
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002  # missing `owner` property error -> it's inside of included products.yaml
+            - E3003  # invalid property `Fn::Transform` error -> cfn-lint bug
+    Properties:
+      Name: !Ref ProductName
+      Description: "This product provisions AWS batch to execute scheduled jobs"
+      ProvisioningArtifactParameters:
+        - Description: Baseline version. Last updated
+          Info:
+            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.27/batch/sc-batch-fargate.yaml'
+          Name: 'v1.1.27'
+      'Fn::Transform':
+        Name: 'AWS::Include'
+        Parameters:
+          # source: https://github.com/Sage-Bionetworks/admincentral-infra/blob/master/templates/cfn-snippets-bucket.yaml
+          Location: "s3://cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz/scipool/products.yaml"
+  AssociatePortfolio:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-scheduled-jobs-SCScheduledJobsPortfolioId'
+      ProductId: !Ref 'ScheduledJobsProduct'
+  ConstrainAccess:
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    DependsOn: AssociatePortfolio
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-scheduled-jobs-SCScheduledJobsPortfolioId'
+      ProductId: !Ref 'ScheduledJobsProduct'
+      RoleArn: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-scheduled-jobs-launchrole-LaunchRoleArn'
+Outputs:
+  ProductId:
+    Value: !Ref 'ScheduledJobsProduct'
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProductId'
