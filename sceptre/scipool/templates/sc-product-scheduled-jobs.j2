@@ -1,13 +1,40 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Scheduled Jobs ServiceCatalog product
 Parameters:
-  RepoRootURL:
-    Type: String
-    Description: Root url for the repo containing the product templates.
   ProductName:
     Type: String
     Description: Name of the product that will be visible to the end user
     Default: 'Scheduled Jobs'
+  ProvisioningArtifactActive:
+    Description: >-
+      Indicates whether the product version is active. Inactive provisioning artifacts
+      are invisible to end users. End users cannot launch or update a provisioned product
+      from an inactive provisioning artifact
+    Type: String
+    AllowedValues:
+      - "True"
+      - "False"
+    ConstraintDescription: "Valid values are True|False"
+    Default: "True"
+  ProvisioningArtifactGuidance:
+    Description: 'The value to apply to the product version guidance'
+    Type: String
+    AllowedValues:
+      - "DEFAULT"
+      - "DEPRECATED"
+    ConstraintDescription: "Valid values are DEFAULT|DEPRECATED"
+    Default: "DEFAULT"
+  ProvisioningArtifactAction:
+    Description: >-
+      The action type used to apply ProvisioningArtifactActive and ProvisioningArtifactGuidance
+      to provisioning artifacts. ALL to apply to all artifacts, ALL_EXCEPT_LATEST to apply to
+      all except the latest artifact
+    Type: String
+    AllowedValues:
+      - "ALL"
+      - "ALL_EXCEPT_LATEST"
+    ConstraintDescription: "Valid values are ALL|ALL_EXCEPT_LATEST"
+    Default: "ALL"
 Resources:
   ScheduledJobsProduct:
     Type: AWS::ServiceCatalog::CloudFormationProduct
@@ -21,15 +48,13 @@ Resources:
       Name: !Ref ProductName
       Description: "This product provisions AWS batch to execute scheduled jobs"
       ProvisioningArtifactParameters:
-        - Description: Baseline version. Last updated
-          Info:
-            LoadTemplateFromURL: !Sub '${RepoRootURL}/v1.1.27/batch/sc-batch-fargate.yaml'
-          Name: 'v1.1.27'
+        {{ sceptre_user_data.ProvisioningArtifactParameters|indent(8) }}
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:
           # source: https://github.com/Sage-Bionetworks/admincentral-infra/blob/master/templates/cfn-snippets-bucket.yaml
           Location: "s3://cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz/scipool/products.yaml"
+        ReplaceProvisioningArtifacts: true
   AssociatePortfolio:
     Type: AWS::ServiceCatalog::PortfolioProductAssociation
     Properties:
@@ -45,6 +70,16 @@ Resources:
       ProductId: !Ref 'ScheduledJobsProduct'
       RoleArn: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-scheduled-jobs-launchrole-LaunchRoleArn'
+  UpdateProductVersions:
+    Type: Custom::ProductProvider
+    Properties:
+      ReDeploy: '{{ range(1, 1000000) | random }}'  # force CFN to redeploy this resource
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-sc-product-provider-UpdateProvisioningArtifactFunctionArn'
+      ProductId: !Ref ScheduledJobsProduct
+      ProvisioningArtifactActive: !Ref ProvisioningArtifactActive
+      ProvisioningArtifactGuidance: !Ref ProvisioningArtifactGuidance
+      ProvisioningArtifactAction: !Ref ProvisioningArtifactAction
 Outputs:
   ProductId:
     Value: !Ref 'ScheduledJobsProduct'
