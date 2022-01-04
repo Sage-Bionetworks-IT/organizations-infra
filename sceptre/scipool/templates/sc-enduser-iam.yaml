@@ -14,6 +14,7 @@ Resources:
         - !Ref SCEnduserExpandedPolicy
         - !Ref ScCloudformationPolicy
         - !Ref SCEnduserRemoteAccessPolicy
+        - !Ref BatchReadOnlyPolicy
       Path: /
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -56,6 +57,19 @@ Resources:
               - organizations:DescribeOrganization
               - servicecatalog:DescribeProvisionedProduct
               - cloudwatch:GetMetricData  # access to EC2 monitoring info
+            Resource: "*"
+  BatchReadOnlyPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Read only access to AWS batch
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - "batch:Describe*"
+              - "batch:List*"
             Resource: "*"
   SCEnduserRemoteAccessPolicy:
     Type: AWS::IAM::ManagedPolicy
