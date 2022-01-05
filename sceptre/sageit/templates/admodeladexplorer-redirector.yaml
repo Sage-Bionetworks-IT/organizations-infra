@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   Provision an S3 bucket, CF distribution to handle redirects for admodelexplorer and modeladexplorer
 Parameters:
-  StackType:  
+  StackType:
     Description: Staging or Prod stack
     Type: String
     AllowedValues: ['prod', 'staging', 'test']
@@ -12,7 +12,7 @@ Parameters:
     AllowedPattern: "arn:aws:acm:.*"
     ConstraintDescription: must be a valid certificate ARN that covers all the domains below (at least prod and staging)
 Conditions:
-  IsProdEnv: !Equals [prod, !Ref StackType]    
+  IsProdEnv: !Equals [prod, !Ref StackType]
 Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
@@ -44,7 +44,7 @@ Resources:
       DistributionConfig:
         Comment: Cloudfront Distribution pointing to S3 bucket
         Origins:
-          - DomainName: !Sub 
+          - DomainName: !Sub
             - ${stackPrefix}.admodeladexplorer.org
             - {stackPrefix: !Ref StackType}
             Id: S3Origin
@@ -55,7 +55,7 @@ Resources:
         Enabled: true
         HttpVersion: 'http2'
         DefaultRootObject: index.html
-        Aliases: 
+        Aliases:
           - !Sub
             - ${stackPrefix}.admodelexplorer.org
             - { stackPrefix: !Ref StackType }
@@ -103,7 +103,7 @@ Resources:
           SslSupportMethod: sni-only
   RedirectFct:
     Type: AWS::CloudFront::Function
-    Properties: 
+    Properties:
       AutoPublish: true
       FunctionCode: |
         function handler(event) {
@@ -117,10 +117,10 @@ Resources:
           }
         return response;
         }
-      FunctionConfig: 
+      FunctionConfig:
         Comment: If coming as admodel, redirect to modelad else redirect to shiny
         Runtime: cloudfront-js-1.0
-      FunctionMetadata: 
+      FunctionMetadata:
         FunctionARN: !Sub
         - arn:aws:cloudfront::797640923903:function/${stackPrefix}-modeladexplorer-redirector-fct
         - { stackPrefix: !Ref StackType }
