@@ -14,7 +14,7 @@ dependencies:
 sceptre_user_data:
   Departments: !file sc-tag-options/internal/Departments.json
   Projects: !file sc-tag-options/internal/Projects.json
-  CostCenters: !file https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.6/templates/tags/SageFinancialProgramCodes.json
+  CostCenters: !file https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.6/tags/SageFinancialProgramCodes.json
   ProductIDs:
     - !stack_output_external sc-portfolio-ec2::SCEC2portfolioId
     - !stack_output_external sc-portfolio-s3-basic::SCS3portfolioId
