@@ -2,7 +2,7 @@ template:
   path: admodeladexplorer-redirector.yaml
 stack-name: staging-admodeladexplorer-redirector
 stack_tags:
-  Department: IT
+  Department: Platform
   Project: Infrastructure
   OwnerEmail: x.schildwachter@sagebionetworks.org
 parameters:

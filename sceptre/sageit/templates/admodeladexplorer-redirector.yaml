@@ -5,7 +5,7 @@ Parameters:
   StackType:
     Description: Staging or Prod stack
     Type: String
-    AllowedValues: ['prod', 'staging', 'test']
+    AllowedValues: ['prod', 'staging']
   AcmCertificateArn:
     Description: ARN of the ACM certificate to apply to the Cloudfront distribution
     Type: String
@@ -94,7 +94,7 @@ Resources:
           -
             EventType: viewer-request
             FunctionARN: !Sub
-            - arn:aws:cloudfront::797640923903:function/${stackPrefix}-modeladexplorer-redirector-fct
+            - arn:aws:cloudfront::${AWS::AccountId}:function/${stackPrefix}-modeladexplorer-redirector-fct
             - { stackPrefix: !Ref StackType }
           ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
@@ -102,6 +102,8 @@ Resources:
           AcmCertificateArn: !Ref AcmCertificateArn
           SslSupportMethod: sni-only
   RedirectFct:
+    # Redirect is done with Cloudfront function associated with distribution
+    # See https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html
     Type: AWS::CloudFront::Function
     Properties:
       AutoPublish: true
@@ -122,7 +124,7 @@ Resources:
         Runtime: cloudfront-js-1.0
       FunctionMetadata:
         FunctionARN: !Sub
-        - arn:aws:cloudfront::797640923903:function/${stackPrefix}-modeladexplorer-redirector-fct
+        - arn:aws:cloudfront::${AWS::AccountId}:function/${stackPrefix}-modeladexplorer-redirector-fct
         - { stackPrefix: !Ref StackType }
       Name: !Sub
       - ${stackPrefix}-modeladexplorer-redirector-fct
