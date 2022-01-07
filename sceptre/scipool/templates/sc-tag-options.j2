@@ -1,72 +1,91 @@
 Description: Tag options for for service catalog products
 AWSTemplateFormatVersion: 2010-09-09
 Resources:
-{% for department in sceptre_user_data.Departments %}
+{% if sceptre_user_data.Departments is defined %}
+  {% for department in sceptre_user_data.Departments %}
   {{ department.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}DepartmentTag:
     Type: AWS::ServiceCatalog::TagOption
     Properties:
       Active: true
       Key: "Department"
       Value: {{ department }}
-{% endfor %}
-{% for project in sceptre_user_data.Projects %}
+  {% endfor %}
+{% endif %}
+{% if sceptre_user_data.Projects is defined %}
+  {% for project in sceptre_user_data.Projects %}
   {{ project.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag:
     Type: AWS::ServiceCatalog::TagOption
     Properties:
       Active: true
       Key: "Project"
       Value: {{ project }}
-{% endfor %}
-
-{% for CostCenter in sceptre_user_data.CostCenters %}
+  {% endfor %}
+{% endif %}
+{% if sceptre_user_data.CostCenters is defined %}
+  {% for CostCenter in sceptre_user_data.CostCenters %}
   {{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
     Type: AWS::ServiceCatalog::TagOption
     Properties:
       Active: true
       Key: "CostCenter"
       Value: {{ CostCenter }}
-{% endfor %}
+  {% endfor %}
+{% endif %}
 
-{% for id in sceptre_user_data.ProductIDs %}
-  {% for department in sceptre_user_data.Departments %}
+{% if sceptre_user_data.ProductIDs is defined %}
+  {% for id in sceptre_user_data.ProductIDs %}
+    {% if sceptre_user_data.Departments is defined %}
+      {% for department in sceptre_user_data.Departments %}
   {{ department.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}TagAssociationProd{{ id.split('-')[1] }}:
     Type: AWS::ServiceCatalog::TagOptionAssociation
     Properties:
       ResourceId: "{{ id }}"
       TagOptionId: !Ref "{{ department.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}DepartmentTag"
-  {% endfor %}
-  {% for project in sceptre_user_data.Projects %}
+      {% endfor %}
+    {% endif %}
+    {% if sceptre_user_data.Projects is defined %}
+      {% for project in sceptre_user_data.Projects %}
   {{ project.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}TagAssociationProd{{ id.split('-')[1] }}:
     Type: AWS::ServiceCatalog::TagOptionAssociation
     Properties:
       ResourceId: "{{ id }}"
       TagOptionId: !Ref "{{ project.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
-  {% endfor %}
-  {% for CostCenter in sceptre_user_data.CostCenters %}
+      {% endfor %}
+    {% endif %}
+    {% if sceptre_user_data.CostCenters is defined %}
+      {% for CostCenter in sceptre_user_data.CostCenters %}
   {{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}TagAssociationProd{{ id.split('-')[1] }}:
     Type: AWS::ServiceCatalog::TagOptionAssociation
     Properties:
       ResourceId: "{{ id }}"
       TagOptionId: !Ref "{{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
+      {% endfor %}
+    {% endif %}
   {% endfor %}
-{% endfor %}
+{% endif %}
 
 Outputs:
-{% for department in sceptre_user_data.Departments %}
+{% if sceptre_user_data.Departments is defined %}
+  {% for department in sceptre_user_data.Departments %}
   {{ department.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}DepartmentTag:
     Value: !Ref "{{ department.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}DepartmentTag"
     Export:
       Name: !Sub "${AWS::Region}-${AWS::StackName}-{{ department.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}DepartmentTag"
-{% endfor %}
-{% for project in sceptre_user_data.Projects %}
+  {% endfor %}
+{% endif %}
+{% if sceptre_user_data.Projects is defined %}
+  {% for project in sceptre_user_data.Projects %}
   {{ project.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag:
     Value: !Ref "{{ project.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
     Export:
       Name: !Sub "${AWS::Region}-${AWS::StackName}-{{ project.replace(' ','').replace('.','').replace('-','').replace('_','').replace('/','') }}ProjectTag"
-{% endfor %}
-{% for CostCenter in sceptre_user_data.CostCenters %}
+  {% endfor %}
+{% endif %}
+{% if sceptre_user_data.CostCenters is defined %}
+  {% for CostCenter in sceptre_user_data.CostCenters %}
   {{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
     Value: !Ref "{{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
     Export:
       Name: !Sub "${AWS::Region}-${AWS::StackName}-{{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
-{% endfor %}
+  {% endfor %}
+{% endif %}
