@@ -1,6 +1,0 @@
-template:
-  type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-explode-macro/master/cfn-explode-macro.yaml
-stack_name: "cfn-explode-macro"
-dependencies:
-  - "prod/bootstrap.yaml"
