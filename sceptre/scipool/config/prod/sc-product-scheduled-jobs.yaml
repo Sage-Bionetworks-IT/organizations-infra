@@ -18,7 +18,11 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.31/batch/sc-batch-fargate.yaml'
       Name: 'v1.1.31'
-    - Description: 'Fix Command paramter. {{ range(1, 10000) | random }}'
+    - Description: 'Fix Command paramter.'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.32/batch/sc-batch-fargate.yaml'
       Name: 'v1.1.32'
+    - Description: 'Refactor batch tagger. {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.33/batch/sc-batch-fargate.yaml'
+      Name: 'v1.1.33'
