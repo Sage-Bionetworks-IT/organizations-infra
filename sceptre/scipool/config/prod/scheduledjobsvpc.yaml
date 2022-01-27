@@ -9,5 +9,5 @@ stack_tags:
 dependencies:
   - prod/bootstrap.yaml
 parameters:
-  VpcSubnetPrefix: "10.255.39"
+  VpcSubnetPrefix: "10.255.40"
   VpcName: "scheduledjobsvpc"
