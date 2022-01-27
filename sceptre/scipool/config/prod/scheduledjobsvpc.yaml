@@ -1,0 +1,13 @@
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.2/VPC/vpc-mini.yaml
+stack_name: scheduledjobsvpc
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - prod/bootstrap.yaml
+parameters:
+  VpcSubnetPrefix: "10.255.40"
+  VpcName: "scheduledjobsvpc"
