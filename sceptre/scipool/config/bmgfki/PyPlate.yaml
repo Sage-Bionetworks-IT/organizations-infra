@@ -1,4 +1,4 @@
 template:
   type: http
-  url: https://raw.githubusercontent.com/awslabs/aws-cloudformation-templates/master/aws/services/CloudFormation/MacrosExamples/PyPlate/python.yaml
+  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.7/templates/PyPlate/python.yaml
 stack_name: PyPlate
