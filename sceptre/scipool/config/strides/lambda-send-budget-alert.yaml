@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-send-budget-alert/master/lambda-send-budget-alert.yaml
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-send-budget-alert/0.1.0/lambda-send-budget-alert.yaml
 stack_name: lambda-send-budget-alert
 parameters:
   SNSTopicARN: !stack_output_external lambda-budgets::BudgetMakerNotificationTopicArn
