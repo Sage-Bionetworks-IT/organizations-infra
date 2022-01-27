@@ -1,0 +1,24 @@
+template:
+  path: "sc-product-scheduled-jobs.j2"
+stack_name: "sc-product-scheduled-jobs"
+stack_tags:
+  Department: "Platform"
+  Project: "Infrastructure"
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "prod/sc-portfolio-scheduled-jobs.yaml"
+sceptre_user_data:
+  # force cloudformation to update stack by setting a random number to the latest product's description
+  ProvisioningArtifactParameters: |
+    - Description: 'Baseline version.'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.30/batch/sc-batch-fargate.yaml'
+      Name: 'v1.1.30'
+    - Description: 'Optional Command paramter'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.31/batch/sc-batch-fargate.yaml'
+      Name: 'v1.1.31'
+    - Description: 'Fix Command paramter. {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.32/batch/sc-batch-fargate.yaml'
+      Name: 'v1.1.32'
