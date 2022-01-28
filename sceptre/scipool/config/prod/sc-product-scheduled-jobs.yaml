@@ -7,6 +7,9 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "prod/sc-portfolio-scheduled-jobs.yaml"
+parameters:
+  ProvisioningArtifactGuidance: "DEPRECATED"
+  ProvisioningArtifactAction: "ALL_EXCEPT_LATEST"
 sceptre_user_data:
   # force cloudformation to update stack by setting a random number to the latest product's description
   ProvisioningArtifactParameters: |
