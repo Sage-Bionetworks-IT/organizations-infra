@@ -13,7 +13,6 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
         - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
         - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
-        - arn:aws:iam::aws:policy/AWSBatchFullAccess
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
         - arn:aws:iam::aws:policy/AWSLambda_FullAccess
       AssumeRolePolicyDocument:
