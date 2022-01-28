@@ -8,6 +8,14 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
         - arn:aws:iam::aws:policy/AWSBatchFullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+        - arn:aws:iam::aws:policy/AWSBatchFullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -31,6 +39,7 @@ Resources:
                   - "iam:AddRoleToInstanceProfile"
                   - "iam:ListRolePolicies"
                   - "iam:ListPolicies"
+                  - "iam:ListPolicyVersions"
                   - "iam:DeleteRole"
                   - "iam:GetRole"
                   - "iam:CreateInstanceProfile"
@@ -39,25 +48,15 @@ Resources:
                   - "iam:ListRoles"
                   - "iam:RemoveRoleFromInstanceProfile"
                   - "iam:CreateRole"
+                  - "iam:CreatePolicy"
                   - "iam:DetachRolePolicy"
                   - "iam:AttachRolePolicy"
+                  - "iam:DeletePolicy"
                   - "iam:TagRole"
-                  - "cloudformation:DescribeStackResource"
-                  - "cloudformation:DescribeStackResources"
-                  - "cloudformation:GetTemplate"
-                  - "cloudformation:List*"
-                  - "cloudformation:DescribeStackEvents"
-                  - "cloudformation:DescribeStacks"
-                  - "cloudformation:CreateStack"
-                  - "cloudformation:DeleteStack"
-                  - "cloudformation:DescribeStackEvents"
-                  - "cloudformation:DescribeStacks"
-                  - "cloudformation:GetTemplateSummary"
-                  - "cloudformation:SetStackPolicy"
-                  - "cloudformation:ValidateTemplate"
-                  - "cloudformation:UpdateStack"
-                  - "cloudformation:*ChangeSet*"
-                  - "s3:GetObject"
+                  - "secretsmanager:CreateSecret"
+                  - "secretsmanager:TagResource"
+                  - "secretsmanager:DeleteSecret"
+                  - "events:*"
                 Resource: '*'
 Outputs:
   LaunchRoleArn:
