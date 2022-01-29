@@ -6,7 +6,6 @@ Resources:
     Properties:
       RoleName: SCScheduledJobsLaunchRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaExecute
         - arn:aws:iam::aws:policy/AWSBatchFullAccess
         - arn:aws:iam::aws:policy/AmazonEC2FullAccess
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
