@@ -250,6 +250,7 @@ SsoAuditor:
     permissionSetName: 'Auditor'
     managedPolicies: [ 'arn:aws:iam::aws:policy/SecurityAudit' ]
     sessionDuration: 'PT1H'
+    masterAccountId: !Ref MasterAccount
 
 SsoViewer:
   Type: update-stacks
