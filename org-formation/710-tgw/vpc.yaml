@@ -1,0 +1,82 @@
+# mostly from https://rnanthan.medium.com/centralised-network-connectivity-with-aws-transit-gateway-7358bb321743
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  VPC with routes to a Transit Gateway
+Parameters:
+  VpcSubnetPrefix:
+    Description: The VPC subnet prefix (i.e. 10.40)
+    Type: String
+Mappings:
+  SubnetConfig:
+    VPC:
+      CIDR: "0.0/16"
+    SubnetA:
+      CIDR: "1.0/24"
+    SubnetB:
+      CIDR: "2.0/24"
+    SubnetC:
+      CIDR: "3.0/24"
+Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, VPC, CIDR]
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+  SubnetA:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select [0, !GetAZs '']
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetA, CIDR]
+      VpcId: !Ref VPC
+  SubnetB:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetB, CIDR]
+      VpcId: !Ref VPC
+  SubnetC:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select [2, !GetAZs '' ]
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetC, CIDR]
+      VpcId: !Ref VPC
+Outputs:
+  SubnetIDs:
+    Description: "VPC Subnet IDs"
+    Value: !Sub '${SubnetA}, ${SubnetB}, ${SubnetC}'
+    Export:
+      Name: !Sub '${AWS::StackName}-SubnetIDs'
+  SubnetA:
+    Description: "VPC Subnet A"
+    Value: !Ref SubnetA
+    Export:
+      Name: !Sub '${AWS::StackName}-SubnetA'
+  SubnetB:
+    Description: "VPC Subnet B"
+    Value: !Ref SubnetB
+    Export:
+      Name: !Sub '${AWS::StackName}-SubnetB'
+  SubnetC:
+    Description: "VPC Subnet C"
+    Value: !Ref SubnetC
+    Export:
+      Name: !Sub '${AWS::StackName}-SubnetC'
+  VpcId:
+    Description: "The VPC ID"
+    Value: !Ref VPC
+    Export:
+      Name: !Sub '${AWS::StackName}-VpcId'

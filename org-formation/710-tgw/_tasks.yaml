@@ -1,0 +1,166 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'tgw'
+
+  accountId:
+    Type: String
+    Description: The identifier for the transit gateway account
+    Default: !Ref TransitAccount
+
+TransitGateway:
+  Type: update-stacks
+  Template: tgw.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  StackDescription: The transit gateway
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  Parameters:
+    Principals:
+      - !Ref ITSandboxAccount
+#      - !Ref SandboxAccount
+
+UnionStationVpc:
+  DependsOn: [ TransitGateway ]
+  Type: update-stacks
+  Template: vpc.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-unionstationvpc'
+  StackDescription: VPC for the transit gateway
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  Parameters:
+    VpcSubnetPrefix: "10.50"
+
+TransitGatewayRoutes:
+  DependsOn: [ UnionStationVpc ]
+  Type: update-stacks
+  Template: tgw-routes.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-routes'
+  StackDescription: Transit gateway routes
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  TemplatingContext:
+    TgwSpokes:
+      # org-sagebase-itsandbox
+      dustbunnyvpc:
+        CIDR: "10.29.0.0/16"
+      # org-sagebase-sandbox
+      sandcastlevpc:
+        CIDR: "10.23.0.0/16"
+  Parameters:
+    VpcSubnetIDs:
+      - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetA']
+      - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetB']
+      - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetC']
+    VpcId: !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-VpcId']
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId']
+
+VpnIdp:
+  Type: update-stacks
+  Template: vpn-idp.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-vpn-idp'
+  StackDescription: Setup VPN integration with IDP
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  Parameters:
+    TransitVpnMetadata: !ReadFile idp/jumpcloud/transitvpn.xml
+    TransitVpnSspMetadata: !ReadFile idp/jumpcloud/transitvpnssp.xml
+
+Vpn:
+  DependsOn: [ VpnIdp, TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: vpn.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-vpn'
+  StackDescription: The AWS client VPN
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  TemplatingContext:
+    # work around for issue https://github.com/org-formation/org-formation-cli/issues/259
+    SubnetIds:
+      - !Sub '!ImportValue ${resourcePrefix}-${appName}-unionstationvpc-SubnetA'
+      - !Sub '!ImportValue ${resourcePrefix}-${appName}-unionstationvpc-SubnetB'
+      - !Sub '!ImportValue ${resourcePrefix}-${appName}-unionstationvpc-SubnetC'
+    TgwSpokes:
+      # "10.50.0.0/16" (unionstationvpc) route automatically setup by the VPN endpoint association
+      # AccessGroups must match Jumpcloud groups
+
+      # org-sagebase-itsandbox
+      dustbunnyvpc:
+        CIDR: "10.29.0.0/16"
+        AccessGroups:
+          - "admin"
+      # org-sagebase-sandbox
+      sandcastlevpc:
+        CIDR: "10.23.0.0/16"
+        AccessGroups:
+          - "admin"
+          - "aws-scicomp-developers"
+  Parameters:
+    ClientCidrBlock: "10.100.0.0/16"
+    VpnSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-vpn-idp-TransitVpnSamlProviderArn']
+    VpnSspSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-vpn-idp-TransitVpnSspSamlProviderArn']
+    VpcId: !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-VpcId']
+    ConnectionLogGroup: "/aws/vpn/sage-client-vpn"
+    # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
+    # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
+    ServerCertificateArn: "arn:aws:acm:us-east-1:153370007719:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6"
+
+Mappings:
+  TgwSpokes:
+    VpcName:
+      804034162148: 'dustbunnyvpc'  # org-sagebase-itsandbox
+      563295687221: 'sandcastlevpc'  # org-sagebase-sandbox
+
+TgwSpoke:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke.yaml
+  StackName: !Join ["-", [!Sub '${resourcePrefix}-${appName}-spoke', !FindInMap [TgwSpokes, VpcName, !Ref CurrentAccount]]]
+  StackDescription: Setup Transit Gateway on spoke accounts
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref ITSandboxAccount
+    IncludeMasterAccount: false
+  Parameters:
+    # This assumes that all VPCs contain the same exports
+    TransitGatewayEndpointCidr: "10.50.0.0/16"
+    VpcRouteTableId: !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokes, VpcName, !Ref CurrentAccount], 'PrivateRouteTable']]]
+    VpcId: !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokes, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    SubnetIds:
+      - !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokes, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
+      - !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokes, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
+      - !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokes, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]

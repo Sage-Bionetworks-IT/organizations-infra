@@ -1,0 +1,37 @@
+# mostly from https://rnanthan.medium.com/centralised-network-connectivity-with-aws-transit-gateway-7358bb321743
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  Setup Transit Gateway routes to spoke VPCs
+Parameters:
+  VpcSubnetIDs:
+    Description: VPC subnets to associate with Transit Gateway
+    Type: List<AWS::EC2::Subnet::Id>
+  VpcId:
+    Description: The VPC ID
+    Type: AWS::EC2::VPC::Id
+  TransitGatewayId:
+    Description: The Transit Gateway ID
+    Type: String
+Resources:
+  TransitGatewayAttachment:
+    Type: AWS::EC2::TransitGatewayAttachment
+    Properties:
+      SubnetIds: !Ref VpcSubnetIDs
+      Tags:
+        - Key: Application
+          Value: NetworkServiceTransitGateway
+      TransitGatewayId: !Ref TransitGatewayId
+      VpcId: !Ref VpcId
+  RouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VpcId
+{% for spoke, spoke_data in TgwSpokes %}
+  TgwSpokeRoute{{ spoke }}:
+    Type: 'AWS::EC2::Route'
+    DependsOn: TransitGatewayAttachment
+    Properties:
+      RouteTableId: !Ref RouteTable
+      TransitGatewayId: !Ref TransitGatewayId
+      DestinationCidrBlock: {{ spoke_data.CIDR }}
+{% endfor %}

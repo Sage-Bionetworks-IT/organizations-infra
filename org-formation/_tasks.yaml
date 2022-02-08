@@ -60,3 +60,8 @@ AwsSso:
   Type: include
   DependsOn: [ Types, SeviceControlPolicies ]
   Path: ./700-aws-sso/_tasks.yaml
+
+TransitGateway:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./710-tgw/_tasks.yaml
