@@ -47,8 +47,6 @@ Resources:
             Effect: "Allow"
             Principal:
               AWS:
-                - !GetAtt AWSIAMXavierSchildwachterUser.Arn
-                - !GetAtt AWSIAMKhaiDoUser.Arn
                 - !GetAtt AWSIAMSynapseEmergencyUser.Arn
             Action:
               - "sts:AssumeRole"
