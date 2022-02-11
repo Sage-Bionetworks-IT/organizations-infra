@@ -1,9 +1,0 @@
-template:
-  type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/transit-gateway-attachment.yaml
-stack_name: "sage-tgw-computevpc"
-dependencies:
-  - "prod/computevpc.yaml"
-parameters:
-  VpcName: "computevpc"
-  TransitGatewayId: 'tgw-08aa3c487e457374a'   # sage-tgw transit gateway
