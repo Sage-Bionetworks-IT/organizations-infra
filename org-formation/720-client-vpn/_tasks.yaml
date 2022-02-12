@@ -1,0 +1,78 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'client-vpn'
+
+  accountId:
+    Type: String
+    Description: The identifier for the account
+    Default: !Ref TransitAccount
+
+  vpnVpc:
+    Type: String
+    Description: The VPC name to associate with the VPN
+    Default: 'unionstationvpc'
+
+VpnIdp:
+  Type: update-stacks
+  Template: vpn-idp.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-idp'
+  StackDescription: Setup VPN integration with IDP
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  Parameters:
+    TransitVpnMetadata: !ReadFile idp/jumpcloud/transitvpn.xml
+    TransitVpnSspMetadata: !ReadFile idp/jumpcloud/transitvpnssp.xml
+
+Vpn:
+  DependsOn: [ VpnIdp ]
+  Type: update-stacks
+  Template: vpn.njk
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  StackDescription: The AWS client VPN
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  TemplatingContext:
+    # work around for issue https://github.com/org-formation/org-formation-cli/issues/259
+    SubnetIds:
+      - !Sub '!ImportValue ${resourcePrefix}-tgw-${vpnVpc}-SubnetA'
+      - !Sub '!ImportValue ${resourcePrefix}-tgw-${vpnVpc}-SubnetB'
+      - !Sub '!ImportValue ${resourcePrefix}-tgw-${vpnVpc}-SubnetC'
+    TgwSpokes:
+      # "10.50.0.0/16" (unionstationvpc) route automatically setup by the VPN endpoint association
+      # AccessGroups must match Jumpcloud groups
+
+      # org-sagebase-itsandbox
+      dustbunnyvpc:
+        CIDR: "10.29.0.0/16"
+        AccessGroups:
+          - "admin"
+      # org-sagebase-sandbox
+      sandcastlevpc:
+        CIDR: "10.23.0.0/16"
+        AccessGroups:
+          - "admin"
+          - "aws-scicomp-developers"
+  Parameters:
+    ClientCidrBlock: "10.100.0.0/16"
+    VpnSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSamlProviderArn']
+    VpnSspSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSspSamlProviderArn']
+    VpcId: !CopyValue [!Sub '${resourcePrefix}-tgw-${vpnVpc}-VpcId']
+    ConnectionLogGroup: !Sub '/aws/vpn/${resourcePrefix}-${appName}'
+    # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
+    # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
+    ServerCertificateArn: "arn:aws:acm:us-east-1:153370007719:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6"

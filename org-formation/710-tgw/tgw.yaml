@@ -13,6 +13,7 @@ Resources:
       AmazonSideAsn: 65000
       AutoAcceptSharedAttachments: "enable"
       DefaultRouteTableAssociation: "enable"
+      DefaultRouteTablePropagation: "enable"
       DnsSupport: "enable"
       VpnEcmpSupport: "enable"
       Tags:

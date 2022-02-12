@@ -1,7 +1,7 @@
 # mostly from https://rnanthan.medium.com/centralised-network-connectivity-with-aws-transit-gateway-7358bb321743
 AWSTemplateFormatVersion: "2010-09-09"
 Description: >-
-  VPC with routes to a Transit Gateway
+  VPC for a Transit Gateway
 Parameters:
   VpcSubnetPrefix:
     Description: The VPC subnet prefix (i.e. 10.40)
@@ -54,6 +54,31 @@ Resources:
         - - !Ref VpcSubnetPrefix
           - !FindInMap [SubnetConfig, SubnetC, CIDR]
       VpcId: !Ref VPC
+  RouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VPC
+  SubnetRouteTableAssociationA:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetA"
+      RouteTableId:
+        Ref: "RouteTable"
+  SubnetRouteTableAssociationB:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetB"
+      RouteTableId:
+        Ref: "RouteTable"
+  SubnetRouteTableAssociationC:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "SubnetC"
+      RouteTableId:
+        Ref: "RouteTable"
 Outputs:
   SubnetIDs:
     Description: "VPC Subnet IDs"
