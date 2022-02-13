@@ -105,3 +105,8 @@ Outputs:
     Value: !Ref VPC
     Export:
       Name: !Sub '${AWS::StackName}-VpcId'
+  RouteTableId:
+    Description: "The VPC route table ID"
+    Value: !Ref RouteTable
+    Export:
+      Name: !Sub '${AWS::StackName}-RouteTableId'

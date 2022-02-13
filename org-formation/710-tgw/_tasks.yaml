@@ -78,6 +78,7 @@ TransitGatewayRoutes:
       - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetB']
       - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetC']
     VpcId: !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-VpcId']
+    VpcRouteTableId: !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-RouteTableId']
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId']
 
 Mappings:

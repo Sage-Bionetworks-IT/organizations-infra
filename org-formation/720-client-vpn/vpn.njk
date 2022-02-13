@@ -22,7 +22,7 @@ Parameters:
     Type: String
     Description: "The cloudwatch log group for client connection information"
 Resources:
-  VpnSecurityGroup:
+  SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: !Sub '${AWS::StackName} Security Group'
@@ -38,13 +38,13 @@ Resources:
           ToPort: -1
           IpProtocol: "-1"
 
-  VpnCloudwatchLogGroup:
+  CloudwatchLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Ref ConnectionLogGroup
       RetentionInDays: 180
 
-  VpnEndpoint:
+  Endpoint:
     Type: AWS::EC2::ClientVpnEndpoint
     Properties:
       AuthenticationOptions:
@@ -55,14 +55,14 @@ Resources:
       ClientCidrBlock: !Ref ClientCidrBlock
       ConnectionLogOptions:
         Enabled: true
-        CloudwatchLogGroup: !Ref VpnCloudwatchLogGroup
+        CloudwatchLogGroup: !Ref CloudwatchLogGroup
       SplitTunnel: true
       ServerCertificateArn: !Ref ServerCertificateArn
       SelfServicePortal: "enabled"
       TransportProtocol: "udp"
       VpcId: !Ref VpcId
       SecurityGroupIds:
-        - !GetAtt VpnSecurityGroup.GroupId
+        - !GetAtt SecurityGroup.GroupId
       TagSpecifications:
         - ResourceType: "client-vpn-endpoint"
           Tags:
@@ -70,10 +70,10 @@ Resources:
               Value: !Ref AWS::StackName
 
 {% for subnet_id in SubnetIds %}
-  VpnEndpointAssociation{{ subnet_id | last }}:
+  EndpointAssociation{{ subnet_id | last }}:
     Type: AWS::EC2::ClientVpnTargetNetworkAssociation
     Properties:
-      ClientVpnEndpointId: !Ref VpnEndpoint
+      ClientVpnEndpointId: !Ref Endpoint
       SubnetId: {{ subnet_id }}
 {% endfor %}
 
@@ -81,16 +81,16 @@ Resources:
 {%   set spoke_loop = loop %}
 {%   for access_group in spoke_data.AccessGroups %}
 {%     set access_group_loop = loop %}
-  VpnEndpointAuthorization{{ spoke_loop.index }}{{ access_group_loop.index }}:
+  EndpointAuthorization{{ spoke_loop.index }}{{ access_group_loop.index }}:
     Type: AWS::EC2::ClientVpnAuthorizationRule
     DependsOn:
 {%     for subnet_id in SubnetIds %}
-      - VpnEndpointAssociation{{ subnet_id | last }}
+      - EndpointAssociation{{ subnet_id | last }}
 {%     endfor %}
     Properties:
       Description: {{ spoke }}-{{ access_group }}
       AccessGroupId: {{ access_group }}
-      ClientVpnEndpointId: !Ref VpnEndpoint
+      ClientVpnEndpointId: !Ref Endpoint
       TargetNetworkCidr: {{ spoke_data.CIDR }}
 {%   endfor %}
 {% endfor %}
@@ -99,23 +99,23 @@ Resources:
 {%   set spoke_loop = loop %}
 {%   for subnet_id in SubnetIds %}
 {%     set subnet_id_loop = loop %}
-  VpnEndpointRoute{{ spoke_loop.index }}{{ subnet_id_loop.index }}:
+  EndpointRoute{{ spoke_loop.index }}{{ subnet_id_loop.index }}:
     Type: AWS::EC2::ClientVpnRoute
     DependsOn:
 {%     for depend in SubnetIds %}
-      - VpnEndpointAssociation{{ subnet_id | last }}
+      - EndpointAssociation{{ subnet_id | last }}
 {%     endfor %}
     Properties:
       Description: {{ spoke }}-{{ subnet_id }}
-      ClientVpnEndpointId: !Ref VpnEndpoint
+      ClientVpnEndpointId: !Ref Endpoint
       DestinationCidrBlock: {{ spoke_data.CIDR }}
       TargetVpcSubnetId: {{ subnet_id }}
 {%   endfor %}
 {% endfor %}
 
 Outputs:
-  VpnEndpoint:
+  Endpoint:
     Description: The VPN endpoint Id
-    Value: !Ref VpnEndpoint
+    Value: !Ref Endpoint
     Export:
-      Name: !Sub '${AWS::StackName}-VpnEndpointId'
+      Name: !Sub '${AWS::StackName}-EndpointId'
