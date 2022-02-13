@@ -54,31 +54,25 @@ Resources:
         - - !Ref VpcSubnetPrefix
           - !FindInMap [SubnetConfig, SubnetC, CIDR]
       VpcId: !Ref VPC
-  RouteTable:
+  PrivateRouteTable:
     Type: "AWS::EC2::RouteTable"
     Properties:
       VpcId: !Ref VPC
   SubnetRouteTableAssociationA:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
-      SubnetId:
-        Ref: "SubnetA"
-      RouteTableId:
-        Ref: "RouteTable"
+      SubnetId: !Ref "SubnetA"
+      RouteTableId: !Ref PrivateRouteTable
   SubnetRouteTableAssociationB:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
-      SubnetId:
-        Ref: "SubnetB"
-      RouteTableId:
-        Ref: "RouteTable"
+      SubnetId: !Ref "SubnetB"
+      RouteTableId: !Ref PrivateRouteTable
   SubnetRouteTableAssociationC:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
-      SubnetId:
-        Ref: "SubnetC"
-      RouteTableId:
-        Ref: "RouteTable"
+      SubnetId: !Ref "SubnetC"
+      RouteTableId: !Ref PrivateRouteTable
 Outputs:
   SubnetIDs:
     Description: "VPC Subnet IDs"
@@ -105,8 +99,8 @@ Outputs:
     Value: !Ref VPC
     Export:
       Name: !Sub '${AWS::StackName}-VpcId'
-  RouteTableId:
+  PrivateRouteTableId:
     Description: "The VPC route table ID"
-    Value: !Ref RouteTable
+    Value: !Ref PrivateRouteTable
     Export:
-      Name: !Sub '${AWS::StackName}-RouteTableId'
+      Name: !Sub '${AWS::StackName}-PrivateRouteTableId'
