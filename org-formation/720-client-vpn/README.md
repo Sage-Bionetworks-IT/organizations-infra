@@ -1,80 +1,19 @@
 # Overview
-A project to install, configure and manage org-sagebase-transit account.
-The purpose of this account is to run the AWS transit gateway as the
-"hub" of our hub and spoke architecture.
+Setup and configure the AWS client Virtual Private Network (VPN) in the
+org-sagebase-transit account. 
 
 ![alt text][architecture]
 
-
-## Workflow
-AWS enforces a specific workflow when setting up the Transit Gateway in a hub
-and spoke architecture.
-
-1. Setup the transit gateway in the central/hub account.
-2. Create a transit gateway route table in the hub account.
-3. Share the transit gateway in the hub account (VPC settings).
-4. Share the transit gateway to spoke accounts with the Resource Access Manager.
-5. Accept invitations from spoke account in the Resource Access Manager.
-
-Note: Invitations are  automatically accepted when shared to AWS account that are
-part of the Sage organizations account.
-
-If shared to account that are NOT in the organization then accept the invitation:
-Login to spoke account with admin user/role and accept the sharing invitation
-in Resource Access Manager -> Shared with me -> Resource Shares ->
-accept the invitation
-
-6. Create attachments to the transit gateway hub from spoke accounts.
-7. Add ("Associate") spoke TGW attachments to the hub transit gateway route table.
-
-## Setup Transit Gateway
-
-### Setup Hub VPC
-The transit gateway hub VPC is created with [unionstation](config/prod/unionstationvpc.yaml)
-file.  That TGW is shared out to our spoke accounts defined in by
-[sceptre_user_data.TgwSpokes](config/prod/sage-tgw.yaml).
-
-### Add spoke VPC
-The Hub VPC is already setup and only need to be done once.  Spokes may be connected to the
-hub with the following workflow:
-
-Create a PR in this repo with the following changes to [_tasks.yaml](_tass.yaml):
-1. Add new account to `TransitGateway.Parameters.Pincicpals`
-2. Add VPC CIDR to `TransitGatewayRoutes.TemplatingContext.TgwSpokes`
-3. Add VPC name to `Mappings.TgwSpokes.VpcName`
-4. (Optional) Add VPC CIDR and AccessGroups to `Vpn.TemplatingContext.TgwSpokes`.  Do this only
-if you want to setup VPN access to resources in the VPC
-5. Review and merge PR
-6. Once merged and deployed the TGW will update VPC routes to route traffic from the hub to the spoke VPC.
-7. Once the invitation is accepted the shared transit gateway (from "hub")
-should appear in the spoke account's VPC -> TransitGateway
-
-### Allow Traffic Between VPCs
-The key to allowing traffic between the hub (unionstation) VPC and the spoke VPC
-is to apply the `TgwSecurityGroup` to the resource in the spoke account.
-
-__Note:__ The `TgwSecurityGroup` SG name will be something like `tgw-spoke-BridgeVpc-TgwSecurityGroup-HC8K48Q48USV`
-
-Workflow to test access:
-1. Provision EC2 in unionstation with SSH access
-2. Provision a private EC2 in spoke account (i.e org-sagebase-bridgedev) and apply the `TgwSecurityGroup`
-to the instance.
-3. SSH into unionstation EC2 and attempt to access (ping/ssh/etc..) the EC2 in the spoke account.
-
-
 ## Setup AWS client VPN
-We setup AWS client VPN leveraging routes that were setup by the transit gateway
-configuration.  The AWS client VPN is created with
-[sage-client-vpn.yaml](config/prod/sage-client-vpn.yaml) file.
+We setup the AWS client VPN leveraging routes that were created by the
+[transit gateway](../710-tgw/README.md) configuration. 
 
 ### Setup IDP
-We federate Jumpcloud users to the VPN with
-[Jumpcloud SSO](https://support.jumpcloud.com/support/s/article/Single-Sign-On-SSO-with-AWS-Client-VPN)
-and [jumpcloud-idp.yaml](config/prod/jumpcloud-idp.yaml).  This allows users to login
-to the VPN with their Jumpcloud credentials.  Once they are logged in they
-will have access to resources in AWS VPCs.
+We federate users to the VPN with [Jumpcloud SSO](https://support.jumpcloud.com/support/s/article/Single-Sign-On-SSO-with-AWS-Client-VPN)
+which allows users to login to the VPN with their Jumpcloud credentials.
+This will also allow us to manage VPC access thru Jumcploud user groups. 
 
-### Setup Jumpcloud SSO
+### Setup Jumpcloud
 We need to setup two SSO apps in jumpcloud because it does not support multiple ACS URLs.
 We need one SSO for the VPN connection and another one for the VPN self service portal.
 
@@ -98,33 +37,44 @@ Create a `transitvpnssp` SSO app for the VPN self service portal access:
   * Attributes: `FirstName=firstname`, `LastName=lastname`, `NameID=email`
   * Enable `Group Attributes option` and set it to `memberOf`
 
-Deploy [sage-client-vpn.yaml](config/prod/sage-client-vpn.yaml) to create the
-AWS client VPN endpoint.  __Note:__ the `ServerCertificateArn` parameter value should
+### Setup AWS SAML Providers
+After setting up Jumpcloud SSO we can let org-formation deploy the [_tasks.yaml](_tasks.yaml)
+file which will create the AWS SAML providers.  
+
+## Add VPN routes
+
+Following workflow to allow VPN users access to VPCs:
+
+Create a PR in this repo with the following changes to [_tasks.yaml](_tasks.yaml):
+1. Add a new entry to the `Vpn.TemplatingContext.TgwSpokes` dictionary.
+2. The `CIDR` is the VPC IP address that the VPN should allow access to. 
+3. The `AccessGroup` value(s) must match a Jumpcloud defined `User Group`. This allows
+the Jumpcloud user group(s) access to a VPC defined by its CIDR.
+
+Once merged and deployed the VPN routes will be updated to route traffic from the
+hub VPC to the spoke VPCs.
+
+__Note__:
+* It is recommended to only add one VPC at a time which means you should split up your PRs to add one spoke VPC per PR.
+* The `ServerCertificateArn` parameter value should
 be the certificate that was created by easy-rsa and imported into the
 AWS cerfiticate manager.
 
+## VPN User Workflow
+VPN users must use a VPN client to access cloud resources
 
-### Manage VPN Access
-VPN user access is managed by [sceptre_user_data.TgwSpokes](config/prod/sage-client-vpn.yaml).
-Modify the `TgwSpokes` definition to update Jumpcloud user access to VPCs.
+* Login to the [Sage IT VPN portal](https://vpn.sageit.org)
+* Download the VPN client configuration file
+* Download the AWS Client VPN application
+* Install and run the client VPN app
+* Load the configuration file into the VPN client:
 
-__Note:__ `AccessGroups` must match Jumpcloud groups
+File -> Manage Profiles -> Add Profile -> select the downloaded configuration file -> Add Profile -> Done
 
-Once the configurations are setup users will get access to specific VPCs after logging into
-the VPN.
+* Now use the VPN client to `connect`
 
-## Instructions to create or update CF stacks
+Once connected you should have access to cloud resources.  Access to resources is managed in Jumpcloud with User Groups. 
 
-```
-# Update CF stacks with sceptre:
-# sceptre launch-stack prod <stack_name>
-```
-
-The above should setup resources for the AWS account.  Once the infrastructure
-for the account has been setup you can access and view the account using the
-[AWS console](https://AWS-account-ID-or-alias.signin.aws.amazon.com/console).
-
-*Note - This project depends on CF templates from other accounts.*
 
 ## Contributions
 Contributions are welcome.
@@ -154,4 +104,4 @@ a [sceptre ssm resolver](https://github.com/cloudreach/sceptre/tree/v1/contrib/s
 and passes them to the cloudformation stack on deployment.
 
 
-[architecture]: transit-gateway-arch.png "hub and spoke architecture"
+[architecture]: client-vpn-arch.png "client vpn architecture"

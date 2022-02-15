@@ -106,7 +106,7 @@ Resources:
       - EndpointAssociation{{ subnet_id | last }}
 {%     endfor %}
     Properties:
-      Description: {{ spoke }}-{{ subnet_id }}
+      Description: {{ spoke }}-Subnet{{ subnet_id | last }}
       ClientVpnEndpointId: !Ref Endpoint
       DestinationCidrBlock: {{ spoke_data.CIDR }}
       TargetVpcSubnetId: {{ subnet_id }}

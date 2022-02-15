@@ -1,9 +1,19 @@
 # Overview
-A project to install, configure and manage org-sagebase-transit account.
-The purpose of this account is to run the AWS transit gateway as the
-"hub" of our hub and spoke architecture.
+Setup and configure the AWS transit gateway (TGW) in the org-sagebase-transit account.
+It will act as the "hub" of our [hub and spoke architecture][1] to manage network
+traffic to our VPCs.
 
 ![alt text][architecture]
+
+## Design
+There are many possible [design patterns for a TGW][2].  Our TGW is configured in a fully
+isolated network pattern similar to this diagram.
+
+![alt text][fully_isolated_network_design]
+
+__Notes__:
+* The Transit VPC is named "unionstationvpc".
+* We use the AWS client VPN instead of a direct connect.
 
 
 ## Workflow
@@ -16,115 +26,53 @@ and spoke architecture.
 4. Share the transit gateway to spoke accounts with the Resource Access Manager.
 5. Accept invitations from spoke account in the Resource Access Manager.
 
-Note: Invitations are  automatically accepted when shared to AWS account that are
-part of the Sage organizations account.
+Note: We have enabled auto accept invitations in our AWS organization account which
+means that invitations are automatically accepted when TGW is shared to any AWS account
+that is part of the Sage organizations account.
 
-If shared to account that are NOT in the organization then accept the invitation:
-Login to spoke account with admin user/role and accept the sharing invitation
-in Resource Access Manager -> Shared with me -> Resource Shares ->
-accept the invitation
+If the account is NOT in the organization then you must manually accept the sharing invitation:
+* Login to spoke account with admin user/role
+* Accept the sharing invitation in the Resource Access Manager -> Shared with me ->
+Resource Shares -> accept the invitation
 
 6. Create attachments to the transit gateway hub from spoke accounts.
 7. Add ("Associate") spoke TGW attachments to the hub transit gateway route table.
 
 ## Setup Transit Gateway
+We have setup automation for the above workflow using [org-formation][3]
 
 ### Setup Hub VPC
-The transit gateway hub VPC is created with [unionstation](config/prod/unionstationvpc.yaml)
-file.  That TGW is shared out to our spoke accounts defined in by
-[sceptre_user_data.TgwSpokes](config/prod/sage-tgw.yaml).
+The Hub VPC, `unionstationvpc`, is already setup and only need to be done once.
+Once the TGW hub is deployed we only need to connect additional VPCs in spoke accounts
+to the hub.
 
 ### Add spoke VPC
-The Hub VPC is already setup and only need to be done once.  Spokes may be connected to the
-hub with the following workflow:
+Spokes may be connected to the hub with the following workflow:
 
-Create a PR in this repo with the following changes to [_tasks.yaml](_tass.yaml):
-1. Add new account to `TransitGateway.Parameters.Pincicpals`
-2. Add VPC CIDR to `TransitGatewayRoutes.TemplatingContext.TgwSpokes`
-3. Add VPC name to `Mappings.TgwSpokes.VpcName`
-4. (Optional) Add VPC CIDR and AccessGroups to `Vpn.TemplatingContext.TgwSpokes`.  Do this only
-if you want to setup VPN access to resources in the VPC
-5. Review and merge PR
-6. Once merged and deployed the TGW will update VPC routes to route traffic from the hub to the spoke VPC.
-7. Once the invitation is accepted the shared transit gateway (from "hub")
-should appear in the spoke account's VPC -> TransitGateway
+Create a PR in this repo with the following changes to [_tasks.yaml](_tasks.yaml):
+1. If it doesn't already exist, add a spoke account to `TransitGateway.Parameters.Principals` parameter.
+This is used to share the TGW to spoke accounts.
+2. Add a new entry to the `TransitGatewayRoutes.TemplatingContext.TgwSpokes` dictionary.
+This is used to setup routes from unionstation VPC to VPCs in spoke accounts.
+3. Add a new entry to the `Mappings` dictionary.  This is used to setup the TGW attachments
+and routes in spoke accounts.
+4. Review and merge PR 
 
-### Allow Traffic Between VPCs
-The key to allowing traffic between the hub (unionstation) VPC and the spoke VPC
-is to apply the `TgwSecurityGroup` to the resource in the spoke account.
+Once merged and deployed the TGW routes will be updated to route traffic from the
+hub VPC to the spoke VPC.
 
-__Note:__ The `TgwSecurityGroup` SG name will be something like `tgw-spoke-BridgeVpc-TgwSecurityGroup-HC8K48Q48USV`
+__Note__: It is recommended to only add one VPC at a time which means you should split up your PRs to add one spoke VPC per PR.
 
-Workflow to test access:
-1. Provision EC2 in unionstation with SSH access
-2. Provision a private EC2 in spoke account (i.e org-sagebase-bridgedev) and apply the `TgwSecurityGroup`
-to the instance.
-3. SSH into unionstation EC2 and attempt to access (ping/ssh/etc..) the EC2 in the spoke account.
+### Test TGW routes
 
+Workflow to test routes:
+1. Provision a private EC2 in `unionstationvpc`
+2. Create a security group to allow `ICMP` ingress traffice
+3. Apply security group to EC2
+4. Repeate provision EC2 steps in the spoke account.
 
-## Setup AWS client VPN
-We setup AWS client VPN leveraging routes that were setup by the transit gateway
-configuration.  The AWS client VPN is created with
-[sage-client-vpn.yaml](config/prod/sage-client-vpn.yaml) file.
-
-### Setup IDP
-We federate Jumpcloud users to the VPN with
-[Jumpcloud SSO](https://support.jumpcloud.com/support/s/article/Single-Sign-On-SSO-with-AWS-Client-VPN)
-and [jumpcloud-idp.yaml](config/prod/jumpcloud-idp.yaml).  This allows users to login
-to the VPN with their Jumpcloud credentials.  Once they are logged in they
-will have access to resources in AWS VPCs.
-
-### Setup Jumpcloud SSO
-We need to setup two SSO apps in jumpcloud because it does not support multiple ACS URLs.
-We need one SSO for the VPN connection and another one for the VPN self service portal.
-
-Follow [instructions](https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/client-authentication.html)
-to create a certificate using [easy-rsa](https://github.com/OpenVPN/easy-rsa)
-then import the certifcate to the AWS certificate manager
-
-Create a `transitvpn` SSO app for VPN access:
-  * SP Entity ID: `urn:amazon:webservices:clientvpn`
-  * ACS URL: `http://127.0.0.1:35001`
-  * Enable `Declare Redirect Endpoint` option
-  * IDP URL: `https://sso.jumpcloud.com/saml2/transitvpn`
-  * Attributes: `FirstName=firstname`, `LastName=lastname`, `NameID=email`
-  * Enable `Group Attributes option` and set it to `memberOf`
-
-Create a `transitvpnssp` SSO app for the VPN self service portal access:
-  * SP Entity ID: `urn:amazon:webservices:clientvpn`
-  * ACS URL: `http://127.0.0.1:35001`
-  * Enable `Declare Redirect Endpoint` option
-  * IDP URL: `https://self-service.clientvpn.amazonaws.com/api/auth/sso/saml`
-  * Attributes: `FirstName=firstname`, `LastName=lastname`, `NameID=email`
-  * Enable `Group Attributes option` and set it to `memberOf`
-
-Deploy [sage-client-vpn.yaml](config/prod/sage-client-vpn.yaml) to create the
-AWS client VPN endpoint.  __Note:__ the `ServerCertificateArn` parameter value should
-be the certificate that was created by easy-rsa and imported into the
-AWS cerfiticate manager.
-
-
-### Manage VPN Access
-VPN user access is managed by [sceptre_user_data.TgwSpokes](config/prod/sage-client-vpn.yaml).
-Modify the `TgwSpokes` definition to update Jumpcloud user access to VPCs.
-
-__Note:__ `AccessGroups` must match Jumpcloud groups
-
-Once the configurations are setup users will get access to specific VPCs after logging into
-the VPN.
-
-## Instructions to create or update CF stacks
-
-```
-# Update CF stacks with sceptre:
-# sceptre launch-stack prod <stack_name>
-```
-
-The above should setup resources for the AWS account.  Once the infrastructure
-for the account has been setup you can access and view the account using the
-[AWS console](https://AWS-account-ID-or-alias.signin.aws.amazon.com/console).
-
-*Note - This project depends on CF templates from other accounts.*
+You should be able to ping the EC2 in spoke VPC from the EC2 in the `unionstationvpc` and vice versa.
+You should *NOT* be able to ping an EC2 in one spoke VPC to an EC2 in another spoke VPC.
 
 ## Contributions
 Contributions are welcome.
@@ -155,3 +103,7 @@ and passes them to the cloudformation stack on deployment.
 
 
 [architecture]: transit-gateway-arch.png "hub and spoke architecture"
+[fully_isolated_network_design]: fully_isolated_network_design.png  "fully isolated network design"  
+[1]: https://aws.amazon.com/blogs/networking-and-content-delivery/automating-aws-transit-gateway-attachments-to-a-transit-gateway-in-a-central-account        "hub and spoke architecture"
+[2]: https://docs.aviatrix.com/HowTos/tgw_design_patterns.html "tgw design patterns"
+[3]: https://github.com/org-formation/org-formation-cli "org-formation"

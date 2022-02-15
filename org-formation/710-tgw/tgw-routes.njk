@@ -1,4 +1,3 @@
-# mostly from https://rnanthan.medium.com/centralised-network-connectivity-with-aws-transit-gateway-7358bb321743
 AWSTemplateFormatVersion: "2010-09-09"
 Description: >-
   Setup Transit Gateway routes to spoke VPCs
@@ -34,3 +33,10 @@ Resources:
       TransitGatewayId: !Ref TransitGatewayId
       DestinationCidrBlock: {{ spoke_data.CIDR }}
 {% endfor %}
+
+Outputs:
+  TransitGatewayAttachmentId:
+    Description: "Transit Gateway Attachment ID"
+    Value: !Ref TransitGatewayAttachment
+    Export:
+      Name: !Sub '${AWS::StackName}-TransitGatewayAttachmentId'
