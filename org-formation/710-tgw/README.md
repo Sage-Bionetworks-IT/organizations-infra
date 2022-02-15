@@ -56,7 +56,7 @@ This is used to share the TGW to spoke accounts.
 This is used to setup routes from unionstation VPC to VPCs in spoke accounts.
 3. Add a new entry to the `Mappings` dictionary.  This is used to setup the TGW attachments
 and routes in spoke accounts.
-4. Review and merge PR 
+4. Review and merge PR
 
 Once merged and deployed the TGW routes will be updated to route traffic from the
 hub VPC to the spoke VPC.
@@ -103,7 +103,7 @@ and passes them to the cloudformation stack on deployment.
 
 
 [architecture]: transit-gateway-arch.png "hub and spoke architecture"
-[fully_isolated_network_design]: fully_isolated_network_design.png  "fully isolated network design"  
+[fully_isolated_network_design]: fully_isolated_network_design.png  "fully isolated network design"
 [1]: https://aws.amazon.com/blogs/networking-and-content-delivery/automating-aws-transit-gateway-attachments-to-a-transit-gateway-in-a-central-account        "hub and spoke architecture"
 [2]: https://docs.aviatrix.com/HowTos/tgw_design_patterns.html "tgw design patterns"
 [3]: https://github.com/org-formation/org-formation-cli "org-formation"

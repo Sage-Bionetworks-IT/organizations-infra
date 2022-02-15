@@ -1,17 +1,17 @@
 # Overview
 Setup and configure the AWS client Virtual Private Network (VPN) in the
-org-sagebase-transit account. 
+org-sagebase-transit account.
 
 ![alt text][architecture]
 
 ## Setup AWS client VPN
 We setup the AWS client VPN leveraging routes that were created by the
-[transit gateway](../710-tgw/README.md) configuration. 
+[transit gateway](../710-tgw/README.md) configuration.
 
 ### Setup IDP
 We federate users to the VPN with [Jumpcloud SSO](https://support.jumpcloud.com/support/s/article/Single-Sign-On-SSO-with-AWS-Client-VPN)
 which allows users to login to the VPN with their Jumpcloud credentials.
-This will also allow us to manage VPC access thru Jumcploud user groups. 
+This will also allow us to manage VPC access thru Jumcploud user groups.
 
 ### Setup Jumpcloud
 We need to setup two SSO apps in jumpcloud because it does not support multiple ACS URLs.
@@ -39,7 +39,7 @@ Create a `transitvpnssp` SSO app for the VPN self service portal access:
 
 ### Setup AWS SAML Providers
 After setting up Jumpcloud SSO we can let org-formation deploy the [_tasks.yaml](_tasks.yaml)
-file which will create the AWS SAML providers.  
+file which will create the AWS SAML providers.
 
 ## Add VPN routes
 
@@ -47,7 +47,7 @@ Following workflow to allow VPN users access to VPCs:
 
 Create a PR in this repo with the following changes to [_tasks.yaml](_tasks.yaml):
 1. Add a new entry to the `Vpn.TemplatingContext.TgwSpokes` dictionary.
-2. The `CIDR` is the VPC IP address that the VPN should allow access to. 
+2. The `CIDR` is the VPC IP address that the VPN should allow access to.
 3. The `AccessGroup` value(s) must match a Jumpcloud defined `User Group`. This allows
 the Jumpcloud user group(s) access to a VPC defined by its CIDR.
 
@@ -73,7 +73,7 @@ File -> Manage Profiles -> Add Profile -> select the downloaded configuration fi
 
 * Now use the VPN client to `connect`
 
-Once connected you should have access to cloud resources.  Access to resources is managed in Jumpcloud with User Groups. 
+Once connected you should have access to cloud resources.  Access to resources is managed in Jumpcloud with User Groups.
 
 
 ## Contributions
