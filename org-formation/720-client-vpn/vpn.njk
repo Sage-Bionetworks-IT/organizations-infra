@@ -25,6 +25,10 @@ Parameters:
     Type: String
     Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint."
     Default: false
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: 'Must be true or false'
 Resources:
   SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'

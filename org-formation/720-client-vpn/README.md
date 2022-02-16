@@ -41,24 +41,44 @@ Create a `transitvpnssp` SSO app for the VPN self service portal access:
 After setting up Jumpcloud SSO we can let org-formation deploy the [_tasks.yaml](_tasks.yaml)
 file which will create the AWS SAML providers.
 
-## Add VPN routes
+## VPN Management
 
-Following workflow to allow VPN users access to VPCs:
+### Setup Jumpcloud User Groups
+The AWS VPN is integrated with Jumpcloud SSO.  We can use JC to manage user group access to
+VPCs.  The first step is to create JC user groups.
+
+To create JC user groups:
+* Login to JC with admin role
+* Create a new JC User Group
+* Associate the new user group to JC SSO apps `transitvpn` and `transitvpnssp`
+![alt text][jc_sso_association]
+* Associate JC users to the user group.
+
+Continue to the next section to setup VPN authorization for the newly created
+JC user group.
+
+### Configure VPN authorization
+Once the JC user groups have been created we need to configure the VPN to allow
+the JC user groups access to specific VPCs.
 
 Create a PR in this repo with the following changes to [_tasks.yaml](_tasks.yaml):
 1. Add a new entry to the `Vpn.TemplatingContext.TgwSpokes` dictionary.
 2. The `CIDR` is the VPC IP address that the VPN should allow access to.
 3. The `AccessGroup` value(s) must match a Jumpcloud defined `User Group`. This allows
 the Jumpcloud user group(s) access to a VPC defined by its CIDR.
+4. Review and merge PR
 
 Once merged and deployed the VPN routes will be updated to route traffic from the
-hub VPC to the spoke VPCs.
+hub VPC to the spoke VPCs.  It will also allow the JC user groups authorization to
+access the VPC.  Now the JC user group should have full access to resources in the
+VPC.
 
 __Note__:
+* VPN users may get disconnected on this VPN update, the VPN client app should automatically reconnect once
+the operation is complete.
 * It is recommended to only add one VPC at a time which means you should split up your PRs to add one spoke VPC per PR.
-* The `ServerCertificateArn` parameter value should
-be the certificate that was created by easy-rsa and imported into the
-AWS cerfiticate manager.
+* The `ServerCertificateArn` parameter value should be the certificate that was created by easy-rsa and
+imported into the AWS cerfiticate manager.
 
 ## VPN User Workflow
 VPN users must use a VPN client to access cloud resources
@@ -74,7 +94,6 @@ File -> Manage Profiles -> Add Profile -> select the downloaded configuration fi
 * Now use the VPN client to `connect`
 
 Once connected you should have access to cloud resources.  Access to resources is managed in Jumpcloud with User Groups.
-
 
 ## Contributions
 Contributions are welcome.
@@ -105,3 +124,4 @@ and passes them to the cloudformation stack on deployment.
 
 
 [architecture]: client-vpn-arch.png "client vpn architecture"
+[jc_sso_association]: jc_sso_association.png "jumpcloud sso association"
