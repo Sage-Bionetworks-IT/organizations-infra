@@ -21,6 +21,10 @@ Parameters:
   ConnectionLogGroup:
     Type: String
     Description: "The cloudwatch log group for client connection information"
+  SplitTunnel:
+    Type: String
+    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint."
+    Default: false
 Resources:
   SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -56,7 +60,7 @@ Resources:
       ConnectionLogOptions:
         Enabled: true
         CloudwatchLogGroup: !Ref CloudwatchLogGroup
-      SplitTunnel: true
+      SplitTunnel: !Ref SplitTunnel
       ServerCertificateArn: !Ref ServerCertificateArn
       SelfServicePortal: "enabled"
       TransportProtocol: "udp"

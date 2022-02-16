@@ -61,7 +61,7 @@ Vpn:
         CIDR: "10.29.0.0/16"
         AccessGroups:
           - "aws-admins"
-          - "aws-auditors"
+          - "aws-itsandbox-auditors"
       # org-sagebase-sandbox
       sandcastlevpc:
         CIDR: "10.23.0.0/16"
