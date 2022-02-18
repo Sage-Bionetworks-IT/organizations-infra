@@ -67,7 +67,7 @@ __Note__: It is recommended to only add one VPC at a time which means you should
 
 Workflow to test routes:
 1. Provision a private EC2 in `unionstationvpc`
-2. Create a security group to allow `ICMP` ingress traffice
+2. Create a security group to allow `ICMP` ingress traffic.
 3. Apply security group to EC2
 4. Repeate provision EC2 steps in the spoke account.
 
