@@ -34,7 +34,6 @@ TransitGateway:
       - !Ref SandboxAccount
 
 UnionStationVpc:
-  DependsOn: [ TransitGateway ]
   Type: update-stacks
   Template: vpc.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-unionstationvpc'
@@ -106,10 +105,10 @@ TransitGatewaySpokeA:
   Parameters:
     # This assumes that all VPCs contain the same exports
     TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
-    VpcRouteTableId: !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateRouteTable']]]
-    VpcId: !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    VpcRouteTableId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateRouteTable']]]
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'VPCId']]]
     SubnetIds:
-      - !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
-      - !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
-      - !CopyValue [!Join ["-", ['us-east-1', !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]

@@ -21,6 +21,12 @@ Parameters:
   ConnectionLogGroup:
     Type: String
     Description: "The cloudwatch log group for client connection information"
+  LogRetentionInDays:
+    Type: Number
+    Description: "The number of days to retain the cloudwatch log events"
+    Default: 180
+    AllowedValues: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653]
+    ConstraintDescription: 'Must be either 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, or 3653'
   SplitTunnel:
     Type: String
     Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint."
@@ -60,7 +66,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Ref ConnectionLogGroup
-      RetentionInDays: 180
+      RetentionInDays: !Ref LogRetentionInDays
 
   Endpoint:
     Type: AWS::EC2::ClientVpnEndpoint
