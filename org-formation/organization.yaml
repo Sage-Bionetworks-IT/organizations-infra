@@ -380,3 +380,16 @@ Organization:
         Project: Infrastructure
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
+
+  AgoraProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-agora-prod
+      RootEmail: agora-prod@sagebase.org
+      Alias: org-sagebase-agora-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department:
+        Project: Infrastructure
+        budget-alarm-threshold: 20000
+        budget-alarm-threshold-email-recipient: agora-prod@sagebase.org
