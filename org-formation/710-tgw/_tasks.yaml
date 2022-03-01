@@ -1,0 +1,114 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'tgw'
+
+  accountId:
+    Type: String
+    Description: The identifier for the account
+    Default: !Ref TransitAccount
+
+  tgwEndpointCidr:
+    Type: String
+    Description: The CIDR For Transit Gateway endpoint
+    Default: '10.50.0.0/16'
+
+TransitGateway:
+  Type: update-stacks
+  Template: tgw.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  StackDescription: The transit gateway
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  Parameters:
+    Principals:
+      - !Ref ITSandboxAccount
+      - !Ref SandboxAccount
+
+UnionStationVpc:
+  Type: update-stacks
+  Template: vpc.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-unionstationvpc'
+  StackDescription: VPC for the transit gateway
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  Parameters:
+    VpcSubnetPrefix: "10.50"
+
+TransitGatewayRoutes:
+  DependsOn: [ TransitGateway, UnionStationVpc ]
+  Type: update-stacks
+  Template: tgw-routes.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-routes'
+  StackDescription: Transit gateway routes
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  TemplatingContext:
+    TgwSpokes:
+      # org-sagebase-itsandbox
+      dustbunnyvpc:
+        CIDR: "10.29.0.0/16"
+      # org-sagebase-sandbox
+      sandcastlevpc:
+        CIDR: "10.23.0.0/16"
+  Parameters:
+    VpcSubnetIDs:
+      - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetA']
+      - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetB']
+      - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetC']
+    VpcId: !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-VpcId']
+    VpcRouteTableId: !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-PrivateRouteTableId']
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId']
+
+Mappings:
+  TgwSpokesA:
+    VpcName:
+      804034162148: 'dustbunnyvpc'  # org-sagebase-itsandbox
+      563295687221: 'sandcastlevpc'  # org-sagebase-sandbox
+      055273631518: 'computevpc'     # org-sagebase-scicomp
+  TgwSpokesB:
+    VpcName:
+      055273631518: 'snowflakevpc'     # org-sagebase-scicomp
+
+TransitGatewaySpokeA:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-a'
+  StackDescription: Setup Transit Gateway on spoke accounts
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref ITSandboxAccount
+      - !Ref SandboxAccount
+    IncludeMasterAccount: false
+  Parameters:
+    # This assumes that all VPCs contain the same exports
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    VpcRouteTableId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateRouteTable']]]
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    SubnetIds:
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]

@@ -21,15 +21,15 @@ and spoke architecture.
 ## Setup Transit Gateway
 
 ### Setup Hub VPC
-The transit gateway hub VPC is created with [unionstation](config/prod/unionstationvpc.yaml)
+The transit gateway hub VPC is created with [unionstation](vpc.yaml)
 file.  That TGW is shared out to our spoke accounts defined in by
-[sceptre_user_data.TgwSpokes](config/prod/sage-tgw.yaml).
+[sceptre_user_data.TgwSpokes](tgw.yaml).
 
 ### Add spoke VPC
 The Hub VPC is already setup and only need to be done once.  Spokes may be connected to the
-hub with the following workflow:
+unionstationvpc hub with the following workflow:
 
-1. Create a PR in this repo with new `TgwSpokes` in [sage-tgw.yaml](config/prod/sage-tgw.yaml)
+1. Create a PR in this repo with new `TgwSpokes` in [tgw-spoke.yaml](tgw-spoke.yaml)
 and [sagetgw-routes.yaml](config/prod/sage-tgw-routes.yaml).  Look at existing PRs as
 [examples](https://github.com/Sage-Bionetworks/transit-infra/pull/23).
 2. Review and merge PR
