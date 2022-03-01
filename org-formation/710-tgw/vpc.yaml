@@ -131,7 +131,7 @@ Resources:
     Properties:
       SubnetId: !Ref SubnetD
       NetworkAclId: !Ref PublicNetworkAcl
-  InboundHTTPPublicNetworkAclEntry:
+  InboundPublicNetworkAclEntry:
     Type: "AWS::EC2::NetworkAclEntry"
     Properties:
       NetworkAclId: !Ref PublicNetworkAcl
