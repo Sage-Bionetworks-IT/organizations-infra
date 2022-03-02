@@ -12,7 +12,7 @@ Parameters:
 
 GuardDuty:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/GuardDuty/guard-duty.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/GuardDuty/guard-duty.yaml
   StackName: !Sub '${resourcePrefix}-${appName}'
   StackDescription: GuardDuty - Base
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -22,32 +22,12 @@ GuardDuty:
     LogArchiveBinding:
       Account: !Ref LogCentralAccount
     MemberBinding:
-      Account:
-        - !Ref TransitAccount
-        - !Ref AdminCentralAccount
-      #  - !Ref LogCentralAccount
-        - !Ref ImageCentralAccount
-      #  - !Ref SecurityCentralAccount
-      OrganizationalUnit:
-        - !Ref BridgeOU
-        - !Ref ServiceCatalogOU
-        - !Ref ScienceDevOU
-        - !Ref ScienceProdOU
-        - !Ref SynapseOU
+      Account: '*'
       IncludeMasterAccount: true
+      ExcludeAccount:
+        - !Ref accountId
     AllBinding:
-      Account:
-        - !Ref TransitAccount
-        - !Ref AdminCentralAccount
-       # - !Ref LogCentralAccount
-        - !Ref ImageCentralAccount
-       # - !Ref SecurityCentralAccount
-      OrganizationalUnit:
-        - !Ref BridgeOU
-        - !Ref ServiceCatalogOU
-        - !Ref ScienceDevOU
-        - !Ref ScienceProdOU
-        - !Ref SynapseOU
+      Account: '*'
       IncludeMasterAccount: true
   Parameters:
     resourcePrefix: !Ref resourcePrefix
@@ -92,7 +72,7 @@ GuardDutyConnectStridesAmpadWorkflows:
 # bucket that contains the trusted IP addresses that are excluded from GuardDuty findings
 GuardDutyTrustedIpsBucket:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/GuardDuty/trusted-ips-bucket.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/GuardDuty/trusted-ips-bucket.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-trusted-ips-bucket'
   StackDescription: GuardDuty - Trusted IPs bucket
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -116,7 +96,7 @@ GuardDutyExtension:
   DependsOn:
     - GuardDuty
     - GuardDutyTrustedIps
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/GuardDuty/guard-duty-extension.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/GuardDuty/guard-duty-extension.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-extension'
   StackDescription: GuardDuty - Extension (including IP Set)
   DefaultOrganizationBindingRegion: !Ref primaryRegion
