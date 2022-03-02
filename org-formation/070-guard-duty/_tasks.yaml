@@ -22,23 +22,32 @@ GuardDuty:
     LogArchiveBinding:
       Account: !Ref LogCentralAccount
     MemberBinding:
+      Account:
+        - !Ref TransitAccount
+        - !Ref AdminCentralAccount
+      #  - !Ref LogCentralAccount
+        - !Ref ImageCentralAccount
+      #  - !Ref SecurityCentralAccount
       OrganizationalUnit:
         - !Ref BridgeOU
         - !Ref ServiceCatalogOU
         - !Ref ScienceDevOU
         - !Ref ScienceProdOU
         - !Ref SynapseOU
-        - !Ref ItProdOU
       IncludeMasterAccount: true
     AllBinding:
       Account:
+        - !Ref TransitAccount
+        - !Ref AdminCentralAccount
+       # - !Ref LogCentralAccount
+        - !Ref ImageCentralAccount
+       # - !Ref SecurityCentralAccount
       OrganizationalUnit:
         - !Ref BridgeOU
         - !Ref ServiceCatalogOU
         - !Ref ScienceDevOU
         - !Ref ScienceProdOU
         - !Ref SynapseOU
-        - !Ref ItProdOU
       IncludeMasterAccount: true
   Parameters:
     resourcePrefix: !Ref resourcePrefix
