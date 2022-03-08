@@ -32,6 +32,7 @@ TransitGateway:
     Principals:
       - !Ref ITSandboxAccount
       - !Ref SandboxAccount
+      - !Ref ScicompAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -71,6 +72,10 @@ TransitGatewayRoutes:
       # org-sagebase-sandbox
       sandcastlevpc:
         CIDR: "10.23.0.0/16"
+      # org-sagebase-scicomp
+      computevpc:
+        CIDR: "10.5.0.0/16"
+
   Parameters:
     VpcSubnetIDs:
       - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetA']
@@ -88,8 +93,9 @@ Mappings:
       055273631518: 'computevpc'     # org-sagebase-scicomp
   TgwSpokesB:
     VpcName:
-      055273631518: 'snowflakevpc'     # org-sagebase-scicomp
+      055273631518: 'snowflakevpc'   # org-sagebase-scicomp
 
+# To do here...
 TransitGatewaySpokeA:
   DependsOn: [ TransitGatewayRoutes ]
   Type: update-stacks
@@ -101,6 +107,7 @@ TransitGatewaySpokeA:
     Account:
       - !Ref ITSandboxAccount
       - !Ref SandboxAccount
+      - !Ref ScicompAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
