@@ -32,6 +32,12 @@ TransitGateway:
     Principals:
       - !Ref ITSandboxAccount
       - !Ref SandboxAccount
+      - !Ref ScicompAccount
+      - !Ref SynapseDevAccount
+      - !Ref SynapseProdAccount
+      - !Ref SynapseDWAccount
+      - !Ref BridgeDevAccount
+      - !Ref BridgeProdAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -71,6 +77,46 @@ TransitGatewayRoutes:
       # org-sagebase-sandbox
       sandcastlevpc:
         CIDR: "10.23.0.0/16"
+      # org-sagebase-scicomp
+      computevpc:
+        CIDR: "10.5.0.0/16"
+      # org-sagebase-scicomp
+      snowflakevpc:
+        CIDR: "10.25.0.0/16"
+      # org-sagebase-synapsedev
+      vpc-1362e468:
+        CIDR: "	10.11.0.0/16"
+      # org-sagebase-synapsedev
+      vpc-c2d49cb9:
+        CIDR: "10.21.0.0/16"
+      # org-sagebase-synapsedev
+      vpc-0f126dc4dd46853a6:
+        CIDR: "10.24.0.0/16"
+      # org-sagebase-synapseprod
+      vpc-f154d28a:
+        CIDR: "	10.10.0.0/16"
+      # org-sagebase-synapseprod
+      vpc-c08848ba:
+        CIDR: "10.30.0.0/16"
+      # org-sagebase-synapseprod
+      vpc-f11f3d8a:
+        CIDR: "10.22.0.0/16"
+      # org-sagebase-synapsedw
+      vpc-946bedef:
+        CIDR: "10.12.0.0/16"
+      # org-sagebase-bridgedev
+      vpc-08ad2ebc1c49963b8:
+        CIDR: "172.48.0.0/16"
+      # org-sagebase-bridgedev
+      vpc-e9335a92:
+        CIDR: "172.51.0.0/16"
+      # org-sagebase-bridgeprod
+      vpc-0818659c21d92f2a3:
+        CIDR: "172.32.0.0/16"
+      # org-sagebase-bridgeprod
+      vpc-9c70bbf9:
+        CIDR: "172.31.0.0/16"
+
   Parameters:
     VpcSubnetIDs:
       - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetA']
@@ -86,10 +132,24 @@ Mappings:
       804034162148: 'dustbunnyvpc'  # org-sagebase-itsandbox
       563295687221: 'sandcastlevpc'  # org-sagebase-sandbox
       055273631518: 'computevpc'     # org-sagebase-scicomp
+      449435941126: 'vpc-1362e468'   # org-sagebase-synapsedev
+      325565585839: 'vpc-f154d28a'   # org-sagebase-synapseprod
+      383874245509: 'vpc-946bedef'   # org-sagebase-synapsedw
+      420786776710: 'vpc-08ad2ebc1c49963b8'   # org-sagebase-bridgedev
+      649232250620: 'vpc-0818659c21d92f2a3'   # org-sagebase-bridgeprod
   TgwSpokesB:
     VpcName:
-      055273631518: 'snowflakevpc'     # org-sagebase-scicomp
+      055273631518: 'snowflakevpc'   # org-sagebase-scicomp
+      449435941126: 'vpc-c2d49cb9'   # org-sagebase-synapsedev
+      325565585839: 'vpc-c08848ba'   # org-sagebase-synapseprod
+      420786776710: 'vpc-e9335a92'   # org-sagebase-bridgedev
+      649232250620: 'vpc-9c70bbf9'   # org-sagebase-bridgeprod
+  TgwSpokesC:
+    VpcName:
+      449435941126: 'vpc-0f126dc4dd46853a6'   # org-sagebase-synapsedev
+      325565585839: 'vpc-f11f3d8a'   # org-sagebase-synapseprod
 
+# To do here...
 TransitGatewaySpokeA:
   DependsOn: [ TransitGatewayRoutes ]
   Type: update-stacks
@@ -101,6 +161,12 @@ TransitGatewaySpokeA:
     Account:
       - !Ref ITSandboxAccount
       - !Ref SandboxAccount
+      - !Ref ScicompAccount
+      - !Ref SynapseDevAccount
+      - !Ref SynapseProdAccount
+      - !Ref SynapseDWAccount
+      - !Ref BridgeDevAccount
+      - !Ref BridgeProdAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
