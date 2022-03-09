@@ -69,7 +69,7 @@ jobs:
       - name: Validate ofn templates
         run: npm run validate-tasks
       - name: Deploy with ofn
-        run: npm run ci-perform-tasks
+        run: npm run ci-perform-tasks-parallel
   sceptre-organizations:
     if: github.event_name == 'push'
     needs: org-formation
