@@ -7,6 +7,9 @@ Parameters:
   AuditorMetadata:
     Type: String
     Description: "Public certificate for the auditor Jumpcloud AWS app"
+  TowerViewerMetadata:
+    Type: String
+    Description: "Public certificate for the towerviewer JumpCloud AWS app"
 
 Resources:
   AdminSamlProvider:
@@ -60,6 +63,92 @@ Resources:
             Condition:
               StringEquals:
                 "SAML:aud": "https://signin.aws.amazon.com/saml"
+  TowerViewerSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "strides-ampad-workflows-towerviewer"
+      Metadata: !Ref TowerViewerMetadata
+      URL: ""
+  TowerViewerSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt TowerViewerSamlProvider.Name
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref TowerViewerSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+      Policies:
+        PolicyDocument:
+          Statement:
+            Sid: TowerViewOnlyAccess,
+            Action:
+              - autoscaling:Describe*
+              - batch:ListJobs
+              - cloudformation:List*
+              - cloudformation:DescribeStacks
+              - cloudtrail:DescribeTrails
+              - cloudtrail:LookupEvents
+              - cloudwatch:List*
+              - cloudwatch:Get*
+              - ec2:DescribeAccountAttributes
+              - ec2:DescribeAddresses
+              - ec2:DescribeAvailabilityZones
+              - ec2:DescribeBundleTasks
+              - ec2:DescribeClassicLinkInstances
+              - ec2:DescribeConversionTasks
+              - ec2:DescribeCustomerGateways
+              - ec2:DescribeDhcpOptions
+              - ec2:DescribeExportTasks
+              - ec2:DescribeFlowLogs
+              - ec2:DescribeHost*
+              - ec2:DescribeIdentityIdFormat
+              - ec2:DescribeIdFormat
+              - ec2:DescribeImage*
+              - ec2:DescribeImport*
+              - ec2:DescribeInstance*
+              - ec2:DescribeInternetGateways
+              - ec2:DescribeKeyPairs
+              - ec2:DescribeMovingAddresses
+              - ec2:DescribeNatGateways
+              - ec2:DescribeNetwork*
+              - ec2:DescribePlacementGroups
+              - ec2:DescribePrefixLists
+              - ec2:DescribeRegions
+              - ec2:DescribeReserved*
+              - ec2:DescribeRouteTables
+              - ec2:DescribeSecurityGroups
+              - ec2:DescribeSnapshot*
+              - ec2:DescribeSpot*
+              - ec2:DescribeSubnets
+              - ec2:DescribeTags
+              - ec2:DescribeVolume*
+              - ec2:DescribeVpc*
+              - ec2:DescribeVpnGateways
+              - ecs:List*
+              - ecs:Describe*
+              - elasticloadbalancing:DescribeListeners
+              - elasticloadbalancing:DescribeLoadBalancers
+              - elasticloadbalancing:DescribeTargetGroups
+              - elasticfilesystem:DescribeFileSystems
+              - elasticloadbalancing:DescribeInstanceHealth
+              - elasticloadbalancing:DescribeTargetHealth
+              - fsx:DescribeFileSystems
+              - iam:List*
+              - iam:GetAccountSummary
+              - iam:GetLoginProfile
+              - lambda:List*
+              - logs:Describe*"
+            Effect: Allow
+            Resource: "*"
 Outputs:
   AdminSamlProviderArn:
     Value: !Ref AdminSamlProvider
@@ -77,3 +166,11 @@ Outputs:
     Value: !GetAtt AuditorSamlProviderRole.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-AuditorSamlProviderRoleArn'
+  TowerViewerSamlProviderArn:
+    Value: !Ref TowerViewerSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TowerViewerSamlProviderArn'
+  TowerViewerSamlProviderRoleArn:
+    Value: !GetAtt TowerViewerSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TowerViewerSamlProviderRoleArn'
