@@ -1,0 +1,9 @@
+template:
+  path: gh_deployer.yaml
+stack_name: gh_deployer
+stack_tags:
+  Department: IT
+  Project: Infrastructure
+  OwnerEmail: x.schildwachter@sagebionetworks.org
+dependencies:
+  - prod/essentials.yaml

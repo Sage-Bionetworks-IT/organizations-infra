@@ -1,0 +1,62 @@
+Description: Setup IAM service user and policies for Github deployment of S3 website
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  GithubDeployerUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: ghdeployer
+  GithubDeployerPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: GithubDeployerPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Action:
+              - acm:ListCertificates,
+              - cloudfront:CreateDistribution
+              - cloudfront:DeleteDistribution
+              - cloudfront:GetDistribution
+              - cloudfront:GetDistributionConfig
+              - cloudfront:ListDistributions
+              - cloudfront:UpdateDistribution
+              - cloudfront:ListCloudFrontOriginAccessIdentities
+              - cloudfront:CreateInvalidation
+              - cloudfront:GetInvalidation
+              - cloudfront:ListInvalidations
+              - cloudfront:TagResource
+              - s3:PutBucketWebsite
+              - s3:PutObject
+              - s3:PutObjectAcl
+              - s3:GetObject
+              - s3:ListBucket
+              - s3:DeleteObject
+              - s3:GetBucketLocation
+            Effect: Allow
+            Resource: "*"
+      Roles:
+        - !Ref GithubDeployerRole
+  GithubDeployerRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !GetAtt GithubDeployerUser.Arn
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+Outputs:
+  GithubDeployerRole:
+    Value: !Ref GithubDeployerRole
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-GithubDeployerRole'
+  GithubDeployerRoleArn:
+    Value: !GetAtt GithubDeployerRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-GithubDeployerRoleArn'
