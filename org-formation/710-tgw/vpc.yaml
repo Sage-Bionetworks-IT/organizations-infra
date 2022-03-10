@@ -16,7 +16,7 @@ Mappings:
     SubnetC:  # private
       CIDR: "3.0/24"
     SubnetD:  # public
-      CIDR: "4.0/24"
+      CIDR: "100.0/24"
 Resources:
   VPC:
     Type: 'AWS::EC2::VPC'
