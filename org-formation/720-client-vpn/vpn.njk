@@ -97,6 +97,30 @@ Resources:
       SubnetId: {{ subnet_id }}
 {% endfor %}
 
+{# Authorization and route between VPN and public internet #}
+  EndpointAuthorizationPublic:
+    Type: AWS::EC2::ClientVpnAuthorizationRule
+    DependsOn:
+{%     for subnet_id in SubnetIds %}
+      - EndpointAssociation{{ subnet_id | last }}
+{%     endfor %}
+    Properties:
+      Description: {{ spoke }}-{{ access_group }}
+      AccessGroupId: {{ access_group }}
+      ClientVpnEndpointId: "0.0.0.0/0"
+      TargetNetworkCidr: {{ spoke_data.CIDR }}
+
+  EndpointRoutePublic:
+    Type: AWS::EC2::ClientVpnRoute
+    DependsOn:
+      - EndpointAuthorizationPublic
+    Properties:
+      Description: "route between VPN and public internet"
+      ClientVpnEndpointId: !Ref Endpoint
+      DestinationCidrBlock: "0.0.0.0/0"
+      TargetVpcSubnetId: !ImportValue sagebase-tgw-unionstationvpc-SubnetC
+
+{# Authorization and routes between VPN and spokes #}
 {% for spoke, spoke_data in TgwSpokes %}
 {%   set spoke_loop = loop %}
 {%   for access_group in spoke_data.AccessGroups %}
