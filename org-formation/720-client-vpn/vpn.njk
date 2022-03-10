@@ -118,7 +118,7 @@ Resources:
       Description: "route between VPN and public internet"
       ClientVpnEndpointId: !Ref Endpoint
       DestinationCidrBlock: "0.0.0.0/0"
-      TargetVpcSubnetId: !ImportValue sagebase-tgw-unionstationvpc-SubnetC
+      TargetVpcSubnetId: !ImportValue sagebase-tgw-unionstationvpc-SubnetD
 
 {# Authorization and routes between VPN and spokes #}
 {% for spoke, spoke_data in TgwSpokes %}
