@@ -52,7 +52,7 @@ Vpn:
       - !Sub '!ImportValue ${resourcePrefix}-tgw-${vpnVpc}-SubnetA'
       - !Sub '!ImportValue ${resourcePrefix}-tgw-${vpnVpc}-SubnetB'
       - !Sub '!ImportValue ${resourcePrefix}-tgw-${vpnVpc}-SubnetC'
-      - !Sub '!ImportValue ${resourcePrefix}-tgw-${vpnVpc}-SubnetD'
+#      - !Sub '!ImportValue ${resourcePrefix}-tgw-${vpnVpc}-SubnetD'
     TgwSpokes:
       # "10.50.0.0/16" (unionstationvpc) route automatically setup by the VPN endpoint association
       # AccessGroups values must match Jumpcloud User Group names

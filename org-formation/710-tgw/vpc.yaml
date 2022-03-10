@@ -15,8 +15,8 @@ Mappings:
       CIDR: "2.0/24"
     SubnetC:  # private
       CIDR: "3.0/24"
-    SubnetD:  # public
-      CIDR: "100.0/24"
+#    SubnetD:  # public
+#      CIDR: "100.0/24"
 Resources:
   VPC:
     Type: 'AWS::EC2::VPC'
@@ -73,16 +73,16 @@ Resources:
         - - !Ref VpcSubnetPrefix
           - !FindInMap [SubnetConfig, SubnetC, CIDR]
       VpcId: !Ref VPC
-  SubnetD:
-    Type: "AWS::EC2::Subnet"
-    Properties:
-      AvailabilityZone: !Select [3, !GetAZs '']
-      CidrBlock: !Join
-        - '.'
-        - - !Ref VpcSubnetPrefix
-          - !FindInMap [SubnetConfig, SubnetD, CIDR]
-      VpcId: !Ref VPC
-      MapPublicIpOnLaunch: true
+#  SubnetD:
+#    Type: "AWS::EC2::Subnet"
+#    Properties:
+#      AvailabilityZone: !Select [3, !GetAZs '']
+#      CidrBlock: !Join
+#        - '.'
+#        - - !Ref VpcSubnetPrefix
+#          - !FindInMap [SubnetConfig, SubnetD, CIDR]
+#      VpcId: !Ref VPC
+#      MapPublicIpOnLaunch: true
   PrivateRouteTable:
     Type: "AWS::EC2::RouteTable"
     Properties:
@@ -102,35 +102,35 @@ Resources:
     Properties:
       SubnetId: !Ref "SubnetC"
       RouteTableId: !Ref PrivateRouteTable
-  SubnetRouteTableAssociationD:
-    Type: "AWS::EC2::SubnetRouteTableAssociation"
-    Properties:
-      SubnetId: !Ref SubnetD
-      RouteTableId: !Ref PublicRouteTable
+#  SubnetRouteTableAssociationD:
+#    Type: "AWS::EC2::SubnetRouteTableAssociation"
+#    Properties:
+#      SubnetId: !Ref SubnetD
+#      RouteTableId: !Ref PublicRouteTable
   ElasticIP:
     Type: "AWS::EC2::EIP"
     Properties:
       Domain: "vpc"
-  NATGateway:
-    Type: "AWS::EC2::NatGateway"
-    Properties:
-      AllocationId: !GetAtt ElasticIP.AllocationId
-      SubnetId: !Ref SubnetD
-  PrivateRouteToInternet:
-    Type: "AWS::EC2::Route"
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable
-      DestinationCidrBlock: "0.0.0.0/0"
-      NatGatewayId: !Ref NATGateway
+#  NATGateway:
+#    Type: "AWS::EC2::NatGateway"
+#    Properties:
+#      AllocationId: !GetAtt ElasticIP.AllocationId
+#      SubnetId: !Ref SubnetD
+#  PrivateRouteToInternet:
+#    Type: "AWS::EC2::Route"
+#    Properties:
+#      RouteTableId: !Ref PrivateRouteTable
+#      DestinationCidrBlock: "0.0.0.0/0"
+#      NatGatewayId: !Ref NATGateway
   PublicNetworkAcl:
     Type: "AWS::EC2::NetworkAcl"
     Properties:
       VpcId: !Ref VPC
-  PublicSubnetNetworkAclAssociation:
-    Type: "AWS::EC2::SubnetNetworkAclAssociation"
-    Properties:
-      SubnetId: !Ref SubnetD
-      NetworkAclId: !Ref PublicNetworkAcl
+#  PublicSubnetNetworkAclAssociation:
+#    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+#    Properties:
+#      SubnetId: !Ref SubnetD
+#      NetworkAclId: !Ref PublicNetworkAcl
   InboundPublicNetworkAclEntry:
     Type: "AWS::EC2::NetworkAclEntry"
     Properties:
@@ -176,11 +176,11 @@ Outputs:
     Value: !Ref SubnetC
     Export:
       Name: !Sub '${AWS::StackName}-SubnetC'
-  SubnetD:
-    Description: "VPC Subnet D"
-    Value: !Ref SubnetD
-    Export:
-      Name: !Sub '${AWS::StackName}-SubnetD'
+#  SubnetD:
+#    Description: "VPC Subnet D"
+#    Value: !Ref SubnetD
+#    Export:
+#      Name: !Sub '${AWS::StackName}-SubnetD'
   VpcId:
     Description: "The VPC ID"
     Value: !Ref VPC
@@ -196,8 +196,8 @@ Outputs:
     Value: !Ref PublicRouteTable
     Export:
       Name: !Sub '${AWS::StackName}-PublicRouteTableId'
-  NATGatewayId:
-    Description: "The NAT Gateway ID"
-    Value: !Ref NATGateway
-    Export:
-      Name: !Sub '${AWS::StackName}-NATGatewayId'
+#  NATGatewayId:
+#    Description: "The NAT Gateway ID"
+#    Value: !Ref NATGateway
+#    Export:
+#      Name: !Sub '${AWS::StackName}-NATGatewayId'
