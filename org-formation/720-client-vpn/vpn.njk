@@ -107,8 +107,8 @@ Resources:
     Properties:
       Description: {{ spoke }}-{{ access_group }}
       AccessGroupId: {{ access_group }}
-      ClientVpnEndpointId: "0.0.0.0/0"
-      TargetNetworkCidr: {{ spoke_data.CIDR }}
+      ClientVpnEndpointId: !Ref Endpoint
+      TargetNetworkCidr: "0.0.0.0/0"
 
   EndpointRoutePublic:
     Type: AWS::EC2::ClientVpnRoute
