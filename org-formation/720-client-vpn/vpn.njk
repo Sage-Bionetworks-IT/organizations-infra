@@ -100,10 +100,6 @@ Resources:
 {# Authorization and route between VPN and public internet #}
   EndpointAuthorizationPublic:
     Type: AWS::EC2::ClientVpnAuthorizationRule
-    DependsOn:
-{%     for subnet_id in SubnetIds %}
-      - EndpointAssociation{{ subnet_id | last }}
-{%     endfor %}
     Properties:
       Description: {{ spoke }}-{{ access_group }}
       AccessGroupId: {{ access_group }}
