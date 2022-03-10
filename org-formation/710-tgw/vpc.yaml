@@ -76,7 +76,7 @@ Resources:
   SubnetD:
     Type: "AWS::EC2::Subnet"
     Properties:
-      AvailabilityZone: !Select [0, !GetAZs '']
+      AvailabilityZone: !Select [3, !GetAZs '']
       CidrBlock: !Join
         - '.'
         - - !Ref VpcSubnetPrefix
