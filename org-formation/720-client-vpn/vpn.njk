@@ -101,7 +101,7 @@ Resources:
   EndpointAuthorizationPublic:
     Type: AWS::EC2::ClientVpnAuthorizationRule
     Properties:
-      Description: {{ spoke }}-{{ access_group }}
+      Description: "authorization between VPN and public internet"
       AccessGroupId: {{ access_group }}
       ClientVpnEndpointId: !Ref Endpoint
       TargetNetworkCidr: "0.0.0.0/0"
