@@ -120,7 +120,7 @@ Resources:
 {%   endfor %}
 {% endfor %}
 
-  EndpointAuthorizationtoPublic:
+  EndpointAuthorizationToPublic:
     Type:AWS::EC2::ClientVpnAuthorizationRule
     DependsOn: 
     Properties:
@@ -145,10 +145,30 @@ Resources:
     Properties:
       Description: {{ spoke }}-Subnet{{ subnet_id | last }}
       ClientVpnEndpointId: !Ref Endpoint
+      DestinationCidrBlock: {{ spoke_data.CIDR }}
+      TargetVpcSubnetId: {{ subnet_id }}
+{%   endfor %}
+{% endfor %}
+
+
+{% for spoke, spoke_data in TgwSpokes %}
+{%   set spoke_loop = loop %}
+{%   for subnet_id in SubnetIds %}
+{%     set subnet_id_loop = loop %}
+  EndpointRouteToPublic:
+    Type: AWS::EC2::ClientVpnRoute
+    DependsOn:
+{%     for depend in SubnetIds %}
+      - EndpointAssociation{{ subnet_id | last }}
+{%     endfor %}
+    Properties:
+      Description: {{ spoke }}-Subnet{{ subnet_id | last }}
+      ClientVpnEndpointId: !Ref Endpoint
       DestinationCidrBlock: 0.0.0.0/0
       TargetVpcSubnetId: {{ subnet_id }}
 {%   endfor %}
 {% endfor %}
+
 
 Outputs:
   Endpoint:
