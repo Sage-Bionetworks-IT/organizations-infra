@@ -178,7 +178,7 @@ Outputs:
       Name: !Sub '${AWS::StackName}-SubnetC'
   SubnetD:
     Description: "VPC Subnet D"
-    Value: !Ref SubnetC
+    Value: !Ref SubnetD
     Export:
       Name: !Sub '${AWS::StackName}-SubnetD'
   VpcId:
