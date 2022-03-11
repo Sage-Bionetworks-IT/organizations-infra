@@ -38,6 +38,7 @@ Organization:
         - !Ref WorkflowsNextflowProdAccount
         - !Ref MobileHealthDataEngineeringProdAccount
         - !Ref CnbAccount
+        - !Ref AgoraProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -391,5 +392,5 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department:
         Project: Infrastructure
-        budget-alarm-threshold: 20000
+        budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: agora-prod@sagebase.org
