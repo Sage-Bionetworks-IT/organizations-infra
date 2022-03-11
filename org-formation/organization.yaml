@@ -390,7 +390,7 @@ Organization:
       Alias: org-sagebase-agora-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department:
-        Project: Infrastructure
+        Department: SysBio
+        Project: amp-ad
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: agora-prod@sagebase.org
