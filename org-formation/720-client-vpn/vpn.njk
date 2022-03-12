@@ -88,11 +88,6 @@ Resources:
       SessionTimeoutHours: !Ref SessionTimeoutHours
       SecurityGroupIds:
         - !GetAtt SecurityGroup.GroupId
-      TagSpecifications:
-        - ResourceType: "client-vpn-endpoint"
-          Tags:
-            - Key: "Name"
-              Value: !Ref AWS::StackName
 
 {% for subnet_id in SubnetIds %}
   EndpointAssociation{{ subnet_id | last }}:
@@ -144,3 +139,8 @@ Outputs:
     Value: !Ref Endpoint
     Export:
       Name: !Sub '${AWS::StackName}-EndpointId'
+  SelfServicePortalUrl:
+    Description: The VPN self service portal URL
+    Value: !Sub 'https://self-service.clientvpn.amazonaws.com/endpoints/${Endpoint}'
+    Export:
+      Name: !Sub '${AWS::StackName}-SelfServicePortalUrl'
