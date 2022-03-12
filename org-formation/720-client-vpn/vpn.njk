@@ -101,20 +101,20 @@ Resources:
   EndpointAuthorizationPublic:
     Type: AWS::EC2::ClientVpnAuthorizationRule
     Properties:
-      Description: "authorization between VPN and public internet"
-      AccessGroupId: {{ access_group }}
+      Description: "public"
+      AuthorizeAllGroups: true
       ClientVpnEndpointId: !Ref Endpoint
       TargetNetworkCidr: "0.0.0.0/0"
 
-  EndpointRoutePublic:
+{% for subnet_id in SubnetIds %}
+  EndpointRoutePublicSubnet{{ subnet_id | last }}:
     Type: AWS::EC2::ClientVpnRoute
-    DependsOn:
-      - EndpointAuthorizationPublic
     Properties:
-      Description: "route between VPN and public internet"
+      Description: public-subnet{{ subnet_id | last }}
       ClientVpnEndpointId: !Ref Endpoint
       DestinationCidrBlock: "0.0.0.0/0"
-      TargetVpcSubnetId: !ImportValue sagebase-tgw-unionstationvpc-SubnetD
+      TargetVpcSubnetId: {{ subnet_id }}
+{% endfor %}
 
 {# Authorization and routes between VPN and spokes #}
 {% for spoke, spoke_data in TgwSpokes %}

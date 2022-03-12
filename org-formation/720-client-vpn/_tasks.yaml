@@ -79,4 +79,4 @@ Vpn:
     # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
     # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
     ServerCertificateArn: !Sub 'arn:aws:acm:${primaryRegion}:${accountId}:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6'
-    SplitTunnel: "true"
+    SplitTunnel: "false"
