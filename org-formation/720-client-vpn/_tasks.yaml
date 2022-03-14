@@ -99,4 +99,4 @@ VpnEndpointRedirect:
     # the endpoint we are redirecting to (AWS VPN client self service)
     TargetHostName: "self-service.clientvpn.amazonaws.com"
     # and a path to our specific config
-    TargetKey: !CopyValue [!Sub 'endpoints/${resourcePrefix}-${appName}-EndpointId', !Ref TransitAccount]
+    TargetKey: !Join ['/', ['endpoints', !CopyValue [!Sub '${resourcePrefix}-${appName}-EndpointId', !Ref TransitAccount]]]
