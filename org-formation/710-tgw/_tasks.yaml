@@ -75,6 +75,8 @@ TransitGatewayRoutes:
       # org-sagebase-scicomp
       computevpc:
         CIDR: "10.5.0.0/16"
+      snowflakevpc:
+        CIDR: "10.25.0.0/16"
 
   Parameters:
     VpcSubnetIDs:
