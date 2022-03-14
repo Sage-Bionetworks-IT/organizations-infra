@@ -97,6 +97,26 @@ Resources:
       SubnetId: {{ subnet_id }}
 {% endfor %}
 
+{# Authorization and route between VPN and public internet #}
+  EndpointAuthorizationPublic:
+    Type: AWS::EC2::ClientVpnAuthorizationRule
+    Properties:
+      Description: "public"
+      AuthorizeAllGroups: true
+      ClientVpnEndpointId: !Ref Endpoint
+      TargetNetworkCidr: "0.0.0.0/0"
+
+{% for subnet_id in SubnetIds %}
+  EndpointRoutePublicSubnet{{ subnet_id | last }}:
+    Type: AWS::EC2::ClientVpnRoute
+    Properties:
+      Description: public-subnet{{ subnet_id | last }}
+      ClientVpnEndpointId: !Ref Endpoint
+      DestinationCidrBlock: "0.0.0.0/0"
+      TargetVpcSubnetId: {{ subnet_id }}
+{% endfor %}
+
+{# Authorization and routes between VPN and spokes #}
 {% for spoke, spoke_data in TgwSpokes %}
 {%   set spoke_loop = loop %}
 {%   for access_group in spoke_data.AccessGroups %}
