@@ -67,13 +67,14 @@ Vpn:
         AccessGroups:
           - "aws-admins"
           - "aws-sandbox-developers"
+          - "scientists"
       # org-sagebase-scicomp
       computevpc:
         CIDR: "10.5.0.0/16"
         AccessGroups:
           - "aws-admins"
           - "aws-scicomp-developers"
-      # org-sagebase-sandbox
+          - "scientists"
       snowflakevpc:
         CIDR: "10.25.0.0/16"
         AccessGroups:
