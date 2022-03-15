@@ -1,4 +1,6 @@
-template_path: remote/AccountAlertTopics.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/AccountAlertTopics.yaml
 stack_name: AccountAlertTopics
 dependencies:
   - develop/bootstrap.yaml
@@ -9,6 +11,3 @@ parameters:
   DeployLambda: "true"
   SlackWebhookURL: !ssm /infra/SlackWebhookUrl
   SlackChannel: "#infra-notices"
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/AccountAlertTopics.yaml -O templates/remote/AccountAlertTopics.yaml"

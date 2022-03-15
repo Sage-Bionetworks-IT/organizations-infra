@@ -1,4 +1,5 @@
-template_path: "client-vpn.j2"
+template:
+  path: "client-vpn.j2"
 stack_name: "sage-client-vpn"
 stack_tags:
   Department: "Platform"

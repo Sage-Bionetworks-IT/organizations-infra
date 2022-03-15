@@ -1,0 +1,8 @@
+template_path: "sc-portfolio-scheduled-jobs.yaml"
+stack_name: "sc-portfolio-scheduled-jobs"
+dependencies:
+  - "prod/sc-scheduled-jobs-launchrole.yaml"
+  - "prod/sc-enduser-iam.yaml"
+parameters:
+  PorfolioName: "Sage Scheduled Jobs Porfolio"
+  PorfolioDescription: "Products for Sage Bionetworks staff"

@@ -1,0 +1,166 @@
+Description: Setup AWS client VPN endpoint
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  ServerCertificateArn:
+    Type: String
+    Description: "The VPN server certificate ARN"
+  ClientCidrBlock:
+    Type: String
+    Description: "The CIDR assigned to clients connected to the VPN"
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+  VpnSamlProviderArn:
+    Type: String
+    Description: "The SAML provider ARN for the client VPN"
+  VpnSspSamlProviderArn:
+    Type: String
+    Description: "The SAML provider ARN for the client VPN self service portal"
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: "The VPC to associate VPN with"
+  ConnectionLogGroup:
+    Type: String
+    Description: "The cloudwatch log group for client connection information"
+  LogRetentionInDays:
+    Type: Number
+    Description: "The number of days to retain the cloudwatch log events"
+    Default: 180
+    AllowedValues: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653]
+    ConstraintDescription: 'Must be either 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, or 3653'
+  SplitTunnel:
+    Type: String
+    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint."
+    Default: false
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: 'Must be true or false'
+  SessionTimeoutHours:
+    Type: Number
+    Description: "The maximum VPN session duration time in hours."
+    Default: 24
+    AllowedValues:
+      - 8
+      - 10
+      - 12
+      - 24
+    ConstraintDescription: 'Must be one of 8, 10, 12, or 24 hours'
+Resources:
+  SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: !Sub '${AWS::StackName} Security Group'
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - CidrIp: "0.0.0.0/0"
+          FromPort: -1
+          ToPort: -1
+          IpProtocol: "-1"
+      SecurityGroupEgress:
+        - CidrIp: "0.0.0.0/0"
+          FromPort: -1
+          ToPort: -1
+          IpProtocol: "-1"
+
+  CloudwatchLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref ConnectionLogGroup
+      RetentionInDays: !Ref LogRetentionInDays
+
+  Endpoint:
+    Type: AWS::EC2::ClientVpnEndpoint
+    Properties:
+      AuthenticationOptions:
+        - Type: "federated-authentication"
+          FederatedAuthentication:
+            SAMLProviderArn: !Ref VpnSamlProviderArn
+            SelfServiceSAMLProviderArn: !Ref VpnSspSamlProviderArn
+      ClientCidrBlock: !Ref ClientCidrBlock
+      ConnectionLogOptions:
+        Enabled: true
+        CloudwatchLogGroup: !Ref CloudwatchLogGroup
+      SplitTunnel: !Ref SplitTunnel
+      ServerCertificateArn: !Ref ServerCertificateArn
+      SelfServicePortal: "enabled"
+      TransportProtocol: "udp"
+      VpcId: !Ref VpcId
+      SessionTimeoutHours: !Ref SessionTimeoutHours
+      SecurityGroupIds:
+        - !GetAtt SecurityGroup.GroupId
+
+{% for subnet_id in SubnetIds %}
+  EndpointAssociation{{ subnet_id | last }}:
+    Type: AWS::EC2::ClientVpnTargetNetworkAssociation
+    Properties:
+      ClientVpnEndpointId: !Ref Endpoint
+      SubnetId: {{ subnet_id }}
+{% endfor %}
+
+{# Authorization and route between VPN and public internet #}
+  EndpointAuthorizationPublic:
+    Type: AWS::EC2::ClientVpnAuthorizationRule
+    Properties:
+      Description: "public"
+      AuthorizeAllGroups: true
+      ClientVpnEndpointId: !Ref Endpoint
+      TargetNetworkCidr: "0.0.0.0/0"
+
+{% for subnet_id in SubnetIds %}
+  EndpointRoutePublicSubnet{{ subnet_id | last }}:
+    Type: AWS::EC2::ClientVpnRoute
+    Properties:
+      Description: public-subnet{{ subnet_id | last }}
+      ClientVpnEndpointId: !Ref Endpoint
+      DestinationCidrBlock: "0.0.0.0/0"
+      TargetVpcSubnetId: {{ subnet_id }}
+{% endfor %}
+
+{# Authorization and routes between VPN and spokes #}
+{% for spoke, spoke_data in TgwSpokes %}
+{%   set spoke_loop = loop %}
+{%   for access_group in spoke_data.AccessGroups %}
+{%     set access_group_loop = loop %}
+  EndpointAuthorization{{ spoke_loop.index }}{{ access_group_loop.index }}:
+    Type: AWS::EC2::ClientVpnAuthorizationRule
+    DependsOn:
+{%     for subnet_id in SubnetIds %}
+      - EndpointAssociation{{ subnet_id | last }}
+{%     endfor %}
+    Properties:
+      Description: {{ spoke }}-{{ access_group }}
+      AccessGroupId: {{ access_group }}
+      ClientVpnEndpointId: !Ref Endpoint
+      TargetNetworkCidr: {{ spoke_data.CIDR }}
+{%   endfor %}
+{% endfor %}
+
+{% for spoke, spoke_data in TgwSpokes %}
+{%   set spoke_loop = loop %}
+{%   for subnet_id in SubnetIds %}
+{%     set subnet_id_loop = loop %}
+  EndpointRoute{{ spoke_loop.index }}{{ subnet_id_loop.index }}:
+    Type: AWS::EC2::ClientVpnRoute
+    DependsOn:
+{%     for depend in SubnetIds %}
+      - EndpointAssociation{{ subnet_id | last }}
+{%     endfor %}
+    Properties:
+      Description: {{ spoke }}-Subnet{{ subnet_id | last }}
+      ClientVpnEndpointId: !Ref Endpoint
+      DestinationCidrBlock: {{ spoke_data.CIDR }}
+      TargetVpcSubnetId: {{ subnet_id }}
+{%   endfor %}
+{% endfor %}
+
+Outputs:
+  Endpoint:
+    Description: The VPN endpoint Id
+    Value: !Ref Endpoint
+    Export:
+      Name: !Sub '${AWS::StackName}-EndpointId'
+  SelfServicePortalUrl:
+    Description: The VPN self service portal URL
+    Value: !Sub 'https://self-service.clientvpn.amazonaws.com/endpoints/${Endpoint}'
+    Export:
+      Name: !Sub '${AWS::StackName}-SelfServicePortalUrl'

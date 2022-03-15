@@ -38,6 +38,7 @@ Organization:
         - !Ref WorkflowsNextflowProdAccount
         - !Ref MobileHealthDataEngineeringProdAccount
         - !Ref CnbAccount
+        - !Ref AgoraProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -242,6 +243,7 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: org-sagebase-bmgfki
+      AccountId: '464102568320'
       RootEmail: aws.bmgfki@sagebase.org
       Alias: org-sagebase-bmgfki
       Tags:
@@ -271,6 +273,7 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: NlpSandboxAccount
+      AccountId: '841415736403'
       RootEmail: aws-nlpsandbox@sagebase.org
       Alias: org-sagebase-nlpsandbox
       Tags:
@@ -284,6 +287,7 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: CnbAccount
+      AccountId: '216152803258'
       RootEmail: cnb@sagebase.org
       Alias: org-sagebase-cnb
       Tags:
@@ -297,6 +301,7 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: org-sagebase-mobilehealth-dataengineering-dev
+      AccountId: '634761300905'
       RootEmail: aws-mobilehealth-dataengineering-dev@sagebase.org
       Alias: org-sagebase-mobilehealth-dataengineering-dev
       Tags:
@@ -310,6 +315,7 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: org-sagebase-mobilehealth-dataengineering-prod
+      AccountId: '611413694531'
       RootEmail: aws-mobilehealth-dataengineering-prod@sagebase.org
       Alias: org-sagebase-mobilehealth-dataengineering-prod
       Tags:
@@ -323,6 +329,7 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: iAtlasProdAccount
+      AccountId: '386990716034'
       RootEmail: aws-iatlas-prod@sagebase.org
       Alias: org-sagebase-iatlas-prod
       Tags:
@@ -337,6 +344,7 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: htan-dev
+      AccountId: '888810830951'
       RootEmail: aws-htan-dev@sagebase.org
       Alias: org-sagebase-htan-dev
       Tags:
@@ -350,24 +358,39 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: workflows-nextflow-prod
+      AccountId: '728882028485'
       RootEmail: aws-workflows-nextflow-prod@sagebase.org
       Alias: org-sagebase-workflows-nextflow-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
-        budget-alarm-threshold: 10000
-        budget-alarm-threshold-email-recipient: aws-workflows-nextflow-prod@sagebase.org
+        # More granular budget alerts (compute, storage, and other) deployed here:
+        # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
   WorkflowsNextflowDevAccount:
     Type: OC::ORG::Account
     Properties:
       AccountName: workflows-nextflow-dev
+      AccountId: '035458030717'
       RootEmail: aws-workflows-nextflow-dev@sagebase.org
       Alias: org-sagebase-workflows-nextflow-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
-        budget-alarm-threshold: 10000
-        budget-alarm-threshold-email-recipient: aws-workflows-nextflow-dev@sagebase.org
+        # More granular budget alerts (compute, storage, and other) deployed here:
+        # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
+
+  AgoraProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-agora-prod
+      RootEmail: agora-prod@sagebase.org
+      Alias: org-sagebase-agora-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: SysBio
+        Project: amp-ad
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: agora-prod@sagebase.org

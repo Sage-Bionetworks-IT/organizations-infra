@@ -1,4 +1,5 @@
-template_path: "cloudtrail.yaml"
+template:
+  path: "cloudtrail.yaml"
 stack_name: "cloudtrail"
 stack_tags:
   Department: "Platform"

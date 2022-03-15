@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: SAML providers for the VPN
+Parameters:
+  TransitVpnMetadata:
+    Type: String
+    Description: "Public certificate for transitvpn SSO"
+  TransitVpnSspMetadata:
+    Type: String
+    Description: "Public certificate for transitvpnssp SSO"
+Resources:
+  TransitVpnSamlProvider:
+    Type: AWS::IAM::SAMLProvider
+    Properties:
+      Name: "transitvpn"
+      SamlMetadataDocument: !Ref TransitVpnMetadata
+  TransitVpnSspSamlProvider:
+    Type: AWS::IAM::SAMLProvider
+    Properties:
+      Name: "transitvpnssp"
+      SamlMetadataDocument: !Ref TransitVpnSspMetadata
+Outputs:
+  TransitVpnSamlProviderArn:
+    Value: !Ref TransitVpnSamlProvider
+    Export:
+      Name: !Sub '${AWS::StackName}-TransitVpnSamlProviderArn'
+  TransitVpnSspSamlProviderArn:
+    Value: !Ref TransitVpnSspSamlProvider
+    Export:
+      Name: !Sub '${AWS::StackName}-TransitVpnSspSamlProviderArn'

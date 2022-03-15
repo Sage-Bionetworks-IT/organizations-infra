@@ -1,4 +1,5 @@
-template_path: accounts.yaml
+template:
+  path: accounts.yaml
 stack_name: accounts
 dependencies:
   - prod/essentials.yaml

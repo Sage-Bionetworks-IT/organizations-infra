@@ -1,4 +1,5 @@
-template_path: "transit-gateway-routes.j2"
+template:
+  path: "transit-gateway-routes.j2"
 stack_name: "sage-tgw-routes"
 stack_tags:
   Department: "Platform"

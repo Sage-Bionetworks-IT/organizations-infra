@@ -1,7 +1,0 @@
-template_path: "remote/cfn-macro-ssm-param.yaml"
-stack_name: "cfn-macro-ssm-param"
-dependencies:
-  - "prod/bootstrap.yaml"
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-macro-ssm-param/master/cfn-macro-ssm-param.yaml -O templates/remote/cfn-macro-ssm-param.yaml"

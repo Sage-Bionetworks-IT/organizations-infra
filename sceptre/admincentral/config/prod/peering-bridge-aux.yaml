@@ -1,4 +1,5 @@
-template_path: VPCPeer.yaml
+template:
+  path: VPCPeer.yaml
 stack_name: peering-bridge-aux
 parameters:
   PeerVPC: vpc-e9335a92

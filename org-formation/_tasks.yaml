@@ -21,6 +21,11 @@ Budgets:
   DependsOn: [ Types ]
   Path: ./040-budgets/_tasks.yaml
 
+Costs:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./050-costs/_tasks.yaml
+
 Cloudtrail:
   Type: include
   DependsOn: [ Types ]
@@ -55,3 +60,13 @@ AwsSso:
   Type: include
   DependsOn: [ Types, SeviceControlPolicies ]
   Path: ./700-aws-sso/_tasks.yaml
+
+TransitGateway:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./710-tgw/_tasks.yaml
+
+ClientVpn:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./720-client-vpn/_tasks.yaml

@@ -1,4 +1,6 @@
-template_path: remote/sumologic-role.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/sumologic-role.yaml
 stack_name: sumologic-role
 dependencies:
   - prod/essentials.yaml
@@ -6,6 +8,3 @@ parameters:
   ExternalID: !ssm /infra/SumologicExternalID
   Actions: 's3:GetObject,s3:GetObjectVersion,s3:ListBucketVersions,s3:ListBucket'
   Resource: !ssm /infra/BeanstalkBucketArn
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/sumologic-role.yaml -O templates/remote/sumologic-role.yaml"

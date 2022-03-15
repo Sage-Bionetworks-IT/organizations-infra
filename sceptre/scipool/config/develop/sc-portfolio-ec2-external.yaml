@@ -1,4 +1,5 @@
-template_path: "sc-portfolio-ec2-external.yaml"
+template:
+  path: "sc-portfolio-ec2-external.yaml"
 stack_name: "sc-portfolio-ec2-external"
 dependencies:
   - "develop/sc-ec2vpc-launchrole.yaml"

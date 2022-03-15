@@ -1,7 +1,0 @@
-template_path: remote/efs-vpc.yaml
-stack_name: docker-runner-vpc
-dependencies:
-  - develop/bootstrap.yaml
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/VPC/efs-vpc.yaml -O templates/remote/efs-vpc.yaml"

@@ -61,10 +61,10 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-  AWSIAMWilliamNguyenUser:
+  AWSIAMKellySongUser:
     Type: 'AWS::IAM::User'
     Properties:
-      UserName: william.nguyen@sagebase.org
+      UserName: kelly.song@sagebase.org
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup

@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "ServiceCatalog Scheduled Jobs launch role"
+Resources:
+  SCScheduledJobsLaunchRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: SCScheduledJobsLaunchRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSBatchFullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - servicecatalog.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: SCLaunchPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: SCLaunchPolicySID
+                Effect: Allow
+                Action:
+                  - "servicecatalog:ListServiceActionsForProvisioningArtifact"
+                  - "servicecatalog:ExecuteprovisionedProductServiceAction"
+                  - "iam:AddRoleToInstanceProfile"
+                  - "iam:ListRolePolicies"
+                  - "iam:ListPolicies"
+                  - "iam:ListPolicyVersions"
+                  - "iam:DeleteRole"
+                  - "iam:GetRole"
+                  - "iam:CreateInstanceProfile"
+                  - "iam:PassRole"
+                  - "iam:DeleteInstanceProfile"
+                  - "iam:ListRoles"
+                  - "iam:RemoveRoleFromInstanceProfile"
+                  - "iam:CreateRole"
+                  - "iam:CreatePolicy"
+                  - "iam:DetachRolePolicy"
+                  - "iam:AttachRolePolicy"
+                  - "iam:DeletePolicy"
+                  - "iam:TagRole"
+                  - "secretsmanager:CreateSecret"
+                  - "secretsmanager:TagResource"
+                  - "secretsmanager:DeleteSecret"
+                  - "events:*"
+                Resource: '*'
+Outputs:
+  LaunchRoleArn:
+    Value: !GetAtt SCScheduledJobsLaunchRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-LaunchRoleArn'
+  LaunchRoleName:
+    Value: !Ref SCScheduledJobsLaunchRole
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-LaunchRoleName'

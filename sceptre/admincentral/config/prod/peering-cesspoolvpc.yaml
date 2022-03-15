@@ -1,4 +1,5 @@
-template_path: VPCPeer.yaml
+template:
+  path: VPCPeer.yaml
 stack_name: peering-cesspoolvpc
 parameters:
   PeerVPC: "vpc-0c1c1404c18d7d984"   # cesspoolvpc ID

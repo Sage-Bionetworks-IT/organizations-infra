@@ -1,4 +1,5 @@
-template_path: "jumpcloud-idp.yaml"
+template:
+  path: "jumpcloud-idp.yaml"
 stack_name: "jumpcloud-idp"
 stack_tags:
   Department: "Platform"

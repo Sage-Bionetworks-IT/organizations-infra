@@ -1,4 +1,6 @@
-template_path: remote/lambda-budgets.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-budgets/0.1.0/lambda-budgets.yaml
 stack_name: lambda-budgets
 stack_tags:
   Department: "Platform"
@@ -8,6 +10,3 @@ parameters:
   EndUserRoleName: !stack_output_external sc-enduser-iam::ExternalEndUserRoleName
   BudgetRules: !file_contents templates/strides/lambda-budgets/budget-rules.yaml
   Thresholds: !file_contents templates/strides/lambda-budgets/thresholds.yaml
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-budgets/master/lambda-budgets.yaml -O templates/remote/lambda-budgets.yaml"

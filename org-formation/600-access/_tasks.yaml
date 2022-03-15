@@ -23,7 +23,7 @@ iAtlasCollaboratorAccess:
     PrincipalArns:
       - arn:aws:iam::556856096938:user/ebs_automation    # Jon Ryser from GenUI
     ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess
+      - arn:aws:iam::aws:policy/ReadOnlyAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account: !Ref iAtlasProdAccount
@@ -75,7 +75,7 @@ HtanDevCIServiceAccount:
 
 WorkflowsNextflowCIServiceAccounts:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.2/templates/IAM/service-account.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.4/templates/IAM/service-account.yaml
   StackName: workflows-nextflow-ci-service-account
   Parameters:
     ManagedPolicyArns:
@@ -85,6 +85,8 @@ WorkflowsNextflowCIServiceAccounts:
     Account:
       - !Ref WorkflowsNextflowProdAccount
       - !Ref WorkflowsNextflowDevAccount
+      # Also deployed by Sceptre for the following non-member accounts:
+      # sceptre/strides-ampad-workflows/config/prod/workflows-nextflow-ci-service-account.yaml
     Region: us-east-1
 
 # Service accounts for https://github.com/Sage-Bionetworks-Workflows/aws-workflows-nextflow-infra
@@ -129,8 +131,8 @@ CnbCIServiceAccount:
     Region: !Ref primaryRegion
 
 # =====================================================================================================
-# Some of our accounts, like org-sagebase-strides, are not part of the Sage organziation therefore we need
-# to manage them as external entities. To allow strides account to send cloudtrail and config artifcats to
+# Some of our accounts, like org-sagebase-strides, are not part of the Sage organization therefore we need
+# to manage them as external entities. To allow strides account to send cloudtrail and config artifacts to
 # logcentral account we need to setup external access to the master buckets.
 AwsCloudtrailExternalAccountAccess:
   Type: update-stacks
@@ -140,6 +142,7 @@ AwsCloudtrailExternalAccountAccess:
     cloudtrail_bucket: sagebase-cloudtrail-231505186444
     accounts:
       - "423819316185"    # org-sagebase-strides
+      - "751556145034"    # org-sagebase-strides-ampad-workflows
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
@@ -154,6 +157,7 @@ AwsConfigExternalAccountAccess:
     config_bucket: sagebase-config-231505186444
     accounts:
       - "423819316185"    # org-sagebase-strides
+      - "751556145034"    # org-sagebase-strides-ampad-workflows
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:

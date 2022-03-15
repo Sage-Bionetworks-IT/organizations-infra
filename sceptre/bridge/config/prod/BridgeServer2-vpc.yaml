@@ -1,10 +1,9 @@
-template_path: remote/vpc.yaml
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/vpc.yaml
 stack_name: BridgeServer2-vpc
 dependencies:
   - prod/bootstrap.yaml
 parameters:
   VpcName: BridgeServer2-vpc
   VpcSubnetPrefix: "172.32"
-hooks:
-  before_launch:
-    - !cmd "wget https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/vpc.yaml -O templates/remote/vpc.yaml"
