@@ -3,8 +3,6 @@ AWSTemplateFormatVersion: 2010-09-09
 Resources:
   GithubDeployerUser:
     Type: AWS::IAM::User
-    Properties:
-      UserName: ghdeployer
   GithubDeployerPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -52,6 +50,10 @@ Resources:
               - "sts:AssumeRole"
       Path: "/"
 Outputs:
+  GithubDeployerUser:
+    Value: !Ref GithubDeployerUser
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-GithubDeployerUser'
   GithubDeployerRole:
     Value: !Ref GithubDeployerRole
     Export:
