@@ -90,12 +90,13 @@ TransitGatewayRoutes:
 Mappings:
   TgwSpokesA:
     VpcName:
-      804034162148: 'dustbunnyvpc'  # org-sagebase-itsandbox
-      563295687221: 'sandcastlevpc'  # org-sagebase-sandbox
-      055273631518: 'computevpc'     # org-sagebase-scicomp
+       # need to quote account numbers that start with 0
+      '804034162148': 'dustbunnyvpc'  # org-sagebase-itsandbox
+      '563295687221': 'sandcastlevpc'  # org-sagebase-sandbox
+      '055273631518': 'computevpc'  # org-sagebase-sandbox
   TgwSpokesB:
     VpcName:
-      055273631518: 'snowflakevpc'   # org-sagebase-scicomp
+      '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
 
 # To do here...
 TransitGatewaySpokeA:
