@@ -88,9 +88,9 @@ TransitGatewayRoutes:
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId']
 
 Mappings:
+  # need to quote account numbers that start with 0
   TgwSpokesA:
     VpcName:
-       # need to quote account numbers that start with 0
       '804034162148': 'dustbunnyvpc'  # org-sagebase-itsandbox
       '563295687221': 'sandcastlevpc'  # org-sagebase-sandbox
       '055273631518': 'computevpc'  # org-sagebase-sandbox
@@ -98,7 +98,6 @@ Mappings:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
 
-# To do here...
 TransitGatewaySpokeA:
   DependsOn: [ TransitGatewayRoutes ]
   Type: update-stacks
@@ -121,4 +120,26 @@ TransitGatewaySpokeA:
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+
+TransitGatewaySpokeB:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-b'
+  StackDescription: Setup Transit Gateway on spoke accounts
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref ScicompAccount
+    IncludeMasterAccount: false
+  Parameters:
+    # This assumes that all VPCs contain the same exports
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    VpcRouteTableId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateRouteTable']]]
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    SubnetIds:
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
