@@ -103,7 +103,7 @@ Mappings:
     VpcName:
       '804034162148': 'dustbunnyvpc'  # org-sagebase-itsandbox
       '563295687221': 'sandcastlevpc'  # org-sagebase-sandbox
-      '055273631518': 'computevpc'  # org-sagebase-sandbox
+      '055273631518': 'computevpc'  # org-sagebase-scicomp
       '420786776710': 'BridgeServer2-develop-vpc'   # org-sagebase-bridgedev
       '649232250620': 'BridgeServer2-vpc'   # org-sagebase-bridgeprod
   TgwSpokesB:
