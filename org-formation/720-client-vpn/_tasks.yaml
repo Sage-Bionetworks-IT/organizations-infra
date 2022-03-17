@@ -61,13 +61,25 @@ Vpn:
         CIDR: "10.29.0.0/16"
         AccessGroups:
           - "aws-admins"
-          - "aws-itsandbox-auditors"
       # org-sagebase-sandbox
       sandcastlevpc:
         CIDR: "10.23.0.0/16"
         AccessGroups:
           - "aws-admins"
           - "aws-sandbox-developers"
+          - "scientists"
+      # org-sagebase-scicomp
+      computevpc:
+        CIDR: "10.5.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-scicomp-developers"
+          - "scientists"
+      snowflakevpc:
+        CIDR: "10.25.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-scicomp-developers"
   Parameters:
     ClientCidrBlock: "10.100.0.0/16"
     VpnSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSamlProviderArn']
