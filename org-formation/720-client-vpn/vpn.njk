@@ -29,7 +29,7 @@ Parameters:
     ConstraintDescription: 'Must be either 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, or 3653'
   SplitTunnel:
     Type: String
-    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint."
+    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint (false for full tunnel)"
     Default: false
     AllowedValues:
       - true
@@ -45,6 +45,8 @@ Parameters:
       - 12
       - 24
     ConstraintDescription: 'Must be one of 8, 10, 12, or 24 hours'
+Conditions:
+  FullTunnel: !Equals [!Ref SplitTunnel, false]
 Resources:
   SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -99,6 +101,7 @@ Resources:
 
 {# Authorization and route between VPN and public internet #}
   EndpointAuthorizationPublic:
+    Condition: FullTunnel
     Type: AWS::EC2::ClientVpnAuthorizationRule
     Properties:
       Description: "public"
@@ -108,6 +111,7 @@ Resources:
 
 {% for subnet_id in SubnetIds %}
   EndpointRoutePublicSubnet{{ subnet_id | last }}:
+    Condition: FullTunnel
     Type: AWS::EC2::ClientVpnRoute
     Properties:
       Description: public-subnet{{ subnet_id | last }}
