@@ -80,6 +80,24 @@ Vpn:
         AccessGroups:
           - "aws-admins"
           - "aws-scicomp-developers"
+      # org-sagebase-bridgedev
+      BridgeServer2-develop-vpc:
+        CIDR: "172.48.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "bridge-developers"
+      bridge-aux:
+        CIDR: "172.51.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "bridge-developers"
+      # org-sagebase-bridgeprod
+      BridgeServer2-vpc:
+        CIDR: "172.32.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "bridge-developers"
+
   Parameters:
     ClientCidrBlock: "10.100.0.0/16"
     VpnSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSamlProviderArn']
