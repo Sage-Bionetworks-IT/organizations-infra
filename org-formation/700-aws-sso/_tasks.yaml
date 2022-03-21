@@ -189,27 +189,6 @@ SsoAdministratorSupporter:
     principalId: !Ref scienceSupporterGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-SsoWriter:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-writer'
-  StackDescription: 'Read and Write role used by Supporter group within Production organizational units'
-  TerminationProtection: false
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      OrganizationalUnit:
-        - !Ref ScienceDevOU
-        - !Ref ScienceProdOU
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref scienceSupporterGroup
-    permissionSetName: 'Writer'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
-    sessionDuration: 'PT1H'
-
 SsoDeveloper:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
