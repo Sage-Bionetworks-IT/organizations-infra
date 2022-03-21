@@ -231,6 +231,17 @@ SsoDeveloper:
     permissionSetName: 'Developer'
     managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
     sessionDuration: 'PT12H'
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Effect": "Deny",
+                  "Action": "iam:PassRole",
+                  "Resource": "*"
+              }
+          ]
+      }
 
 SsoAuditor:
   Type: update-stacks
@@ -467,6 +478,11 @@ SsoWorkflowNextflowDevDeveloper:
                       "arn:aws:iam::035458030717:instance-profile/dev-*",
                       "arn:aws:iam::035458030717:policy/dev-*"
                   ]
+              },
+              {
+                  "Effect": "Deny",
+                  "Action": "iam:PassRole",
+                  "Resource": "*"
               }
           ]
       }
@@ -749,6 +765,11 @@ SsoBridgeProdDeveloper:
               "dynamodb:DeleteTable"
             ],
             "Resource": "*"
+          },
+          {
+              "Effect": "Deny",
+              "Action": "iam:PassRole",
+              "Resource": "*"
           }
         ]
       }
