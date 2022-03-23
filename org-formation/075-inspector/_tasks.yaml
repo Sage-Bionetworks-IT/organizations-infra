@@ -1,0 +1,25 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'inspector'
+
+  accountId:
+    Type: String
+    Description: The identifier from the account used to manage inspector
+    Default: !Ref SecurityCentralAccount
+
+Inspector:
+  Type: update-stacks
+  Template: inspector.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  StackDescription: AWS Inspector service
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    InspectorBinding:
+      Account: '*'
+      IncludeMasterAccount: true
+
