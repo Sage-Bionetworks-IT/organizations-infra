@@ -22,4 +22,3 @@ Inspector:
     InspectorBinding:
       Account: '*'
       IncludeMasterAccount: true
-
