@@ -16,8 +16,6 @@ Inspector:
   StackName: !Sub '${resourcePrefix}-${appName}'
   StackDescription: AWS Inspector service
   DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref accountId
   OrganizationBindings:
     InspectorBinding:
       Account: '*'
