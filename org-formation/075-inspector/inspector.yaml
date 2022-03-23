@@ -1,6 +1,21 @@
 AWSTemplateFormatVersion: '2010-09-09-OC'
 OrganizationBindings:
   InspectorBinding:
+Parameters:
+  ScheduleExpression:
+    Type: String
+    Default: "rate(7 days)"
+  ScheduleState:
+    Type: String
+    Default: "ENABLED"
+    AllowedValues:
+      - "ENABLED"
+      - "DISABLED"
+  AssessmentDurationInSeconds:
+    Type: Number
+    Default: 3600
+    MinValue: 180
+    MaxValue: 86400
 Mappings:
   RulesPackagesAmazonInspectorArns: # ARNs derived from https://docs.aws.amazon.com/inspector/latest/userguide/inspector_rules-arns.html
     us-east-1:
@@ -38,7 +53,7 @@ Resources:
     OrganizationBinding: !Ref InspectorBinding
     Properties:
       AssessmentTargetArn: !GetAtt AssessmentTarget.Arn
-      DurationInSeconds: 3600
+      DurationInSeconds: !Ref AssessmentDurationInSeconds
       RulesPackageArns:
         - !FindInMap [ RulesPackagesAmazonInspectorArns, !Ref AWS::Region, CommonVulnerabilitiesExposures ]
         - !FindInMap [ RulesPackagesAmazonInspectorArns, !Ref AWS::Region, CISOperatingSystemBenchmarks ]
@@ -67,9 +82,9 @@ Resources:
     Type: AWS::Events::Rule
     OrganizationBinding: !Ref InspectorBinding
     Properties:
-      Description: !Sub Scheduled Inspector Assessment for ${AssessmentTemplate.Arn} running every 7 day(s)
-      ScheduleExpression: rate(7 days)
-      State: ENABLED
+      Description: !Sub 'Inspector Assessment ${AssessmentTemplate.Arn} scheduled for ${ScheduleExpression}'
+      ScheduleExpression: !Ref ScheduleExpression
+      State: !Ref ScheduleState
       Targets:
         - Id: InspectorAssessmentTemplateSchedule
           Arn: !Sub ${AssessmentTemplate.Arn}
