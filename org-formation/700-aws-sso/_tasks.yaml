@@ -1001,23 +1001,23 @@ SsoScicompIncludeDccCollab:
     permissionSetName: 'IncludeDccCollab'
     sessionDuration: 'PT12H'
     inlinePolicy: >-
-    {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Effect": "Deny",
-          "Principal": "*",
-          "Action": [
-              "s3:GetObject*",
-              "s3:PutObject*",
-              "s3:DeleteObject*"
-          ],
-          "Resource": "arn:aws:s3:::*",
-          "Condition": {
-            "StringNotLike": {
-              "s3:ResourceAccount": "<CHOP AWS Account ID>",
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject*",
+                "s3:PutObject*",
+                "s3:DeleteObject*"
+            ],
+            "Resource": "arn:aws:s3:::*",
+            "Condition": {
+              "StringNotLike": {
+                "s3:ResourceAccount": "<CHOP AWS Account ID>",
+              }
             }
           }
-        }
-      ]
-    }
+        ]
+      }
