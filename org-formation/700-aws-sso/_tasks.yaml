@@ -987,8 +987,8 @@ SsoCnbAdmin:
 SsoScicompIncludeDccCollab:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-include-dcc-dev'
-  StackDescription: 'SSO: role used to access INCLUDE DCC project resources at CHOP'
+  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-include-dcc-collab'
+  StackDescription: 'SSO: role to access INCLUDE DCC project resources at CHOP'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
