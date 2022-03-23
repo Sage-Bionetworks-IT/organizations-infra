@@ -150,6 +150,10 @@ Parameters:
     Type: String
     Default: '906769aa66-911ad81b-8331-4670-a8eb-d53c63d6a0e1'
 
+  scicompIncludeDccCollabGroup:      #JC aws-scicomp-include-dcc-collabs
+    Type: String
+    Default: '906769aa66-b713e6a6-fe9b-4737-919e-c1d4bc4a8447'
+
 SsoAdministrator:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
@@ -979,3 +983,41 @@ SsoCnbAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref cnbAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoScicompIncludeDccCollab:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-include-dcc-dev'
+  StackDescription: 'SSO: role used to access INCLUDE DCC project resources at CHOP'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScicompAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scicompIncludeDccCollabGroup
+    permissionSetName: 'IncludeDccCollab'
+    sessionDuration: 'PT12H'
+    inlinePolicy: >-
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": [
+              "s3:GetObject*",
+              "s3:PutObject*",
+              "s3:DeleteObject*"
+          ],
+          "Resource": "arn:aws:s3:::*",
+          "Condition": {
+            "StringNotLike": {
+              "s3:ResourceAccount": "<CHOP AWS Account ID>",
+            }
+          }
+        }
+      ]
+    }
