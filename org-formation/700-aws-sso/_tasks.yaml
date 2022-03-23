@@ -52,7 +52,7 @@ Parameters:
 
   mobileHealthDataEngineeringDevViewerGroup:
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-72c01182-929a-4014-a2df-d864148a3085'
 
   mobileHealthDataEngineeringProdAdminGroup:   #JC aws-mobilehealth-dataengineering-prod-admins
     Type: String
@@ -60,7 +60,7 @@ Parameters:
 
   mobileHealthDataEngineeringProdViewerGroup:
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-89cf459f-e670-49c1-9771-f71f5fa1f9b0'
 
   nlpSandboxAdminGroup:      #JC aws-nlp-sandbox-admins
     Type: String
