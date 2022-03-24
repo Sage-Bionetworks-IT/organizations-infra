@@ -115,6 +115,51 @@ CnbCIServiceAccount:
       - !Ref CnbAccount
     Region: !Ref primaryRegion
 
+# Service account for GHA portal deployer in SageIT account
+PortalDeployGhaServiceAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
+  StackName: portal-deployer-gha-service-account
+  Parameters:
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "PublishToS3Web",
+            "Action": [
+              "acm:ListCertificates",
+              "cloudfront:CreateDistribution",
+              "cloudfront:DeleteDistribution",
+              "cloudfront:GetDistribution",
+              "cloudfront:GetDistributionConfig",
+              "cloudfront:ListDistributions",
+              "cloudfront:UpdateDistribution",
+              "cloudfront:ListCloudFrontOriginAccessIdentities",
+              "cloudfront:CreateInvalidation",
+              "cloudfront:GetInvalidation",
+              "cloudfront:ListInvalidations",
+              "cloudfront:TagResource",
+              "s3:PutBucketWebsite",
+              "s3:PutObject",
+              "s3:PutObjectAcl",
+              "s3:GetObject",
+              "s3:ListBucket",
+              "s3:DeleteObject",
+              "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+          }
+        ]
+      }
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref SageITAccount
+    Region: !Ref primaryRegion
+
+
 # =====================================================================================================
 # Some of our accounts, like org-sagebase-strides, are not part of the Sage organization therefore we need
 # to manage them as external entities. To allow strides account to send cloudtrail and config artifacts to
