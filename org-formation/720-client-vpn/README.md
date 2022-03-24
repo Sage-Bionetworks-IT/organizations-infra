@@ -123,5 +123,5 @@ a [sceptre ssm resolver](https://github.com/cloudreach/sceptre/tree/v1/contrib/s
 and passes them to the cloudformation stack on deployment.
 
 
-[architecture]: client-vpn-arch.png "client vpn architecture"
+[architecture]: tgw-client-vpn-arch.png "client vpn architecture"
 [jc_sso_association]: jc_sso_association.png "jumpcloud sso association"
