@@ -1000,6 +1000,8 @@ SsoScicompIncludeDccCollab:
     principalId: !Ref scicompIncludeDccCollabGroup
     permissionSetName: 'IncludeDccCollab'
     sessionDuration: 'PT12H'
+    # policy derived from https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html#vpc-endpoints-policies-s3
+    # Restricting access to buckets in a specific AWS account
     inlinePolicy: >-
       {
         "Version": "2012-10-17",
