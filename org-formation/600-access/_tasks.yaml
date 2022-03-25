@@ -1,6 +1,19 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
+# A service account for https://github.com/Sage-Bionetworks/agora-infra
+AgoraCIServiceAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
+  StackName: agora-prod-ci-access
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref AgoraProdAccount
+    Region: us-east-1
+
 # A service account for https://github.com/Sage-Bionetworks/iatlas-infra
 iAtlasCIServiceAccount:
   Type: update-stacks
