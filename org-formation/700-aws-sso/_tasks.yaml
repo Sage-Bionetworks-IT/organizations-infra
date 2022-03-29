@@ -1002,6 +1002,7 @@ SsoScicompIncludeDccCollab:
     sessionDuration: 'PT12H'
     # policy derived from https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html#vpc-endpoints-policies-s3
     # Restricting access to buckets in a specific AWS account
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AmazonS3FullAccess' ]
     inlinePolicy: >-
       {
         "Version": "2012-10-17",
@@ -1009,12 +1010,8 @@ SsoScicompIncludeDccCollab:
           {
             "Effect": "Deny",
             "Principal": "*",
-            "Action": [
-                "s3:GetObject*",
-                "s3:PutObject*",
-                "s3:DeleteObject*"
-            ],
-            "Resource": "arn:aws:s3:::include-study-us-east-1-prd-sd-*",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::*",
             "Condition": {
               "StringNotLike": {
                 "s3:ResourceAccount": "373997854230"
@@ -1023,13 +1020,10 @@ SsoScicompIncludeDccCollab:
           },
           {
             "Effect": "Deny",
-            "Principal": "*",
-            "Action": [
-                "s3:GetObject*",
-                "s3:PutObject*",
-                "s3:DeleteObject*"
-            ],
-            "Resource": "arn:aws:s3:::kf-strides-study-us-east-1-prd-sd-*",
+            "Action": "*",
+            "Resource": "arn:aws:s3:::*",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::*",
             "Condition": {
               "StringNotLike": {
                 "s3:ResourceAccount": "232196027141"
@@ -1039,12 +1033,8 @@ SsoScicompIncludeDccCollab:
           {
             "Effect": "Deny",
             "Principal": "*",
-            "Action": [
-                "s3:GetObject*",
-                "s3:PutObject*",
-                "s3:DeleteObject*"
-            ],
-            "Resource": "arn:aws:s3:::kf-study-us-east-1-prd-sd-*",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::*",
             "Condition": {
               "StringNotLike": {
                 "s3:ResourceAccount": "538745987955"
