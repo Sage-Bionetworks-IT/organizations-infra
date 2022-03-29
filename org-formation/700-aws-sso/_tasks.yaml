@@ -1054,28 +1054,12 @@ SsoScicompIncludeDccCollab:
             "Action": "s3:*",
             "Resource": "arn:aws:s3:::*",
             "Condition": {
-              "StringNotLike": {
-                "s3:ResourceAccount": "373997854230"
-              }
-            }
-          },
-          {
-            "Effect": "Deny",
-            "Action": "s3:*",
-            "Resource": "arn:aws:s3:::*",
-            "Condition": {
-              "StringNotLike": {
-                "s3:ResourceAccount": "232196027141"
-              }
-            }
-          },
-          {
-            "Effect": "Deny",
-            "Action": "s3:*",
-            "Resource": "arn:aws:s3:::*",
-            "Condition": {
-              "StringNotLike": {
-                "s3:ResourceAccount": "538745987955"
+              "ForAnyValue:StringNotLike": {
+                  "s3:ResourceAccount": [
+                      "373997854230",
+                      "232196027141",
+                      "538745987955"
+                  ]
               }
             }
           }
