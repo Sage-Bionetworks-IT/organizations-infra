@@ -10,8 +10,8 @@ Parameters:
     Type: String
     Default: 'arn:aws:sso:::instance/ssoins-7223f51628aaa549'
 
-  #----------------------------------------------------------------------------------------------
-  # Mapping Jumpcloud groups to AWS SSO groups which are automatically synced to JC groups.
+#----------------------------------------------------------------------------------------------
+# Mapping Jumpcloud groups to AWS SSO groups which are automatically synced to JC groups.
 
   adminGroup:           #JC aws-admins
     Type: String
@@ -157,7 +157,10 @@ Parameters:
     Type: String
     Default: '906769aa66-911ad81b-8331-4670-a8eb-d53c63d6a0e1'
 
-  #----------------------------------------------------------------------------------------------
+  scicompIncludeDccCollabGroup:      #JC aws-scicomp-include-dcc-collabs
+    Type: String
+    Default: '906769aa66-b713e6a6-fe9b-4737-919e-c1d4bc4a8447'
+#----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
   Type: update-stacks
@@ -1022,3 +1025,43 @@ SsoCnbAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref cnbAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoScicompIncludeDccCollab:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-include-dcc-collab'
+  StackDescription: 'SSO: role to access INCLUDE DCC project resources at CHOP'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScicompAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scicompIncludeDccCollabGroup
+    permissionSetName: 'IncludeDccCollab'
+    sessionDuration: 'PT12H'
+    # policy derived from https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html#vpc-endpoints-policies-s3
+    # Restricting access to buckets in a specific AWS account
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AmazonS3FullAccess' ]
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Deny",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::*",
+            "Condition": {
+              "ForAnyValue:StringNotLike": {
+                  "s3:ResourceAccount": [
+                      "373997854230",
+                      "232196027141",
+                      "538745987955"
+                  ]
+              }
+            }
+          }
+        ]
+      }
