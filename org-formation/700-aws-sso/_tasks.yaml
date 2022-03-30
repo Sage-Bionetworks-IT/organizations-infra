@@ -236,7 +236,7 @@ SsoDeveloper:
           "Statement": [
               {
                   "Effect": "Deny",
-                  "Action": "iam:PassRole",
+                  "Action": "sts:AssumeRole",
                   "Resource": "*"
               }
           ]
@@ -514,7 +514,7 @@ SsoWorkflowNextflowDevDeveloper:
               },
               {
                   "Effect": "Deny",
-                  "Action": "iam:PassRole",
+                  "Action": "sts:AssumeRole",
                   "Resource": "*"
               }
           ]
@@ -801,7 +801,7 @@ SsoBridgeProdDeveloper:
           },
           {
               "Effect": "Deny",
-              "Action": "iam:PassRole",
+              "Action": "sts:AssumeRole",
               "Resource": "*"
           }
         ]
