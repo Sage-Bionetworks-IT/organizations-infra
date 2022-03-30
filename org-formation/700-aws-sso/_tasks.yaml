@@ -164,7 +164,7 @@ Parameters:
 
 SsoAdministrator:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-admin'
   StackDescription: 'Full permission role used by Admin group within whole organization'
   TerminationProtection: false
@@ -184,7 +184,7 @@ SsoAdministrator:
 
 SsoAdministratorSupporter:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-admin-supporter'
   StackDescription: 'Full permission role used by Supporter group within Production organizational units'
   TerminationProtection: false
@@ -203,7 +203,7 @@ SsoAdministratorSupporter:
 
 SsoDeveloper:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-developer'
   StackDescription: 'Read and Write role used by Developer group within SDLC organizational units'
   TerminationProtection: false
@@ -236,7 +236,7 @@ SsoDeveloper:
 
 SsoAuditor:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-auditor'
   StackDescription: 'Audit role used by Auditor group within whole organization'
   TerminationProtection: false
@@ -256,7 +256,7 @@ SsoAuditor:
 
 SsoViewer:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-viewer'
   StackDescription: 'Read-only role used by Admin group within whole organization'
   TerminationProtection: false
@@ -276,7 +276,7 @@ SsoViewer:
 
 SsoViewerSupporter:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-viewer-supporter'
   StackDescription: 'Read-only role used by Supporter group within Production organizational units'
   TerminationProtection: false
@@ -296,7 +296,7 @@ SsoViewerSupporter:
 SsoSandboxDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-sandbox-developer'
   StackDescription: 'SSO: Developer role used by sandbox developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -313,7 +313,7 @@ SsoSandboxDeveloper:
 SsoSandboxAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-sandbox-admin'
   StackDescription: 'SSO: Administrator role used by sandbox admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -330,7 +330,7 @@ SsoSandboxAdmin:
 scicompViewer:
   Type: update-stacks
   DependsOn: SsoViewer
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-scicomp-viewer'
   StackDescription: 'SSO: viewer role used by scicomp viewer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -355,7 +355,7 @@ scicompViewer:
 scicompDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-scicomp-developer'
   StackDescription: 'SSO: Developer role used by scicomp developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -372,7 +372,7 @@ scicompDeveloper:
 SsoMobileHealthDataEngineeringDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-mobilehealth-dataengineering-dev-admin'
   StackDescription: 'SSO: Administrator role used by mobileHealth data engineering admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -389,7 +389,7 @@ SsoMobileHealthDataEngineeringDevAdmin:
 SsoMobileHealthDataEngineeringDevViewer:
   Type: update-stacks
   DependsOn: SsoViewer
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-mobilehealth-dataengineering-dev-viewer'
   StackDescription: 'SSO: Viewer role used by mobileHealth data engineering viewer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -406,7 +406,7 @@ SsoMobileHealthDataEngineeringDevViewer:
 SsoMobileHealthDataEngineeringProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-mobilehealth-dataengineering-prod-admin'
   StackDescription: 'SSO: Administrator role used by mobileHealth data engineering admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -423,7 +423,7 @@ SsoMobileHealthDataEngineeringProdAdmin:
 SsoMobileHealthDataEngineeringProdViewer:
   Type: update-stacks
   DependsOn: SsoViewer
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-mobilehealth-dataengineering-prod-viewer'
   StackDescription: 'SSO: Viewer role used by mobileHealth data engineering viewer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -440,7 +440,7 @@ SsoMobileHealthDataEngineeringProdViewer:
 SsoNlpSandboxAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-nlp-sandbox-admin'
   StackDescription: 'SSO: Administrator role used by NLP Sandbox Admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -457,7 +457,7 @@ SsoNlpSandboxAdmin:
 SsoWorkflowNextflowDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-dev-admin'
   StackDescription: 'SSO: Administrator role used by workflow nextflow admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -474,7 +474,7 @@ SsoWorkflowNextflowDevAdmin:
 SsoWorkflowNextflowDevDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-dev-developer'
   StackDescription: 'SSO: Developer role used by workflow nextflow developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -514,7 +514,7 @@ SsoWorkflowNextflowDevDeveloper:
 
 SsoWorkflowNextflowTowerViewer:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.2/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-tower-viewer'
   StackDescription: 'SSO: Limited viewer role used by workflow nextflow tower viewer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -603,7 +603,7 @@ SsoWorkflowNextflowTowerViewer:
 SsoWorkflowNextflowProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-workflow-nextflow-prod-admin'
   StackDescription: 'SSO: Administrator role used by workflow nextflow admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -620,7 +620,7 @@ SsoWorkflowNextflowProdAdmin:
 SsoSynapseAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-synapse-admin'
   StackDescription: 'SSO: admin role used by synapse admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -638,7 +638,7 @@ SsoSynapseAdmin:
 SsoSynapseDevDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-synapsedev-developer'
   StackDescription: 'SSO: developer role used by synapsedev developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -655,7 +655,7 @@ SsoSynapseDevDeveloper:
 SsoSynapseProdDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-synapseprod-developer'
   StackDescription: 'SSO: developer role used by synapseprod developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -672,7 +672,7 @@ SsoSynapseProdDeveloper:
 SsoSynapseProdViewer:
   Type: update-stacks
   DependsOn: SsoViewer
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-synapseprod-viewer'
   StackDescription: 'SSO: viewer role used by synapseprod developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -688,7 +688,7 @@ SsoSynapseProdViewer:
 
 SsoImageCentralAmiLibrarian:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-imagecentral-ami-librarian'
   StackDescription: 'SSO: librarian role used by imagecentral AMI librarian group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -709,7 +709,7 @@ SsoImageCentralAmiLibrarian:
 SsoBridgeDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgedev-admin'
   StackDescription: 'SSO: admin role used by bridgedev admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -726,7 +726,7 @@ SsoBridgeDevAdmin:
 SsoBridgeProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-admin'
   StackDescription: 'SSO: admin role used by bridgeprod admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -743,7 +743,7 @@ SsoBridgeProdAdmin:
 SsoBridgeDevDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgedev-developer'
   StackDescription: 'SSO: developer role used by bridgedev developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -760,7 +760,7 @@ SsoBridgeDevDeveloper:
 SsoBridgeProdDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-developer'
   StackDescription: 'SSO: developer role used by bridgeprod developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -801,7 +801,7 @@ SsoBridgeProdDeveloper:
 
 SsoBridgeProdIosDeveloper:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bridgeprod-ios-developer'
   StackDescription: 'SSO: developer role used by bridge prod ios developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -843,7 +843,7 @@ SsoBridgeProdIosDeveloper:
 SsoScipoolDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-scipooldev-admin'
   StackDescription: 'SSO: admin role used by scipooldev admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -860,7 +860,7 @@ SsoScipoolDevAdmin:
 SsoScipoolProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-scipoolprod-admin'
   StackDescription: 'SSO: admin role used by scipoolprod admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -876,7 +876,7 @@ SsoScipoolProdAdmin:
 
 SsoScipoolDevCommunityManager:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager'
   StackDescription: 'SSO: community manager role used by scipooldev community manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -913,7 +913,7 @@ SsoScipoolDevCommunityManager:
 SsoScipoolProdCommunityManager:
   Type: update-stacks
   DependsOn: [ SsoScipoolDevCommunityManager ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-scipoolprod-community-manager'
   StackDescription: 'SSO: community manager role used by scipooldev community manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -929,7 +929,7 @@ SsoScipoolProdCommunityManager:
 
 SsoAdminCentralCfnDeployer:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-admincentral-cfn-deployer'
   StackDescription: 'SSO: deployer role used by admincental CFN deployer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -982,7 +982,7 @@ SsoAdminCentralCfnDeployer:
 SsoHtanDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-htan-dev-admin'
   StackDescription: 'SSO: Administrator role used by htan dev admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -999,7 +999,7 @@ SsoHtanDevAdmin:
 SsoBmgfkiAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.19/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bmgf-admin'
   StackDescription: 'SSO: admin role used by BMGF KI admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -1016,7 +1016,7 @@ SsoBmgfkiAdmin:
 SsoBmgfkiCommunityManager:
   Type: update-stacks
   DependsOn: [ SsoScipoolDevCommunityManager ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.19/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-bmgfki-community-manager'
   StackDescription: 'SSO: community manager role used by BMGF KI community manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -1033,7 +1033,7 @@ SsoBmgfkiCommunityManager:
 SsoCnbAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.19/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-cnb-admin'
   StackDescription: 'SSO: Administrator role used by CNB admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -1049,7 +1049,7 @@ SsoCnbAdmin:
 
 SsoScicompIncludeDccCollab:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-scicomp-include-dcc-collab'
   StackDescription: 'SSO: role to access INCLUDE DCC project resources at CHOP'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
