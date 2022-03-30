@@ -1,37 +1,17 @@
 name: aws-deploy
 
 on:
-  pull_request:
-    branches: ['*']
   push:
     branches: [master]
+  workflow_run:
+    workflows: [ "validate" ]
+    types:
+      - completed
+
+concurrency:
+  group: ${{ github.workflow }}
 
 jobs:
-  pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - uses: pre-commit/action@v2.0.0
-  jinja-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Install jinja libraries
-        uses: BSFishy/pip-action@v1
-        with:
-          packages: jinja2==3.0.1
-      - name: Install jinja linter tool
-        run: git clone --single-branch https://github.com/drm/jinja2-lint.git /tmp/jinja2-lint
-      - name: Execute jinja linter
-        run: find . -type f -name "*.j2" -exec /tmp/jinja2-lint/j2lint.py '{}' +
   org-formation:
     if: github.event_name == 'push'
     needs:
