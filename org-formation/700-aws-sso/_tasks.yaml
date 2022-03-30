@@ -160,6 +160,14 @@ Parameters:
   scicompIncludeDccCollabGroup:      #JC aws-scicomp-include-dcc-collabs
     Type: String
     Default: '906769aa66-b713e6a6-fe9b-4737-919e-c1d4bc4a8447'
+
+  agoraProdAdminGroup:     #JC aws-agoraprod-admins
+    Type: String
+    Default: '906769aa66-af067ea3-406a-4a69-ab39-251fed985d86'
+
+  agoraProdDeveloperGroup:   #JC aws-agoraprod-developers
+    Type: String
+    Default: '906769aa66-45d850f1-c67b-40fd-a3ce-d9b670712543'
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
@@ -1065,3 +1073,37 @@ SsoScicompIncludeDccCollab:
           }
         ]
       }
+
+SsoAgoraProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-agoraprod-admin'
+  StackDescription: 'SSO: admin role used by agoraprod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref AgoraProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref agoraProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoAgoraProdDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-agoraprod-developer'
+  StackDescription: 'SSO: developer role used by agoraprod developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref AgoraProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref agoraProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
