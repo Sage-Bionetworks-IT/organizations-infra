@@ -545,7 +545,7 @@ SsoWorkflowNextflowTowerViewer:
           {
             "Sid": "TowerViewOnlyAccess",
             "Action": [
-              "batch:ListJobs",
+              "batch:ListJobs"
             ],
             "Effect": "Allow",
             "Resource": "*"
