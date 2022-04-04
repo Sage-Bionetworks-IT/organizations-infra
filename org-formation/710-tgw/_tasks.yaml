@@ -107,7 +107,7 @@ Mappings:
       '055273631518': 'computevpc'  # org-sagebase-scicomp
       '420786776710': 'BridgeServer2-vpc'   # org-sagebase-bridgedev
       '649232250620': 'BridgeServer2-vpc'   # org-sagebase-bridgeprod
-      '383874245509': 'synapsedw-vpc'      # org-sagebase-synapsedw
+      '383874245509': 'vpc'      # org-sagebase-synapsedw
   TgwSpokesB:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
