@@ -35,7 +35,7 @@ TransitGateway:
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount
-      - !Ref SynapseDwAccount
+      - !Ref SynapseDWAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -127,7 +127,7 @@ TransitGatewaySpokeA:
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount
-      - !Ref SynapseDwAccount
+      - !Ref SynapseDWAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
