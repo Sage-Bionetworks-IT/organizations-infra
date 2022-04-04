@@ -1025,8 +1025,8 @@ SsoScicompIncludeDccCollab:
         "Statement": [
           {
             "Effect": "Deny",
-            "Action": "s3:*",
-            "Resource": "arn:aws:s3:::*",
+            "Action": "*",
+            "Resource": "*",
             "Condition": {
               "ForAnyValue:StringNotLike": {
                   "s3:ResourceAccount": [
