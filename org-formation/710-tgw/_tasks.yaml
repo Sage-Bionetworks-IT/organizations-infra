@@ -150,6 +150,7 @@ TransitGatewaySpokeB:
   DefaultOrganizationBinding:
     Account:
       - !Ref ScicompAccount
+      - !Ref BridgeDevAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
