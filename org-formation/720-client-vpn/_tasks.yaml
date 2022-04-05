@@ -66,6 +66,7 @@ Vpn:
         CIDR: "10.23.0.0/16"
         AccessGroups:
           - "aws-admins"
+          - "aws-sandbox-admins"
           - "aws-sandbox-developers"
           - "scientists"
       # org-sagebase-scicomp
@@ -96,7 +97,8 @@ Vpn:
         CIDR: "172.32.0.0/16"
         AccessGroups:
           - "aws-admins"
-          - "bridge-developers"
+          - "aws-bridgeprod-admins"
+          - "aws-bridgeprod-developers"
       # org-sagebase-synapsedw
       synapsedw-vpc:
         CIDR: "10.12.0.0/16"
