@@ -103,6 +103,12 @@ Vpn:
         AccessGroups:
           - "aws-admins"
           - "aws-synapse-admins"
+      # org-sagebase-synapsedev
+      synapse-dev-vpc-2:
+        CIDR: "10.24.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-synapse-admins"
 
   Parameters:
     ClientCidrBlock: "10.100.0.0/16"

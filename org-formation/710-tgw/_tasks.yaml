@@ -36,6 +36,7 @@ TransitGateway:
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount
       - !Ref SynapseDWAccount
+      - !Ref SynapseDevAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -88,6 +89,9 @@ TransitGatewayRoutes:
       # org-sagebase-bridgeprod
       BridgeServer2-vpc:
         CIDR: "172.32.0.0/16"
+      # org-sagebase-synapsedev
+      synapse-dev-vpc-2:
+        CIDR: "10.24.0.0/16"
 
   Parameters:
     VpcSubnetIDs:
@@ -112,6 +116,9 @@ Mappings:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
       '420786776710': 'bridge-aux'   # org-sagebase-bridgedev
+  TgwSpokesS:
+    VpcName:
+      '449435941126': 'synapse-dev-vpc-2'      # org-sagebase-synapsedev
 
 TransitGatewaySpokeA:
   DependsOn: [ TransitGatewayRoutes ]
@@ -162,3 +169,33 @@ TransitGatewaySpokeB:
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+
+TransitGatewaySpokeS:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke-synapse.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-s'
+  StackDescription: Setup Transit Gateway on synapse account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseDevAccount
+    IncludeMasterAccount: false
+  Parameters:
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesS, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+  TemplatingContext:
+    VpcSubnetGroups:
+      Red:
+        PrivateSubnets: '[subnet-09a4744795ca56560, subnet-057fc96fe8a2fd8d1, subnet-00df8da8d4fea3cdd, subnet-0d70d31a0425eb081, subnet-09ea5f07411620e16, subnet-0222d90fd1143d310]'
+        PrivateSubnetRouteTableIds: [rtb-0c5a404f7b1400015, rtb-0854eaef2abd5db91, rtb-00890645b7e07f9d3, rtb-014e6dedaab8ac33e, rtb-01fe7be6ff3a1770e, rtb-0728ff33fac88853c]
+      Blue:
+        PrivateSubnets: '[subnet-06c96ae7b86ca925f, subnet-0dfd057e747d1c478, subnet-0867af02e1c8e49e4, subnet-042ccac2b8e352af8, subnet-0a2025d4e0c0b5ba5, subnet-0d2574f1b4822051a]'
+        PrivateSubnetRouteTableIds: [rtb-0a8a5a2f677a3bf40, rtb-0c5ca1322acf2c65a, rtb-09128ac4c478dc721, rtb-0ddaa361da8c07e01, rtb-0fb756c4997b46780, rtb-0927a35b5eb552c6a]
+      Green:
+        PrivateSubnets: '[subnet-0e76448649e0636b4, subnet-094fb1d1838d905a3, subnet-0ad4945b93afc68f4, subnet-08d6e58487e45e94f, subnet-0a05b9d8a855b3936, subnet-0bbca9690202e2605]'
+        PrivateSubnetRouteTableIds: [rtb-0f3d170ab9a19beed, rtb-0c167363ca4734633, rtb-0d3ced57b5e7a180a, rtb-043145dc7b516a46a, rtb-052b77c5df89ebc1f, rtb-0baaa2546505fb532]
+      Orange:
+        PrivateSubnets: '[subnet-0ddf373eb2d9d5c2f, subnet-0a0f54c802d77ae9f, subnet-0a0e791e7045df95a, subnet-0b8f22a695114624d, subnet-092aa591789f64d43, subnet-0c6f5ad48a624bb9f]'
+        PrivateSubnetRouteTableIds: [rtb-04c879589ab2ef488, rtb-0a502d10b03000b9d, rtb-020109818113821d1, rtb-04ca11af7f7deb148, rtb-0e77a1d7b852b0862, rtb-0d75c896d033bf0a8]
