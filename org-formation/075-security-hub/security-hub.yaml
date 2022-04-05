@@ -1,0 +1,11 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Setup AWS Security Hub"
+Resources:
+  SecurityHub:
+    Type: "AWS::SecurityHub::Hub"
+Outputs:
+  SecurityHubArn:
+    Description: "The security hub ARN"
+    Value: !Ref SecurityHub
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SecurityHubArn'
