@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   org-formation:
-    if: github.event_name == 'push'
+    if: ${{ github.event_name == 'push' && github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -48,7 +48,6 @@ jobs:
       - name: Deploy with ofn
         run: npm run ci-perform-tasks-parallel
   sceptre-organizations:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -82,7 +81,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-admincentral:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -116,7 +114,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-itsandbox:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -150,7 +147,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-sandbox:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -184,7 +180,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-scicomp:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -218,7 +213,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-strides:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -252,7 +246,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-strides-ampad-workflows:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -286,7 +279,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-scipooldev:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -320,7 +312,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch develop --yes
   sceptre-scipoolprod:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -358,7 +349,6 @@ jobs:
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch prod --yes
   sceptre-stridespool:
-    if: github.event_name == 'push'
     needs:
       - org-formation
       - sceptre-strides
@@ -398,7 +388,6 @@ jobs:
           sceptre delete --yes strides/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch strides --yes
   sceptre-bmgfki:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -436,7 +425,6 @@ jobs:
           sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch bmgfki --yes
   sceptre-sageit:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -475,7 +463,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-logcentral:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -509,7 +496,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-synapsedw:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -543,7 +529,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-synapsedev:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -577,7 +562,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-synapseprod:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -611,7 +595,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-securitycentral:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -645,7 +628,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-bridgedev:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -679,7 +661,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch develop --yes
   sceptre-bridgeprod:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
@@ -713,7 +694,6 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-imagecentral:
-    if: github.event_name == 'push'
     needs: org-formation
     runs-on: ubuntu-latest
     steps:
