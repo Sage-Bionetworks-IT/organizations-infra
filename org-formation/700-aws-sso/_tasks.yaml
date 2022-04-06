@@ -260,8 +260,7 @@ SsoAuditor:
     permissionSetName: 'Auditor'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/SecurityAudit'
-      - 'arn:aws:iam::aws:policy/AmazonInspectorReadOnlyAccess'
-      - 'arn:aws:iam::aws:policy/AmazonGuardDutyReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
