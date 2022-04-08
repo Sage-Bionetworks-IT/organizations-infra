@@ -31,4 +31,4 @@ SecurityHubNotifications:
     Subscriptions:
       # refer to https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html for valid list of protocol and endpoints
       - Protocol: "email"
-        Endpoints: ["foo@sagebase.org","bar@sagebase.org"]
+        Endpoints: ["it-alert-inbox@sagebase.org"]
