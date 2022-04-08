@@ -8,13 +8,13 @@ Parameters:
   accountId:
     Type: String
     Description: The identifier from the account used to manage GuardDuty
-    Default: !Ref SecurityCentralAccount
+    Default: !Ref MasterAccount
 
 SecurityHub:
   Type: update-stacks
   Template: security-hub.yaml
   StackName: !Sub '${resourcePrefix}-${appName}'
-  StackDescription: SecurityHub notifications
+  StackDescription: Setup SecurityHub service
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref accountId
