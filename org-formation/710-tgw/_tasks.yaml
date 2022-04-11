@@ -170,7 +170,7 @@ TransitGatewaySpokeB:
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
 
-TransitGatewaySpokeS:
+TransitGatewaySpokesS:
   DependsOn: [ TransitGatewayRoutes ]
   Type: update-stacks
   Template: tgw-spoke-synapse.njk
