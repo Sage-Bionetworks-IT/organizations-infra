@@ -7,7 +7,7 @@ Parameters:
 
   accountId:
     Type: String
-    Description: The identifier from the account used to manage GuardDuty
+    Description: The identifier from the account used to manage this service
     Default: !Ref MasterAccount
 
 SecurityHub:
