@@ -14,17 +14,18 @@ Parameters:
     Type: AWS::EC2::VPC::Id
 Resources:
 {% for subnet_group, group_data in VpcSubnetGroups %}
-  {% set private_subnet_list = group_data.PrivateSubnets.split(',') %}
-  {% set private_subnet_route_table_ids_list = group_data.PrivateSubnetRouteTableIds.split(',') %}
+  {% if group_data.PrivateSubnets %}
+    {% set private_subnet_list = group_data.PrivateSubnets.split(',') %}
   Attachment{{ subnet_group | replace('-','') }}:
     Type: AWS::EC2::TransitGatewayAttachment
     Properties:
       SubnetIds: [{{ private_subnet_list }}]
       TransitGatewayId: !Ref TransitGatewayId
       VpcId: !Ref VpcId
+  {% endif %}
+  {% set private_subnet_route_table_ids_list = group_data.PrivateSubnetRouteTableIds.split(',') %}
   {% for PrivateSubnetRouteTableId in private_subnet_route_table_ids_list %}
   Route{{ PrivateSubnetRouteTableId | replace('-','') | replace(' ','') }}:
-    DependsOn: Attachment{{ subnet_group | replace('-','') }}
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: !Ref TransitGatewayEndpointCidr
