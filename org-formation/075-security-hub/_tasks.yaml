@@ -1,0 +1,34 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'securityhub'
+
+  accountId:
+    Type: String
+    Description: The identifier from the account used to manage this service
+    Default: !Ref MasterAccount
+
+SecurityHub:
+  Type: update-stacks
+  Template: security-hub.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  StackDescription: Setup SecurityHub service
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+
+SecurityHubNotifications:
+  Type: update-stacks
+  Template: notifications.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-notifications'
+  StackDescription: SecurityHub notifications
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  TemplatingContext:
+    Subscriptions:
+      # refer to https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html for valid list of protocol and endpoints
+      - Protocol: "email"
+        Endpoints: ["it-alert-inbox@sagebase.org"]
