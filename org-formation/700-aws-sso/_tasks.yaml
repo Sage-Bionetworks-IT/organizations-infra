@@ -258,7 +258,12 @@ SsoAuditor:
     instanceArn: !Ref instanceArn
     principalId: !Ref auditorGroup
     permissionSetName: 'Auditor'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/SecurityAudit' ]
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/SecurityAudit'
+      - 'arn:aws:iam::aws:policy/job-function/SupportUser'
+      - 'arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
 

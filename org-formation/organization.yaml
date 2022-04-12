@@ -64,6 +64,7 @@ Organization:
         - !Ref LogCentralAccount
         - !Ref ImageCentralAccount
         - !Ref SecurityCentralAccount
+        - !Ref IpamAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -394,3 +395,12 @@ Organization:
         Project: amp-ad
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: agora-prod@sagebase.org
+
+  IpamAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-ipam
+      RootEmail: aws.ipam@sagebase.org
+      Alias: org-sagebase-ipam
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
