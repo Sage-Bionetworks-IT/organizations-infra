@@ -109,6 +109,13 @@ Vpn:
         AccessGroups:
           - "aws-admins"
           - "aws-synapse-admins"
+      # org-sagebase-agora-prod
+      agoravpc:
+        CIDR: "10.255.45.0/24"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-agoraprod-admins"
+          - "aws-agoraprod-developers"
 
   Parameters:
     ClientCidrBlock: "10.100.0.0/16"
