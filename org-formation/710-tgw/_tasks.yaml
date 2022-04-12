@@ -36,6 +36,8 @@ TransitGateway:
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount
       - !Ref SynapseDWAccount
+      - !Ref SynapseDevAccount
+      - !Ref AgoraProdAccount
 
 UnionStationVpc:
   Type: update-stacks
