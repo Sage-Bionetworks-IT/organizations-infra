@@ -96,8 +96,8 @@ TransitGatewayRoutes:
       synapse-dev-vpc-2:
         CIDR: "10.24.0.0/16"
       # org-sagebase-synapseprod
-      synapse-dev-vpc-2:
-        CIDR: "10.24.0.0/16"
+      synapse-prod-vpc-2:
+        CIDR: "10.20.0.0/16"
       # org-sagebase-agora-prod
       agoravpc:
         CIDR: "10.255.45.0/24"
@@ -241,7 +241,7 @@ TransitGatewaySpokesSynapseProd:
         PrivateSubnetRouteTableIds: rtb-0039756eb383c5cf3, rtb-0f8b2d14dd3bf7e7e, rtb-0b99e196c78e42cfa, rtb-099d62216a53e560a, rtb-0955bbeb48197af64, rtb-061fed7dfc7f8085c
       Green:
 #        PrivateSubnets: subnet-0860e3bc675436d79, subnet-02ab3d3b410fd59b8, subnet-0f7079956a4c2c268, subnet-0682c1a04f2b1d6d4, subnet-065776a604a01d1f2, subnet-007a46edd1523eed8
-        PrivateSubnetRouteTableIds: 	rtb-0a92323d9c0baee66, rtb-0521c182f068eb608, rtb-03daa449de5b69de9, rtb-0c1604d3033d3e2f8, rtb-07cf7905605134042, rtb-023c93c7c01a69e60
+        PrivateSubnetRouteTableIds: rtb-0a92323d9c0baee66, rtb-0521c182f068eb608, rtb-03daa449de5b69de9, rtb-0c1604d3033d3e2f8, rtb-07cf7905605134042, rtb-023c93c7c01a69e60
       Orange:
 #        PrivateSubnets: subnet-0e1dcd48ba4f83d92, subnet-06f07457ece6e5ac9, subnet-04845fc84521ef3c8, subnet-0827ea15f8ccbdac8, subnet-005881d2f83250a8a, subnet-08094e2690d564a79
         PrivateSubnetRouteTableIds: rtb-017969de3bac2881a, rtb-015c80c48eb89cc2c, rtb-02a5a37f8ff44f4e6, rtb-0e6054e298decb4c0, rtb-012a55a4c9ad9817f, rtb-048ee26a74e6e135d
