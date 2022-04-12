@@ -20,24 +20,6 @@ Ec2NoVpcDefaults:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
 
-SceptreCloudformationBucket:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/S3/public-bucket.yaml
-  StackName: sceptre-cloudformation-bucket
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
-    Region: !Ref primaryRegion
-
-SceptreLambdaBucket:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/S3/public-bucket.yaml
-  StackName: sceptre-lambda-bucket
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
-    Region: !Ref primaryRegion
-
 VpcPeeringRequest:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.12/templates/VPC/vpc-peering-request.yaml
