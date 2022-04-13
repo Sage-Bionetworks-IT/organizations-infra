@@ -30,7 +30,6 @@ Parameters:
   SplitTunnel:
     Type: String
     Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint (false for full tunnel)"
-    Default: false
     AllowedValues:
       - true
       - false

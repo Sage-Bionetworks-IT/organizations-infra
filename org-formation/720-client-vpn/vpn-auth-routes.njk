@@ -4,6 +4,15 @@ Parameters:
   ClientVpnEndpointId:
     Type: String
     Description: The ID of the VPN Endpoint
+  SplitTunnel:
+    Type: String
+    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint (false for full tunnel)"
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: 'Must be true or false'
+Conditions:
+  FullTunnel: !Equals [!Ref SplitTunnel, false]
 Resources:
 {% for subnet_id in SubnetIds %}
   EndpointAssociation{{ subnet_id | last }}:
@@ -36,10 +45,8 @@ Resources:
 
 {# Authorization and routes between VPN and spokes #}
 {% for spoke, spoke_data in TgwSpokes %}
-{%   set spoke_loop = loop %}
 {%   for access_group in spoke_data.AccessGroups %}
-{%     set access_group_loop = loop %}
-  EndpointAuthorization{{ spoke_loop.index }}{{ access_group_loop.index }}:
+  EndpointAuthorization{{ spoke_data.CIDR | replace('.','') | replace('/','') }}{{ access_group | replace('-','') }}:
     Type: AWS::EC2::ClientVpnAuthorizationRule
     DependsOn:
 {%     for subnet_id in SubnetIds %}
@@ -54,10 +61,8 @@ Resources:
 {% endfor %}
 
 {% for spoke, spoke_data in TgwSpokes %}
-{%   set spoke_loop = loop %}
 {%   for subnet_id in SubnetIds %}
-{%     set subnet_id_loop = loop %}
-  EndpointRoute{{ spoke_loop.index }}{{ subnet_id_loop.index }}:
+  EndpointRoute{{ spoke_data.CIDR | replace('.','') | replace('/','') }}{{ subnet_id | last }}:
     Type: AWS::EC2::ClientVpnRoute
     DependsOn:
 {%     for depend in SubnetIds %}

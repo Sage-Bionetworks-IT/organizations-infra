@@ -15,6 +15,14 @@ Parameters:
     Description: The VPC name to associate with the VPN
     Default: 'unionstationvpc'
 
+  splitTunnel:
+    Type: String
+    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint (false for full tunnel)"
+    Default: false
+    AllowedValues:
+      - true
+      - false
+
 VpnIdp:
   Type: update-stacks
   Template: vpn-idp.yaml
@@ -57,7 +65,7 @@ Vpn:
     # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
     # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
     ServerCertificateArn: !Sub 'arn:aws:acm:${primaryRegion}:${accountId}:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6'
-    SplitTunnel: "false"
+    SplitTunnel: !Ref splitTunnel
 
 VpnAuthRoutes:
   DependsOn: [ Vpn ]
@@ -75,6 +83,7 @@ VpnAuthRoutes:
       IncludeMasterAccount: false
   Parameters:
     ClientVpnEndpointId: !CopyValue [!Sub '${resourcePrefix}-${appName}-EndpointId']
+    SplitTunnel: !Ref splitTunnel
   TemplatingContext:
     # work around for issue https://github.com/org-formation/org-formation-cli/issues/259
     SubnetIds:
