@@ -36,6 +36,8 @@ Resources:
   EndpointRoutePublicSubnet{{ subnet_id | last }}:
     Condition: FullTunnel
     Type: AWS::EC2::ClientVpnRoute
+    DependsOn:
+      - EndpointAssociation{{ subnet_id | last }}
     Properties:
       Description: public-subnet{{ subnet_id | last }}
       ClientVpnEndpointId: !Ref ClientVpnEndpointId
