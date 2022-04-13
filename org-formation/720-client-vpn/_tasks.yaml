@@ -15,6 +15,14 @@ Parameters:
     Description: The VPC name to associate with the VPN
     Default: 'unionstationvpc'
 
+  splitTunnel:
+    Type: String
+    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint (false for full tunnel)"
+    Default: false
+    AllowedValues:
+      - true
+      - false
+
 VpnIdp:
   Type: update-stacks
   Template: vpn-idp.yaml
@@ -35,7 +43,7 @@ VpnIdp:
 Vpn:
   DependsOn: [ VpnIdp ]
   Type: update-stacks
-  Template: vpn.njk
+  Template: vpn.yaml
   StackName: !Sub '${resourcePrefix}-${appName}'
   StackDescription: The AWS client VPN
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -46,6 +54,36 @@ Vpn:
       Account:
         - !Ref accountId
       IncludeMasterAccount: false
+  Parameters:
+    ClientCidrBlock: "10.100.0.0/16"
+    VpnSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSamlProviderArn']
+    VpnSspSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSspSamlProviderArn']
+    VpcId: !CopyValue [!Sub '${resourcePrefix}-tgw-${vpnVpc}-VpcId']
+    ConnectionLogGroup: !Sub '/aws/vpn/${resourcePrefix}-${appName}'
+    SessionTimeoutHours: "12"
+    LogRetentionInDays: "3653"
+    # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
+    # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
+    ServerCertificateArn: !Sub 'arn:aws:acm:${primaryRegion}:${accountId}:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6'
+    SplitTunnel: !Ref splitTunnel
+
+VpnAuthRoutes:
+  DependsOn: [ Vpn ]
+  Type: update-stacks
+  Template: vpn-auth-routes.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-auth-routes'
+  StackDescription: Setup AWS client VPN authorizations and routes
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  Parameters:
+    ClientVpnEndpointId: !CopyValue [!Sub '${resourcePrefix}-${appName}-EndpointId']
+    SplitTunnel: !Ref splitTunnel
   TemplatingContext:
     # work around for issue https://github.com/org-formation/org-formation-cli/issues/259
     SubnetIds:
@@ -116,19 +154,6 @@ Vpn:
           - "aws-admins"
           - "aws-agoraprod-admins"
           - "aws-agoraprod-developers"
-
-  Parameters:
-    ClientCidrBlock: "10.100.0.0/16"
-    VpnSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSamlProviderArn']
-    VpnSspSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSspSamlProviderArn']
-    VpcId: !CopyValue [!Sub '${resourcePrefix}-tgw-${vpnVpc}-VpcId']
-    ConnectionLogGroup: !Sub '/aws/vpn/${resourcePrefix}-${appName}'
-    SessionTimeoutHours: "12"
-    LogRetentionInDays: "3653"
-    # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
-    # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
-    ServerCertificateArn: !Sub 'arn:aws:acm:${primaryRegion}:${accountId}:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6'
-    SplitTunnel: "false"
 
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]
