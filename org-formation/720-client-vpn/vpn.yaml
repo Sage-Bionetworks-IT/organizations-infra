@@ -45,8 +45,6 @@ Parameters:
       - 12
       - 24
     ConstraintDescription: 'Must be one of 8, 10, 12, or 24 hours'
-Conditions:
-  FullTunnel: !Equals [!Ref SplitTunnel, false]
 Resources:
   SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -91,70 +89,8 @@ Resources:
       SecurityGroupIds:
         - !GetAtt SecurityGroup.GroupId
 
-{% for subnet_id in SubnetIds %}
-  EndpointAssociation{{ subnet_id | last }}:
-    Type: AWS::EC2::ClientVpnTargetNetworkAssociation
-    Properties:
-      ClientVpnEndpointId: !Ref Endpoint
-      SubnetId: {{ subnet_id }}
-{% endfor %}
-
-{# Authorization and route between VPN and public internet #}
-  EndpointAuthorizationPublic:
-    Condition: FullTunnel
-    Type: AWS::EC2::ClientVpnAuthorizationRule
-    Properties:
-      Description: "public"
-      AuthorizeAllGroups: true
-      ClientVpnEndpointId: !Ref Endpoint
-      TargetNetworkCidr: "0.0.0.0/0"
-
-{% for subnet_id in SubnetIds %}
-  EndpointRoutePublicSubnet{{ subnet_id | last }}:
-    Condition: FullTunnel
-    Type: AWS::EC2::ClientVpnRoute
-    Properties:
-      Description: public-subnet{{ subnet_id | last }}
-      ClientVpnEndpointId: !Ref Endpoint
-      DestinationCidrBlock: "0.0.0.0/0"
-      TargetVpcSubnetId: {{ subnet_id }}
-{% endfor %}
-
-{# Authorization and routes between VPN and spokes #}
-{% for spoke, spoke_data in TgwSpokes %}
-{%   for access_group in spoke_data.AccessGroups %}
-  EndpointAuthorization{{ spoke_data.CIDR | replace('.','') | replace('/','') }}{{ access_group | replace('-','') }}:
-    Type: AWS::EC2::ClientVpnAuthorizationRule
-    DependsOn:
-{%     for subnet_id in SubnetIds %}
-      - EndpointAssociation{{ subnet_id | last }}
-{%     endfor %}
-    Properties:
-      Description: {{ spoke }}-{{ access_group }}
-      AccessGroupId: {{ access_group }}
-      ClientVpnEndpointId: !Ref Endpoint
-      TargetNetworkCidr: {{ spoke_data.CIDR }}
-{%   endfor %}
-{% endfor %}
-
-{% for spoke, spoke_data in TgwSpokes %}
-{%   for subnet_id in SubnetIds %}
-  EndpointRoute{{ spoke_data.CIDR | replace('.','') | replace('/','') }}{{ subnet_id | last }}:
-    Type: AWS::EC2::ClientVpnRoute
-    DependsOn:
-{%     for depend in SubnetIds %}
-      - EndpointAssociation{{ subnet_id | last }}
-{%     endfor %}
-    Properties:
-      Description: {{ spoke }}-Subnet{{ subnet_id | last }}
-      ClientVpnEndpointId: !Ref Endpoint
-      DestinationCidrBlock: {{ spoke_data.CIDR }}
-      TargetVpcSubnetId: {{ subnet_id }}
-{%   endfor %}
-{% endfor %}
-
 Outputs:
-  Endpoint:
+  EndpointId:
     Description: The VPN endpoint Id
     Value: !Ref Endpoint
     Export:
