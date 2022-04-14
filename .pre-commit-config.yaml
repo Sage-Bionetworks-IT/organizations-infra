@@ -3,7 +3,7 @@ repos:
     rev: b9e96b3212fa06aea65964ff0d5cda84ce935f38
     hooks:
     - id: git-secrets
-      entry: git-secrets --register-aws
+      entry: git-secrets --register-aws --global
     - id: git-secrets
       entry: git-secrets --scan
       args: [--untracked]
