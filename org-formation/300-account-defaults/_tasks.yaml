@@ -38,6 +38,22 @@ SceptreLambdaBucket:
     Account: '*'
     Region: !Ref primaryRegion
 
+ItKmsKey:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/KMS/kms-key.yaml
+  StackName: it-kms-key
+  Parameters:
+    AliasName: alias/it-infra
+    AdminPrincipalArns:
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationFormationBuildAccessRole'
+    UserPrincipalArns:
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationFormationBuildAccessRole'
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
+
 VpcPeeringRequest:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.12/templates/VPC/vpc-peering-request.yaml
