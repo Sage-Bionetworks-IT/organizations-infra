@@ -18,7 +18,7 @@ jobs:
       - name: setup git-secrets
         run: git-secrets --register-aws --global
       - name: run pre-commit
-      - uses: pre-commit/action@v2.0.0
+        uses: pre-commit/action@v2.0.0
   jinja-lint:
     runs-on: ubuntu-latest
     steps:
