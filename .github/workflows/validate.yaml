@@ -15,10 +15,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - name: setup git-secrets
-        run: git-secrets --register-aws --global
-      - name: run pre-commit
-        uses: pre-commit/action@v2.0.0
+      - uses: pre-commit/action@v2.0.0
   jinja-lint:
     runs-on: ubuntu-latest
     steps:
