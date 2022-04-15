@@ -1,7 +1,7 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
-#---------- A service account for https://github.com/Sage-Bionetworks/agora-infra  -----------
+# ------ A service account for https://github.com/Sage-Bionetworks/agora-infra  -------
 AgoraDevCIServiceAccount:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
@@ -25,7 +25,7 @@ AgoraProdCIServiceAccount:
     IncludeMasterAccount: false
     Account: !Ref AgoraProdAccount
     Region: us-east-1
-----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 # A service account for https://github.com/Sage-Bionetworks/iatlas-infra
 iAtlasCIServiceAccount:
