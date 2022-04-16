@@ -168,6 +168,14 @@ Parameters:
   agoraProdDeveloperGroup:   #JC aws-agoraprod-developers
     Type: String
     Default: '906769aa66-45d850f1-c67b-40fd-a3ce-d9b670712543'
+
+  agoraDevAdminGroup:     #JC aws-agoradev-admins
+    Type: String
+    Default: '906769aa66-3fd73ca7-ea84-44ad-812a-2555aa3da618'
+
+  agoraDevDeveloperGroup:   #JC aws-agoradev-developers
+    Type: String
+    Default: '906769aa66-97799c36-3766-4b50-9a0a-62b22d9a5c60'
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
@@ -1077,4 +1085,38 @@ SsoAgoraProdDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref agoraProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoAgoraDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-agoradev-admin'
+  StackDescription: 'SSO: admin role used by agoradev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref AgoraDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref agoraDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoAgoraDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-agoradev-developer'
+  StackDescription: 'SSO: developer role used by agoradev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref AgoraDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref agoraDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
