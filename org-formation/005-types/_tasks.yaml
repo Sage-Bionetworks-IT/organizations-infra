@@ -61,7 +61,7 @@ EnableAWSServiceRp:
 PasswordPolicyRp:
   Type: register-type
   ResourceType: 'Community::IAM::PasswordPolicy'
-  SchemaHandlerPackage: !Sub 's3://${catalogBucket}/community-iam-passwordpolicy-0.4.0.zip'
+  SchemaHandlerPackage: !Sub 's3://${catalogBucket}/community-iam-passwordpolicy-0.2.0.zip'
   OrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
