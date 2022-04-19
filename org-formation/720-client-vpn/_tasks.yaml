@@ -155,8 +155,8 @@ VpnAuthRoutes:
         CIDR: "10.255.45.0/24"
         AccessGroups:
           - "aws-admins"
-          - "aws-agoraprod-admins"
-          - "aws-agoraprod-developers"
+          - "aws-agoradev-admins"
+          - "aws-agoradev-developers"
       # org-sagebase-scipooldev
       cesspoolvpc:
         CIDR: "10.31.0.0/16"
@@ -169,8 +169,6 @@ VpnAuthRoutes:
         AccessGroups:
           - "aws-admins"
           - "scientists"
-          - "aws-agoradev-admins"
-          - "aws-agoradev-developers"
 
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]
