@@ -11,7 +11,9 @@ AgoraCIServiceAccount:
       - arn:aws:iam::aws:policy/AdministratorAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
-    Account: !Ref AgoraProdAccount
+    Account:
+      - !Ref AgoraDevAccount
+      - !Ref AgoraProdAccount
     Region: us-east-1
 
 # A service account for https://github.com/Sage-Bionetworks/iatlas-infra

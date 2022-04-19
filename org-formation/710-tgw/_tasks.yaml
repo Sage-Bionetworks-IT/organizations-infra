@@ -38,7 +38,7 @@ TransitGateway:
       - !Ref SynapseDWAccount
       - !Ref SynapseDevAccount
       - !Ref SynapseProdAccount
-      - !Ref AgoraProdAccount
+      - !Ref AgoraDevAccount
       - !Ref iAtlasProdAccount
 
 UnionStationVpc:
@@ -98,8 +98,8 @@ TransitGatewayRoutes:
       # org-sagebase-synapseprod
       synapse-prod-vpc-2:
         CIDR: "10.20.0.0/16"
-      # org-sagebase-agora-prod
-      agoravpc:
+      # org-sagebase-agora-dev
+      agoradev-vpc:
         CIDR: "10.255.45.0/24"
 
   Parameters:
@@ -121,7 +121,7 @@ Mappings:
       '420786776710': 'BridgeServer2-vpc'   # org-sagebase-bridgedev
       '649232250620': 'BridgeServer2-vpc'   # org-sagebase-bridgeprod
       '383874245509': 'vpc'      # org-sagebase-synapsedw
-      '681175625864': 'agoravpc'      # org-sagebase-agora-prod
+      '607346494281': 'agoravpc'      # org-sagebase-agora-dev
   TgwSpokesB:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
@@ -148,7 +148,7 @@ TransitGatewaySpokeA:
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount
       - !Ref SynapseDWAccount
-      - !Ref AgoraProdAccount
+      - !Ref AgoraDevAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
