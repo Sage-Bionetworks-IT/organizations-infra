@@ -45,6 +45,10 @@ Parameters:
     Type: String
     Default: '906769aa66-8c4034aa-9441-47b2-8770-34422ea4affa'
 
+  securityWriterGroup:   #JC aws-security-writers
+    Type: String
+    Default: '' #TODO make group and fill guid
+
   mobileHealthDataEngineeringDevAdminGroup:     #JC aws-mobilehealth-dataengineering-dev-admins
     Type: String
     Default: '906769aa66-e218c196-4107-417d-8b75-c2e81a4aa290'
@@ -268,10 +272,33 @@ SsoAuditor:
     permissionSetName: 'Auditor'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/SecurityAudit'
-      - 'arn:aws:iam::aws:policy/job-function/SupportUser'
       - 'arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
+    sessionDuration: 'PT1H'
+    masterAccountId: !Ref MasterAccount
+
+SsoSecurityWriter:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-securitywriter'
+  StackDescription: 'SecurityWriter role used by SecurityWriter group in securitycentral'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SecurityCentralAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref securityWriterGroup
+    permissionSetName: 'SecurityWriter'
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/AmazonGuardDutyFullAccess'
+      - 'arn:aws:iam::aws:policy/AWSSecurityHubFullAccess'
+      - 'arn:aws:iam::aws:policy/AmazonInspector2FullAccess'
+      - 'arn:aws:iam::aws:policy/job-function/SupportUser'
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
 
