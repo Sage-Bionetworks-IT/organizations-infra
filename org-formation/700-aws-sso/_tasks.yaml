@@ -299,7 +299,7 @@ SsoViewerPlus:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-viewer-plus'
-  StackDescription: 'Read-only role used by Admin group within whole organization'
+  StackDescription: 'Read-only role with access to additional services'
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
