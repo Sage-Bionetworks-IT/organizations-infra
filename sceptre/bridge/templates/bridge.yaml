@@ -59,47 +59,6 @@ Resources:
               - 's3:DeleteObject'
             Effect: Allow
             Resource: "arn:aws:s3:::ios-apps.sagebridge.org/*"
-  # resources for logging services
-  AWSIAMSumoLogicUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      Groups:
-        - !Ref AWSIAMLoggingServiceGroup
-  AWSIAMSumoLogicUserAccessKey:
-    Type: 'AWS::IAM::AccessKey'
-    Properties:
-      UserName: !Ref AWSIAMSumoLogicUser
-  IAMLoggingServiceManagedPolicy:
-    Type: "AWS::IAM::ManagedPolicy"
-    Properties:
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Action:
-              - 's3:GetObject'
-              - 's3:GetObjectVersion'
-              - 's3:ListBucketVersions'
-              - 's3:ListBucket'
-            Effect: Allow
-            Resource:
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::elasticbeanstalk-'
-                  - !Ref AWS::Region
-                  - '-'
-                  - !Ref AWS::AccountId
-                  - '/*'
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::elasticbeanstalk-'
-                  - !Ref AWS::Region
-                  - '-'
-                  - !Ref AWS::AccountId
-  AWSIAMLoggingServiceGroup:
-    Type: 'AWS::IAM::Group'
-    Properties:
-      ManagedPolicyArns:
-        - !Ref IAMLoggingServiceManagedPolicy
   # resources for app monitoring services
   AWSIAMNewRelicBudgetPolicy:
     Type: "AWS::IAM::Policy"
@@ -372,14 +331,6 @@ Outputs:
     Value: !Ref AwsDefaultVpcId
     Export:
       Name: !Sub '${AWS::StackName}-AwsDefaultVpcId'
-  AWSIAMSumoLogicUser:
-    Value: !Ref AWSIAMSumoLogicUser
-    Export:
-      Name: !Sub '${AWS::StackName}-SumoLogicUser'
-  AWSIAMSumoLogicUserAccessKey:
-    Value: !Ref AWSIAMSumoLogicUserAccessKey
-    Export:
-      Name: !Sub '${AWS::StackName}-SumoLogicUserAccessKey'
   AWSS3AndroidAppBucketWebsiteURL:
     Condition: CreateProdResources
     Value: !GetAtt AWSS3AndroidAppBucket.WebsiteURL
