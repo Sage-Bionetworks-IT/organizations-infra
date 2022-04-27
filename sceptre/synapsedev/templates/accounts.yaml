@@ -61,16 +61,6 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-  AWSIAMKellySongUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: kelly.song@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
 
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
