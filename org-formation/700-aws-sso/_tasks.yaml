@@ -295,6 +295,32 @@ SsoViewer:
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
+SsoViewerPlus:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-viewer-plus'
+  StackDescription: 'Read-only role with access to additional services'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref adminGroup
+    permissionSetName: 'viewer-plus'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
+    managedPolicies:
+      - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
+      - arn:aws:iam::aws:policy/job-function/SupportUser
+      - arn:aws:iam::aws:policy/AmazonDocDBReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly
+      - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSLambda_ReadOnlyAccess
+
 SsoViewerSupporter:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
@@ -363,15 +389,7 @@ scicompViewer:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref scicompViewerGroup
-    permissionSetName: 'Viewer-Plus'
-    sessionDuration: 'PT12H'
-    managedPolicies:
-      - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
-      - arn:aws:iam::aws:policy/job-function/SupportUser
-      - arn:aws:iam::aws:policy/AmazonDocDBReadOnlyAccess
-      - arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly
-      - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
-      - arn:aws:iam::aws:policy/AWSLambda_ReadOnlyAccess
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
 
 scicompDeveloper:
   Type: update-stacks
