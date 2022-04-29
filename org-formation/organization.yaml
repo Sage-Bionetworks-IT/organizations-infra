@@ -27,6 +27,7 @@ Organization:
         - !Ref HtanDevAccount
         - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
+        - !Ref AgoraDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -52,6 +53,8 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ItDev
+      Accounts:
+        - !Ref SceptreDevAccount
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -64,6 +67,7 @@ Organization:
         - !Ref LogCentralAccount
         - !Ref ImageCentralAccount
         - !Ref SecurityCentralAccount
+        - !Ref IpamAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -382,6 +386,19 @@ Organization:
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
+  AgoraDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-agora-dev
+      RootEmail: agora-develop@sagebase.org
+      Alias: org-sagebase-agora-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: SysBio
+        Project: amp-ad
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: agora-develop@sagebase.org
+
   AgoraProdAccount:
     Type: OC::ORG::Account
     Properties:
@@ -394,3 +411,21 @@ Organization:
         Project: amp-ad
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: agora-prod@sagebase.org
+
+  IpamAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-ipam
+      RootEmail: aws.ipam@sagebase.org
+      Alias: org-sagebase-ipam
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+
+  SceptreDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-sceptredev
+      RootEmail: aws.sceptredev@sagebase.org
+      Alias: org-sagebase-sceptredev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml

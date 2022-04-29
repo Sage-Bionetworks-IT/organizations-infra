@@ -1,8 +1,0 @@
-template:
-  type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-saml-provider/master/cfn-cr-saml-provider.yaml
-stack_name: cfn-cr-saml-provider
-stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
-  OwnerEmail: "it@sagebase.org"

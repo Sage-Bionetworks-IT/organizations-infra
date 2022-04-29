@@ -25,7 +25,7 @@ Resources:
       TransitGatewayId: !Ref TransitGatewayId
       VpcId: !Ref VpcId
 {% for spoke, spoke_data in TgwSpokes %}
-  TgwSpokeRoute{{ spoke }}:
+  TgwSpokeRoute{{ spoke | replace('-','') }}:
     Type: 'AWS::EC2::Route'
     DependsOn: TransitGatewayAttachment
     Properties:

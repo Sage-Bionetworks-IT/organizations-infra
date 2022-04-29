@@ -29,8 +29,7 @@ Parameters:
     ConstraintDescription: 'Must be either 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, or 3653'
   SplitTunnel:
     Type: String
-    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint."
-    Default: false
+    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint (false for full tunnel)"
     AllowedValues:
       - true
       - false
@@ -39,12 +38,11 @@ Parameters:
     Type: Number
     Description: "The maximum VPN session duration time in hours."
     Default: 24
-    AllowedValues:
-      - 8
-      - 10
-      - 12
-      - 24
+    AllowedValues: [8, 10, 12, 24]
     ConstraintDescription: 'Must be one of 8, 10, 12, or 24 hours'
+  VpnDnsServers:
+    Type: List<String>
+    Description: "A list IP Addresses for DNS"
 Resources:
   SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -77,6 +75,7 @@ Resources:
             SAMLProviderArn: !Ref VpnSamlProviderArn
             SelfServiceSAMLProviderArn: !Ref VpnSspSamlProviderArn
       ClientCidrBlock: !Ref ClientCidrBlock
+      DnsServers: !Ref VpnDnsServers
       ConnectionLogOptions:
         Enabled: true
         CloudwatchLogGroup: !Ref CloudwatchLogGroup
@@ -89,72 +88,8 @@ Resources:
       SecurityGroupIds:
         - !GetAtt SecurityGroup.GroupId
 
-{% for subnet_id in SubnetIds %}
-  EndpointAssociation{{ subnet_id | last }}:
-    Type: AWS::EC2::ClientVpnTargetNetworkAssociation
-    Properties:
-      ClientVpnEndpointId: !Ref Endpoint
-      SubnetId: {{ subnet_id }}
-{% endfor %}
-
-{# Authorization and route between VPN and public internet #}
-  EndpointAuthorizationPublic:
-    Type: AWS::EC2::ClientVpnAuthorizationRule
-    Properties:
-      Description: "public"
-      AuthorizeAllGroups: true
-      ClientVpnEndpointId: !Ref Endpoint
-      TargetNetworkCidr: "0.0.0.0/0"
-
-{% for subnet_id in SubnetIds %}
-  EndpointRoutePublicSubnet{{ subnet_id | last }}:
-    Type: AWS::EC2::ClientVpnRoute
-    Properties:
-      Description: public-subnet{{ subnet_id | last }}
-      ClientVpnEndpointId: !Ref Endpoint
-      DestinationCidrBlock: "0.0.0.0/0"
-      TargetVpcSubnetId: {{ subnet_id }}
-{% endfor %}
-
-{# Authorization and routes between VPN and spokes #}
-{% for spoke, spoke_data in TgwSpokes %}
-{%   set spoke_loop = loop %}
-{%   for access_group in spoke_data.AccessGroups %}
-{%     set access_group_loop = loop %}
-  EndpointAuthorization{{ spoke_loop.index }}{{ access_group_loop.index }}:
-    Type: AWS::EC2::ClientVpnAuthorizationRule
-    DependsOn:
-{%     for subnet_id in SubnetIds %}
-      - EndpointAssociation{{ subnet_id | last }}
-{%     endfor %}
-    Properties:
-      Description: {{ spoke }}-{{ access_group }}
-      AccessGroupId: {{ access_group }}
-      ClientVpnEndpointId: !Ref Endpoint
-      TargetNetworkCidr: {{ spoke_data.CIDR }}
-{%   endfor %}
-{% endfor %}
-
-{% for spoke, spoke_data in TgwSpokes %}
-{%   set spoke_loop = loop %}
-{%   for subnet_id in SubnetIds %}
-{%     set subnet_id_loop = loop %}
-  EndpointRoute{{ spoke_loop.index }}{{ subnet_id_loop.index }}:
-    Type: AWS::EC2::ClientVpnRoute
-    DependsOn:
-{%     for depend in SubnetIds %}
-      - EndpointAssociation{{ subnet_id | last }}
-{%     endfor %}
-    Properties:
-      Description: {{ spoke }}-Subnet{{ subnet_id | last }}
-      ClientVpnEndpointId: !Ref Endpoint
-      DestinationCidrBlock: {{ spoke_data.CIDR }}
-      TargetVpcSubnetId: {{ subnet_id }}
-{%   endfor %}
-{% endfor %}
-
 Outputs:
-  Endpoint:
+  EndpointId:
     Description: The VPN endpoint Id
     Value: !Ref Endpoint
     Export:

@@ -8,7 +8,7 @@
     "print-tasks": "npx org-formation print-tasks ./org-formation/_tasks.yaml --verbose --print-stack --output yaml --max-concurrent-stacks 100 --max-concurrent-tasks 100",
     "perform-tasks": "npx org-formation perform-tasks ./org-formation/_tasks.yaml --verbose --print-stack --max-concurrent-stacks 1 --max-concurrent-tasks 1",
     "ci-perform-tasks": "npx org-formation perform-tasks ./org-formation/_tasks.yaml --verbose --print-stack --max-concurrent-stacks 1 --max-concurrent-tasks 1 --perform-cleanup",
-    "ci-perform-tasks-parallel": "npx org-formation perform-tasks ./org-formation/_tasks.yaml --verbose --print-stack --max-concurrent-stacks 100 --max-concurrent-tasks 100 --perform-cleanup",
+    "ci-perform-tasks-parallel": "npx org-formation perform-tasks ./org-formation/_tasks.yaml --verbose --print-stack --max-concurrent-stacks 10 --max-concurrent-tasks 10 --perform-cleanup",
     "validate-tasks": "npx org-formation validate-tasks ./org-formation/_tasks.yaml --verbose --print-stack --failed-tasks-tolerance 0  --max-concurrent-stacks 100 --max-concurrent-tasks 100",
     "cfn-lint": "cfn-lint ./.printed-stacks/**/*.yaml -i W2001,E3001,E1019,W1020,W2509,E3021"
   },
@@ -30,6 +30,6 @@
   },
   "homepage": "https://github.com/Sage-Bionetworks-IT/organizations-infra.git/README.md",
   "dependencies": {
-    "aws-organization-formation": "^0.9.17-beta.4"
+    "aws-organization-formation": "^0.9.20-beta.1"
   }
 }

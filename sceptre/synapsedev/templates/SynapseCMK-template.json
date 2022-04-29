@@ -209,6 +209,13 @@
                                         "events:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "lambda:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }

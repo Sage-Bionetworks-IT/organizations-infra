@@ -55,27 +55,27 @@ PreventDisableCloudwatchConfigs:
       - !Ref BridgeOU
       - !Ref ServiceCatalogOU
 
-DenyAllRegionsOutsideUsEast1:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.4/templates/SCP/deny-all-regions-outside-us-east-1.yaml
-  StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us-east-1'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  Parameters:
-    targetIds:
-      - !Ref ItDevOU
-      - !Ref ItProdOU
-      - !Ref ScienceProdOU
+#DenyAllRegionsOutsideUsEast1:
+#  Type: update-stacks
+#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.4/templates/SCP/deny-all-regions-outside-us-east-1.yaml
+#  StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us-east-1'
+#  DefaultOrganizationBindingRegion: !Ref primaryRegion
+#  DefaultOrganizationBinding:
+#    IncludeMasterAccount: true
+#  Parameters:
+#    targetIds:
+#      - !Ref ItDevOU
+#      - !Ref ItProdOU
+#      - !Ref ScienceProdOU
 
-DenyAllRegionsOutsideUs:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.4/templates/SCP/deny-all-regions-outside-us.yaml
-  StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  Parameters:
-    targetIds:
-      - !Ref ScienceDevOU
-      - !Ref ServiceCatalogOU
+#DenyAllRegionsOutsideUs:
+#  Type: update-stacks
+#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.4/templates/SCP/deny-all-regions-outside-us.yaml
+#  StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us'
+#  DefaultOrganizationBindingRegion: !Ref primaryRegion
+#  DefaultOrganizationBinding:
+#    IncludeMasterAccount: true
+#  Parameters:
+#    targetIds: "*"
+#      - !Ref ScienceDevOU
+#      - !Ref ServiceCatalogOU
