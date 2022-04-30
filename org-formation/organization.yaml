@@ -53,6 +53,8 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ItDev
+      Accounts:
+        - !Ref SceptreDevAccount
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -416,5 +418,14 @@ Organization:
       AccountName: org-sagebase-ipam
       RootEmail: aws.ipam@sagebase.org
       Alias: org-sagebase-ipam
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+
+  SceptreDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-sceptredev
+      RootEmail: aws.sceptredev@sagebase.org
+      Alias: org-sagebase-sceptredev
       Tags:
         <<: !Include ./_default_org_tags.yaml
