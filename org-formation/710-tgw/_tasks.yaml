@@ -95,6 +95,9 @@ TransitGatewayRoutes:
       # org-sagebase-synapsedev
       synapse-dev-vpc-2:
         CIDR: "10.24.0.0/16"
+      # org-sagebase-synapseprod
+      synapse-prod-vpc-2:
+        CIDR: "10.20.0.0/16"
       # org-sagebase-agora-dev
       agoradev-vpc:
         CIDR: "10.255.45.0/24"
@@ -123,9 +126,12 @@ Mappings:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
       '420786776710': 'bridge-aux'   # org-sagebase-bridgedev
-  TgwSpokesS:
+  TgwSpokesSynapseDev:
     VpcName:
       '449435941126': 'synapse-dev-vpc-2'      # org-sagebase-synapsedev
+  TgwSpokesSynapseProd:
+    VpcName:
+      '325565585839': 'synapse-prod-vpc-2'      # org-sagebase-synapseprod
 
 TransitGatewaySpokeA:
   DependsOn: [ TransitGatewayRoutes ]
@@ -178,11 +184,11 @@ TransitGatewaySpokeB:
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
 
-TransitGatewaySpokesS:
+TransitGatewaySpokesSynapseDev:
   DependsOn: [ TransitGatewayRoutes ]
   Type: update-stacks
   Template: tgw-spoke-synapse.njk
-  StackName: !Sub '${resourcePrefix}-${appName}-spoke-s'
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-synapse-dev'
   StackDescription: Setup Transit Gateway on synapse account
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -191,7 +197,7 @@ TransitGatewaySpokesS:
     IncludeMasterAccount: false
   Parameters:
     TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
-    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesS, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesSynapseDev, VpcName, !Ref CurrentAccount], 'VPCId']]]
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
   TemplatingContext:
     VpcSubnetGroups:
@@ -208,3 +214,34 @@ TransitGatewaySpokesS:
       Orange:
 #        PrivateSubnets: subnet-0ddf373eb2d9d5c2f, subnet-0a0f54c802d77ae9f, subnet-0a0e791e7045df95a, subnet-0b8f22a695114624d, subnet-092aa591789f64d43, subnet-0c6f5ad48a624bb9f
         PrivateSubnetRouteTableIds: rtb-04c879589ab2ef488, rtb-0a502d10b03000b9d, rtb-020109818113821d1, rtb-04ca11af7f7deb148, rtb-0e77a1d7b852b0862, rtb-0d75c896d033bf0a8
+
+TransitGatewaySpokesSynapseProd:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke-synapse.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-synapse-prod'
+  StackDescription: Setup Transit Gateway on synapse account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseProdAccount
+    IncludeMasterAccount: false
+  Parameters:
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesSynapseProd, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+  TemplatingContext:
+    VpcSubnetGroups:
+      # per https://sagebionetworks.jira.com/browse/IT-1234 we only need one set of PrivateSubnets
+      Red:
+        PrivateSubnets: subnet-083c6dcaf0ea22c50, subnet-02daea7c83cb57798, subnet-0be443bb331d00f38, subnet-03f78b7a8f2a51063, subnet-05027d99e58c71812, subnet-00b88143144603e6f
+        PrivateSubnetRouteTableIds: rtb-0c845ed39c8a67d6b, rtb-0c36588c2bb997e24, rtb-032db169b27022bf6, rtb-0f5eea7430f6049e3, rtb-0e762e46bb2270b12, rtb-05fce47a8e41a4b5b
+      Blue:
+#        PrivateSubnets: subnet-087ab925352b52096, subnet-06099e23a516786de, subnet-020602f0fd52c5e61, subnet-0aabc47100134c5d5, subnet-08780dfd939f1dd21, subnet-0eca9fd00eeb4a614
+        PrivateSubnetRouteTableIds: rtb-0039756eb383c5cf3, rtb-0f8b2d14dd3bf7e7e, rtb-0b99e196c78e42cfa, rtb-099d62216a53e560a, rtb-0955bbeb48197af64, rtb-061fed7dfc7f8085c
+      Green:
+#        PrivateSubnets: subnet-0860e3bc675436d79, subnet-02ab3d3b410fd59b8, subnet-0f7079956a4c2c268, subnet-0682c1a04f2b1d6d4, subnet-065776a604a01d1f2, subnet-007a46edd1523eed8
+        PrivateSubnetRouteTableIds: rtb-0a92323d9c0baee66, rtb-0521c182f068eb608, rtb-03daa449de5b69de9, rtb-0c1604d3033d3e2f8, rtb-07cf7905605134042, rtb-023c93c7c01a69e60
+      Orange:
+#        PrivateSubnets: subnet-0e1dcd48ba4f83d92, subnet-06f07457ece6e5ac9, subnet-04845fc84521ef3c8, subnet-0827ea15f8ccbdac8, subnet-005881d2f83250a8a, subnet-08094e2690d564a79
+        PrivateSubnetRouteTableIds: rtb-017969de3bac2881a, rtb-015c80c48eb89cc2c, rtb-02a5a37f8ff44f4e6, rtb-0e6054e298decb4c0, rtb-012a55a4c9ad9817f, rtb-048ee26a74e6e135d

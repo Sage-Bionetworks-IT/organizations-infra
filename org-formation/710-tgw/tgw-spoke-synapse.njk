@@ -13,19 +13,17 @@ Parameters:
     Description: 'The VPC ID to attach'
     Type: AWS::EC2::VPC::Id
 Resources:
-{% for subnet_group, group_data in VpcSubnetGroups %}
-  {% if group_data.PrivateSubnets %}
-    {% set private_subnet_list = group_data.PrivateSubnets.split(',') %}
-  Attachment{{ subnet_group | replace('-','') }}:
+  Attachment:
     Type: AWS::EC2::TransitGatewayAttachment
     Properties:
-      SubnetIds: [{{ private_subnet_list }}]
+      SubnetIds: [{{ VpcSubnetGroups.Red.PrivateSubnets }}]
       TransitGatewayId: !Ref TransitGatewayId
       VpcId: !Ref VpcId
-  {% endif %}
+{% for subnet_group, group_data in VpcSubnetGroups %}
   {% set private_subnet_route_table_ids_list = group_data.PrivateSubnetRouteTableIds.split(',') %}
   {% for PrivateSubnetRouteTableId in private_subnet_route_table_ids_list %}
   Route{{ PrivateSubnetRouteTableId | replace('-','') | replace(' ','') }}:
+    DependsOn: Attachment
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: !Ref TransitGatewayEndpointCidr
