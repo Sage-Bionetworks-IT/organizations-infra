@@ -100,6 +100,8 @@ TransitGatewayRoutes:
       # org-sagebase-synapseprod
       synapse-prod-vpc-2:
         CIDR: "10.20.0.0/16"
+      synapse-ops-vpc-v2:
+        CIDR: "10.30.0.0/16"
       # org-sagebase-agora-dev
       agoradev-vpc:
         CIDR: "10.255.45.0/24"
@@ -136,6 +138,7 @@ Mappings:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
       '420786776710': 'bridge-aux'   # org-sagebase-bridgedev
+      '325565585839': 'synapse-ops-vpc-v2' # org-sagebase-synapseprod
   TgwSpokesSynapseDev:
     VpcName:
       '449435941126': 'synapse-dev-vpc-2'      # org-sagebase-synapsedev
@@ -184,6 +187,7 @@ TransitGatewaySpokeB:
     Account:
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
+      - !Ref SynapseProdAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
