@@ -188,7 +188,7 @@ TransitGatewaySpokesSynapseDev:
   DependsOn: [ TransitGatewayRoutes ]
   Type: update-stacks
   Template: tgw-spoke-synapse.njk
-  StackName: !Sub '${resourcePrefix}-${appName}-spoke-s'
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-synapse-dev'
   StackDescription: Setup Transit Gateway on synapse account
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -219,7 +219,7 @@ TransitGatewaySpokesSynapseProd:
   DependsOn: [ TransitGatewayRoutes ]
   Type: update-stacks
   Template: tgw-spoke-synapse.njk
-  StackName: !Sub '${resourcePrefix}-${appName}-spoke-s'
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-synapse-prod'
   StackDescription: Setup Transit Gateway on synapse account
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
