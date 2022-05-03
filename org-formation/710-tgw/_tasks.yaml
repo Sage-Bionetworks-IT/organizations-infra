@@ -111,6 +111,9 @@ TransitGatewayRoutes:
       # org-sagebase-scipoolprod
       internalpoolvpc:
         CIDR: "10.41.0.0/16"
+      # org-sagebase-synapsedw
+      vpc:
+        CIDR: "10.12.0.0/16"
 
   Parameters:
     VpcSubnetIDs:
