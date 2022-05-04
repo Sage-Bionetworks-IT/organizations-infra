@@ -42,6 +42,7 @@ TransitGateway:
       - !Ref iAtlasProdAccount
       - !Ref ScipoolDevAccount
       - !Ref ScipoolProdAccount
+      - !Ref SageITAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -114,6 +115,9 @@ TransitGatewayRoutes:
       # org-sagebase-synapsedw
       vpc:
         CIDR: "10.12.0.0/16"
+      # org-sagebase-sageit
+      sagedefaultvpc:
+        CIDR: "10.13.0.0/16"
 
   Parameters:
     VpcSubnetIDs:
@@ -142,6 +146,7 @@ Mappings:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
       '420786776710': 'bridge-aux'   # org-sagebase-bridgedev
       '325565585839': 'synapse-ops-vpc-v2' # org-sagebase-synapseprod
+      '797640923903': 'sagedefaultvpc' # org-sagebase-sageit
   TgwSpokesSynapseDev:
     VpcName:
       '449435941126': 'synapse-dev-vpc-2'      # org-sagebase-synapsedev
@@ -191,6 +196,7 @@ TransitGatewaySpokeB:
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref SynapseProdAccount
+      - !Ref SageITAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
