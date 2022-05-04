@@ -141,12 +141,12 @@ Mappings:
       '607346494281': 'agoravpc'      # org-sagebase-agora-dev
       '465877038949': 'cesspoolvpc'      # org-sagebase-scipooldev
       '237179673806': 'internalpoolvpc'      # org-sagebase-scipooldev
+      '797640923903': 'sagedefaultvpc' # org-sagebase-sageit
   TgwSpokesB:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
       '420786776710': 'bridge-aux'   # org-sagebase-bridgedev
       '325565585839': 'synapse-ops-vpc-v2' # org-sagebase-synapseprod
-      '797640923903': 'sagedefaultvpc' # org-sagebase-sageit
   TgwSpokesSynapseDev:
     VpcName:
       '449435941126': 'synapse-dev-vpc-2'      # org-sagebase-synapsedev
@@ -172,6 +172,7 @@ TransitGatewaySpokeA:
       - !Ref AgoraDevAccount
       - !Ref ScipoolDevAccount
       - !Ref ScipoolProdAccount
+      - !Ref SageITAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
@@ -196,7 +197,6 @@ TransitGatewaySpokeB:
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref SynapseProdAccount
-      - !Ref SageITAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
