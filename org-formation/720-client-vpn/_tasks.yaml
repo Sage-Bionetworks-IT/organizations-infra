@@ -143,7 +143,7 @@ VpnAuthRoutes:
         AccessGroups:
           - "aws-admins"
           - "aws-synapse-admins"
-          - "aws-synapsedw-users"
+          - "synapsedw-users"
       # org-sagebase-synapsedev
       synapse-dev-vpc-2:
         CIDR: "10.24.0.0/16"
@@ -183,6 +183,13 @@ VpnAuthRoutes:
         AccessGroups:
           - "aws-admins"
           - "scientists"
+      # org-sagebase-sageit
+        CIDR: "10.13.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+          - "sageit-users"
+
 
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]
