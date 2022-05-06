@@ -184,7 +184,7 @@ VpnAuthRoutes:
           - "aws-admins"
           - "scientists"
       # org-sagebase-sageit
-      sagedefaultvpc:
+      defaultvpc:
         CIDR: "10.13.0.0/16"
         AccessGroups:
           - "aws-admins"
