@@ -690,48 +690,6 @@ SsoImageCentralAmiLibrarian:
       - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
     sessionDuration: 'PT12H'
 
-SsoKubernetesDeveloper:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.2/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-kubernetes-developer'
-  StackDescription: 'SSO: Limited developer role used by kuberenetes developers'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account:
-        - !Ref SandboxAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref TBD
-    permissionSetName: 'Kubernetes-Developer'
-    sessionDuration: 'PT12H'
-    inlinePolicy: >-
-      {
-          "Version": "2012-10-17",
-          "Statement": [
-              {
-                  "Effect": "Allow",
-                  "Action": [
-                      "eks:*"
-                  ],
-                  "Resource": "*"
-              },
-              {
-                  "Effect": "Allow",
-                  "Action": "iam:PassRole",
-                  "Resource": "*",
-                  "Condition": {
-                      "StringEquals": {
-                          "iam:PassedToService": "arn:aws:iam::563295687221:role/accounts-EksServiceRole-MU4BSZOHRHCG"
-                      }
-                  }
-              }
-          ]
-      }
-
-
 SsoBridgeDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
