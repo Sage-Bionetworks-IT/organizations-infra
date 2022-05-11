@@ -1,9 +1,0 @@
-template:
-  type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/peer-route-config.yaml
-stack_name: peer-vpn-computevpc
-parameters:
-  PeeringConnectionId: pcx-7e3bec16
-  VpcPrivateRouteTable: rtb-5f73c623
-  VpcPublicRouteTable: rtb-6e7fca12
-  VpnCidr: 10.1.0.0/16
