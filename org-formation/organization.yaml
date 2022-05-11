@@ -28,6 +28,7 @@ Organization:
         - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
         - !Ref AgoraDevAccount
+        - !Ref DnTDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -385,6 +386,18 @@ Organization:
         Project: Infrastructure
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
+
+  DnTDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: data-and-tooling-dev
+      RootEmail: ibc-ops@sagebase.org
+      Alias: org-sagebase-data-and-tooling-dev
+      Tags:
+        Department: IBC
+        Project: Infrastructure
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
 
   AgoraDevAccount:
     Type: OC::ORG::Account
