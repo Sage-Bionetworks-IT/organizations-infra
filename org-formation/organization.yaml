@@ -40,6 +40,7 @@ Organization:
         - !Ref MobileHealthDataEngineeringProdAccount
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
+        - !Ref IncludeAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -286,6 +287,20 @@ Organization:
         Project: NLP-Sandbox
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
+
+  IncludeAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: IncludeAccount
+      AccountId: '841415736403'
+      RootEmail: ibc-ops@sagebase.org
+      Alias: org-sagebase-include
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: IBC
+        Project: INCLUDE
+        budget-alarm-threshold: 20000
+        budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
 
   CnbAccount:
     Type: OC::ORG::Account
