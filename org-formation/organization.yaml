@@ -292,14 +292,14 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: IncludeAccount
-      RootEmail: ibc-ops@sagebase.org
+      RootEmail: aws-include-prod@sagebase.org
       Alias: org-sagebase-include
       Tags:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: INCLUDE
         budget-alarm-threshold: 20000
-        budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
+        budget-alarm-threshold-email-recipient: aws-include-prod@sagebase.org
 
   CnbAccount:
     Type: OC::ORG::Account
