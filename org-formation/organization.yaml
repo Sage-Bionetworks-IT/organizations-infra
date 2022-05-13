@@ -390,9 +390,9 @@ Organization:
   DnTDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: data-and-tooling-dev
+      AccountName: org-sagebase-dnt-dev
       RootEmail: ibc-ops@sagebase.org
-      Alias: org-sagebase-data-and-tooling-dev
+      Alias: org-sagebase-dnt-dev
       Tags:
         Department: IBC
         Project: Infrastructure
