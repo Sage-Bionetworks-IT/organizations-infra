@@ -398,6 +398,7 @@ Organization:
         Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
+        CostCenter: NO PROGRAM / 000000
 
   AgoraDevAccount:
     Type: OC::ORG::Account
