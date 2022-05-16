@@ -299,6 +299,7 @@ Organization:
         Department: IBC
         Project: INCLUDE
         budget-alarm-threshold: 20000
+        CostCenter: "INCLUDE - CHOP / 122000"
         budget-alarm-threshold-email-recipient: aws-include-prod@sagebase.org
 
   CnbAccount:
