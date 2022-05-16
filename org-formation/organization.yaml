@@ -286,6 +286,7 @@ Organization:
         Department: CompOnc
         Project: NLP-Sandbox
         budget-alarm-threshold: 20000
+        CostCenter: CSBC - NCI / 101300  # need to be confirmed
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
   # INCLUDE is the grant where we collaborate with CHOP
@@ -314,6 +315,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CNB
         Project: Challenges
+        CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: cnb@sagebase.org
 
@@ -328,6 +330,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: mobile-toolbox
+        CostCenter: Mobile Toolbox Project Core / 112501
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-dev@sagebase.org
 
@@ -342,6 +345,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
+        CostCenter: Mobile Toolbox Project Core / 112501
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-prod@sagebase.org
 
@@ -356,6 +360,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: iAtlas
+        CostCenter: iAtlas 3 / 314900
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-iatlas-prod@sagebase.org
 
@@ -371,6 +376,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: htan
+        CostCenter: HTAN-DFCI / 120100  # HTAN Supp DFCI / 121700
         budget-alarm-threshold: 2500
         budget-alarm-threshold-email-recipient: aws-htan-dev@sagebase.org
 
@@ -385,6 +391,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
+        CostCenter: NO PROGRAM / 000000
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
@@ -399,6 +406,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
+        CostCenter: NO PROGRAM / 000000
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
