@@ -1158,7 +1158,7 @@ SsoIncludeChopProdAdmin:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref includeChopProdAccount
+      Account: !Ref IncludeChopProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref includeChopProdAdminGroup
@@ -1175,7 +1175,7 @@ SsoIncludeChopProdDeveloper:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref includeChopProdAccount
+      Account: !Ref IncludeChopProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref incudeChopProdDeveloperGroup
