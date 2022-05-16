@@ -176,6 +176,14 @@ Parameters:
   agoraDevDeveloperGroup:   #JC aws-agoradev-developers
     Type: String
     Default: '906769aa66-97799c36-3766-4b50-9a0a-62b22d9a5c60'
+
+  IncludeChopProdAdminGroup:     #JC aws-includechopprod-admins
+    Type: String
+    Default: '906769aa66-a5b83d7c-4846-4f46-b134-608d66060765'
+
+  IncludeChopProdDeveloperGroup:   #JC aws-includechopprod-developers
+    Type: String
+    Default: '906769aa66-24060cf5-7100-4c45-a9be-27c3ff5aba69'
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
@@ -1137,4 +1145,38 @@ SsoAgoraDevDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref agoraDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoIncludeChopProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-includechopprod-admin'
+  StackDescription: 'SSO: admin role used by includechopprod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref IncludeChopProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref includeChopProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoIncludeChopProdDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-includechopprod-developer'
+  StackDescription: 'SSO: developer role used by includechopprod developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref IncludeChopProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref incudeChopProdDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
