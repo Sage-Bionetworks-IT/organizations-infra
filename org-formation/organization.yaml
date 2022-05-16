@@ -40,7 +40,7 @@ Organization:
         - !Ref MobileHealthDataEngineeringProdAccount
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
-        - !Ref IncludeAccount
+        - !Ref IncludeChopProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
