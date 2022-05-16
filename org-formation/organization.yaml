@@ -361,7 +361,7 @@ Organization:
         Department: CompOnc
         Project: iAtlas
         CostCenter: iAtlas 3 / 314900
-        budget-alarm-threshold: 2000
+        budget-alarm-threshold: 2000  # TODO: Update code in June/July 2022 when iAtlas 4 starts.
         budget-alarm-threshold-email-recipient: aws-iatlas-prod@sagebase.org
 
   # Provisioner repository: https://github.com/ncihtan/aws-htan-infra
