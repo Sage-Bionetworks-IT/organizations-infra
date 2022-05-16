@@ -376,7 +376,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: htan
-        CostCenter: HTAN-DFCI / 120100  # HTAN Supp DFCI / 121700
+        CostCenter: HTAN-DFCI / 120100
         budget-alarm-threshold: 2500
         budget-alarm-threshold-email-recipient: aws-htan-dev@sagebase.org
 
