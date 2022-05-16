@@ -40,6 +40,7 @@ Organization:
         - !Ref MobileHealthDataEngineeringProdAccount
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
+        - !Ref IncludeChopProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -286,6 +287,21 @@ Organization:
         Project: NLP-Sandbox
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
+
+  # INCLUDE is the grant where we collaborate with CHOP
+  IncludeChopProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-include-chop-prod
+      RootEmail: aws-include-prod@sagebase.org
+      Alias: org-sagebase-include-chop-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: IBC
+        Project: INCLUDE
+        budget-alarm-threshold: 20000
+        CostCenter: "INCLUDE - CHOP / 122000"
+        budget-alarm-threshold-email-recipient: aws-include-prod@sagebase.org
 
   CnbAccount:
     Type: OC::ORG::Account
