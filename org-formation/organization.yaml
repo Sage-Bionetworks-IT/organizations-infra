@@ -286,7 +286,7 @@ Organization:
         Department: CompOnc
         Project: NLP-Sandbox
         budget-alarm-threshold: 20000
-        CostCenter: CD2H / 11330005
+        CostCenter: CD2H-CU / 11330
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
   # INCLUDE is the grant where we collaborate with CHOP
@@ -360,8 +360,8 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: iAtlas
-        CostCenter: iAtlas 3 / 314900
-        budget-alarm-threshold: 2000  # TODO: Update code in June/July 2022 when iAtlas 4 starts.
+        CostCenter: iAtlas 3 / 314900  # TODO: Update code in June/July 2022 when iAtlas 4 starts.
+        budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-iatlas-prod@sagebase.org
 
   # Provisioner repository: https://github.com/ncihtan/aws-htan-infra
