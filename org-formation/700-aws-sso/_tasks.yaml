@@ -179,11 +179,11 @@ Parameters:
 
   IncludeChopProdAdminGroup:     #JC aws-includechopprod-admins
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-a5b83d7c-4846-4f46-b134-608d66060765'
 
   IncludeChopProdDeveloperGroup:   #JC aws-includechopprod-developers
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-24060cf5-7100-4c45-a9be-27c3ff5aba69'
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
