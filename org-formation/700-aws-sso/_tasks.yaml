@@ -177,11 +177,11 @@ Parameters:
     Type: String
     Default: '906769aa66-97799c36-3766-4b50-9a0a-62b22d9a5c60'
 
-  IncludeChopProdAdminGroup:     #JC aws-includechopprod-admins
+  includeChopProdAdminGroup:     #JC aws-includechopprod-admins
     Type: String
     Default: '906769aa66-a5b83d7c-4846-4f46-b134-608d66060765'
 
-  IncludeChopProdDeveloperGroup:   #JC aws-includechopprod-developers
+  includeChopProdDeveloperGroup:   #JC aws-includechopprod-developers
     Type: String
     Default: '906769aa66-24060cf5-7100-4c45-a9be-27c3ff5aba69'
 #----------------------------------------------------------------------------------------------
@@ -1158,7 +1158,7 @@ SsoIncludeChopProdAdmin:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref IncludeChopProdAccount
+      Account: !Ref includeChopProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref includeChopProdAdminGroup
@@ -1175,7 +1175,7 @@ SsoIncludeChopProdDeveloper:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref IncludeChopProdAccount
+      Account: !Ref includeChopProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref incudeChopProdDeveloperGroup
