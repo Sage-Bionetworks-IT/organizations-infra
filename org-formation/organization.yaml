@@ -286,7 +286,7 @@ Organization:
         Department: CompOnc
         Project: NLP-Sandbox
         budget-alarm-threshold: 20000
-        CostCenter: CSBC - NCI / 101300  # need to be confirmed
+        CostCenter: CD2H Total / 10133
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
   # INCLUDE is the grant where we collaborate with CHOP
