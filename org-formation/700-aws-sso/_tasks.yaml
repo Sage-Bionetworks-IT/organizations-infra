@@ -177,11 +177,11 @@ Parameters:
     Type: String
     Default: '906769aa66-97799c36-3766-4b50-9a0a-62b22d9a5c60'
 
-  IncludeProdAdminGroup:     #JC aws-includeprod-admins
+  IncludeChopProdAdminGroup:     #JC aws-includechopprod-admins
     Type: String
     Default: 'TBD'
 
-  IncludeProdDeveloperGroup:   #JC aws-includeprod-developers
+  IncludeChopProdDeveloperGroup:   #JC aws-includechopprod-developers
     Type: String
     Default: 'TBD'
 #----------------------------------------------------------------------------------------------
@@ -1147,36 +1147,36 @@ SsoAgoraDevDeveloper:
     principalId: !Ref agoraDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
-SsoIncludeProdAdmin:
+SsoIncludeChopProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-includeprod-admin'
-  StackDescription: 'SSO: admin role used by includeprod admin group'
+  StackName: !Sub '${resourcePrefix}-${appName}-includechopprod-admin'
+  StackDescription: 'SSO: admin role used by includechopprod admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref IncludeProdAccount
+      Account: !Ref IncludeChopProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref includeProdAdminGroup
+    principalId: !Ref includeChopProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-SsoIncludeProdDeveloper:
+SsoIncludeChopProdDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-includeprod-developer'
-  StackDescription: 'SSO: developer role used by includeprod developer group'
+  StackName: !Sub '${resourcePrefix}-${appName}-includechopprod-developer'
+  StackDescription: 'SSO: developer role used by includechopprod developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref DntDevAccount
+      Account: !Ref IncludeChopProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref incudeProdDeveloperGroup
+    principalId: !Ref incudeChopProdDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
