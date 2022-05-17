@@ -330,7 +330,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: mobile-toolbox
-        CostCenter: Mobile Toolbox Project Core / 112501
+        CostCenter: Mobile Toolbox Project Core / 112501  # Difficulty here is RECOVER / 122500 will also leverage this infra.
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-dev@sagebase.org
 
@@ -345,7 +345,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
-        CostCenter: Mobile Toolbox Project Core / 112501
+        CostCenter: Mobile Toolbox Project Core / 112501  # Difficulty here is RECOVER / 122500 will also leverage this infra.
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-prod@sagebase.org
 
@@ -420,6 +420,9 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: SysBio
         Project: amp-ad
+        # Anna G confirmed that AMP-AD charges should technically
+        # be charged to STRIDES account but this tag works
+        CostCenter: NIA AMP-AD CC / 101500
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: agora-develop@sagebase.org
 
@@ -433,6 +436,9 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: SysBio
         Project: amp-ad
+        # Anna G confirmed that AMP-AD charges should technically
+        # be charged to STRIDES account but this tag works
+        CostCenter: NIA AMP-AD CC / 101500
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: agora-prod@sagebase.org
 
