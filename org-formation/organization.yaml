@@ -315,7 +315,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CNB
         Project: Challenges
-        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags to override this default
+        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: cnb@sagebase.org
 
@@ -376,7 +376,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: htan
-        CostCenter: HTAN-DFCI / 120100  # HTAN Supp DFCI / 121700
+        CostCenter: HTAN-DFCI / 120100
         budget-alarm-threshold: 2500
         budget-alarm-threshold-email-recipient: aws-htan-dev@sagebase.org
 
@@ -391,7 +391,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
-        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags to override this default
+        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
@@ -406,7 +406,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
-        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags to override this default
+        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
