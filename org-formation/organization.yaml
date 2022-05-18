@@ -317,7 +317,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CNB
         Project: Challenges
-        AccountOwner: thomas.yu@sagebase.org
+        AccountOwner: thomas.yu@sagebase.org  # This could change to Jake A.
         CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: cnb@sagebase.org
@@ -432,7 +432,7 @@ Organization:
         # Anna G confirmed that AMP-AD charges should technically
         # be charged to STRIDES account but this tag works
         CostCenter: NIA AMP-AD CC / 101500
-        AccountOwner: anna.greenwood@sagebase.org
+        AccountOwner: jessica.britton@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: agora-develop@sagebase.org
 
@@ -449,7 +449,7 @@ Organization:
         # Anna G confirmed that AMP-AD charges should technically
         # be charged to STRIDES account but this tag works
         CostCenter: NIA AMP-AD CC / 101500
-        AccountOwner: anna.greenwood@sagebase.org
+        AccountOwner: jessica.britton@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: agora-prod@sagebase.org
 
