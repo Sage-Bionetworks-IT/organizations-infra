@@ -190,6 +190,12 @@ VpnAuthRoutes:
           - "aws-admins"
           - "scientists"
           - "sageit-users"
+      # nlpsandbox
+      nlpsandboxvpc:
+        CIDR: "10.255.21.0/24"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-nlp-sandbox-admins"
 
 
 VpnEndpointRedirect:

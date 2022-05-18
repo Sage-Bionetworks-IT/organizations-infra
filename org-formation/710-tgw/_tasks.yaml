@@ -43,6 +43,7 @@ TransitGateway:
       - !Ref ScipoolDevAccount
       - !Ref ScipoolProdAccount
       - !Ref SageITAccount
+      - !Ref NlpSandboxAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -118,6 +119,10 @@ TransitGatewayRoutes:
       # org-sagebase-sageit
       defaultvpc:
         CIDR: "10.13.0.0/16"
+      # nplsandbox
+      nlpsandboxvpc:
+        CIDR: "10.255.21.0/24"
+
 
   Parameters:
     VpcSubnetIDs:
@@ -142,6 +147,7 @@ Mappings:
       '465877038949': 'cesspoolvpc'      # org-sagebase-scipooldev
       '237179673806': 'internalpoolvpc'      # org-sagebase-scipooldev
       '797640923903': 'defaultvpc' # org-sagebase-sageit
+      '841415736403': 'nlpsanboxvpc' # nlpsandbox
   TgwSpokesB:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
@@ -173,6 +179,7 @@ TransitGatewaySpokeA:
       - !Ref ScipoolDevAccount
       - !Ref ScipoolProdAccount
       - !Ref SageITAccount
+      - !Ref NlpsanboxAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
