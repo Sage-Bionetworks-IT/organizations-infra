@@ -445,3 +445,20 @@ Organization:
       Alias: org-sagebase-sceptredev
       Tags:
         <<: !Include ./_default_org_tags.yaml
+
+
+  #---------- Personal User Accounts  -----------
+  hxo89cta7a0e:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-hxo89cta7a0e
+      RootEmail: aws-hxo89cta7a0e@sagebase.org
+      Alias: org-sagebase-hxo89cta7a0e
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: TBD
+        Project: TBD
+        CostCenter: TBD
+        AccountOwner: tess.thyer@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: tess.thyer@sagebase.org
