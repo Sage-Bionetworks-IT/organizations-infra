@@ -5,6 +5,6 @@ stack_name: bridge-ops
 dependencies:
   - prod/bootstrap.yaml
 parameters:
-  InstanceType: t3a.micro
+  InstanceType: t3.micro
   VpcId: vpc-0818659c21d92f2a3
   SubnetId: subnet-0226fb44adc9329c8
