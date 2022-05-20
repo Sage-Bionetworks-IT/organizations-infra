@@ -3,7 +3,7 @@ template:
   url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/EC2/basic-ec2.j2
 stack_name: bridge-ops
 dependencies:
-  - prod/bootstrap.yaml
+  - prod/BridgeServer2-vpc.yaml
 parameters:
   InstanceType: t3.micro
   VpcId: vpc-0818659c21d92f2a3
