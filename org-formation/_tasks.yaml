@@ -61,6 +61,11 @@ AccountAccess:
   DependsOn: [ Types ]
   Path: ./600-access/_tasks.yaml
 
+IdentityProviders:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./650-identity-providers/_tasks.yaml
+
 AwsSso:
   Type: include
   DependsOn: [ Types, SeviceControlPolicies ]
