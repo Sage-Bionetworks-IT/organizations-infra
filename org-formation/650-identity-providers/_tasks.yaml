@@ -16,4 +16,3 @@ GithubOidcSageBionetworksIt:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Region: us-east-1
-
