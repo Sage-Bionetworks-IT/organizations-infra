@@ -9,12 +9,28 @@ AgoraCIServiceAccount:
   Parameters:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
+      - - arn:aws:iam::aws:policy/PowerUserAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
       - !Ref AgoraDevAccount
       - !Ref AgoraProdAccount
     Region: us-east-1
+
+    # Setup Agora collaborator access
+    AgoraCollaboratorAccess:
+      Type: update-stacks
+      Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+      StackName: agora-collaborator-access
+      Parameters:
+        PrincipalArns:
+          - arn:aws:iam::155057775224:user/MattC    # Matthias Courville from GenUI
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/PowerUserAccess
+      DefaultOrganizationBinding:
+        IncludeMasterAccount: false
+        Account: !Ref AgoraDevAccount
+        Region: us-east-1
 
 # A service account for https://github.com/Sage-Bionetworks/iatlas-infra
 iAtlasCIServiceAccount:
