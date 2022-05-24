@@ -58,6 +58,11 @@ Resources:
       ClientIdList: !Ref ClientIdList
       ThumbprintList: !Ref ThumbprintList
       Url: !Ref Url
+  ServicePolicy:
+    Condition: HasPolicyDocument
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument: !Ref PolicyDocument
 {% for Repository in Repositories %}
   ProviderRole{{ Repository.name | replace('-','') | replace('_','') }}:
     Type: AWS::IAM::Role
