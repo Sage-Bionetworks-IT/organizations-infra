@@ -9,7 +9,7 @@ AgoraCIServiceAccount:
   Parameters:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
-      - - arn:aws:iam::aws:policy/PowerUserAccess
+      - arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
@@ -26,7 +26,7 @@ AgoraCIServiceAccount:
         PrincipalArns:
           - arn:aws:iam::155057775224:user/MattC    # Matthias Courville from GenUI
         ManagedPolicyArns:
-          - arn:aws:iam::aws:policy/PowerUserAccess
+          - arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk
       DefaultOrganizationBinding:
         IncludeMasterAccount: false
         Account: !Ref AgoraDevAccount
