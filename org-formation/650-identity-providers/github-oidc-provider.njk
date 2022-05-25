@@ -1,4 +1,8 @@
-AWSTemplateFormatVersion: '2010-09-09'
+{# Allow Github to access AWS without giving github AWS credentials #}
+{# Must pass in the following templating parameters    #}
+{#   Repositories:                                     #}
+{#     - name: "organizations-infra"                   #}
+{#       branch: "master"                              #}
 Parameters:
   ClientIdList:
     Type: List<String>
