@@ -29,7 +29,6 @@ jobs:
         with:
           packages: |
             jinja2==3.0.1
-            jinja2-ansible-filters
       - name: Install jinja linter tool
         run: git clone --single-branch https://github.com/drm/jinja2-lint.git /tmp/jinja2-lint && pushd /tmp/jinja2-lint && git checkout 75dcd5a
       - name: Execute jinja linter
