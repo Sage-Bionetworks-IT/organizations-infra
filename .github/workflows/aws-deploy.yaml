@@ -13,6 +13,9 @@ concurrency:
 jobs:
   org-formation:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -46,6 +49,9 @@ jobs:
         run: npm run ci-perform-tasks-parallel
   sceptre-organizations:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
