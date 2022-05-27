@@ -13,16 +13,17 @@ concurrency:
 jobs:
   org-formation:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
+          role-to-assume: arn:aws:iam::531805629419:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1EY1CRUF48VP5
           role-duration-seconds: 1200
       - name: Use Node.js
         uses: actions/setup-node@v1
@@ -48,6 +49,9 @@ jobs:
         run: npm run ci-perform-tasks-parallel
   sceptre-organizations:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -69,10 +73,8 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
+          role-to-assume: arn:aws:iam::531805629419:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1EY1CRUF48VP5
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
