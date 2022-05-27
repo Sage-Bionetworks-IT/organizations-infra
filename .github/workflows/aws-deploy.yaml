@@ -83,6 +83,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-admincentral:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -119,6 +122,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-itsandbox:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -155,6 +161,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-sandbox:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -191,6 +200,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-scicomp:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -227,6 +239,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-strides:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -263,6 +278,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-strides-ampad-workflows:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -299,6 +317,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-scipooldev:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -335,6 +356,9 @@ jobs:
           sceptre launch develop --yes
   sceptre-scipoolprod:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -377,6 +401,9 @@ jobs:
     needs:
       - org-formation
       - sceptre-strides
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -417,6 +444,9 @@ jobs:
           sceptre launch strides --yes
   sceptre-bmgfki:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -457,6 +487,9 @@ jobs:
           sceptre launch bmgfki --yes
   sceptre-sageit:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -498,6 +531,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-logcentral:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -534,6 +570,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-synapsedw:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -570,6 +609,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-synapsedev:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -606,6 +648,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-synapseprod:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -642,6 +687,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-securitycentral:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -678,6 +726,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-bridgedev:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -714,6 +765,9 @@ jobs:
           sceptre launch develop --yes
   sceptre-bridgeprod:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -750,6 +804,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-imagecentral:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
