@@ -17,4 +17,5 @@ GithubOidcSageBionetworksIt:
         branch: "master"
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
+    Account: '*'
     Region: us-east-1
