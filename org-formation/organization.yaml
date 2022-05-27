@@ -399,6 +399,7 @@ Organization:
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
         CostCenter: NO PROGRAM / 000000
+        AccountOwner: thomas.yu@sagebase.org
 
   AgoraDevAccount:
     Type: OC::ORG::Account
