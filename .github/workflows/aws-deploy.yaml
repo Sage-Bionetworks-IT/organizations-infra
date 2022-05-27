@@ -83,6 +83,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-admincentral:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -101,11 +104,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::745159704268:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -116,6 +122,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-itsandbox:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -134,11 +143,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::804034162148:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -149,6 +161,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-sandbox:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -167,11 +182,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::563295687221:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -182,6 +200,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-scicomp:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -200,11 +221,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::055273631518:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -215,6 +239,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-strides:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -233,11 +260,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::423819316185:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -248,6 +278,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-strides-ampad-workflows:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -266,11 +299,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::751556145034:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -281,6 +317,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-scipooldev:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -299,11 +338,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::465877038949:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -314,6 +356,9 @@ jobs:
           sceptre launch develop --yes
   sceptre-scipoolprod:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -332,11 +377,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::237179673806:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -353,6 +401,9 @@ jobs:
     needs:
       - org-formation
       - sceptre-strides
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -371,11 +422,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::423819316185:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -390,6 +444,9 @@ jobs:
           sceptre launch strides --yes
   sceptre-bmgfki:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -408,11 +465,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::464102568320:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -427,6 +487,9 @@ jobs:
           sceptre launch bmgfki --yes
   sceptre-sageit:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -445,11 +508,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::797640923903:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -465,6 +531,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-logcentral:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -483,11 +552,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::231505186444:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -498,6 +570,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-synapsedw:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -516,11 +591,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::383874245509:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -531,6 +609,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-synapsedev:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -549,11 +630,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::449435941126:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -564,6 +648,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-synapseprod:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -582,11 +669,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::325565585839:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -597,6 +687,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-securitycentral:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -615,11 +708,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::140124849929:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -630,6 +726,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-bridgedev:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -648,11 +747,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::420786776710:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -663,6 +765,9 @@ jobs:
           sceptre launch develop --yes
   sceptre-bridgeprod:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -681,11 +786,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::649232250620:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
@@ -696,6 +804,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-imagecentral:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -714,11 +825,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sceptre sceptre-ssm-resolver
+      - name: Assume organizations role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::867686887310:role/OrganizationFormationBuildAccessRole
           role-duration-seconds: 1200
