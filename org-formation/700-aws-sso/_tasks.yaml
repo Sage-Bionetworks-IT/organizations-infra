@@ -1222,4 +1222,3 @@ SsoDntDevDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref dntDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
