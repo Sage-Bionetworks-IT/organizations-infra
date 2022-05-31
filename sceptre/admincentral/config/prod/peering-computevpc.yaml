@@ -1,8 +1,0 @@
-template:
-  path: VPCPeer.yaml
-stack_name: peering-computevpc
-parameters:
-  PeerVPC: vpc-e66bd19d
-  PeerVPCOwner: !ssm /infra/ScicompAwsAccountId
-  PeerVPCCIDR: 10.5.0.0/16
-  PeerRoleName: essentials-VPCPeeringAuthorizerRole-19X5D81TAK34F
