@@ -179,11 +179,11 @@ Parameters:
 
   dnTDevAdminGroup:     #JC aws-dntdev-admins
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-c017dd5e-4872-4bd1-8b5c-c0cc92088dfc'
 
   dnTDevDeveloperGroup:   #JC aws-dntdev-developers
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-e78063c9-9fc6-4654-a089-ebb26854f202'
 
 #----------------------------------------------------------------------------------------------
 
