@@ -246,10 +246,8 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::423819316185:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::423819316185:role/github-oidc-sage-bionetwo-ProviderRoleorganization-3R0K18XHN449
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -280,10 +278,8 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::751556145034:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::751556145034:role/github-oidc-sage-bionetwo-ProviderRoleorganization-9JE3CF75DHRZ
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
