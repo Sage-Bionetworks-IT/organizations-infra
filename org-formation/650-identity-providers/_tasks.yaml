@@ -3,7 +3,7 @@ Parameters:
 
 GithubOidcSageBionetworksIt:
   Type: update-stacks
-  Template: github-oidc-provider.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.1/templates/IAM/github-oidc-provider.j2
   StackName: github-oidc-sage-bionetworks-it
   Parameters:
     ManagedPolicyArns:
