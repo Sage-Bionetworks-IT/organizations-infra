@@ -225,6 +225,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-strides:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -257,6 +260,9 @@ jobs:
           sceptre launch prod --yes
   sceptre-strides-ampad-workflows:
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
