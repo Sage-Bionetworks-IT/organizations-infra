@@ -1203,7 +1203,7 @@ SsoDntDevAdmin:
       Account: !Ref DnTDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref dntDevAdminGroup
+    principalId: !Ref dnTDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoDntDevDeveloper:
@@ -1220,5 +1220,5 @@ SsoDntDevDeveloper:
       Account: !Ref DnTDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref dntDevDeveloperGroup
+    principalId: !Ref dnTDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
