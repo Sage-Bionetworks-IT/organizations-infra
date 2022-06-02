@@ -433,6 +433,7 @@ Organization:
         budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
         CostCenter: NO PROGRAM / 000000
         AccountOwner: thomas.yu@sagebase.org
+        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   AgoraDevAccount:
     Type: OC::ORG::Account
