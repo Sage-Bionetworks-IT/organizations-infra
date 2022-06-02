@@ -61,6 +61,16 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
+  AWSIAMSandhraSokhalUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: sandhra.sokhal@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
 
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
