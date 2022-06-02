@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "print-tasks": "npx org-formation print-tasks ./org-formation/_tasks.yaml --verbose --print-stack --output yaml --max-concurrent-stacks 100 --max-concurrent-tasks 100",
-    "print-tasks-failfast": "npx org-formation print-tasks ./org-formation/_tasks.yaml --verbose --print-stack --output yaml --max-concurrent-stacks 1 --max-concurrent-tasks 1 --failed-tasks-tolerance 0  --failed-stacks-tolerance 0",
+    "print-tasks-failfast": "npx org-formation print-tasks ./org-formation/_tasks.yaml --verbose --print-stack --output yaml --max-concurrent-stacks 1 --max-concurrent-tasks 1 --failed-tasks-tolerance 1  --failed-stacks-tolerance 1",
     "perform-tasks": "npx org-formation perform-tasks ./org-formation/_tasks.yaml --verbose --print-stack --max-concurrent-stacks 1 --max-concurrent-tasks 1",
     "ci-perform-tasks": "npx org-formation perform-tasks ./org-formation/_tasks.yaml --verbose --print-stack --max-concurrent-stacks 1 --max-concurrent-tasks 1 --perform-cleanup",
     "ci-perform-tasks-parallel": "npx org-formation perform-tasks ./org-formation/_tasks.yaml --verbose --print-stack --max-concurrent-stacks 10 --max-concurrent-tasks 10 --perform-cleanup",
