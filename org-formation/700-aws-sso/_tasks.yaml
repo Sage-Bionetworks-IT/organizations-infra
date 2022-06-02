@@ -1200,7 +1200,7 @@ SsoDntDevAdmin:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref DntDevAccount
+      Account: !Ref DnTDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref dntDevAdminGroup
@@ -1217,7 +1217,7 @@ SsoDntDevDeveloper:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref DntDevAccount
+      Account: !Ref DnTDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref dntDevDeveloperGroup
