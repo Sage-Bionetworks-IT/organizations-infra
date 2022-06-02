@@ -427,13 +427,13 @@ Organization:
       RootEmail: ibc-ops@sagebase.org
       Alias: org-sagebase-dnt-dev
       Tags:
+        <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
         CostCenter: NO PROGRAM / 000000
         AccountOwner: thomas.yu@sagebase.org
-        CloudwatchCloudTrailLogRetentionPeriod: 90
 
   AgoraDevAccount:
     Type: OC::ORG::Account
