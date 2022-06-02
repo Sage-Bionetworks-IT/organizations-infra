@@ -306,6 +306,10 @@ Organization:
         CostCenter: "INCLUDE - CHOP / 122000"
         budget-alarm-threshold-email-recipient: aws-include-prod@sagebase.org
 
+  # This account is used to host the challenge registry
+  # Challenge submission infrastructure that can't be supported using service catalog
+  # will also be hosted in this account with appropriate
+  # CostCenter tags on the resources.
   CnbAccount:
     Type: OC::ORG::Account
     Properties:
@@ -317,8 +321,8 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CNB
         Project: Challenges
-        AccountOwner: thomas.yu@sagebase.org  # This could change to Jake A.
-        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
+        AccountOwner: thomas.schaffter@sagebionetworks.org
+        CostCenter: NIH-ITCR / 101600
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: cnb@sagebase.org
 
