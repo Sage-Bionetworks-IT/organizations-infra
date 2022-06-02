@@ -28,6 +28,7 @@ Organization:
         - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
         - !Ref AgoraDevAccount
+        - !Ref DnTDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -418,6 +419,20 @@ Organization:
         CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
+
+  DnTDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-dnt-dev
+      RootEmail: ibc-ops@sagebase.org
+      Alias: org-sagebase-dnt-dev
+      Tags:
+        Department: IBC
+        Project: Infrastructure
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        AccountOwner: thomas.yu@sagebase.org
 
   AgoraDevAccount:
     Type: OC::ORG::Account
