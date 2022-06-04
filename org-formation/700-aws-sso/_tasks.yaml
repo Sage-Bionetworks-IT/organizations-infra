@@ -184,6 +184,14 @@ Parameters:
   includeChopProdDeveloperGroup:   #JC aws-includechopprod-developers
     Type: String
     Default: '906769aa66-24060cf5-7100-4c45-a9be-27c3ff5aba69'
+
+  dnTDevAdminGroup:     #JC aws-dntdev-admins
+    Type: String
+    Default: '906769aa66-c017dd5e-4872-4bd1-8b5c-c0cc92088dfc'
+
+  dnTDevDeveloperGroup:   #JC aws-dntdev-developers
+    Type: String
+    Default: '906769aa66-e78063c9-9fc6-4654-a089-ebb26854f202'
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
@@ -1179,4 +1187,38 @@ SsoIncludeChopProdDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref includeChopProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoDntDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-dntdev-admin'
+  StackDescription: 'SSO: admin role used by dntdev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DnTDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dnTDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoDntDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-dntdev-developer'
+  StackDescription: 'SSO: developer role used by dntdev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DnTDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dnTDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
