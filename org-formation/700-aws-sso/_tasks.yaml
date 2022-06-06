@@ -193,13 +193,13 @@ Parameters:
     Type: String
     Default: '906769aa66-e78063c9-9fc6-4654-a089-ebb26854f202'
 
-  saturnCloudDevAdminGroup:     #JC aws-saturnclouddev-admins
+  saturnCloudDevAdminGroup:     #JC aws-saturncloud-dev-admins
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-810bed57-bb15-4f9f-a754-df4795e52a44'
 
-  saturnCloudDevDeveloperGroup:   #JC aws-saturnclouddev-developers
+  saturnCloudDevDeveloperGroup:   #JC aws-saturncloud-dev-developers
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-c6938d5f-605b-4ea8-9b1b-43b995b4fe4b'
 
 #----------------------------------------------------------------------------------------------
 
