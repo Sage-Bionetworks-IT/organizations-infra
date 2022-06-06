@@ -1,3 +1,5 @@
+# This template is from Saturn Cloud
+# https://dev.saturncloud.io/docs/enterprise/installation/#option-b-create-the-iam-role-yourself
 AWSTemplateFormatVersion: 2010-09-09
 Description: AWS CloudFormation Template to create an IAM role for Saturn app.
 Parameters:
