@@ -105,6 +105,13 @@ Organization:
         - !Ref BridgeDevAccount
         - !Ref BridgeProdAccount
 
+  PersonalAccountsOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: personal
+      Accounts:
+        - !Ref VYadavAccount
+
   BridgeDevAccount:
     Type: OC::ORG::Account
     Properties:
@@ -500,3 +507,19 @@ Organization:
       Alias: org-sagebase-saturncloud-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
+
+  #------------ Personal Accounts -----------
+  VYadavAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-vyadav
+      RootEmail: vijay.yadav@sagebase.org
+      Alias: org-sagebase-vyadav
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: TBD
+        Project: TBD
+        CostCenter: TBD
+        AccountOwner: vijay.yadav@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: vijay.yadav@sagebase.org
