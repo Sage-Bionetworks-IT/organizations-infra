@@ -46,9 +46,9 @@ ItKmsKey:
     AliasName: alias/it-infra
     AdminPrincipalArns:
       - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
-      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationFormationBuildAccessRole'
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
     UserPrincipalArns:
-      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationFormationBuildAccessRole'
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'

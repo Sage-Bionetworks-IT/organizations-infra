@@ -1,0 +1,259 @@
+# This template is from Saturn Cloud
+# https://dev.saturncloud.io/docs/enterprise/installation/#option-b-create-the-iam-role-yourself
+AWSTemplateFormatVersion: 2010-09-09
+Description: AWS CloudFormation Template to create an IAM role for Saturn app.
+Parameters:
+  ExternalID:
+    Type: String
+    Description: >-
+      External ID for Saturn to use when assuming the IAM role. This value is
+      provided by Saturn.
+Resources:
+  SaturnCustomerAdminRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: customer-admin
+      Description: IAM role for Saturn app.
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: 'arn:aws:iam::227979560085:root'
+            Action: 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                'sts:ExternalId': !Ref ExternalID
+      Path: /saturn/
+  CreateSaturnAdminEKSPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      Roles:
+        - !Ref SaturnCustomerAdminRole
+      Description: Grant Saturn access to manage EKS and related services.
+      Path: /saturn/
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: SaturnAdminEKS
+            Effect: Allow
+            Action:
+              - 'autoscaling:AttachInstances'
+              - 'autoscaling:CreateAutoScalingGroup'
+              - 'autoscaling:CreateLaunchConfiguration'
+              - 'autoscaling:CreateOrUpdateTags'
+              - 'autoscaling:DeleteAutoScalingGroup'
+              - 'autoscaling:DeleteLaunchConfiguration'
+              - 'autoscaling:DeleteTags'
+              - 'autoscaling:Describe*'
+              - 'autoscaling:DetachInstances'
+              - 'autoscaling:SetDesiredCapacity'
+              - 'autoscaling:UpdateAutoScalingGroup'
+              - 'autoscaling:SuspendProcesses'
+              - 'autoscaling:SetInstanceProtection'
+              - 'ec2:AllocateAddress'
+              - 'ec2:AssignPrivateIpAddresses'
+              - 'ec2:Associate*'
+              - 'ec2:AttachInternetGateway'
+              - 'ec2:AttachNetworkInterface'
+              - 'ec2:AttachVolume'
+              - 'ec2:AuthorizeSecurityGroupEgress'
+              - 'ec2:AuthorizeSecurityGroupIngress'
+              - 'ec2:CreateDefaultSubnet'
+              - 'ec2:CreateDhcpOptions'
+              - 'ec2:CreateEgressOnlyInternetGateway'
+              - 'ec2:CreateInternetGateway'
+              - 'ec2:CreateLaunchTemplate'
+              - 'ec2:CreateLaunchTemplateVersion'
+              - 'ec2:CreateNatGateway'
+              - 'ec2:CreateNetworkInterface'
+              - 'ec2:CreateRoute'
+              - 'ec2:CreateRouteTable'
+              - 'ec2:CreateSecurityGroup'
+              - 'ec2:CreateSubnet'
+              - 'ec2:CreateSnapshot'
+              - 'ec2:CopySnapshot'
+              - 'ec2:CreateTags'
+              - 'ec2:CreateVolume'
+              - 'ec2:CreateVpc'
+              - 'ec2:DeleteDhcpOptions'
+              - 'ec2:DeleteEgressOnlyInternetGateway'
+              - 'ec2:DeleteInternetGateway'
+              - 'ec2:DeleteLaunchTemplate'
+              - 'ec2:DeleteLaunchTemplateVersions'
+              - 'ec2:DeleteNatGateway'
+              - 'ec2:DeleteNetworkInterface'
+              - 'elasticfilesystem:TagResource'
+              - 'elasticfilesystem:UntagResource'
+              - 'elasticfilesystem:CreateTags'
+              - 'elasticfilesystem:DeleteTags'
+              - 'ec2:DeleteRoute'
+              - 'ec2:DeleteRouteTable'
+              - 'ec2:DeleteSecurityGroup'
+              - 'ec2:DeleteSubnet'
+              - 'ec2:DeleteSnapshot'
+              - 'ec2:DeleteTags'
+              - 'ec2:DeleteVolume'
+              - 'ec2:DeleteVpc'
+              - 'ec2:DeleteVpnGateway'
+              - 'ec2:DeleteNetworkAcl'
+              - 'ec2:Describe*'
+              - 'ec2:DetachInternetGateway'
+              - 'ec2:DetachNetworkInterface'
+              - 'ec2:DetachVolume'
+              - 'ec2:Disassociate*'
+              - 'ec2:GetLaunchTemplateData'
+              - 'ec2:ModifyInstanceAttribute'
+              - 'ec2:ModifyLaunchTemplate'
+              - 'ec2:ModifyNetworkInterfaceAttribute'
+              - 'ec2:ModifyVolume'
+              - 'ec2:ModifySubnetAttribute'
+              - 'ec2:ModifyVpcAttribute'
+              - 'ec2:ModifyVpcEndpoint'
+              - 'ec2:ReleaseAddress'
+              - 'ec2:RevokeSecurityGroupEgress'
+              - 'ec2:RevokeSecurityGroupIngress'
+              - 'ec2:RunInstances'
+              - 'ec2:UnassignPrivateIpAddresses'
+              - 'ec2:UpdateSecurityGroupRuleDescriptionsEgress'
+              - 'ec2:UpdateSecurityGroupRuleDescriptionsIngress'
+              - 'eks:AssociateIdentityProviderConfig'
+              - 'eks:TagResource'
+              - 'eks:CreateCluster'
+              - 'eks:DeleteCluster'
+              - 'eks:DescribeCluster'
+              - 'eks:ListClusters'
+              - 'eks:UpdateClusterConfig'
+              - 'eks:UpdateClusterVersion'
+              - 'eks:DescribeUpdate'
+              - 'eks:DescribeIdentityProviderConfig'
+              - 'elasticloadbalancing:AddTags'
+              - 'elasticloadbalancing:ApplySecurityGroupsToLoadBalancer'
+              - 'elasticloadbalancing:AttachLoadBalancerToSubnets'
+              - 'elasticloadbalancing:ConfigureHealthCheck'
+              - 'elasticloadbalancing:CreateListener'
+              - 'elasticloadbalancing:CreateLoadBalancer'
+              - 'elasticloadbalancing:CreateLoadBalancerListeners'
+              - 'elasticloadbalancing:CreateLoadBalancerPolicy'
+              - 'elasticloadbalancing:CreateTargetGroup'
+              - 'elasticloadbalancing:DeleteListener'
+              - 'elasticloadbalancing:DeleteLoadBalancer'
+              - 'elasticloadbalancing:DeleteLoadBalancerListeners'
+              - 'elasticloadbalancing:DeleteTargetGroup'
+              - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
+              - 'elasticloadbalancing:DeregisterTargets'
+              - 'elasticloadbalancing:DescribeListeners'
+              - 'elasticloadbalancing:DescribeLoadBalancerAttributes'
+              - 'elasticloadbalancing:DescribeLoadBalancerPolicies'
+              - 'elasticloadbalancing:DescribeLoadBalancers'
+              - 'elasticloadbalancing:DescribeTargetGroupAttributes'
+              - 'elasticloadbalancing:DescribeTargetGroups'
+              - 'elasticloadbalancing:DescribeTargetHealth'
+              - 'elasticloadbalancing:DetachLoadBalancerFromSubnets'
+              - 'elasticloadbalancing:ModifyListener'
+              - 'elasticloadbalancing:ModifyLoadBalancerAttributes'
+              - 'elasticloadbalancing:ModifyTargetGroup'
+              - 'elasticloadbalancing:ModifyTargetGroupAttributes'
+              - 'elasticloadbalancing:RegisterInstancesWithLoadBalancer'
+              - 'elasticloadbalancing:RegisterTargets'
+              - 'elasticloadbalancing:SetLoadBalancerPoliciesForBackendServer'
+              - 'elasticloadbalancing:SetLoadBalancerPoliciesOfListener'
+              - 'kms:DescribeKey'
+              - 'elasticfilesystem:Describe*'
+              - 'elasticfilesystem:CreateFileSystem'
+              - 'elasticfilesystem:CreateMountTarget'
+              - 'elasticfilesystem:PutLifecycleConfiguration'
+              - 'elasticfilesystem:PutBackupPolicy'
+              - 'elasticfilesystem:DeleteMountTarget'
+              - 'elasticfilesystem:DeleteFileSystem'
+              - 'elasticfilesystem:UpdateFileSystem'
+              - 'elasticfilesystem:TagResource'
+              - 'elasticfilesystem:UntagResource'
+              - 'elasticfilesystem:CreateTags'
+              - 'elasticfilesystem:DeleteTags'
+            Resource: '*'
+  CreateSaturnAdminPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      Roles:
+        - !Ref SaturnCustomerAdminRole
+      Description: Grant Saturn access to manage services.
+      Path: /saturn/
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: SaturnAdminAEIS
+            Effect: Allow
+            Action:
+              - 'acm:ExportCertificate'
+              - 'acm:DeleteCertificate'
+              - 'acm:UpdateCertificateOptions'
+              - 'acm:AddTagsToCertificate'
+              - 'acm:RenewCertificate'
+              - 'acm:ListTagsForCertificate'
+              - 'acm:DescribeCertificate'
+              - 'acm:RequestCertificate'
+              - 'acm:RemoveTagsFromCertificate'
+              - 'acm:ResendValidationEmail'
+              - 'acm:GetCertificate'
+              - 'acm:ListCertificates'
+              - 'acm:ImportCertificate'
+              - 'iam:AttachUserPolicy'
+              - 'iam:AddRoleToInstanceProfile'
+              - 'iam:AttachRolePolicy'
+              - 'iam:CreateAccessKey'
+              - 'iam:CreateInstanceProfile'
+              - 'iam:CreateServiceLinkedRole'
+              - 'iam:CreateOpenIDConnectProvider'
+              - 'iam:GetOpenIDConnectProvider'
+              - 'iam:DeleteOpenIDConnectProvider'
+              - 'iam:CreatePolicy'
+              - 'iam:CreatePolicyVersion'
+              - 'iam:CreateRole'
+              - 'iam:CreateUser'
+              - 'iam:DeleteInstanceProfile'
+              - 'iam:DeletePolicy'
+              - 'iam:DeleteRole'
+              - 'iam:DeleteRolePolicy'
+              - 'iam:DeleteServiceLinkedRole'
+              - 'iam:DetachRolePolicy'
+              - 'iam:GetInstanceProfile'
+              - 'iam:GetPolicy'
+              - 'iam:GetPolicyVersion'
+              - 'iam:GetRole'
+              - 'iam:GetUser'
+              - 'iam:GetRolePolicy'
+              - 'iam:List*'
+              - 'iam:PassRole'
+              - 'iam:PutRolePolicy'
+              - 'iam:PutUserPolicy'
+              - 'iam:RemoveRoleFromInstanceProfile'
+              - 'iam:TagRole'
+              - 'iam:TagUser'
+              - 'iam:UpdateAssumeRolePolicy'
+              - 'iam:GetUserPolicy'
+              - 'iam:DeleteAccessKey'
+              - 'iam:DetachUserPolicy'
+              - 'iam:DeleteUserPolicy'
+              - 'iam:DeleteUser'
+            Resource: '*'
+          - Effect: Allow
+            Action: 's3:*'
+            Resource:
+              - 'arn:aws:s3:::saturn*/*'
+              - 'arn:aws:s3:::saturn*'
+          - Effect: Allow
+            Action: 'ecr:*'
+            Resource: 'arn:aws:ecr:*:*:repository/saturn*'
+          - Effect: Allow
+            Action:
+              - 'ecr:CreateRepository'
+              - 'ecr:GetAuthorizationToken'
+              - 'ecr:DescribeRepositories'
+            Resource: '*'
+Outputs:
+  SaturnCustomerAdminRole:
+    Description: Saturn IAM role arn
+    Value: !GetAtt
+      - SaturnCustomerAdminRole
+      - Arn

@@ -61,10 +61,10 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-  AWSIAMKellySongUser:
+  AWSIAMSandhraSokhalUser:
     Type: 'AWS::IAM::User'
     Properties:
-      UserName: kelly.song@sagebase.org
+      UserName: sandhra.sokhal@sagebase.org
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup

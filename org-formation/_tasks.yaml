@@ -36,6 +36,11 @@ GuarDuty:
   DependsOn: [ Types ]
   Path: ./070-guard-duty/_tasks.yaml
 
+SecurityHub:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./075-security-hub/_tasks.yaml
+
 AwsConfigInventory:
   Type: include
   DependsOn: [ Types ]
@@ -55,6 +60,11 @@ AccountAccess:
   Type: include
   DependsOn: [ Types ]
   Path: ./600-access/_tasks.yaml
+
+IdentityProviders:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./650-identity-providers/_tasks.yaml
 
 AwsSso:
   Type: include

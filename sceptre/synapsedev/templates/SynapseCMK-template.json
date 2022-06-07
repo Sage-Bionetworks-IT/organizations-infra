@@ -101,22 +101,7 @@
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "iam:CreateRole",
-                                        "iam:DeleteRole",
-                                        "iam:UpdateRole",
-                                        "iam:GetRole",
-                                        "iam:PassRole",
-                                        "iam:CreateRolePolicy",
-                                        "iam:DeleteRolePolicy",
-                                        "iam:PutRolePolicy",
-                                        "iam:CreateInstanceProfile",
-                                        "iam:DeleteInstanceProfile",
-                                        "iam:GetInstanceProfile",
-                                        "iam:RemoveRoleFromInstanceProfile",
-                                        "iam:AddRoleToInstanceProfile",
-                                        "iam:CreateServiceLinkedRole"
-                                    ],
+                                    "Action": "iam:*",
                                     "Resource": "*"
                                 },
                                 {
@@ -207,6 +192,13 @@
                                     "Effect": "Allow",
                                     "Action": [
                                         "events:*"
+                                    ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "lambda:*"
                                     ],
                                     "Resource": "*"
                                 }
