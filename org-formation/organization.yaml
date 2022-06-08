@@ -517,9 +517,7 @@ Organization:
       Alias: org-sagebase-vyadav
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: TBD
-        Project: TBD
-        CostCenter: TBD
+        CostCenter: "NO PROGRAM / 000000"
         AccountOwner: vijay.yadav@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: vijay.yadav@sagebase.org
