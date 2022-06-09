@@ -1,8 +1,0 @@
-template:
-  path: VPCPeer.yaml
-stack_name: peering-nlpsandbox
-parameters:
-  PeerVPC: vpc-0f809761f28e9e350    # nlpsandbox VPC ID
-  PeerVPCOwner: "841415736403"      # nlpsandbox account ID
-  PeerVPCCIDR: 10.255.21.0/24       # nlpsandbox VPC CIDR
-  PeerRoleName: sagebase-vpc-peering-request-AuthorizerRole-NZ421S77TZ3Y  # authorizer role name created by sagebase-vpc-peering-request stack
