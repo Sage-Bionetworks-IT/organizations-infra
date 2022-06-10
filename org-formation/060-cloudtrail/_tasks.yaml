@@ -28,7 +28,7 @@ CloudwatchTrailLog:
   Parameters:
     LogGroupName: !Sub '/aws/cloudtrail/${resourcePrefix}-cloudwatch-log.log'
     RetentionInDays: !GetAtt CurrentAccount.Tags.CloudwatchCloudTrailLogRetentionPeriod
-    KmsKeyId: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-trail-kms-key-KeyArn' ]
+    KmsKeyId: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-trail-kms-key-Key' ]
 
 CloudTrail:
   Type: update-stacks
