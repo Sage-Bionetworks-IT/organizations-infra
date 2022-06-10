@@ -6,7 +6,7 @@ CloudTrailKmsKey:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/KMS/kms-key.yaml
   StackName: !Sub '${resourcePrefix}-cloudtrail-kms-key'
   Parameters:
-    AliasName: alias/cloudwatch-trail
+    AliasName: alias/cloudtrail-kms-key
     AdminPrincipalArns:
       - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
       - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
