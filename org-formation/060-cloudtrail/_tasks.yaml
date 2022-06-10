@@ -1,25 +1,9 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
-CloudwatchTrailKmsKey:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/KMS/kms-key.yaml
-  StackName: !Sub '${resourcePrefix}-cloudwatch-trail-kms-key'
-  Parameters:
-    AliasName: alias/cloudwatch-trail
-    AdminPrincipalArns:
-      - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
-      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
-    UserPrincipalArns:
-      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
-    Region: !Ref primaryRegion
-
 CloudwatchTrailLog:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.2/templates/Cloudwatch/cloudwatch-log.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Cloudwatch/cloudwatch-log.yaml
   StackName: !Sub '${resourcePrefix}-cloudwatch-log'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -28,7 +12,6 @@ CloudwatchTrailLog:
   Parameters:
     LogGroupName: !Sub '/aws/cloudtrail/${resourcePrefix}-cloudwatch-log.log'
     RetentionInDays: !GetAtt CurrentAccount.Tags.CloudwatchCloudTrailLogRetentionPeriod
-    KmsKeyId: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-trail-kms-key-KeyArn' ]
 
 CloudTrail:
   Type: update-stacks
