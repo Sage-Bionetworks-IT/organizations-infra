@@ -1,6 +1,22 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
+CloudTrailKmsKey:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/KMS/kms-key.yaml
+  StackName: !Sub '${resourcePrefix}-cloudtrail-kms-key'
+  Parameters:
+    AliasName: alias/cloudwatch-trail
+    AdminPrincipalArns:
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
+    UserPrincipalArns:
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
+
 CloudwatchTrailLog:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.6/templates/Cloudwatch/cloudwatch-log.yaml
@@ -16,7 +32,7 @@ CloudwatchTrailLog:
 CloudTrail:
   Type: update-stacks
   DependsOn: [ "CloudwatchTrailLog" ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/Cloudtrail/cloudtrail-trail.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.2/templates/Cloudtrail/cloudtrail-trail.yaml
   StackName: !Sub '${resourcePrefix}-cloudtrail'
   StackDescription: CloudTrail
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -30,6 +46,7 @@ CloudTrail:
     bucketName: !Sub '${resourcePrefix}-cloudtrail-${CurrentAccount.AccountId}'
     CloudWatchLogsLogGroupArn: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-log-LogGroupArn' ]
     CloudWatchLogsRoleArn: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-log-LogRoleArn' ]
+    KmsKeyId: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudtrail-kms-key-Key' ]
 
 CloudTrailSumoLogicRole:
   Type: update-stacks
