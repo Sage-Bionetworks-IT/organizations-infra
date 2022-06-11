@@ -63,8 +63,6 @@ Add a yaml section to organizations.yaml file like soo..
         <<: !Include ./_default_org_tags.yaml
         Department: SysBio
         Project: amp-ad
-        # Anna G confirmed that AMP-AD charges should technically
-        # be charged to STRIDES account but this tag works
         CostCenter: NIA AMP-AD CC / 101500
         AccountOwner: member-one@sagebase.org
         budget-alarm-threshold: 1000
