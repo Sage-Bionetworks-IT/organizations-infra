@@ -47,7 +47,7 @@ jobs:
       - name: Validate ofn templates
         run: npm run validate-tasks
       - name: Validate with print-task
-        run: npm print-tasks-failfast
+        run: npm run print-tasks-failfast
       - name: Deploy with ofn
         run: npm run ci-perform-tasks-parallel
   sceptre-organizations:
