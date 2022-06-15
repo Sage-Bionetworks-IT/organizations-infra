@@ -110,7 +110,7 @@ Organization:
     Properties:
       OrganizationalUnitName: personal
       Accounts:
-        - !Ref VYadavAccount
+        - !Ref 8dxfh53Account
 
   BridgeDevAccount:
     Type: OC::ORG::Account
@@ -509,15 +509,15 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
 
   #------------ Personal Accounts -----------
-  VYadavAccount:
+  8dxfh53Account:
     Type: OC::ORG::Account
     Properties:
-      AccountName: org-sagebase-vyadav
-      RootEmail: vijay.yadav@sagebase.org
-      Alias: org-sagebase-vyadav
+      AccountName: org-sagebase-8dxfh53
+      RootEmail: aws.8dxfh53@sagebase.org
+      Alias: org-sagebase-8dxfh53
       Tags:
         <<: !Include ./_default_org_tags.yaml
         CostCenter: "NO PROGRAM / 000000"
         AccountOwner: vijay.yadav@sagebase.org
         budget-alarm-threshold: 2000
-        budget-alarm-threshold-email-recipient: vijay.yadav@sagebase.org
+        budget-alarm-threshold-email-recipient: aws.8dxfh53@sagebase.org
