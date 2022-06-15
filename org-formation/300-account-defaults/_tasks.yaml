@@ -53,19 +53,3 @@ ItKmsKey:
     IncludeMasterAccount: true
     Account: '*'
     Region: !Ref primaryRegion
-
-VpcPeeringRequest:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.12/templates/VPC/vpc-peering-request.yaml
-  StackName: !Sub '${resourcePrefix}-vpc-peering-request'
-  StackDescription: 'Authorize VPC peering requests'
-  Parameters:
-    VpcPeeringRequesterAwsAccountId: !Ref AdminCentralAccount
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account:
-      - !Ref NlpSandboxAccount
-      - !Ref WorkflowsNextflowDevAccount
-      - !Ref WorkflowsNextflowProdAccount
-      - !Ref MobileHealthDataEngineeringDevAccount

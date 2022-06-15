@@ -201,6 +201,13 @@
                                         "lambda:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "athena:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }

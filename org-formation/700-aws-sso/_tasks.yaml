@@ -192,6 +192,15 @@ Parameters:
   dnTDevDeveloperGroup:   #JC aws-dntdev-developers
     Type: String
     Default: '906769aa66-e78063c9-9fc6-4654-a089-ebb26854f202'
+
+  saturnCloudDevAdminGroup:     #JC aws-saturncloud-dev-admins
+    Type: String
+    Default: '906769aa66-810bed57-bb15-4f9f-a754-df4795e52a44'
+
+  saturnCloudDevDeveloperGroup:   #JC aws-saturncloud-dev-developers
+    Type: String
+    Default: '906769aa66-c6938d5f-605b-4ea8-9b1b-43b995b4fe4b'
+
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
@@ -252,7 +261,9 @@ SsoDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref developerGroup
     permissionSetName: 'Developer'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/PowerUserAccess'
+      - 'arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk'
     sessionDuration: 'PT12H'
     inlinePolicy: >-
       {
@@ -1221,4 +1232,38 @@ SsoDntDevDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref dnTDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoSaturnCloudDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-saturnclouddev-admin'
+  StackDescription: 'SSO: admin role used by saturnclouddev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SaturnCloudDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref saturnCloudDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoSaturnCloudDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-saturnclouddev-developer'
+  StackDescription: 'SSO: developer role used by staturnclouddev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SaturnCloudDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref saturnCloudDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
