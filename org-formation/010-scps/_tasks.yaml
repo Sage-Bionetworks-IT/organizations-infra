@@ -74,9 +74,9 @@ DenyAllRegionsOutsideUs:
   StackName: !Sub '${resourcePrefix}-deny-all-regions-outside-us'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
+    IncludeMasterAccount: false
   Parameters:
-    targetIds: "*"
+    targetIds:
       - !Ref ScienceDevOU
       - !Ref ScienceProdOU
       - !Ref ServiceCatalogOU
