@@ -1253,7 +1253,7 @@ SsoDntDevViewer:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref dntDevViewerGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
 SsoSaturnCloudDevAdmin:
   Type: update-stacks
