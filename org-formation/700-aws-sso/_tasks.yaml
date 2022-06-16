@@ -201,9 +201,10 @@ Parameters:
     Type: String
     Default: '906769aa66-c6938d5f-605b-4ea8-9b1b-43b995b4fe4b'
 
+  #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
-    Default: 'TBD'
+    Default: '906769aa66-c75c5f09-8e6e-4e8a-8a1f-cbf13f56d5e7'
 
 #----------------------------------------------------------------------------------------------
 
@@ -1272,7 +1273,7 @@ SsoSaturnCloudDevDeveloper:
     principalId: !Ref saturnCloudDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
-8dxfh53Admin:
+Sso8dxfh53Admin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
