@@ -201,6 +201,10 @@ Parameters:
     Type: String
     Default: '906769aa66-c6938d5f-605b-4ea8-9b1b-43b995b4fe4b'
 
+  8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
+    Type: String
+    Default: 'TBD'
+
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
@@ -1267,3 +1271,20 @@ SsoSaturnCloudDevDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref saturnCloudDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+8dxfh53Admin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-8dxfh53-admin'
+  StackDescription: 'SSO: admin role used by 8dxfh53 admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref  8dxfh53Account
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref 8dxfh53AdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
