@@ -193,6 +193,10 @@ Parameters:
     Type: String
     Default: '906769aa66-e78063c9-9fc6-4654-a089-ebb26854f202'
 
+  dntDevViewerGroup:      #JC aws-dntdev-viewers
+    Type: String
+    Default: '906769aa66-1d010ba3-e9cd-451b-98fd-f60bb7e3965d'
+
   saturnCloudDevAdminGroup:     #JC aws-saturncloud-dev-admins
     Type: String
     Default: '906769aa66-810bed57-bb15-4f9f-a754-df4795e52a44'
@@ -200,6 +204,11 @@ Parameters:
   saturnCloudDevDeveloperGroup:   #JC aws-saturncloud-dev-developers
     Type: String
     Default: '906769aa66-c6938d5f-605b-4ea8-9b1b-43b995b4fe4b'
+
+  #------------- personal AWS accounts ------------------
+  8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
+    Type: String
+    Default: '906769aa66-c75c5f09-8e6e-4e8a-8a1f-cbf13f56d5e7'
 
 #----------------------------------------------------------------------------------------------
 
@@ -1234,6 +1243,23 @@ SsoDntDevDeveloper:
     principalId: !Ref dnTDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
+SsoDntDevViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-dntdev-viewer'
+  StackDescription: 'SSO: viewer role used by  dntdev viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DnTDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dntDevViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
 SsoSaturnCloudDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -1267,3 +1293,20 @@ SsoSaturnCloudDevDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref saturnCloudDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+Sso8dxfh53Admin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-8dxfh53-admin'
+  StackDescription: 'SSO: admin role used by 8dxfh53 admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref  8dxfh53Account
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref 8dxfh53AdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]

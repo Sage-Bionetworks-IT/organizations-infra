@@ -71,6 +71,11 @@ AwsSso:
   DependsOn: [ Types, SeviceControlPolicies ]
   Path: ./700-aws-sso/_tasks.yaml
 
+AwsIpam:
+  Type: include
+  DependsOn: [ Types, SeviceControlPolicies ]
+  Path: ./705-ipam/_tasks.yaml
+
 TransitGateway:
   Type: include
   DependsOn: [ Types ]

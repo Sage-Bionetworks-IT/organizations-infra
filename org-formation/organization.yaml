@@ -105,6 +105,13 @@ Organization:
         - !Ref BridgeDevAccount
         - !Ref BridgeProdAccount
 
+  PersonalAccountsOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: personal
+      Accounts:
+        - !Ref 8dxfh53Account
+
   BridgeDevAccount:
     Type: OC::ORG::Account
     Properties:
@@ -500,3 +507,17 @@ Organization:
       Alias: org-sagebase-saturncloud-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
+
+  #------------ Personal Accounts -----------
+  8dxfh53Account:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-8dxfh53
+      RootEmail: aws.8dxfh53@sagebase.org
+      Alias: org-sagebase-8dxfh53
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        CostCenter: "NO PROGRAM / 000000"
+        AccountOwner: vijay.yadav@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws.8dxfh53@sagebase.org
