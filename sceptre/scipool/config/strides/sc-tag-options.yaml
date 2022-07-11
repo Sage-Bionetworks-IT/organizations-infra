@@ -10,6 +10,7 @@ dependencies:
   - "strides/sc-portfolio-ec2.yaml"
   - "strides/sc-portfolio-ec2-external.yaml"
   - "strides/sc-portfolio-s3-basic.yaml"
+  - "strides/sc-portfolio-scheduled-jobs.yaml"
 sceptre_user_data:
   Departments: !file sc-tag-options/internal/Departments.json
   Projects: !file sc-tag-options/internal/Projects.json
