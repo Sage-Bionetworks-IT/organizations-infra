@@ -36,6 +36,7 @@ PreventDisableCloudtrail:
       - !Ref SynapseOU
       - !Ref BridgeOU
       - !Ref ServiceCatalogOU
+      - !Ref PersonalAccountsOU
 
 PreventDisableCloudwatchConfigs:
   Type: update-stacks
@@ -54,6 +55,7 @@ PreventDisableCloudwatchConfigs:
       - !Ref SynapseOU
       - !Ref BridgeOU
       - !Ref ServiceCatalogOU
+      - !Ref PersonalAccountsOU
 
 #DenyAllRegionsOutsideUsEast1:
 #  Type: update-stacks
