@@ -2,6 +2,10 @@ AWSTemplateFormatVersion: '2010-09-09-OC'
 Description: Manage AWS organizations with master account
 
 Organization:
+
+  #------- Service Control Policies -----------
+  <<: !Include ./_scp.yaml
+
   MasterAccount:
     Type: OC::ORG::MasterAccount
     Properties:
@@ -21,6 +25,9 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ScienceDev
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
       Accounts:
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringDevAccount
@@ -34,6 +41,9 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ScienceProd
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
       Accounts:
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
@@ -47,6 +57,9 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: Platform
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
       OrganizationalUnits:
         - !Ref SynapseOU
         - !Ref BridgeOU
@@ -55,6 +68,9 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ItDev
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
       Accounts:
         - !Ref SceptreDevAccount
         - !Ref SaturnCloudDevAccount
@@ -63,6 +79,9 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ItProd
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
       Accounts:
         - !Ref TransitAccount
         - !Ref AdminCentralAccount
@@ -83,6 +102,9 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ServiceCatalog
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
       Accounts:
         - !Ref BmgfkiAccount
         - !Ref ScipoolDevAccount
@@ -109,6 +131,9 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: personal
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
       Accounts:
         - !Ref 8dxfh53Account
 
