@@ -95,3 +95,18 @@
               - 'guardduty:UpdatePublishingDestination'
               - 'guardduty:UpdateThreatIntelSet'
             Resource: '*'
+
+  RestrictDnsRegistrationSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictDnsRegistration
+      Description: Restrict users from registring domain names
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyDnsRegistration
+            Effect: Deny
+            Action:
+              - 'route53domains:RegisterDomain'
+              - 'route53domains:TransferDomain'
+            Resource: '*'
