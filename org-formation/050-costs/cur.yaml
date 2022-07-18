@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Monthly Cost and Usage Report'
+Parameters:
+  Bucket:
+    Type: String
+  Frequency:
+    Type: String
+    Default: "monthly"
+    AllowedValues:
+    - "monthly"
+    - "weekly"
+    - "hourly"
+Resources:
+  MonthlyCostReport:
+    Type: "AWS::CUR::ReportDefinition"
+    Properties:
+      ReportName: !Sub "${AWS::StackName}"
+      ReportVersioning: False
+      TimeUnit: !Ref Frequency
+      Compression: "parquet"
+      Format: "parquet"
+      S3Region: !Ref primaryRegion
+      S3Prefix: !Ref Frequency
+      S3Bucket: !Ref Bucket
