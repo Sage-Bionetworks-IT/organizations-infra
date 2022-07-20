@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Monthly Cost and Usage Report'
+Parameters:
+  Bucket:
+    Type: String
+Resources:
+  MonthlyCostReport:
+    Type: "AWS::CUR::ReportDefinition"
+    Properties:
+      ReportName: !Ref AWS::StackName
+      ReportVersioning: "OVERWRITE_REPORT"
+      RefreshClosedReports: true
+      TimeUnit: "MONTHLY"
+      Compression: "Parquet"
+      Format: "Parquet"
+      S3Region: !Ref AWS::Region
+      S3Prefix: "CostReport"
+      S3Bucket: !Ref Bucket

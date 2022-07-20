@@ -12,3 +12,12 @@ BudgetAlarms:
     budgetName: !Sub '${resourcePrefix}-budget-${CurrentAccount.AccountId}'
     budgetAmount: !GetAtt CurrentAccount.Tags.budget-alarm-threshold
     emailAddress: !GetAtt CurrentAccount.Tags.budget-alarm-threshold-email-recipient
+
+CostAndUsageReports:
+  Type: update-stacks
+  Template: cur.yaml
+  StackName: !Sub '${resourcePrefix}-CUR-Monthly'
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+  Parameters:
+    Bucket: "cost-and-usage-reports.sagebase.org"

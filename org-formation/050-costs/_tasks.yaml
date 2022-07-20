@@ -11,13 +11,3 @@ AnomalyDetectorService:
     Region: !Ref primaryRegion
   Parameters:
     Subscriber: !GetAtt CurrentAccount.RootEmail
-
-CostAndUsageReports:
-  Type: update-stacks
-  Template: cur.yaml
-  StackName: !Sub '${resourcePrefix}-CUR-Monthly'
-  DefaultOrganizationBinding:
-    Account: !Ref MasterAccount
-  Parameters:
-    Bucket: "cost-and-usage-reports.sagebase.org"
-    Frequency: "monthly"
