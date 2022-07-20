@@ -66,6 +66,7 @@ Vpn:
     # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
     ServerCertificateArn: !Sub 'arn:aws:acm:${primaryRegion}:${accountId}:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6'
     SplitTunnel: !Ref splitTunnel
+    VpnDnsServers: ["10.50.0.2", "8.8.8.8"]
 
 VpnAuthRoutes:
   DependsOn: [ Vpn ]
@@ -135,27 +136,61 @@ VpnAuthRoutes:
         CIDR: "172.32.0.0/16"
         AccessGroups:
           - "aws-admins"
-          - "aws-bridge-admins"
-          - "bridge-developers"
+          - "aws-bridgeprod-admins"
       # org-sagebase-synapsedw
-      synapsedw-vpc:
+      vpc:
         CIDR: "10.12.0.0/16"
         AccessGroups:
           - "aws-admins"
           - "aws-synapse-admins"
+          - "synapsedw-users"
       # org-sagebase-synapsedev
       synapse-dev-vpc-2:
         CIDR: "10.24.0.0/16"
         AccessGroups:
           - "aws-admins"
           - "aws-synapse-admins"
-      # org-sagebase-agora-prod
-      agoravpc:
+          - "aws-synapsedev-developers"
+      # org-sagebase-synapseprod
+      synapse-prod-vpc-2:
+        CIDR: "10.20.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-synapse-admins"
+          - "aws-synapseprod-developers"
+      synapse-ops-vpc-v2:
+        CIDR: "10.30.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-synapse-admins"
+          - "aws-synapseprod-developers"
+      # org-sagebase-agora-dev
+      agoradev-vpc:
         CIDR: "10.255.45.0/24"
         AccessGroups:
           - "aws-admins"
-          - "aws-agoraprod-admins"
-          - "aws-agoraprod-developers"
+          - "aws-agoradev-admins"
+          - "aws-agoradev-developers"
+      # org-sagebase-scipooldev
+      cesspoolvpc:
+        CIDR: "10.31.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+      # org-sagebase-scipoolprod
+      internalpoolvpc:
+        CIDR: "10.41.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+      # org-sagebase-sageit
+      defaultvpc:
+        CIDR: "10.13.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+          - "sageit-users"
+
 
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]

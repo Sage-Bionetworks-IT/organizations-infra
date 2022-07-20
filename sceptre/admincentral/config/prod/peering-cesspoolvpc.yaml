@@ -1,8 +1,0 @@
-template:
-  path: VPCPeer.yaml
-stack_name: peering-cesspoolvpc
-parameters:
-  PeerVPC: "vpc-0c1c1404c18d7d984"   # cesspoolvpc ID
-  PeerVPCOwner: "465877038949"   # org-sagebase-scipooldev account ID
-  PeerVPCCIDR: "10.31.0.0/16"    # cesspool CIDR
-  PeerRoleName: "essentials-VPCPeeringAuthorizerRole-K5R2EE9BA7LO"

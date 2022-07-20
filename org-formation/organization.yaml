@@ -2,6 +2,10 @@ AWSTemplateFormatVersion: '2010-09-09-OC'
 Description: Manage AWS organizations with master account
 
 Organization:
+
+  #------- Service Control Policies -----------
+  <<: !Include ./_scp.yaml
+
   MasterAccount:
     Type: OC::ORG::MasterAccount
     Properties:
@@ -21,17 +25,29 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ScienceDev
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
+        - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringDevAccount
         - !Ref HtanDevAccount
         - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
+        - !Ref AgoraDevAccount
+        - !Ref DnTDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ScienceProd
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
+        - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
@@ -39,11 +55,17 @@ Organization:
         - !Ref MobileHealthDataEngineeringProdAccount
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
+        - !Ref IncludeChopProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: Platform
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
+        - !Ref RestrictDnsRegistrationSCP
       OrganizationalUnits:
         - !Ref SynapseOU
         - !Ref BridgeOU
@@ -52,11 +74,24 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ItDev
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
+        - !Ref RestrictDnsRegistrationSCP
+      Accounts:
+        - !Ref SceptreDevAccount
+        - !Ref SaturnCloudDevAccount
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ItProd
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
+        - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref TransitAccount
         - !Ref AdminCentralAccount
@@ -77,6 +112,11 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ServiceCatalog
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
+        - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref BmgfkiAccount
         - !Ref ScipoolDevAccount
@@ -98,6 +138,18 @@ Organization:
       Accounts:
         - !Ref BridgeDevAccount
         - !Ref BridgeProdAccount
+
+  PersonalAccountsOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: personal
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
+        - !Ref RestrictDnsRegistrationSCP
+      Accounts:
+        - !Ref 8dxfh53Account
 
   BridgeDevAccount:
     Type: OC::ORG::Account
@@ -281,9 +333,31 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: NLP-Sandbox
+        AccountOwner: thomas.yu@sagebase.org
         budget-alarm-threshold: 20000
+        CostCenter: CD2H-CU / 11330
         budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
+  # INCLUDE is the grant where we collaborate with CHOP
+  IncludeChopProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-include-chop-prod
+      RootEmail: aws-include-prod@sagebase.org
+      Alias: org-sagebase-include-chop-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: IBC
+        Project: INCLUDE
+        AccountOwner: thomas.yu@sagebase.org
+        budget-alarm-threshold: 20000
+        CostCenter: "INCLUDE - CHOP / 122000"
+        budget-alarm-threshold-email-recipient: aws-include-prod@sagebase.org
+
+  # This account is used to host the challenge registry
+  # Challenge submission infrastructure that can't be supported using service catalog
+  # will also be hosted in this account with appropriate
+  # CostCenter tags on the resources.
   CnbAccount:
     Type: OC::ORG::Account
     Properties:
@@ -295,6 +369,8 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CNB
         Project: Challenges
+        AccountOwner: thomas.schaffter@sagebionetworks.org
+        CostCenter: NIH-ITCR / 101600
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: cnb@sagebase.org
 
@@ -309,6 +385,8 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: mobile-toolbox
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: Mobile Toolbox Project Core / 112501  # Difficulty here is RECOVER / 122500 will also leverage this infra.
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-dev@sagebase.org
 
@@ -323,6 +401,8 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: Mobile Toolbox Project Core / 112501  # Difficulty here is RECOVER / 122500 will also leverage this infra.
         budget-alarm-threshold: 20000
         budget-alarm-threshold-email-recipient: aws-mobilehealth-dataengineering-prod@sagebase.org
 
@@ -337,6 +417,8 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: iAtlas
+        AccountOwner: brian.oconnor@sagebase.org
+        CostCenter: iAtlas 3 / 314900  # TODO: Update code in June/July 2022 when iAtlas 4 starts.
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-iatlas-prod@sagebase.org
 
@@ -352,6 +434,8 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: CompOnc
         Project: htan
+        CostCenter: HTAN-DFCI / 120100
+        AccountOwner: brian.oconnor@sagebase.org
         budget-alarm-threshold: 2500
         budget-alarm-threshold-email-recipient: aws-htan-dev@sagebase.org
 
@@ -366,6 +450,8 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
@@ -380,8 +466,42 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: IBC
         Project: Infrastructure
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
+
+  DnTDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-dnt-dev
+      RootEmail: ibc-ops@sagebase.org
+      Alias: org-sagebase-dnt-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: IBC
+        Project: Infrastructure
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        AccountOwner: thomas.yu@sagebase.org
+
+  AgoraDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-agora-dev
+      RootEmail: agora-develop@sagebase.org
+      Alias: org-sagebase-agora-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: SysBio
+        Project: amp-ad
+        # Anna G confirmed that AMP-AD charges should technically
+        # be charged to STRIDES account but this tag works
+        CostCenter: NIA AMP-AD CC / 101500
+        AccountOwner: jessica.britton@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: agora-develop@sagebase.org
 
   AgoraProdAccount:
     Type: OC::ORG::Account
@@ -393,6 +513,10 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         Department: SysBio
         Project: amp-ad
+        # Anna G confirmed that AMP-AD charges should technically
+        # be charged to STRIDES account but this tag works
+        CostCenter: NIA AMP-AD CC / 101500
+        AccountOwner: jessica.britton@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: agora-prod@sagebase.org
 
@@ -404,3 +528,35 @@ Organization:
       Alias: org-sagebase-ipam
       Tags:
         <<: !Include ./_default_org_tags.yaml
+
+  SceptreDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-sceptredev
+      RootEmail: aws.sceptredev@sagebase.org
+      Alias: org-sagebase-sceptredev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+
+  SaturnCloudDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-saturncloud-dev
+      RootEmail: saturncloud-dev@sagebase.org
+      Alias: org-sagebase-saturncloud-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+
+  #------------ Personal Accounts -----------
+  8dxfh53Account:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-8dxfh53
+      RootEmail: aws.8dxfh53@sagebase.org
+      Alias: org-sagebase-8dxfh53
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        CostCenter: "NO PROGRAM / 000000"
+        AccountOwner: vijay.yadav@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws.8dxfh53@sagebase.org
