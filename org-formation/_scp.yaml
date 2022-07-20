@@ -54,6 +54,22 @@
               - 'cloudtrail:DeleteTrail'
             Resource: '*'
 
+  # A login profile allows a user to access the AWS console.
+  # In effect this allows the creation of service users but will restrict creation of human users
+  RestrictIamLoginProfileSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictIamLoginProfile
+      Description: Restrict creation or adding IAM login profile to user accounts
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyCreateIamLoginProfile
+            Effect: Deny
+            Action:
+              - 'iam:CreateLoginProfile'
+            Resource: '*'
+
   RestrictDisableGuarddutySCP:
     Type: OC::ORG::ServiceControlPolicy
     Properties:
