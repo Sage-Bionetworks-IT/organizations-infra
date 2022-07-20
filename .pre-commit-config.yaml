@@ -3,10 +3,8 @@ repos:
     rev: b9e96b3212fa06aea65964ff0d5cda84ce935f38
     hooks:
     - id: git-secrets
-      entry: git-secrets --register-aws --global
-    - id: git-secrets
-      entry: git-secrets --scan
-      args: [--untracked]
+      entry: git-secrets
+      args: [--scan, --recursive]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
