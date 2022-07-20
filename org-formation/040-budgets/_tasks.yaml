@@ -16,8 +16,8 @@ BudgetAlarms:
 CostAndUsageReports:
   Type: update-stacks
   Template: cur.yaml
-  StackName: !Sub '${resourcePrefix}-CUR-Monthly'
+  StackName: !Sub '${resourcePrefix}-monthly-cost-report'
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
   Parameters:
-    Bucket: "cost-and-usage-reports.sagebase.org"
+    resourcePrefix: !Ref resourcePrefix
