@@ -150,6 +150,7 @@ Organization:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref 8dxfh53Account
+        - !Ref P9hFg7IAccount
 
   BridgeDevAccount:
     Type: OC::ORG::Account
@@ -560,3 +561,15 @@ Organization:
         AccountOwner: vijay.yadav@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws.8dxfh53@sagebase.org
+  P9hFg7IAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-P9hFg7I
+      RootEmail: aws.P9hFg7I@sagebase.org
+      Alias: org-sagebase-P9hFg7I
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        CostCenter: "NO PROGRAM / 000000"
+        AccountOwner: joni.harker@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws.P9hFg7I@sagebase.org
