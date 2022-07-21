@@ -16,7 +16,7 @@ BudgetAlarms:
 CostAndUsageReports:
   Type: update-stacks
   Template: cur.yaml
-  StackName: !Sub '${resourcePrefix}-monthly-cost-report'
+  StackName: !Sub '${resourcePrefix}-cost-reports'
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
   Parameters:
