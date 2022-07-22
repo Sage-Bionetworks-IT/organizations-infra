@@ -19,5 +19,6 @@ CostAndUsageReports:
   StackName: !Sub '${resourcePrefix}-cost-reports'
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
+    Region: !Ref primaryRegion
   Parameters:
     resourcePrefix: !Ref resourcePrefix
