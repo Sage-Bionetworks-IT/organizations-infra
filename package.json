@@ -31,6 +31,6 @@
   },
   "homepage": "https://github.com/Sage-Bionetworks-IT/organizations-infra.git/README.md",
   "dependencies": {
-    "aws-organization-formation": "^0.9.20-beta.3"
+    "aws-organization-formation": "1.0.3"
   }
 }

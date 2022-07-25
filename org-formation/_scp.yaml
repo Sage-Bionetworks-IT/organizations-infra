@@ -1,0 +1,128 @@
+  RestrictUnusedRegionsSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictUnusedRegions
+      Description: Restrict Unused regions
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyUnsupportedRegions
+            Effect: Deny
+            NotAction:
+              - 'cloudfront:*'
+              - 'iam:*'
+              - 'route53:*'
+              - 'support:*'
+            Resource: '*'
+            Condition:
+              StringNotEquals:
+                'aws:RequestedRegion':
+                  - us-west-1
+                  - us-west-2
+                  - us-east-1
+                  - us-east-2
+
+  RestrictDisableCloudwatchSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictDisableCloudwatch
+      Description: Restrict users from disabling cloudwatch
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyDisableCloudwatch
+            Effect: Deny
+            Action:
+              - 'config:DeleteConfigRule'
+              - 'config:DeleteConfigurationRecorder'
+              - 'config:DeleteDeliveryChannel'
+              - 'config:StopConfigurationRecorder'
+            Resource: '*'
+
+  RestrictDisableCloudtrailSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictDisableCloudtrail
+      Description: Restrict users from disabling cloudtrail
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyDisableCloudtrail
+            Effect: Deny
+            Action:
+              - 'cloudtrail:StopLogging'
+              - 'cloudtrail:DeleteTrail'
+            Resource: '*'
+
+  # A login profile allows a user to access the AWS console.
+  # In effect this allows the creation of service users but will restrict creation of human users
+  RestrictIamLoginProfileSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictIamLoginProfile
+      Description: Restrict creation or adding IAM login profile to user accounts
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyCreateIamLoginProfile
+            Effect: Deny
+            Action:
+              - 'iam:CreateLoginProfile'
+            Resource: '*'
+
+  RestrictDisableGuarddutySCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictDisableGuardduty
+      Description: Restrict users from disabling guard duty
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyDisableGuardduty
+            Effect: Deny
+            Action:
+              - 'guardduty:AcceptInvitation'
+              - 'guardduty:CreateDetector'
+              - 'guardduty:CreateFilter'
+              - 'guardduty:CreateIPSet'
+              - 'guardduty:CreateMembers'
+              - 'guardduty:CreatePublishingDestination'
+              - 'guardduty:CreateThreatIntelSet'
+              - 'guardduty:DeclineInvitations'
+              - 'guardduty:DeleteDetector'
+              - 'guardduty:DeleteFilter'
+              - 'guardduty:DeleteInvitations'
+              - 'guardduty:DeleteIPSet'
+              - 'guardduty:DeleteMembers'
+              - 'guardduty:DeletePublishingDestination'
+              - 'guardduty:DeleteThreatIntelSet'
+              - 'guardduty:DisassociateFromMasterAccount'
+              - 'guardduty:DisassociateMembers'
+              - 'guardduty:InviteMembers'
+              - 'guardduty:StartMonitoringMembers'
+              - 'guardduty:StopMonitoringMembers'
+              - 'guardduty:TagResource'
+              - 'guardduty:UnarchiveFindings'
+              - 'guardduty:UntagResource'
+              - 'guardduty:UpdateDetector'
+              - 'guardduty:UpdateFilter'
+              - 'guardduty:UpdateFindingsFeedback'
+              - 'guardduty:UpdateIPSet'
+              - 'guardduty:UpdatePublishingDestination'
+              - 'guardduty:UpdateThreatIntelSet'
+            Resource: '*'
+
+  RestrictDnsRegistrationSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictDnsRegistration
+      Description: Restrict users from registring domain names
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyDnsRegistration
+            Effect: Deny
+            Action:
+              - 'route53domains:RegisterDomain'
+              - 'route53domains:TransferDomain'
+            Resource: '*'

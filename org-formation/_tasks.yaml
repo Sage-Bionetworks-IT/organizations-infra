@@ -11,11 +11,6 @@ Types:
   DependsOn: [ OrganizationUpdate ]
   Path: ./005-types/_tasks.yaml
 
-SeviceControlPolicies:
-  Type: include
-  DependsOn: [ Types ]
-  Path: ./010-scps/_tasks.yaml
-
 Budgets:
   Type: include
   DependsOn: [ Types ]
@@ -68,12 +63,12 @@ IdentityProviders:
 
 AwsSso:
   Type: include
-  DependsOn: [ Types, SeviceControlPolicies ]
+  DependsOn: [ Types ]
   Path: ./700-aws-sso/_tasks.yaml
 
 AwsIpam:
   Type: include
-  DependsOn: [ Types, SeviceControlPolicies ]
+  DependsOn: [ Types ]
   Path: ./705-ipam/_tasks.yaml
 
 TransitGateway:
