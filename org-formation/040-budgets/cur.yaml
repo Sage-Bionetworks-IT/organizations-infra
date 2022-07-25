@@ -31,15 +31,6 @@ Resources:
             Resource: !Sub '${CostReportBucket.Arn}/${resourcePrefix}/*'
             Principal:
               Service: "billingreports.amazonaws.com"
-          # Grant full access to the 'organizations' account
-          - Action:
-              - 's3:*'
-            Effect: Allow
-            Resource:
-              - !GetAtt CostReportBucket.Arn
-              - !Sub '${CostReportBucket.Arn}/${resourcePrefix}/*'
-            Principal:
-              AWS: "531805629419"
   MonthlyCostReport:
     Type: "AWS::CUR::ReportDefinition"
     Properties:
