@@ -6,7 +6,7 @@ repos:
       entry: git-secrets
       args: [--scan, --recursive]
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.3.0
     hooks:
       # On Windows, git will convert all CRLF to LF, but only after all hooks are done executing.
       # yamllint will fail before git has a chance to convert line endings, so it must be explicitly done before yamllint
@@ -16,20 +16,20 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.26.2
+    rev: v1.27.1
     hooks:
       - id: yamllint
   - repo: https://github.com/awslabs/cfn-python-lint
-    rev: v0.53.0
+    rev: v0.61.3
     hooks:
       - id: cfn-python-lint
         files: templates/.*\.(json|yml|yaml)$
         exclude: templates/.*/lambda-budgets/.*\.(json|yml|yaml)$
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.10
+    rev: v1.3.0
     hooks:
       - id: remove-tabs
   - repo: https://github.com/sirosen/check-jsonschema
-    rev: 0.4.1
+    rev: 0.17.1
     hooks:
       - id: check-github-workflows

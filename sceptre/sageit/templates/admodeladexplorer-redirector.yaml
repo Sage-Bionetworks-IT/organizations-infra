@@ -122,10 +122,6 @@ Resources:
       FunctionConfig:
         Comment: If coming as admodel, redirect to modelad else redirect to shiny
         Runtime: cloudfront-js-1.0
-      FunctionMetadata:
-        FunctionARN: !Sub
-        - arn:aws:cloudfront::${AWS::AccountId}:function/${stackPrefix}-modeladexplorer-redirector-fct
-        - { stackPrefix: !Ref StackType }
       Name: !Sub
       - ${stackPrefix}-modeladexplorer-redirector-fct
       - { stackPrefix: !Ref StackType }
