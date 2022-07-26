@@ -16,7 +16,7 @@ CloudwatchTrailLog:
 CloudTrail:
   Type: update-stacks
   DependsOn: [ "CloudwatchTrailLog" ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/Cloudtrail/cloudtrail-trail.yaml
+  Template: cloudtrail-trail.yaml
   StackName: !Sub '${resourcePrefix}-cloudtrail'
   StackDescription: CloudTrail
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -24,12 +24,19 @@ CloudTrail:
     Account: '*'
     IncludeMasterAccount: true
   OrganizationBindings:
-    LogArchiveBinding:
+    MasterBinding:
       Account: !Ref LogCentralAccount
+    MemberBinding:
+      Account: '*'
+      IncludeMasterAccount: true
+      ExcludeAccount: !Ref LogCentralAccount
   Parameters:
     bucketName: !Sub '${resourcePrefix}-cloudtrail-${CurrentAccount.AccountId}'
     CloudWatchLogsLogGroupArn: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-log-LogGroupArn' ]
     CloudWatchLogsRoleArn: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-log-LogRoleArn' ]
+    KmsKeyAdminPrincipalArns:
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
 
 CloudTrailSumoLogicRole:
   Type: update-stacks
