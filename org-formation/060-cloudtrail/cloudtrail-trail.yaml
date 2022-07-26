@@ -152,7 +152,7 @@ Resources:
       EnableLogFileValidation: true
       CloudWatchLogsLogGroupArn: !Ref CloudWatchLogsLogGroupArn
       CloudWatchLogsRoleArn: !Ref CloudWatchLogsRoleArn
-      KMSKeyId: !Ref KmsKey
+#      KMSKeyId: !Ref KmsKey
 
   MemberCloudTrail:
     OrganizationBinding: !Ref MemberBinding
