@@ -21,6 +21,7 @@ Resources:
       EnableKeyRotation: "true"
       PendingWindowInDays: 7
       KeyPolicy:
+        # policy copied from manual setup of cloudtrail with encryption
         Version: '2012-10-17'
         Id: Key policy created by CloudTrail
         Statement:
@@ -120,7 +121,8 @@ Resources:
     Properties:
       Bucket: !Ref CloudTrailBucket
       PolicyDocument:
-        Version: '2012-10-17'
+        # policy copied from manual setup of cloudtrail with encryption
+        Version: 2012-10-17
         Statement:
         - Sid: AWSCloudTrailAclCheck20150319
           Effect: Allow
