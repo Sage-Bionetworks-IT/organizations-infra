@@ -1,6 +1,5 @@
 # From https://github.com/org-formation/org-formation-reference/tree/master/src/templates/060-cloud-trail
 AWSTemplateFormatVersion: '2010-09-09-OC'
-
 Parameters:
   bucketName:
     Type: String
@@ -28,9 +27,7 @@ Resources:
         - Sid: Enable IAM User Permissions
           Effect: Allow
           Principal:
-            AWS:
-            - arn:aws:iam::231505186444:root
-            - arn:aws:iam::531805629419:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1EY1CRUF48VP5
+            AWS: !Ref KmsKeyAdminPrincipalArns
           Action: kms:*
           Resource: "*"
         - Sid: Allow CloudTrail to encrypt logs
@@ -41,9 +38,9 @@ Resources:
           Resource: "*"
           Condition:
             StringEquals:
-              AWS:SourceArn: arn:aws:cloudtrail:us-east-1:231505186444:trail/sagebase-cloudtrail-CloudTrail-168R5FX8JF4MG
+              AWS:SourceArn: !Sub 'arn:aws:cloudtrail:*:${AWS::AccountId}:trail/${AWS::StackName}*'
             StringLike:
-              kms:EncryptionContext:aws:cloudtrail:arn: arn:aws:cloudtrail:*:231505186444:trail/*
+              kms:EncryptionContext:aws:cloudtrail:arn: !Sub 'arn:aws:cloudtrail:*:${AWS::AccountId}:trail/*'
         - Sid: Allow CloudTrail to describe key
           Effect: Allow
           Principal:
@@ -60,9 +57,9 @@ Resources:
           Resource: "*"
           Condition:
             StringEquals:
-              kms:CallerAccount: '231505186444'
+              kms:CallerAccount: !Ref AWS::AccountId
             StringLike:
-              kms:EncryptionContext:aws:cloudtrail:arn: arn:aws:cloudtrail:*:231505186444:trail/*
+              kms:EncryptionContext:aws:cloudtrail:arn: !Sub 'arn:aws:cloudtrail:*:${AWS::AccountId}:trail/*'
         - Sid: Allow alias creation during setup
           Effect: Allow
           Principal:
@@ -72,7 +69,7 @@ Resources:
           Condition:
             StringEquals:
               kms:ViaService: ec2.us-east-1.amazonaws.com
-              kms:CallerAccount: '231505186444'
+              kms:CallerAccount: !Ref AWS::AccountId
         - Sid: Enable cross account log decryption
           Effect: Allow
           Principal:
@@ -83,9 +80,9 @@ Resources:
           Resource: "*"
           Condition:
             StringEquals:
-              kms:CallerAccount: '231505186444'
+              kms:CallerAccount: !Ref AWS::AccountId
             StringLike:
-              kms:EncryptionContext:aws:cloudtrail:arn: arn:aws:cloudtrail:*:231505186444:trail/*
+              kms:EncryptionContext:aws:cloudtrail:arn: !Sub 'arn:aws:cloudtrail:*:${AWS::AccountId}:trail/*'
 
   CloudTrailBucket:
     OrganizationBinding: !Ref MasterBinding
@@ -130,25 +127,24 @@ Resources:
           Principal:
             Service: cloudtrail.amazonaws.com
           Action: s3:GetBucketAcl
-          Resource: arn:aws:s3:::sagebase-cloudtrail-231505186444
+          Resource: !GetAtt CloudTrailBucket.Arn
           Condition:
             StringEquals:
-              AWS:SourceArn: arn:aws:cloudtrail:us-east-1:231505186444:trail/sagebase-cloudtrail-CloudTrail-168R5FX8JF4MG
+              AWS:SourceArn: !GetAtt CloudTrail.Arn
         - Sid: AWSCloudTrailWrite20150319
           Effect: Allow
           Principal:
             Service: cloudtrail.amazonaws.com
           Action: s3:PutObject
-          Resource: arn:aws:s3:::sagebase-cloudtrail-231505186444/AWSLogs/231505186444/*
+          Resource: !Sub '${CloudTrailBucket.Arn}/AWSLogs/${AWS::AccountId}/*'
           Condition:
             StringEquals:
               s3:x-amz-acl: bucket-owner-full-control
-              AWS:SourceArn: arn:aws:cloudtrail:us-east-1:231505186444:trail/sagebase-cloudtrail-CloudTrail-168R5FX8JF4MG
+              AWS:SourceArn: !GetAtt CloudTrail.Arn
 
   CloudTrail:
     OrganizationBinding: !Ref MasterBinding
     Type: AWS::CloudTrail::Trail
-    DependsOn: CloudTrailBucketPolicy
     Properties:
       S3BucketName: !Ref CloudTrailBucket
       IsLogging: true
