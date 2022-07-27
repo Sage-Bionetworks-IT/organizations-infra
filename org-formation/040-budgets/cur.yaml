@@ -34,7 +34,7 @@ Resources:
   MonthlyCostReport:
     Type: "AWS::CUR::ReportDefinition"
     Properties:
-      ReportName: !Sub "${resourcePrefix}-monthly-costs"
+      ReportName: "monthly-costs"
       ReportVersioning: "OVERWRITE_REPORT"
       RefreshClosedReports: true
       TimeUnit: "MONTHLY"
