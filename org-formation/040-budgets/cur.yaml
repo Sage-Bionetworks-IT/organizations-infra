@@ -8,7 +8,7 @@ Resources:
     Type: "AWS::S3::Bucket"
     Properties:
       BucketName: !Sub "${resourcePrefix}-cost-reports"
-      AccessControl: Private
+      AccessControl: Public
   CostReportBucketPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
