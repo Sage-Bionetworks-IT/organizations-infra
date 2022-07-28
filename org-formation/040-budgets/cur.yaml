@@ -8,8 +8,9 @@ Resources:
     Type: "AWS::S3::Bucket"
     Properties:
       BucketName: !Sub "${resourcePrefix}-cost-reports"
-      AccessControl: PublicRead
+      AccessControl: BucketOwnerFullControl
   CostReportBucketPolicy:
+    # This policy MUST match https://docs.aws.amazon.com/cur/latest/userguide/cur-s3.html
     Type: "AWS::S3::BucketPolicy"
     Properties:
       Bucket: !Ref CostReportBucket
@@ -28,7 +29,7 @@ Resources:
           - Action:
               - 's3:PutObject'
             Effect: Allow
-            Resource: !Sub '${CostReportBucket.Arn}/${resourcePrefix}/*'
+            Resource: !Sub '${CostReportBucket.Arn}/*'
             Principal:
               Service: "billingreports.amazonaws.com"
   MonthlyCostReport:
@@ -43,3 +44,4 @@ Resources:
       S3Region: !Ref AWS::Region
       S3Prefix: !Ref resourcePrefix
       S3Bucket: !Ref CostReportBucket
+    DependsOn: CostReportBucketPolicy
