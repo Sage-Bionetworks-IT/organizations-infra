@@ -32,6 +32,15 @@ Resources:
             Resource: !Sub '${CostReportBucket.Arn}/*'
             Principal:
               Service: "billingreports.amazonaws.com"
+          # Grant AWS admins and Travis CI access to view cost reports
+          - Action:
+              - 's3:GetObject'
+            Effect: Allow
+            Resource: !Sub '${CostReportBucket.Arn}/*'
+            Principal:
+              AWS:
+                - !Sub "arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole"
+                - arn:aws:iam::745159704268:role/service-accounts-CfnDeployerServiceRole-1OJK3OAN1IAI  # Travis CI
   MonthlyCostReport:
     Type: "AWS::CUR::ReportDefinition"
     Properties:
