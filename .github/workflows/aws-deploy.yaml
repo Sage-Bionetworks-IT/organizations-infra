@@ -1,52 +1,30 @@
 name: aws-deploy
 
 on:
-  pull_request:
-    branches: ['*']
-  push:
+  workflow_run:
+    workflows: [ "validate" ]
     branches: [master]
+    types:
+      - completed
+
+concurrency:
+  group: ${{ github.workflow }}
 
 jobs:
-  pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - uses: pre-commit/action@v2.0.0
-  jinja-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Install jinja libraries
-        uses: BSFishy/pip-action@v1
-        with:
-          packages: jinja2==3.0.1
-      - name: Install jinja linter tool
-        run: git clone --single-branch https://github.com/drm/jinja2-lint.git /tmp/jinja2-lint
-      - name: Execute jinja linter
-        run: find . -type f -name "*.j2" -exec /tmp/jinja2-lint/j2lint.py '{}' +
   org-formation:
-    if: github.event_name == 'push'
-    needs:
-      - pre-commit
-      - jinja-lint
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
+          role-to-assume: arn:aws:iam::531805629419:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1EY1CRUF48VP5
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Use Node.js
         uses: actions/setup-node@v1
@@ -68,11 +46,15 @@ jobs:
         run: npm install
       - name: Validate ofn templates
         run: npm run validate-tasks
+      - name: Validate with print-task
+        run: npm run print-tasks-failfast
       - name: Deploy with ofn
-        run: npm run ci-perform-tasks
+        run: npm run ci-perform-tasks-parallel
   sceptre-organizations:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -94,54 +76,20 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::531805629419:role/bootstrap-ci-service-access-CiServiceRole-VVXK9EUQNPUZ
+          role-to-assume: arn:aws:iam::531805629419:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1EY1CRUF48VP5
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
           cd sceptre/organizations
           mkdir -p templates/remote
           sceptre launch prod --yes
-# Transit Gateway is still work in progress
-#  sceptre-transit:
-#    if: github.event_name == 'push'
-#    needs: org-formation
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Set up Python
-#        uses: actions/setup-python@v2
-#        with:
-#          python-version: 3.9
-#      - name: Cache python modules
-#        uses: actions/cache@v2
-#        with:
-#          path: ~/.cache/pip
-#          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-#          restore-keys: |
-#            ${{ runner.os }}-pip-
-#      - name: Install dependencies
-#        run: |
-#          python -m pip install --upgrade pip
-#          pip install sceptre sceptre-ssm-resolver
-#      - name: Assume AWS Role
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-#          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
-#          aws-region: us-east-1
-#          role-to-assume: arn:aws:iam::153370007719:role/OrganizationFormationBuildAccessRole
-#          role-duration-seconds: 1200
-#      - name: Deploy with sceptre
-#        run: |
-#          cd sceptre/transit
-#          mkdir -p templates/remote
-#          sceptre launch prod --yes
   sceptre-admincentral:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -163,10 +111,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::745159704268:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::745159704268:role/github-oidc-sage-bionetwo-ProviderRoleorganization-93H11ERK3F4N
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -174,8 +121,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-itsandbox:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -197,10 +146,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::804034162148:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::804034162148:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1HOMAZA6V6MZF
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -208,8 +156,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-sandbox:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -231,10 +181,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::563295687221:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::563295687221:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1W3Y2BTXS0IHN
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -242,8 +191,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-scicomp:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -265,10 +216,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::055273631518:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::055273631518:role/github-oidc-sage-bionetwo-ProviderRoleorganization-4FAIL7WJ3XUJ
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -276,8 +226,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-strides:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -299,10 +251,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::423819316185:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::423819316185:role/github-oidc-sage-bionetwo-ProviderRoleorganization-3R0K18XHN449
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -310,8 +261,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-strides-ampad-workflows:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -333,10 +286,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::751556145034:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::751556145034:role/github-oidc-sage-bionetwo-ProviderRoleorganization-9JE3CF75DHRZ
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -344,8 +296,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-scipooldev:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -367,10 +321,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::465877038949:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::465877038949:role/github-oidc-sage-bionetwo-ProviderRoleorganization-12N6ZXXUHHIAE
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -378,8 +331,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch develop --yes
   sceptre-scipoolprod:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -401,10 +356,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::237179673806:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::237179673806:role/github-oidc-sage-bionetwo-ProviderRoleorganization-10OXGCTGE0A2S
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
@@ -416,10 +370,12 @@ jobs:
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch prod --yes
   sceptre-stridespool:
-    if: github.event_name == 'push'
     needs:
       - org-formation
       - sceptre-strides
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -441,10 +397,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::423819316185:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::423819316185:role/github-oidc-sage-bionetwo-ProviderRoleorganization-3R0K18XHN449
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
@@ -456,8 +411,10 @@ jobs:
           sceptre delete --yes strides/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch strides --yes
   sceptre-bmgfki:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -479,10 +436,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::464102568320:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::464102568320:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1I3FAZB5NGCL6
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
@@ -494,8 +450,10 @@ jobs:
           sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           sceptre launch bmgfki --yes
   sceptre-sageit:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -517,10 +475,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::797640923903:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::797640923903:role/github-oidc-sage-bionetwo-ProviderRoleorganization-I97YJEULPXRB
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy staging with sceptre
         run: |
@@ -533,8 +490,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-logcentral:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -556,10 +515,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::231505186444:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::231505186444:role/github-oidc-sage-bionetwo-ProviderRoleorganization-VQLGWAN33424
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -567,8 +525,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-synapsedw:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -590,10 +550,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::383874245509:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::383874245509:role/github-oidc-sage-bionetwo-ProviderRoleorganization-5CKE8W1T0QQN
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -601,8 +560,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-synapsedev:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -624,10 +585,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::449435941126:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::449435941126:role/github-oidc-sage-bionetwo-ProviderRoleorganization-JYEP5VLBM0OD
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -635,8 +595,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-synapseprod:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -658,10 +620,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::325565585839:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::325565585839:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1VA1E6MRNQ9LY
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -669,8 +630,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-securitycentral:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -692,10 +655,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::140124849929:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::140124849929:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1Y0ZL6QUYBBXP
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -703,8 +665,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-bridgedev:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -726,10 +690,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::420786776710:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::420786776710:role/github-oidc-sage-bionetwo-ProviderRoleorganization-ZML8QW5KQAJI
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -737,8 +700,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch develop --yes
   sceptre-bridgeprod:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -760,10 +725,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::649232250620:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::649232250620:role/github-oidc-sage-bionetwo-ProviderRoleorganization-2YBQPKY1HZSY
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |
@@ -771,8 +735,10 @@ jobs:
           mkdir -p templates/remote
           sceptre launch prod --yes
   sceptre-imagecentral:
-    if: github.event_name == 'push'
     needs: org-formation
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -794,10 +760,9 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CI_SERVICE_USER_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CI_SERVICE_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::867686887310:role/OrganizationFormationBuildAccessRole
+          role-to-assume: arn:aws:iam::867686887310:role/github-oidc-sage-bionetwo-ProviderRoleorganization-Q3961B67OXY7
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
         run: |

@@ -16,7 +16,11 @@ Mappings:
     SubnetC:  # private
       CIDR: "3.0/24"
     SubnetD:  # public
-      CIDR: "4.0/24"
+      CIDR: "100.0/24"
+    SubnetE:  # public
+      CIDR: "101.0/24"
+    SubnetF:  # public
+      CIDR: "102.0/24"
 Resources:
   VPC:
     Type: 'AWS::EC2::VPC'
@@ -83,6 +87,26 @@ Resources:
           - !FindInMap [SubnetConfig, SubnetD, CIDR]
       VpcId: !Ref VPC
       MapPublicIpOnLaunch: true
+  SubnetE:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetE, CIDR]
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: true
+  SubnetF:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      AvailabilityZone: !Select [2, !GetAZs '']
+      CidrBlock: !Join
+        - '.'
+        - - !Ref VpcSubnetPrefix
+          - !FindInMap [SubnetConfig, SubnetF, CIDR]
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: true
   PrivateRouteTable:
     Type: "AWS::EC2::RouteTable"
     Properties:
@@ -107,6 +131,16 @@ Resources:
     Properties:
       SubnetId: !Ref SubnetD
       RouteTableId: !Ref PublicRouteTable
+  SubnetRouteTableAssociationE:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetE
+      RouteTableId: !Ref PublicRouteTable
+  SubnetRouteTableAssociationF:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref SubnetF
+      RouteTableId: !Ref PublicRouteTable
   ElasticIP:
     Type: "AWS::EC2::EIP"
     Properties:
@@ -126,10 +160,20 @@ Resources:
     Type: "AWS::EC2::NetworkAcl"
     Properties:
       VpcId: !Ref VPC
-  PublicSubnetNetworkAclAssociation:
+  NetworkAclAssociationPublicSubnetD:
     Type: "AWS::EC2::SubnetNetworkAclAssociation"
     Properties:
       SubnetId: !Ref SubnetD
+      NetworkAclId: !Ref PublicNetworkAcl
+  NetworkAclAssociationPublicSubnetE:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      SubnetId: !Ref SubnetE
+      NetworkAclId: !Ref PublicNetworkAcl
+  NetworkAclAssociationPublicSubnetF:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      SubnetId: !Ref SubnetF
       NetworkAclId: !Ref PublicNetworkAcl
   InboundPublicNetworkAclEntry:
     Type: "AWS::EC2::NetworkAclEntry"
@@ -156,31 +200,46 @@ Resources:
         From: 0
         To: 65535
 Outputs:
-  SubnetIDs:
-    Description: "VPC Subnet IDs"
+  PrivateSubnetIDs:
+    Description: "Private VPC Subnet IDs"
     Value: !Sub '${SubnetA}, ${SubnetB}, ${SubnetC}'
     Export:
-      Name: !Sub '${AWS::StackName}-SubnetIDs'
+      Name: !Sub '${AWS::StackName}-PrivateSubnetIDs'
+  PublicSubnetIDs:
+    Description: "Public VPC Subnet IDs"
+    Value: !Sub '${SubnetD}, ${SubnetE}, ${SubnetF}'
+    Export:
+      Name: !Sub '${AWS::StackName}-PublicSubnetIDs'
   SubnetA:
-    Description: "VPC Subnet A"
+    Description: "Private Subnet"
     Value: !Ref SubnetA
     Export:
       Name: !Sub '${AWS::StackName}-SubnetA'
   SubnetB:
-    Description: "VPC Subnet B"
+    Description: "Private Subnet"
     Value: !Ref SubnetB
     Export:
       Name: !Sub '${AWS::StackName}-SubnetB'
   SubnetC:
-    Description: "VPC Subnet C"
+    Description: "Private Subnet"
     Value: !Ref SubnetC
     Export:
       Name: !Sub '${AWS::StackName}-SubnetC'
   SubnetD:
-    Description: "VPC Subnet D"
-    Value: !Ref SubnetC
+    Description: "Public Subnet"
+    Value: !Ref SubnetD
     Export:
       Name: !Sub '${AWS::StackName}-SubnetD'
+  SubnetE:
+    Description: "Public Subnet"
+    Value: !Ref SubnetE
+    Export:
+      Name: !Sub '${AWS::StackName}-SubnetE'
+  SubnetF:
+    Description: "Public Subnet"
+    Value: !Ref SubnetF
+    Export:
+      Name: !Sub '${AWS::StackName}-SubnetF'
   VpcId:
     Description: "The VPC ID"
     Value: !Ref VPC

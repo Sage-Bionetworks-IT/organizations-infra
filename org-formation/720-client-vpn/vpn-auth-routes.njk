@@ -1,0 +1,79 @@
+Description: Setup client VPN authorization and routes
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  ClientVpnEndpointId:
+    Type: String
+    Description: The ID of the VPN Endpoint
+  SplitTunnel:
+    Type: String
+    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint (false for full tunnel)"
+    AllowedValues:
+      - true
+      - false
+    ConstraintDescription: 'Must be true or false'
+Conditions:
+  FullTunnel: !Equals [!Ref SplitTunnel, false]
+Resources:
+{% for subnet_id in SubnetIds %}
+  EndpointAssociation{{ subnet_id | last }}:
+    Type: AWS::EC2::ClientVpnTargetNetworkAssociation
+    Properties:
+      ClientVpnEndpointId: !Ref ClientVpnEndpointId
+      SubnetId: {{ subnet_id }}
+{% endfor %}
+
+{# Authorization and route between VPN and public internet #}
+  EndpointAuthorizationPublic:
+    Condition: FullTunnel
+    Type: AWS::EC2::ClientVpnAuthorizationRule
+    Properties:
+      Description: "public"
+      AuthorizeAllGroups: true
+      ClientVpnEndpointId: !Ref ClientVpnEndpointId
+      TargetNetworkCidr: "0.0.0.0/0"
+
+{% for subnet_id in SubnetIds %}
+  EndpointRoutePublicSubnet{{ subnet_id | last }}:
+    Condition: FullTunnel
+    Type: AWS::EC2::ClientVpnRoute
+    DependsOn:
+      - EndpointAssociation{{ subnet_id | last }}
+    Properties:
+      Description: public-subnet{{ subnet_id | last }}
+      ClientVpnEndpointId: !Ref ClientVpnEndpointId
+      DestinationCidrBlock: "0.0.0.0/0"
+      TargetVpcSubnetId: {{ subnet_id }}
+{% endfor %}
+
+{# Authorization and routes between VPN and spokes #}
+{% for spoke, spoke_data in TgwSpokes %}
+{%   for access_group in spoke_data.AccessGroups %}
+  EndpointAuthorization{{ spoke_data.CIDR | replace('.','') | replace('/','') }}{{ access_group | replace('-','') }}:
+    Type: AWS::EC2::ClientVpnAuthorizationRule
+    DependsOn:
+{%     for subnet_id in SubnetIds %}
+      - EndpointAssociation{{ subnet_id | last }}
+{%     endfor %}
+    Properties:
+      Description: {{ spoke }}-{{ access_group }}
+      AccessGroupId: {{ access_group }}
+      ClientVpnEndpointId: !Ref ClientVpnEndpointId
+      TargetNetworkCidr: {{ spoke_data.CIDR }}
+{%   endfor %}
+{% endfor %}
+
+{% for spoke, spoke_data in TgwSpokes %}
+{%   for subnet_id in SubnetIds %}
+  EndpointRoute{{ spoke_data.CIDR | replace('.','') | replace('/','') }}{{ subnet_id | last }}:
+    Type: AWS::EC2::ClientVpnRoute
+    DependsOn:
+{%     for depend in SubnetIds %}
+      - EndpointAssociation{{ subnet_id | last }}
+{%     endfor %}
+    Properties:
+      Description: {{ spoke }}-Subnet{{ subnet_id | last }}
+      ClientVpnEndpointId: !Ref ClientVpnEndpointId
+      DestinationCidrBlock: {{ spoke_data.CIDR }}
+      TargetVpcSubnetId: {{ subnet_id }}
+{%   endfor %}
+{% endfor %}

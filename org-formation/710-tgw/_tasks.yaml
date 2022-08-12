@@ -32,6 +32,17 @@ TransitGateway:
     Principals:
       - !Ref ITSandboxAccount
       - !Ref SandboxAccount
+      - !Ref ScicompAccount
+      - !Ref BridgeDevAccount
+      - !Ref BridgeProdAccount
+      - !Ref SynapseDWAccount
+      - !Ref SynapseDevAccount
+      - !Ref SynapseProdAccount
+      - !Ref AgoraDevAccount
+      - !Ref iAtlasProdAccount
+      - !Ref ScipoolDevAccount
+      - !Ref ScipoolProdAccount
+      - !Ref SageITAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -71,6 +82,43 @@ TransitGatewayRoutes:
       # org-sagebase-sandbox
       sandcastlevpc:
         CIDR: "10.23.0.0/16"
+      # org-sagebase-scicomp
+      computevpc:
+        CIDR: "10.5.0.0/16"
+      snowflakevpc:
+        CIDR: "10.25.0.0/16"
+      # org-sagebase-bridgedev
+      BridgeServer2-develop-vpc:
+        CIDR: "172.48.0.0/16"
+      bridge-aux:
+        CIDR: "172.51.0.0/16"
+      # org-sagebase-bridgeprod
+      BridgeServer2-vpc:
+        CIDR: "172.32.0.0/16"
+      # org-sagebase-synapsedev
+      synapse-dev-vpc-2:
+        CIDR: "10.24.0.0/16"
+      # org-sagebase-synapseprod
+      synapse-prod-vpc-2:
+        CIDR: "10.20.0.0/16"
+      synapse-ops-vpc-v2:
+        CIDR: "10.30.0.0/16"
+      # org-sagebase-agora-dev
+      agoradev-vpc:
+        CIDR: "10.255.45.0/24"
+      # org-sagebase-scipooldev
+      cesspoolvpc:
+        CIDR: "10.31.0.0/16"
+      # org-sagebase-scipoolprod
+      internalpoolvpc:
+        CIDR: "10.41.0.0/16"
+      # org-sagebase-synapsedw
+      vpc:
+        CIDR: "10.12.0.0/16"
+      # org-sagebase-sageit
+      defaultvpc:
+        CIDR: "10.13.0.0/16"
+
   Parameters:
     VpcSubnetIDs:
       - !CopyValue [!Sub '${resourcePrefix}-${appName}-unionstationvpc-SubnetA']
@@ -81,14 +129,30 @@ TransitGatewayRoutes:
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId']
 
 Mappings:
+  # need to quote account numbers that start with 0
   TgwSpokesA:
     VpcName:
-      804034162148: 'dustbunnyvpc'  # org-sagebase-itsandbox
-      563295687221: 'sandcastlevpc'  # org-sagebase-sandbox
-      055273631518: 'computevpc'     # org-sagebase-scicomp
+      '804034162148': 'dustbunnyvpc'  # org-sagebase-itsandbox
+      '563295687221': 'sandcastlevpc'  # org-sagebase-sandbox
+      '055273631518': 'computevpc'  # org-sagebase-scicomp
+      '420786776710': 'BridgeServer2-vpc'   # org-sagebase-bridgedev
+      '649232250620': 'BridgeServer2-vpc'   # org-sagebase-bridgeprod
+      '383874245509': 'vpc'      # org-sagebase-synapsedw
+      '607346494281': 'agoravpc'      # org-sagebase-agora-dev
+      '465877038949': 'cesspoolvpc'      # org-sagebase-scipooldev
+      '237179673806': 'internalpoolvpc'      # org-sagebase-scipooldev
+      '797640923903': 'defaultvpc' # org-sagebase-sageit
   TgwSpokesB:
     VpcName:
-      055273631518: 'snowflakevpc'     # org-sagebase-scicomp
+      '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
+      '420786776710': 'bridge-aux'   # org-sagebase-bridgedev
+      '325565585839': 'synapse-ops-vpc-v2' # org-sagebase-synapseprod
+  TgwSpokesSynapseDev:
+    VpcName:
+      '449435941126': 'synapse-dev-vpc-2'      # org-sagebase-synapsedev
+  TgwSpokesSynapseProd:
+    VpcName:
+      '325565585839': 'synapse-prod-vpc-2'      # org-sagebase-synapseprod
 
 TransitGatewaySpokeA:
   DependsOn: [ TransitGatewayRoutes ]
@@ -101,6 +165,14 @@ TransitGatewaySpokeA:
     Account:
       - !Ref ITSandboxAccount
       - !Ref SandboxAccount
+      - !Ref ScicompAccount
+      - !Ref BridgeDevAccount
+      - !Ref BridgeProdAccount
+      - !Ref SynapseDWAccount
+      - !Ref AgoraDevAccount
+      - !Ref ScipoolDevAccount
+      - !Ref ScipoolProdAccount
+      - !Ref SageITAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
@@ -112,3 +184,89 @@ TransitGatewaySpokeA:
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesA, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+
+TransitGatewaySpokeB:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-b'
+  StackDescription: Setup Transit Gateway on spoke accounts
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref ScicompAccount
+      - !Ref BridgeDevAccount
+      - !Ref SynapseProdAccount
+    IncludeMasterAccount: false
+  Parameters:
+    # This assumes that all VPCs contain the same exports
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    VpcRouteTableId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateRouteTable']]]
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    SubnetIds:
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+
+TransitGatewaySpokesSynapseDev:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke-synapse.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-synapse-dev'
+  StackDescription: Setup Transit Gateway on synapse account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseDevAccount
+    IncludeMasterAccount: false
+  Parameters:
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesSynapseDev, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+  TemplatingContext:
+    VpcSubnetGroups:
+      # per https://sagebionetworks.jira.com/browse/IT-1234 we only need one set of PrivateSubnets
+      Red:
+        PrivateSubnets: subnet-09a4744795ca56560, subnet-057fc96fe8a2fd8d1, subnet-00df8da8d4fea3cdd, subnet-0d70d31a0425eb081, subnet-09ea5f07411620e16, subnet-0222d90fd1143d310
+        PrivateSubnetRouteTableIds: rtb-0c5a404f7b1400015, rtb-0854eaef2abd5db91, rtb-00890645b7e07f9d3, rtb-014e6dedaab8ac33e, rtb-01fe7be6ff3a1770e, rtb-0728ff33fac88853c
+      Blue:
+#        PrivateSubnets: subnet-06c96ae7b86ca925f, subnet-0dfd057e747d1c478, subnet-0867af02e1c8e49e4, subnet-042ccac2b8e352af8, subnet-0a2025d4e0c0b5ba5, subnet-0d2574f1b4822051a
+        PrivateSubnetRouteTableIds: rtb-0a8a5a2f677a3bf40, rtb-0c5ca1322acf2c65a, rtb-09128ac4c478dc721, rtb-0ddaa361da8c07e01, rtb-0fb756c4997b46780, rtb-0927a35b5eb552c6a
+      Green:
+#        PrivateSubnets: subnet-0e76448649e0636b4, subnet-094fb1d1838d905a3, subnet-0ad4945b93afc68f4, subnet-08d6e58487e45e94f, subnet-0a05b9d8a855b3936, subnet-0bbca9690202e2605
+        PrivateSubnetRouteTableIds: rtb-0f3d170ab9a19beed, rtb-0c167363ca4734633, rtb-0d3ced57b5e7a180a, rtb-043145dc7b516a46a, rtb-052b77c5df89ebc1f, rtb-0baaa2546505fb532
+      Orange:
+#        PrivateSubnets: subnet-0ddf373eb2d9d5c2f, subnet-0a0f54c802d77ae9f, subnet-0a0e791e7045df95a, subnet-0b8f22a695114624d, subnet-092aa591789f64d43, subnet-0c6f5ad48a624bb9f
+        PrivateSubnetRouteTableIds: rtb-04c879589ab2ef488, rtb-0a502d10b03000b9d, rtb-020109818113821d1, rtb-04ca11af7f7deb148, rtb-0e77a1d7b852b0862, rtb-0d75c896d033bf0a8
+
+TransitGatewaySpokesSynapseProd:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke-synapse.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-synapse-prod'
+  StackDescription: Setup Transit Gateway on synapse account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseProdAccount
+    IncludeMasterAccount: false
+  Parameters:
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesSynapseProd, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+  TemplatingContext:
+    VpcSubnetGroups:
+      # per https://sagebionetworks.jira.com/browse/IT-1234 we only need one set of PrivateSubnets
+      Red:
+        PrivateSubnets: subnet-083c6dcaf0ea22c50, subnet-02daea7c83cb57798, subnet-0be443bb331d00f38, subnet-03f78b7a8f2a51063, subnet-05027d99e58c71812, subnet-00b88143144603e6f
+        PrivateSubnetRouteTableIds: rtb-0c845ed39c8a67d6b, rtb-0c36588c2bb997e24, rtb-032db169b27022bf6, rtb-0f5eea7430f6049e3, rtb-0e762e46bb2270b12, rtb-05fce47a8e41a4b5b
+      Blue:
+#        PrivateSubnets: subnet-087ab925352b52096, subnet-06099e23a516786de, subnet-020602f0fd52c5e61, subnet-0aabc47100134c5d5, subnet-08780dfd939f1dd21, subnet-0eca9fd00eeb4a614
+        PrivateSubnetRouteTableIds: rtb-0039756eb383c5cf3, rtb-0f8b2d14dd3bf7e7e, rtb-0b99e196c78e42cfa, rtb-099d62216a53e560a, rtb-0955bbeb48197af64, rtb-061fed7dfc7f8085c
+      Green:
+#        PrivateSubnets: subnet-0860e3bc675436d79, subnet-02ab3d3b410fd59b8, subnet-0f7079956a4c2c268, subnet-0682c1a04f2b1d6d4, subnet-065776a604a01d1f2, subnet-007a46edd1523eed8
+        PrivateSubnetRouteTableIds: rtb-0a92323d9c0baee66, rtb-0521c182f068eb608, rtb-03daa449de5b69de9, rtb-0c1604d3033d3e2f8, rtb-07cf7905605134042, rtb-023c93c7c01a69e60
+      Orange:
+#        PrivateSubnets: subnet-0e1dcd48ba4f83d92, subnet-06f07457ece6e5ac9, subnet-04845fc84521ef3c8, subnet-0827ea15f8ccbdac8, subnet-005881d2f83250a8a, subnet-08094e2690d564a79
+        PrivateSubnetRouteTableIds: rtb-017969de3bac2881a, rtb-015c80c48eb89cc2c, rtb-02a5a37f8ff44f4e6, rtb-0e6054e298decb4c0, rtb-012a55a4c9ad9817f, rtb-048ee26a74e6e135d

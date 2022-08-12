@@ -15,6 +15,14 @@ Parameters:
     Description: The VPC name to associate with the VPN
     Default: 'unionstationvpc'
 
+  splitTunnel:
+    Type: String
+    Description: "Indicates whether split-tunnel is enabled on the AWS Client VPN endpoint (false for full tunnel)"
+    Default: false
+    AllowedValues:
+      - true
+      - false
+
 VpnIdp:
   Type: update-stacks
   Template: vpn-idp.yaml
@@ -35,7 +43,7 @@ VpnIdp:
 Vpn:
   DependsOn: [ VpnIdp ]
   Type: update-stacks
-  Template: vpn.njk
+  Template: vpn.yaml
   StackName: !Sub '${resourcePrefix}-${appName}'
   StackDescription: The AWS client VPN
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -46,6 +54,37 @@ Vpn:
       Account:
         - !Ref accountId
       IncludeMasterAccount: false
+  Parameters:
+    ClientCidrBlock: "10.100.0.0/16"
+    VpnSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSamlProviderArn']
+    VpnSspSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSspSamlProviderArn']
+    VpcId: !CopyValue [!Sub '${resourcePrefix}-tgw-${vpnVpc}-VpcId']
+    ConnectionLogGroup: !Sub '/aws/vpn/${resourcePrefix}-${appName}'
+    SessionTimeoutHours: "12"
+    LogRetentionInDays: "3653"
+    # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
+    # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
+    ServerCertificateArn: !Sub 'arn:aws:acm:${primaryRegion}:${accountId}:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6'
+    SplitTunnel: !Ref splitTunnel
+    VpnDnsServers: ["10.50.0.2", "8.8.8.8"]
+
+VpnAuthRoutes:
+  DependsOn: [ Vpn ]
+  Type: update-stacks
+  Template: vpn-auth-routes.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-auth-routes'
+  StackDescription: Setup AWS client VPN authorizations and routes
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    AllBinding:
+      Account:
+        - !Ref accountId
+      IncludeMasterAccount: false
+  Parameters:
+    ClientVpnEndpointId: !CopyValue [!Sub '${resourcePrefix}-${appName}-EndpointId']
+    SplitTunnel: !Ref splitTunnel
   TemplatingContext:
     # work around for issue https://github.com/org-formation/org-formation-cli/issues/259
     SubnetIds:
@@ -61,21 +100,114 @@ Vpn:
         CIDR: "10.29.0.0/16"
         AccessGroups:
           - "aws-admins"
-          - "aws-itsandbox-auditors"
       # org-sagebase-sandbox
       sandcastlevpc:
         CIDR: "10.23.0.0/16"
         AccessGroups:
           - "aws-admins"
+          - "aws-sandbox-admins"
           - "aws-sandbox-developers"
+          - "scientists"
+      # org-sagebase-scicomp
+      computevpc:
+        CIDR: "10.5.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-scicomp-developers"
+          - "scientists"
+      snowflakevpc:
+        CIDR: "10.25.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-scicomp-developers"
+      # org-sagebase-bridgedev
+      BridgeServer2-develop-vpc:
+        CIDR: "172.48.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "bridge-developers"
+      bridge-aux:
+        CIDR: "172.51.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "bridge-developers"
+      # org-sagebase-bridgeprod
+      BridgeServer2-vpc:
+        CIDR: "172.32.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-bridgeprod-admins"
+      # org-sagebase-synapsedw
+      vpc:
+        CIDR: "10.12.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-synapse-admins"
+          - "synapsedw-users"
+      # org-sagebase-synapsedev
+      synapse-dev-vpc-2:
+        CIDR: "10.24.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-synapse-admins"
+          - "aws-synapsedev-developers"
+      # org-sagebase-synapseprod
+      synapse-prod-vpc-2:
+        CIDR: "10.20.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-synapse-admins"
+          - "aws-synapseprod-developers"
+      synapse-ops-vpc-v2:
+        CIDR: "10.30.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-synapse-admins"
+          - "aws-synapseprod-developers"
+      # org-sagebase-agora-dev
+      agoradev-vpc:
+        CIDR: "10.255.45.0/24"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-agoradev-admins"
+          - "aws-agoradev-developers"
+      # org-sagebase-scipooldev
+      cesspoolvpc:
+        CIDR: "10.31.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+      # org-sagebase-scipoolprod
+      internalpoolvpc:
+        CIDR: "10.41.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+      # org-sagebase-sageit
+      defaultvpc:
+        CIDR: "10.13.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+          - "sageit-users"
+
+
+VpnEndpointRedirect:
+  DependsOn: [ Vpn ]
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/s3-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-redirect'
+  StackDescription: Setup a redirect to the VPN URL endpoint
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
   Parameters:
-    ClientCidrBlock: "10.100.0.0/16"
-    VpnSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSamlProviderArn']
-    VpnSspSamlProviderArn: !CopyValue [!Sub '${resourcePrefix}-${appName}-idp-TransitVpnSspSamlProviderArn']
-    VpcId: !CopyValue [!Sub '${resourcePrefix}-tgw-${vpnVpc}-VpcId']
-    ConnectionLogGroup: !Sub '/aws/vpn/${resourcePrefix}-${appName}'
-    SessionTimeoutHours: "12"
-    LogRetentionInDays: "3653"
-    # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
-    # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
-    ServerCertificateArn: !Sub 'arn:aws:acm:${primaryRegion}:${accountId}:certificate/8bdbf421-c38a-4d87-8a03-821a1b7acab6'
+    # the endpoint we are redirecting from
+    SourceHostName: "vpn.sageit.org"
+    SourceAcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-sageit-org-acm-cert-CertificateArn']
+    # ID of the sageit.org zone (in sageit account)
+    SourceHostedZoneId: "Z0478495257GEB73WFM63"
+    # the endpoint we are redirecting to (AWS VPN client self service)
+    TargetHostName: "self-service.clientvpn.amazonaws.com"
+    # and a path to our specific config
+    TargetKey: !Join ['/', ['endpoints', !CopyValue [!Sub '${resourcePrefix}-${appName}-EndpointId', !Ref TransitAccount]]]

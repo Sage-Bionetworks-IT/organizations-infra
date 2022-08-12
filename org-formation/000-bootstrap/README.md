@@ -53,17 +53,20 @@ Create an google group or email for the new AWS member account (i.e. aws.MemberA
 
 Add a yaml section to organizations.yaml file like soo..
 ```yaml
-  MemberAccount1:
+  MemberOneAccount:
     Type: OC::ORG::Account
     Properties:
-      Alias: org-sagebase-member-account1
-      AccountName: org-sagebase-member-account1
-      RootEmail: aws.MemberAccount1@company.com
+      AccountName: org-sagebase-member-one
+      RootEmail: member-one@sagebase.org
+      Alias: org-sagebase-member-one
       Tags:
-        Department: Platform
-        Project: Infrastructure
-        budget-alarm-threshold: '20'
-        account-owner-email: aws.ManagementAccount@company.com
+        <<: !Include ./_default_org_tags.yaml
+        Department: SysBio
+        Project: amp-ad
+        CostCenter: NIA AMP-AD CC / 101500
+        AccountOwner: member-one@sagebase.org
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: member-one@sagebase.org
 ```
 
 run “npx org-formation perform-tasks --profile management-role --verbose --print-stack organization-tasks.yaml”

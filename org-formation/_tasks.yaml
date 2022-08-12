@@ -11,11 +11,6 @@ Types:
   DependsOn: [ OrganizationUpdate ]
   Path: ./005-types/_tasks.yaml
 
-SeviceControlPolicies:
-  Type: include
-  DependsOn: [ Types ]
-  Path: ./010-scps/_tasks.yaml
-
 Budgets:
   Type: include
   DependsOn: [ Types ]
@@ -35,6 +30,11 @@ GuarDuty:
   Type: include
   DependsOn: [ Types ]
   Path: ./070-guard-duty/_tasks.yaml
+
+SecurityHub:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./075-security-hub/_tasks.yaml
 
 AwsConfigInventory:
   Type: include
@@ -56,10 +56,20 @@ AccountAccess:
   DependsOn: [ Types ]
   Path: ./600-access/_tasks.yaml
 
+IdentityProviders:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./650-identity-providers/_tasks.yaml
+
 AwsSso:
   Type: include
-  DependsOn: [ Types, SeviceControlPolicies ]
+  DependsOn: [ Types ]
   Path: ./700-aws-sso/_tasks.yaml
+
+AwsIpam:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./705-ipam/_tasks.yaml
 
 TransitGateway:
   Type: include

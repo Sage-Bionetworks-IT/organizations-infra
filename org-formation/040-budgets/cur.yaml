@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Monthly Cost and Usage Report'
+Parameters:
+  resourcePrefix:
+    Type: String
+Resources:
+  CostReportBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Sub "${resourcePrefix}-cost-reports"
+      AccessControl: BucketOwnerFullControl
+  CostReportBucketPolicy:
+    # This policy MUST match https://docs.aws.amazon.com/cur/latest/userguide/cur-s3.html
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref CostReportBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          # Grant AWS Billing access to view bucket ACLs and policies
+          - Action:
+              - 's3:GetBucketAcl'
+              - 's3:GetBucketPolicy'
+            Effect: Allow
+            Resource: !GetAtt CostReportBucket.Arn
+            Principal:
+              Service: "billingreports.amazonaws.com"
+          # Grant AWS Billing access to create cost reports
+          - Action:
+              - 's3:PutObject'
+            Effect: Allow
+            Resource: !Sub '${CostReportBucket.Arn}/*'
+            Principal:
+              Service: "billingreports.amazonaws.com"
+  MonthlyCostReport:
+    Type: "AWS::CUR::ReportDefinition"
+    Properties:
+      ReportName: "monthly-costs"
+      ReportVersioning: "OVERWRITE_REPORT"
+      RefreshClosedReports: true
+      TimeUnit: "MONTHLY"
+      Compression: "Parquet"
+      Format: "Parquet"
+      S3Region: !Ref AWS::Region
+      S3Prefix: !Ref resourcePrefix
+      S3Bucket: !Ref CostReportBucket
+    DependsOn: CostReportBucketPolicy

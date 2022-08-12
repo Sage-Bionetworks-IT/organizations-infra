@@ -1,0 +1,21 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+GithubOidcSageBionetworksIt:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.1/templates/IAM/github-oidc-provider.j2
+  StackName: github-oidc-sage-bionetworks-it
+  Parameters:
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+    ThumbprintList:
+      - "6938fd4d98bab03faadb97b34396831e3780aea1"
+    GitHubOrg: "Sage-Bionetworks-IT"
+  TemplatingContext:
+    Repositories:
+      - name: "organizations-infra"
+        branch: "master"
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: us-east-1

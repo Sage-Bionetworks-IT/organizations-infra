@@ -1,6 +1,37 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
+# A service account for https://github.com/Sage-Bionetworks/agora-infra
+AgoraCIServiceAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
+  StackName: ci-service-access
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+      - arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref AgoraDevAccount
+      - !Ref AgoraProdAccount
+    Region: us-east-1
+
+# Setup Agora collaborator access
+AgoraCollaboratorAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  StackName: agora-collaborator-access
+  Parameters:
+    PrincipalArns:
+      - arn:aws:iam::155057775224:user/MattC    # Matthias Courville from GenUI
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref AgoraDevAccount
+    Region: us-east-1
+
 # A service account for https://github.com/Sage-Bionetworks/iatlas-infra
 iAtlasCIServiceAccount:
   Type: update-stacks
@@ -9,21 +40,6 @@ iAtlasCIServiceAccount:
   Parameters:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account: !Ref iAtlasProdAccount
-    Region: us-east-1
-
-# Setup iAtlas collaborator access
-iAtlasCollaboratorAccess:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
-  StackName: iatlas-collaborator-access
-  Parameters:
-    PrincipalArns:
-      - arn:aws:iam::556856096938:user/ebs_automation    # Jon Ryser from GenUI
-    ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/ReadOnlyAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account: !Ref iAtlasProdAccount
@@ -129,6 +145,34 @@ CnbCIServiceAccount:
     Account:
       - !Ref CnbAccount
     Region: !Ref primaryRegion
+
+# A service account for https://github.com/Sceptre/sceptre-aws
+SceptreCIServiceAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
+  StackName: sceptre-ci-service-access
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref SceptreDevAccount
+    Region: us-east-1
+
+# An access role allowing Saturn Cloud access to our AWS account running their product
+# https://dev.saturncloud.io/docs/enterprise/installation/
+SaturnCloudAccessRole:
+  Type: update-stacks
+  Template: saturncloud-access-role.yaml
+  StackName: saturncloud-access-role
+  Parameters:
+    ExternalID: "e8d82da3-c401-412f-b7d1-b72b818bb631"
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref SaturnCloudDevAccount
+    Region: us-east-1
 
 # =====================================================================================================
 # Some of our accounts, like org-sagebase-strides, are not part of the Sage organization therefore we need
