@@ -160,6 +160,19 @@ SceptreCIServiceAccount:
       - !Ref SceptreDevAccount
     Region: us-east-1
 
+DnTDevCIServiceAccounts:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
+  StackName: dnt-dev-ci-service-account
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref DnTDevAccount
+    Region: us-east-1
+
 # An access role allowing Saturn Cloud access to our AWS account running their product
 # https://dev.saturncloud.io/docs/enterprise/installation/
 SaturnCloudAccessRole:
