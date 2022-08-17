@@ -7,9 +7,9 @@ Parameters:
   AuditorMetadata:
     Type: String
     Description: "Public certificate for the auditor Jumpcloud AWS app"
-  ViewerMetadata:
+  TowerViewerMetadata:
     Type: String
-    Description: "Public certificate for the viewer JumpCloud AWS app"
+    Description: "Public certificate for the towerviewer JumpCloud AWS app"
 
 Resources:
   AdminSamlProvider:
@@ -63,32 +63,32 @@ Resources:
             Condition:
               StringEquals:
                 "SAML:aud": "https://signin.aws.amazon.com/saml"
-  ViewerSamlProvider:
+  TowerViewerSamlProvider:
     Type: Custom::SAMLProvider
     Properties:
       ServiceToken: !ImportValue
         'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
-      Name: "strides-ampad-workflows-viewer"
-      Metadata: !Ref ViewerMetadata
+      Name: "strides-ampad-workflows-towerviewer"
+      Metadata: !Ref TowerViewerMetadata
       URL: ""
-  ViewerSamlProviderRole:
+  TowerViewerSamlProviderRole:
     Type: AWS::IAM::Role
     Properties:
       MaxSessionDuration: 28800
-      RoleName: !GetAtt ViewerSamlProvider.Name
+      RoleName: !GetAtt TowerViewerSamlProvider.Name
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
-              Federated: !Ref ViewerSamlProvider
+              Federated: !Ref TowerViewerSamlProvider
             Action: sts:AssumeRoleWithSAML
             Condition:
               StringEquals:
                 "SAML:aud": "https://signin.aws.amazon.com/saml"
       Path: /
       Policies:
-        - PolicyName: ViewerPolicy
+        - PolicyName: TowerViewerPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -113,11 +113,11 @@ Outputs:
     Value: !GetAtt AuditorSamlProviderRole.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-AuditorSamlProviderRoleArn'
-  ViewerSamlProviderArn:
-    Value: !Ref ViewerSamlProvider
+  TowerViewerSamlProviderArn:
+    Value: !Ref TowerViewerSamlProvider
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ViewerSamlProviderArn'
-  ViewerSamlProviderRoleArn:
-    Value: !GetAtt ViewerSamlProviderRole.Arn
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TowerViewerSamlProviderArn'
+  TowerViewerSamlProviderRoleArn:
+    Value: !GetAtt TowerViewerSamlProviderRole.Arn
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ViewerSamlProviderRoleArn'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TowerViewerSamlProviderRoleArn'
