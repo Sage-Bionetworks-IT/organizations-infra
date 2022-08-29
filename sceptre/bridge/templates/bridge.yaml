@@ -313,11 +313,6 @@ Outputs:
         - !GetAtt AWSS3AndroidAppBucket.DomainName
     Export:
       Name: !Sub '${AWS::StackName}-AndroidAppBucketSecureURL'
-  VPCPeeringAuthorizerRole:
-    Description: Cross Account Role Name
-    Value: !Ref VPCPeeringAuthorizerRole
-    Export:
-      Name: !Sub '${AWS::StackName}-VPCPeeringAuthorizerRole'
   VpnSecurityGroup:
     Value: !Ref VpnSecurityGroup
     Export:
