@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://github.com/Sage-Bionetworks/aws-infra/blob/v0.4.8/templates/EC2/basic-ec2.j2
+  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.8/templates/EC2/basic-ec2.j2
 stack_name: bridge-ops
 dependencies:
   - prod/BridgeServer2-vpc.yaml
