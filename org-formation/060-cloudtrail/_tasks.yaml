@@ -31,7 +31,7 @@ CloudTrail:
       IncludeMasterAccount: true
       ExcludeAccount: !Ref LogCentralAccount
   Parameters:
-    bucketName: !Sub '${resourcePrefix}-cloudtrail-${CurrentAccount.AccountId}'
+    bucketName: !Sub '${resourcePrefix}-cloudtrail-${LogCentralAccount}'
     CloudWatchLogsLogGroupArn: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-log-LogGroupArn' ]
     CloudWatchLogsRoleArn: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-cloudwatch-log-LogRoleArn' ]
     KmsKeyAdminPrincipalArns:
