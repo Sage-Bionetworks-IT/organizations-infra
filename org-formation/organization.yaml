@@ -281,6 +281,7 @@ Organization:
       Alias: org-sagebase-scipooldev
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        CostCenter: 'NO PROGRAM / 000000'  # resource-level cost center tags will override this default
 
   ScipoolProdAccount:
     Type: OC::ORG::Account
@@ -291,6 +292,7 @@ Organization:
       Alias: org-sagebase-scipoolprod
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        CostCenter: 'NO PROGRAM / 000000'  # resource-level cost center tags will override this default
 
   BmgfkiAccount:
     Type: OC::ORG::Account
@@ -301,6 +303,7 @@ Organization:
       Alias: org-sagebase-bmgfki
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        CostCenter: 'BMGF-Ki / 30144'
 
   ScicompAccount:
     Type: OC::ORG::Account
@@ -311,6 +314,7 @@ Organization:
       Alias: org-sagebase-scicomp
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        CostCenter: 'NO PROGRAM / 000000'  # resource-level cost center tags will override this default
 
   SandboxAccount:
     Type: OC::ORG::Account
@@ -321,6 +325,7 @@ Organization:
       Alias: org-sagebase-sandbox
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        CostCenter: 'NO PROGRAM / 000000'  # resource-level cost center tags will override this default
 
   NlpSandboxAccount:
     Type: OC::ORG::Account
