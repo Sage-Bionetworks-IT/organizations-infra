@@ -34,6 +34,10 @@ Resources:
                   - ''
                   - - 'Fn::ImportValue': !Sub '${AWS::Region}-essentials-LambdaArtifactsBucketArn'
                     - '/*'
+          - Effect: Allow
+            Action:
+              - iam:ListPolicies       # required by sam validate
+            Resource: arn:aws:iam::*
           - Sid: ManageServerlessRepo
             Effect: Allow
             Action:
