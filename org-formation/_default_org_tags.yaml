@@ -1,3 +1,4 @@
 Department: Platform
 Project: Infrastructure
 CloudwatchCloudTrailLogRetentionPeriod: 90
+CostCenter: 'Platform Infrastructure / 990300'
