@@ -37,7 +37,7 @@ Resources:
           - Effect: Allow
             Action:
               - iam:ListPolicies       # required by sam validate
-            Resource: arn:aws:iam::* 
+            Resource: arn:aws:iam::*
           - Sid: ManageServerlessRepo
             Effect: Allow
             Action:
