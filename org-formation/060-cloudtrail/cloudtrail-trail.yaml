@@ -139,7 +139,6 @@ Resources:
           Condition:
             StringEquals:
               s3:x-amz-acl: bucket-owner-full-control
-              AWS:SourceArn: !GetAtt CloudTrail.Arn
 
   CloudTrail:
     OrganizationBinding: !Ref MasterBinding
