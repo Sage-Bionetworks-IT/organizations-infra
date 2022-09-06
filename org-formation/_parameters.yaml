@@ -16,3 +16,7 @@ allRegions:
   Type: List<String>
   Default:
     - us-east-1
+
+AdminCentralCfnBucket:
+  Type: String
+  Default: bootstrap-awss3cloudformationbucket-19qromfd235z9
