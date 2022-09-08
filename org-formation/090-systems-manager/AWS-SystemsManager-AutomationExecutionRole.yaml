@@ -22,9 +22,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: >-
   AWS CloudFormation template to configure a target account for a scheduled multi-account
   and multi-region Automation patching operation. | Automation Service
-Parameters :
-  ManagementAccountNumber :
-    Type : 'String'
+Parameters:
+  ManagementAccountNumber:
+    Type: 'String'
     Description: 'Account number for the central management account.'
 Resources:
   AutomationExecutionServiceRole:
