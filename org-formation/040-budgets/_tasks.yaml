@@ -25,7 +25,7 @@ CostAndUsageReports:
 
 CostReportLambda:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-cost-reports/0.0.1/lambda-cost-reports.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-cost-reports/0.0.2/lambda-cost-reports.yaml'
   StackName: lambda-cost-reports
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
