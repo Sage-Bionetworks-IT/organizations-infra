@@ -158,9 +158,9 @@ Resources:
             Effect: Allow
   MultiAccountPatchingBlogLambdaFunction:
     Type: AWS::Lambda::Function
-    Properties: 
-      Code: 
-        ZipFile: !Sub | 
+    Properties:
+      Code:
+        ZipFile: !Sub |
           import boto3
           import os
           import string
@@ -186,11 +186,11 @@ Resources:
               ExecutionRoleName=os.environ['ExecutionRoleName']
               MasterAccountID=os.environ['MasterAccountID']
               AutomationDocumentMamrRunPatchBaseline=os.environ['AutomationDocumentMamrRunPatchBaseline']
-              
+
               if len(RunPatchBaselineInstallOverrideList) > 0:
                   response = client.start_automation_execution(
                   DocumentName=f'{AutomationDocumentMamrRunPatchBaseline}',
-                  
+
                   Parameters={
                       'AutomationAssumeRole':[f'arn:aws:iam::{MasterAccountID}:role/AWS-SystemsManager-AutomationAdministrationRole'] ,
                       'Operation' : [f'{RunPatchBaselineOperation}'] ,
@@ -211,7 +211,7 @@ Resources:
               else:
                   response = client.start_automation_execution(
                   DocumentName=f'{AutomationDocumentMamrRunPatchBaseline}',
-                  
+
                   Parameters={
                       'AutomationAssumeRole':[f'arn:aws:iam::{MasterAccountID}:role/AWS-SystemsManager-AutomationAdministrationRole'] ,
                       'Operation' : [f'{RunPatchBaselineOperation}'] ,
@@ -229,7 +229,7 @@ Resources:
                   ]
               )
               print(response)
-      Environment: 
+      Environment:
         Variables:
 #            TargetAccounts: !Ref TargetAccounts
             TargetAccounts: Fn::EnumTargetAccounts PatchMemberBinding '${account}'
@@ -247,7 +247,7 @@ Resources:
             AutomationDocumentMamrRunPatchBaseline: !Ref AutomationDocumentMamrRunPatchBaseline
       FunctionName: MultiAccountPatchingBlog
       Handler: index.handler
-      Role: !GetAtt AWSLambdaSSMMultiAccountPatchingBlogRole.Arn 
+      Role: !GetAtt AWSLambdaSSMMultiAccountPatchingBlogRole.Arn
       Runtime: python3.7
   AutomationAdministrationServiceRole:
     Type: AWS::IAM::Role
@@ -280,18 +280,18 @@ Resources:
             - "*"
   AutomationDocumentMamrRunPatchBaseline:
     Type: AWS::SSM::Document
-    Properties: 
+    Properties:
       Name: Automation-RunPatchBaseline
       DocumentType: Automation
       Content:
         description: >-
           **Description**
-          
+
           This document runs the Command document ```AWS-RunPatchBaseline``` on the specified instances.
         schemaVersion: '0.3'
         assumeRole: '{{ AutomationAssumeRole }}'
         parameters:
-          AutomationAssumeRole: 
+          AutomationAssumeRole:
             type: String
             description: The ARN of the Automation service role to assume.
           Operation:
@@ -307,7 +307,7 @@ Resources:
             default: RebootIfNeeded
             description: >-
               (Optional) Reboot behavior after a patch Install operation. If you choose
-              NoReboot and patches are installed, the instance is marked as non-compliant 
+              NoReboot and patches are installed, the instance is marked as non-compliant
               until a subsequent reboot and scan.
           InstallOverrideList:
             type: String

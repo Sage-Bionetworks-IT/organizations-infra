@@ -1,5 +1,5 @@
 ## Purpose of these templates
-The templates in this folder enables 
+The templates in this folder enables
 [AWS Systems Manager](https://aws.amazon.com/systems-manager/)
 in each account. Amazon Systems Manager is a secure end-to-end management solution for AWS cloud environments.
 It is the operations hub for your AWS applications and resources, and is broken into four core feature groups:
