@@ -19,33 +19,33 @@ PatchResourceGroup:
   DefaultOrganizationBinding:
     Account: !Ref accountId
 
-#PatchManager:
-#  Type: update-stacks
-#  DependsOn: PatchResourceGroup
-#  Template: Scheduled-Patch-Automation.yaml
-#  StackName: !Sub '${resourcePrefix}-${appName}-patchmanager'
-#  StackDescription: Setup Systems manager patch management for the manager
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    Account: !Ref accountId
-#  OrganizationBindings:
-#    PatchMemberBinding:
-#      Account: '*'
-#      IncludeMasterAccount: true
-#  Parameters:
-#    EventBridgeRuleSchedule: "cron(15 22 ? * TUE *)"
-#    ResourceGroupName: !CopyValue sagebase-systemsmanager-TagBasedGroupName
-#    RunPatchBaselineOperation: "Scan"
-#    TargetRegionIds: "us-east-1"
-#
-#PatchMembers:
-#  Type: update-stacks
-#  Template: AWS-SystemsManager-AutomationExecutionRole.yaml
-#  StackName: !Sub '${resourcePrefix}-${appName}-patchmember'
-#  StackDescription: Setup Systems manager patch management for the member
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    Account: '*'
-#    IncludeMasterAccount: true
-#  Parameters:
-#    ManagementAccountNumber: !Ref accountId
+PatchManager:
+  Type: update-stacks
+  DependsOn: PatchResourceGroup
+  Template: Scheduled-Patch-Automation.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-patchmanager'
+  StackDescription: Setup Systems manager patch management for the manager
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    PatchMemberBinding:
+      Account: '*'
+      IncludeMasterAccount: true
+  Parameters:
+    EventBridgeRuleSchedule: "cron(15 22 ? * TUE *)"
+    ResourceGroupName: !CopyValue sagebase-systemsmanager-patch-resource-group-TagBasedGroupName
+    RunPatchBaselineOperation: "Scan"
+    TargetRegionIds: "us-east-1"
+
+PatchMembers:
+  Type: update-stacks
+  Template: AWS-SystemsManager-AutomationExecutionRole.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-patchmember'
+  StackDescription: Setup Systems manager patch management for the member
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: '*'
+    IncludeMasterAccount: true
+  Parameters:
+    ManagementAccountNumber: !Ref accountId

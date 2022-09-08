@@ -31,6 +31,7 @@ Parameters:
       The Automation execution role to be assumed in target accounts during multi-account and multi-Region Automation patching operations.
   ExistingAutomationAdministrationRole:
     Type: String
+    Default: ''
     Description: >-
       (Optional) The IAM role ARN of an existing Automation Administration role which has permissions to invoke multi-account and multi-Region Automation workflows.
   MaximumConcurrency:
