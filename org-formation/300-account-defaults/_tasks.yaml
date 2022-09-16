@@ -23,6 +23,7 @@ Ec2NoVpcDefaults:
 EbsVolumeCleanup:
   Type: update-stacks
   Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-ebs-cleanup/master/lambda-ebs-cleanup.yaml'
+  ForceDeploy: true
   StackName: lambda-ebs-cleanup
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
