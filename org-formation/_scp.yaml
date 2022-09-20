@@ -1,13 +1,13 @@
   # From https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-deny-region
-  RestrictUnusedRegionsSCP:
+  RestrictUnsupportedRegionsSCP:
     Type: OC::ORG::ServiceControlPolicy
     Properties:
-      PolicyName: RestrictUnusedRegions
-      Description: Restrict Unused regions
+      PolicyName: RestrictUnupportedRegions
+      Description: Deny use of regions that are not supported by IT
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-        - Sid: DenyAllOutsideEU
+        - Sid: DenyAllUnsupportedRegions
           Effect: Deny
           NotAction:
             - a4b:*
@@ -171,7 +171,7 @@
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Sid: DenyDnsRegistration
+          - Sid: DenyLeaveOrganization
             Effect: Deny
             Action:
               - 'route53domains:RegisterDomain'
