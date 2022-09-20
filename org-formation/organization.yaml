@@ -568,7 +568,7 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: org-sagebase-sysmancentral
-      RootEmail: aws.sysman@sagebase.org
+      RootEmail: aws.sysmancentral@sagebase.org
       Alias: org-sagebase-sysmancentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
