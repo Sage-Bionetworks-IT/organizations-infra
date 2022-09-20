@@ -227,6 +227,7 @@ Resources:
               print(response)
       Environment:
         Variables:
+            # Fn::EnumTargetAccounts is specific to org-formation. It returns all PatchMemberBinding account IDs defined in _tasks.yaml
             TargetAccounts:
               Fn::Join:
                 - ","
