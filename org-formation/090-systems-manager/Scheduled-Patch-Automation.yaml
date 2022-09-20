@@ -70,10 +70,6 @@ Parameters:
     Type: String
     Description: >-
       Enter a resource group that includes the resources you want to target. Important: The Resource Group name is case sensitive.
-#  TargetAccounts:
-#    Type: String
-#    Description: >-
-#      Comma separated list of AWS Account Ids for the target account(s).
   TargetLocationMaxConcurrency:
     Type: String
     Default: '1'
@@ -231,8 +227,10 @@ Resources:
               print(response)
       Environment:
         Variables:
-#            TargetAccounts: !Ref TargetAccounts
-            TargetAccounts: Fn::EnumTargetAccounts PatchMemberBinding '${account}'
+            TargetAccounts:
+              Fn::Join:
+                - ","
+                - - Fn::EnumTargetAccounts PatchMemberBinding ${account}
             TargetRegionIds: !Ref TargetRegionIds
             RunPatchBaselineOperation: !Ref RunPatchBaselineOperation
             RunPatchBaselineRebootOption: !Ref RunPatchBaselineRebootOption
