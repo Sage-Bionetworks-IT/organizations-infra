@@ -3,12 +3,25 @@ Description: 'Monthly Cost and Usage Report'
 Parameters:
   resourcePrefix:
     Type: String
+  bucketName:
+    Type: String
+  lambdaArn:
+    Type: String
 Resources:
   CostReportBucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Sub "${resourcePrefix}-cost-reports"
+      BucketName: !Ref bucketName
       AccessControl: BucketOwnerFullControl
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: "s3:ObjectCreated:*"
+            Function: !Ref lambdaArn
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: ".snappy.parquet"
   CostReportBucketPolicy:
     # This policy MUST match https://docs.aws.amazon.com/cur/latest/userguide/cur-s3.html
     Type: "AWS::S3::BucketPolicy"
