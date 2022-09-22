@@ -1,26 +1,61 @@
-  RestrictUnusedRegionsSCP:
+  # From https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-deny-region
+  RestrictUnsupportedRegionsSCP:
     Type: OC::ORG::ServiceControlPolicy
     Properties:
-      PolicyName: RestrictUnusedRegions
-      Description: Restrict Unused regions
+      PolicyName: RestrictUnupportedRegions
+      Description: Deny use of regions that are not supported by IT
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Sid: DenyUnsupportedRegions
-            Effect: Deny
-            NotAction:
-              - 'cloudfront:*'
-              - 'iam:*'
-              - 'route53:*'
-              - 'support:*'
-            Resource: '*'
-            Condition:
-              StringNotEquals:
-                'aws:RequestedRegion':
-                  - us-west-1
-                  - us-west-2
-                  - us-east-1
-                  - us-east-2
+        - Sid: DenyAllUnsupportedRegions
+          Effect: Deny
+          NotAction:
+            - a4b:*
+            - acm:*
+            - aws-marketplace-management:*
+            - aws-marketplace:*
+            - aws-portal:*
+            - budgets:*
+            - ce:*
+            - chime:*
+            - cloudfront:*
+            - config:*
+            - cur:*
+            - directconnect:*
+            - ec2:DescribeRegions
+            - ec2:DescribeTransitGateways
+            - ec2:DescribeVpnGateways
+            - fms:*
+            - globalaccelerator:*
+            - health:*
+            - iam:*
+            - importexport:*
+            - kms:*
+            - mobileanalytics:*
+            - networkmanager:*
+            - organizations:*
+            - pricing:*
+            - route53:*
+            - route53domains:*
+            - s3:GetAccountPublic*
+            - s3:ListAllMyBuckets
+            - s3:PutAccountPublic*
+            - shield:*
+            - sts:*
+            - support:*
+            - trustedadvisor:*
+            - waf-regional:*
+            - waf:*
+            - wafv2:*
+            - wellarchitected:*
+          Resource: "*"
+          Condition:
+            StringNotEquals:
+              aws:RequestedRegion:
+                - us-west-1
+                - us-west-2
+                - us-east-1
+                - us-east-2
 
   RestrictDisableCloudwatchSCP:
     Type: OC::ORG::ServiceControlPolicy
@@ -126,3 +161,18 @@
               - 'route53domains:RegisterDomain'
               - 'route53domains:TransferDomain'
             Resource: '*'
+
+  # from https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-deny-region
+  RestrictLeaveOrganizationSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictLeaveOrganization
+      Description: Administrators of member accounts can't remove their accounts from the organization
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyLeaveOrganization
+            Effect: Deny
+            Action:
+              - organizations:LeaveOrganization
+            Resource: "*"
