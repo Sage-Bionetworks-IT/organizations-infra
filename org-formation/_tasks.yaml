@@ -41,6 +41,11 @@ AwsConfigInventory:
   DependsOn: [ Types ]
   Path: ./080-aws-config-inventory/_tasks.yml
 
+AwsSystemsManager:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./090-systems-manager/_tasks.yml
+
 Baseline:
   Type: include
   DependsOn: [ Types ]
