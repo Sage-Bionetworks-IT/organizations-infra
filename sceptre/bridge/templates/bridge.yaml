@@ -19,12 +19,6 @@ Parameters:
     NoEcho: true
   OperatorEmail:
     Type: String
-  VpcPeeringRequesterAwsAccountId:
-    Type: String
-    NoEcho: true
-    Description: The AWS account running the Sophos-VPN
-    AllowedPattern: '[0-9]*'
-    ConstraintDescription: Must be account number without dashes
 Conditions:
   CreateProdResources: !Equals [ !Ref AwsAccount, prod ]
 Resources:
@@ -266,31 +260,6 @@ Resources:
         IndexDocument: index.html
         ErrorDocument: error.html
     DeletionPolicy: Retain
-  # Create a role to authorize the VPC Peering request from a specific account,
-  # this is used to create the VPC Peer between different accounts in  CloudFormation
-  # https://github.com/awslabs/aws-cloudformation-templates/tree/master/aws/solutions/VPCPeering
-  VPCPeeringAuthorizerRole:
-    Type: 'AWS::IAM::Role'
-    Properties:
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              AWS: !Join
-                - ''
-                - - 'arn:aws:iam::'
-                  - !Ref VpcPeeringRequesterAwsAccountId
-                  - ':root'
-            Action: 'sts:AssumeRole'
-      Policies:
-        - PolicyName: VPCAuthorizer
-          PolicyDocument:
-            Statement:
-              - Effect: Allow
-                Action:
-                  - 'ec2:AcceptVpcPeeringConnection'
-                Resource:
-                  - '*'
   # Security group to allow VPN users access to aws resources
   VpnSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -298,11 +267,6 @@ Resources:
       GroupDescription: Security Group for VPN
       VpcId: !Ref AwsDefaultVpcId
       SecurityGroupIngress:
-        - CidrIp: "10.1.0.0/16"
-          FromPort: -1
-          ToPort: -1
-          IpProtocol: "-1"
-          Description: "Allow all VPN traffic"
         - CidrIp: "10.50.0.0/16"    # AWS TGW Hub
           FromPort: -1
           ToPort: -1
@@ -349,11 +313,6 @@ Outputs:
         - !GetAtt AWSS3AndroidAppBucket.DomainName
     Export:
       Name: !Sub '${AWS::StackName}-AndroidAppBucketSecureURL'
-  VPCPeeringAuthorizerRole:
-    Description: Cross Account Role Name
-    Value: !Ref VPCPeeringAuthorizerRole
-    Export:
-      Name: !Sub '${AWS::StackName}-VPCPeeringAuthorizerRole'
   VpnSecurityGroup:
     Value: !Ref VpnSecurityGroup
     Export:
