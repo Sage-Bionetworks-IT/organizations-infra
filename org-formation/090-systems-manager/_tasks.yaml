@@ -10,6 +10,15 @@ Parameters:
     Description: The identifier from the account used to manage this service
     Default: !Ref SysmanCentralAccount
 
+SysmanAutomationServiceRole:
+  Type: update-stacks
+  Template: AWS-SystemsManager-AutomationServiceRole.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sysman-automation-service-role'
+  StackDescription: Service role for AWS System Manager automation
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+
 PatchResourceGroup:
   Type: update-stacks
   Template: patch-resource-group.yaml
