@@ -39,7 +39,12 @@ SecurityHub:
 AwsConfigInventory:
   Type: include
   DependsOn: [ Types ]
-  Path: ./080-aws-config-inventory/_tasks.yml
+  Path: ./080-aws-config-inventory/_tasks.yaml
+
+AwsSystemsManager:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./090-systems-manager/_tasks.yaml
 
 Baseline:
   Type: include

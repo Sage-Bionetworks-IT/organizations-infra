@@ -20,6 +20,15 @@ Ec2NoVpcDefaults:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
 
+EbsVolumeCleanup:
+  Type: update-stacks
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-ebs-cleanup/master/lambda-ebs-cleanup.yaml'
+  StackName: lambda-ebs-cleanup
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
+
 SceptreCloudformationBucket:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/S3/public-bucket.yaml

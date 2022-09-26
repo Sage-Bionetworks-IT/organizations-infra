@@ -15,12 +15,14 @@ Organization:
       Alias: org-sagebase-organizations
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   OrganizationRoot:
     Type: OC::ORG::OrganizationRoot
     Properties:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
 
+  #------- Organizational Units -----------
   ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
@@ -100,6 +102,7 @@ Organization:
         - !Ref ImageCentralAccount
         - !Ref SecurityCentralAccount
         - !Ref IpamAccount
+        - !Ref SysmanCentralAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -151,6 +154,7 @@ Organization:
       Accounts:
         - !Ref 8dxfh53Account
 
+  #------- Accounts -----------
   BridgeDevAccount:
     Type: OC::ORG::Account
     Properties:
@@ -160,6 +164,7 @@ Organization:
       Alias: org-sagebase-bridgedevelop
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   BridgeProdAccount:
     Type: OC::ORG::Account
@@ -170,6 +175,7 @@ Organization:
       Alias: org-sagebase-bridgeprod
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SynapseDevAccount:
     Type: OC::ORG::Account
@@ -180,6 +186,7 @@ Organization:
       Alias: org-sagebase-synapsedev
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SynapseDWAccount:
     Type: OC::ORG::Account
@@ -190,6 +197,7 @@ Organization:
       Alias: org-sagebase-synapsedw
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SynapseProdAccount:
     Type: OC::ORG::Account
@@ -200,6 +208,7 @@ Organization:
       Alias: org-sagebase-synapseprod
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   TransitAccount:
     Type: OC::ORG::Account
@@ -210,6 +219,7 @@ Organization:
       Alias: org-sagebase-transit
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   AdminCentralAccount:
     Type: OC::ORG::Account
@@ -220,6 +230,7 @@ Organization:
       Alias: org-sagebase-admincentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SageITAccount:
     Type: OC::ORG::Account
@@ -230,6 +241,7 @@ Organization:
       Alias: org-sagebase-sageit
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   LogCentralAccount:
     Type: OC::ORG::Account
@@ -240,6 +252,7 @@ Organization:
       Alias: org-sagebase-logcentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
         CloudwatchCloudTrailLogRetentionPeriod: 3653
 
   SecurityCentralAccount:
@@ -251,6 +264,7 @@ Organization:
       Alias: org-sagebase-securitycentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   ImageCentralAccount:
     Type: OC::ORG::Account
@@ -261,6 +275,7 @@ Organization:
       Alias: org-sagebase-imagecentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   ITSandboxAccount:
     Type: OC::ORG::Account
@@ -271,6 +286,7 @@ Organization:
       Alias: org-sagebase-itsandbox
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   ScipoolDevAccount:
     Type: OC::ORG::Account
@@ -301,6 +317,7 @@ Organization:
       Alias: org-sagebase-bmgfki
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        CostCenter: 'BMGF-Ki / 30144'
 
   ScicompAccount:
     Type: OC::ORG::Account
@@ -451,7 +468,6 @@ Organization:
         Department: IBC
         Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
-        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
@@ -467,7 +483,6 @@ Organization:
         Department: IBC
         Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
-        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
@@ -483,7 +498,6 @@ Organization:
         Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
-        CostCenter: NO PROGRAM / 000000
         AccountOwner: thomas.yu@sagebase.org
 
   AgoraDevAccount:
@@ -528,6 +542,7 @@ Organization:
       Alias: org-sagebase-ipam
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SceptreDevAccount:
     Type: OC::ORG::Account
@@ -537,6 +552,7 @@ Organization:
       Alias: org-sagebase-sceptredev
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SaturnCloudDevAccount:
     Type: OC::ORG::Account
@@ -546,6 +562,17 @@ Organization:
       Alias: org-sagebase-saturncloud-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
+
+  SysmanCentralAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-sysmancentral
+      RootEmail: aws.sysmancentral@sagebase.org
+      Alias: org-sagebase-sysmancentral
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   #------------ Personal Accounts -----------
   8dxfh53Account:
@@ -556,7 +583,6 @@ Organization:
       Alias: org-sagebase-8dxfh53
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        CostCenter: "NO PROGRAM / 000000"
         AccountOwner: vijay.yadav@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws.8dxfh53@sagebase.org
