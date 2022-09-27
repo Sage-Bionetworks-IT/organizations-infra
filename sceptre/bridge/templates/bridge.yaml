@@ -260,23 +260,6 @@ Resources:
         IndexDocument: index.html
         ErrorDocument: error.html
     DeletionPolicy: Retain
-  # Security group to allow VPN users access to aws resources
-  VpnSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: Security Group for VPN
-      VpcId: !Ref AwsDefaultVpcId
-      SecurityGroupIngress:
-        - CidrIp: "10.50.0.0/16"    # AWS TGW Hub
-          FromPort: -1
-          ToPort: -1
-          IpProtocol: "-1"
-          Description: "Allow AWS TGW Hub traffic"
-      SecurityGroupEgress:
-        - CidrIp: "0.0.0.0/0"
-          FromPort: -1
-          ToPort: -1
-          IpProtocol: "-1"
   # Allow access to bastian hosts
   BastianSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -313,10 +296,6 @@ Outputs:
         - !GetAtt AWSS3AndroidAppBucket.DomainName
     Export:
       Name: !Sub '${AWS::StackName}-AndroidAppBucketSecureURL'
-  VpnSecurityGroup:
-    Value: !Ref VpnSecurityGroup
-    Export:
-      Name: !Sub '${AWS::StackName}-VpnSecurityGroup'
   BastianSecurityGroup:
     Description: "Bastian Security Group Id"
     Value: !Ref BastianSecurityGroup
