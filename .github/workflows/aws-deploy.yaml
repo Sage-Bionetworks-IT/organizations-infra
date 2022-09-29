@@ -84,7 +84,7 @@ jobs:
         run: |
           cd sceptre/organizations
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-admincentral:
     needs: org-formation
     permissions:
@@ -119,7 +119,7 @@ jobs:
         run: |
           cd sceptre/admincentral
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-itsandbox:
     needs: org-formation
     permissions:
@@ -154,7 +154,7 @@ jobs:
         run: |
           cd sceptre/itsandbox
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-sandbox:
     needs: org-formation
     permissions:
@@ -189,7 +189,7 @@ jobs:
         run: |
           cd sceptre/sandbox
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-scicomp:
     needs: org-formation
     permissions:
@@ -224,7 +224,7 @@ jobs:
         run: |
           cd sceptre/scicomp
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-strides:
     needs: org-formation
     permissions:
@@ -259,7 +259,7 @@ jobs:
         run: |
           cd sceptre/strides
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-strides-ampad-workflows:
     needs: org-formation
     permissions:
@@ -294,7 +294,7 @@ jobs:
         run: |
           cd sceptre/strides-ampad-workflows
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-scipooldev:
     needs: org-formation
     permissions:
@@ -329,7 +329,7 @@ jobs:
         run: |
           cd sceptre/scipool
           mkdir -p templates/remote
-          sceptre launch develop --yes
+          sceptre launch develop --prune --yes
   sceptre-scipoolprod:
     needs: org-formation
     permissions:
@@ -368,7 +368,7 @@ jobs:
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-stridespool:
     needs:
       - org-formation
@@ -409,7 +409,7 @@ jobs:
           sceptre delete --yes strides/sc-product-assoc-ec2-linux-docker.yaml
           sceptre delete --yes strides/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
           sceptre delete --yes strides/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
-          sceptre launch strides --yes
+          sceptre launch strides --prune --yes
   sceptre-bmgfki:
     needs: org-formation
     permissions:
@@ -448,7 +448,7 @@ jobs:
           sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-docker.yaml
           sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
           sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
-          sceptre launch bmgfki --yes
+          sceptre launch bmgfki --prune --yes
   sceptre-sageit:
     needs: org-formation
     permissions:
@@ -483,12 +483,12 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/sceptre/sageit
           mkdir -p templates/remote
-          sceptre launch staging --yes
+          sceptre launch staging --prune --yes
       - name: Deploy prod with sceptre
         run: |
           cd $GITHUB_WORKSPACE/sceptre/sageit
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-logcentral:
     needs: org-formation
     permissions:
@@ -523,7 +523,7 @@ jobs:
         run: |
           cd sceptre/logcentral
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-synapsedw:
     needs: org-formation
     permissions:
@@ -558,7 +558,7 @@ jobs:
         run: |
           cd sceptre/synapsedw
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-synapsedev:
     needs: org-formation
     permissions:
@@ -593,7 +593,7 @@ jobs:
         run: |
           cd sceptre/synapsedev
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-synapseprod:
     needs: org-formation
     permissions:
@@ -628,7 +628,7 @@ jobs:
         run: |
           cd sceptre/synapseprod
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-securitycentral:
     needs: org-formation
     permissions:
@@ -663,7 +663,7 @@ jobs:
         run: |
           cd sceptre/securitycentral
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-bridgedev:
     needs: org-formation
     permissions:
@@ -698,7 +698,7 @@ jobs:
         run: |
           cd sceptre/bridge
           mkdir -p templates/remote
-          sceptre launch develop --yes
+          sceptre launch develop --prune --yes
   sceptre-bridgeprod:
     needs: org-formation
     permissions:
@@ -733,7 +733,7 @@ jobs:
         run: |
           cd sceptre/bridge
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
   sceptre-imagecentral:
     needs: org-formation
     permissions:
@@ -768,4 +768,4 @@ jobs:
         run: |
           cd sceptre/imagecentral
           mkdir -p templates/remote
-          sceptre launch prod --yes
+          sceptre launch prod --prune --yes
