@@ -207,7 +207,7 @@ Parameters:
 
   scicompIT1967Group:      #JC aws-scicomp-it-1967
     Type: String
-    Default: ''
+    Default: 'd48804d8-40c1-7077-d5c7-2d07d0ed603f'
 
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
