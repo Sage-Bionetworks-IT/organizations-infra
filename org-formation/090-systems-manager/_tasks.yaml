@@ -43,8 +43,9 @@ PatchManager:
       IncludeMasterAccount: true
   Parameters:
     EventBridgeRuleSchedule: "cron(15 22 ? * TUE *)"
+    RunPatchBaselineRebootOption: "RebootIfNeeded"
     ResourceGroupName: !CopyValue sagebase-systemsmanager-patch-resource-group-TagBasedGroupName
-    RunPatchBaselineOperation: "Scan"
+    RunPatchBaselineOperation: "Install"
     TargetRegionIds: "us-east-1"
 
 PatchMembers:
