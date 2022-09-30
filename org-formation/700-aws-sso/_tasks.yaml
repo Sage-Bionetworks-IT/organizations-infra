@@ -205,6 +205,10 @@ Parameters:
     Type: String
     Default: '906769aa66-c6938d5f-605b-4ea8-9b1b-43b995b4fe4b'
 
+  scicompIT1967Group:      #JC aws-scicomp-it-1967
+    Type: String
+    Default: 'd48804d8-40c1-7077-d5c7-2d07d0ed603f'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -1100,6 +1104,43 @@ SsoScicompIncludeDccCollab:
                       "373997854230",
                       "232196027141",
                       "538745987955"
+                  ]
+              }
+            }
+          }
+        ]
+      }
+
+SsoScicompIT1967:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-it-1967'
+  StackDescription: 'SSO: role to test cross account access'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScicompAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scicompIT1967Group
+    permissionSetName: 'IT1967'
+    sessionDuration: 'PT12H'
+    # allows users full access to resources in other AWS accounts while also denying access to resources in the scicomp account.
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AmazonS3FullAccess' ]
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Deny",
+            "Action": "*",
+            "Resource": "*",
+            "Condition": {
+              "ForAnyValue:StringEquals": {
+                  "s3:ResourceAccount": [
+                      "055273631518"
                   ]
               }
             }
