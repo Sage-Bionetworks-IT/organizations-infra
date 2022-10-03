@@ -158,13 +158,20 @@ Resources:
       Code:
         ZipFile: !Sub |
           import boto3
+          import json
+          import logging
           import os
           import string
           import uuid
 
+          logger = logging.getLogger()
+          logger.setLevel(logging.DEBUG)
+
           client = boto3.client('ssm')
 
           def handler(event,context):
+              logger.debug("Received event: " + json.dumps(event, sort_keys=True))
+
               TargetAccounts=os.environ['TargetAccounts']
               b = str(TargetAccounts)
               TargetAccountsArray = b.split(",")
