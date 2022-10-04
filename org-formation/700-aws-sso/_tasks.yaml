@@ -205,9 +205,9 @@ Parameters:
     Type: String
     Default: '906769aa66-c6938d5f-605b-4ea8-9b1b-43b995b4fe4b'
 
-  scicompIT1967Group:      #JC aws-scicomp-it-1967
+  identityCentralS3ExternalCollabGroup:      #JC aws-identitycentral-s3-external-collab
     Type: String
-    Default: 'd48804d8-40c1-7077-d5c7-2d07d0ed603f'
+    Default: 'e4880448-e061-70b3-2487-e2c54abce711'
 
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
@@ -1111,42 +1111,25 @@ SsoScicompIncludeDccCollab:
         ]
       }
 
-SsoScicompIT1967:
+# allows users full access to s3 in other AWS accounts while also denying access to s3 in the identitycentral account.
+SsoIdentityCentralS3ExternalCollab:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-scicomp-it-1967'
-  StackDescription: 'SSO: role to test cross account access'
+  StackName: !Sub '${resourcePrefix}-${appName}-identitycentral-s3-external-collab'
+  StackDescription: 'SSO: role to allow s3 cross account access to other accounts'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref ScicompAccount
+      Account: !Ref IdentityCentralAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref scicompIT1967Group
-    permissionSetName: 'IT1967'
+    principalId: !Ref identityCentralS3ExternalCollabGroup
+    permissionSetName: 'S3ExternalCollab'
     sessionDuration: 'PT12H'
-    # allows users full access to resources in other AWS accounts while also denying access to resources in the scicomp account.
     managedPolicies: [ 'arn:aws:iam::aws:policy/AmazonS3FullAccess' ]
-    inlinePolicy: >-
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-            "Effect": "Deny",
-            "Action": "*",
-            "Resource": "*",
-            "Condition": {
-              "ForAnyValue:StringEquals": {
-                  "s3:ResourceAccount": [
-                      "055273631518"
-                  ]
-              }
-            }
-          }
-        ]
-      }
+    inlinePolicy: !Join ['{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*","Condition":{"ForAnyValue:StringEquals":{"s3:ResourceAccount":["', !Ref IdentityCentralAccount, '"]}}}]}']
 
 SsoAgoraProdAdmin:
   Type: update-stacks
