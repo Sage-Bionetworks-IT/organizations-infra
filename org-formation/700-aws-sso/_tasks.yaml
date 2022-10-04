@@ -1129,7 +1129,7 @@ SsoIdentityCentralS3ExternalCollab:
     permissionSetName: 'S3ExternalCollab'
     sessionDuration: 'PT12H'
     managedPolicies: [ 'arn:aws:iam::aws:policy/AmazonS3FullAccess' ]
-    inlinePolicy: !Join ['{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*","Condition":{"ForAnyValue:StringEquals":{"s3:ResourceAccount":["', !Ref IdentityCentralAccount, '"]}}}]}']
+    inlinePolicy: !Join ["", ['{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*","Condition":{"ForAnyValue:StringEquals":{"s3:ResourceAccount":["', !Ref IdentityCentralAccount, '"]}}}]}']]
 
 SsoAgoraProdAdmin:
   Type: update-stacks
