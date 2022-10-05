@@ -9,6 +9,7 @@ AgoraCIServiceAccount:
   Parameters:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
+      - arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
@@ -22,6 +23,21 @@ iAtlasCIServiceAccount:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
   StackName: iatlas-prod-ci-access
   Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref iAtlasProdAccount
+    Region: us-east-1
+
+# Setup iAtlas collaborator access
+iAtlasCollaboratorAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.8/templates/IAM/cross-account-access.yaml
+  StackName: iatlas-collaborator-access
+  Parameters:
+    PrincipalArns:
+      - arn:aws:iam::556856096938:user/ebs_automation    # Jon Ryser from GenUI
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
   DefaultOrganizationBinding:
@@ -130,37 +146,43 @@ CnbCIServiceAccount:
       - !Ref CnbAccount
     Region: !Ref primaryRegion
 
-# =====================================================================================================
-# Some of our accounts, like org-sagebase-strides, are not part of the Sage organization therefore we need
-# to manage them as external entities. To allow strides account to send cloudtrail and config artifacts to
-# logcentral account we need to setup external access to the master buckets.
-AwsCloudtrailExternalAccountAccess:
+# A service account for https://github.com/Sceptre/sceptre-aws
+SceptreCIServiceAccount:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.9/templates/Cloudtrail/CloudtrailLogAccess.njk
-  StackName: aws-cloudtrail-ext-access
-  TemplatingContext:
-    cloudtrail_bucket: sagebase-cloudtrail-231505186444
-    accounts:
-      - "423819316185"    # org-sagebase-strides
-      - "751556145034"    # org-sagebase-strides-ampad-workflows
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
+  StackName: sceptre-ci-service-access
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
-      - !Ref LogCentralAccount
+      - !Ref SceptreDevAccount
     Region: us-east-1
 
-AwsConfigExternalAccountAccess:
+DnTDevCIServiceAccounts:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.9/templates/Config/ConfigLogAccess.njk
-  StackName: aws-config-ext-access
-  TemplatingContext:
-    config_bucket: sagebase-config-231505186444
-    accounts:
-      - "423819316185"    # org-sagebase-strides
-      - "751556145034"    # org-sagebase-strides-ampad-workflows
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
+  StackName: dnt-dev-ci-service-account
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
-      - !Ref LogCentralAccount
+      - !Ref DnTDevAccount
     Region: us-east-1
-# ========================================================================================================
+
+# An access role allowing Saturn Cloud access to our AWS account running their product
+# https://dev.saturncloud.io/docs/enterprise/installation/
+SaturnCloudAccessRole:
+  Type: update-stacks
+  Template: saturncloud-access-role.yaml
+  StackName: saturncloud-access-role
+  Parameters:
+    ExternalID: "e8d82da3-c401-412f-b7d1-b72b818bb631"
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref SaturnCloudDevAccount
+    Region: us-east-1

@@ -136,20 +136,34 @@ VpnAuthRoutes:
         CIDR: "172.32.0.0/16"
         AccessGroups:
           - "aws-admins"
-          - "aws-bridge-admins"
-          - "bridge-developers"
+          - "aws-bridgeprod-admins"
       # org-sagebase-synapsedw
-      synapsedw-vpc:
+      vpc:
         CIDR: "10.12.0.0/16"
         AccessGroups:
           - "aws-admins"
           - "aws-synapse-admins"
+          - "synapsedw-users"
       # org-sagebase-synapsedev
       synapse-dev-vpc-2:
         CIDR: "10.24.0.0/16"
         AccessGroups:
           - "aws-admins"
           - "aws-synapse-admins"
+          - "aws-synapsedev-developers"
+      # org-sagebase-synapseprod
+      synapse-prod-vpc-2:
+        CIDR: "10.20.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-synapse-admins"
+          - "aws-synapseprod-developers"
+      synapse-ops-vpc-v2:
+        CIDR: "10.30.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "aws-synapse-admins"
+          - "aws-synapseprod-developers"
       # org-sagebase-agora-dev
       agoradev-vpc:
         CIDR: "10.255.45.0/24"
@@ -157,11 +171,31 @@ VpnAuthRoutes:
           - "aws-admins"
           - "aws-agoradev-admins"
           - "aws-agoradev-developers"
+      # org-sagebase-scipooldev
+      cesspoolvpc:
+        CIDR: "10.31.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+      # org-sagebase-scipoolprod
+      internalpoolvpc:
+        CIDR: "10.41.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+      # org-sagebase-sageit
+      defaultvpc:
+        CIDR: "10.13.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
+          - "sageit-users"
+
 
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/s3-redirector.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.8/templates/s3-redirector.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-redirect'
   StackDescription: Setup a redirect to the VPN URL endpoint
   DefaultOrganizationBindingRegion: !Ref primaryRegion

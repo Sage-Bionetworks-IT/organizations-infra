@@ -8,5 +8,6 @@ stack_tags:
 parameters:
   AdminMetadata: !file_contents idp/jumpcloud/strides-ampad-workflows-admin.xml
   AuditorMetadata: !file_contents idp/jumpcloud/strides-ampad-workflows-auditor.xml
+  TowerViewerMetadata: !file_contents idp/jumpcloud/strides-ampad-workflows-towerviewer.xml
 dependencies:
   - "prod/cfn-cr-saml-provider.yaml"

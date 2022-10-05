@@ -1,0 +1,178 @@
+  # From https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-deny-region
+  RestrictUnsupportedRegionsSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictUnupportedRegions
+      Description: Deny use of regions that are not supported by IT
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Sid: DenyAllUnsupportedRegions
+          Effect: Deny
+          NotAction:
+            - a4b:*
+            - acm:*
+            - aws-marketplace-management:*
+            - aws-marketplace:*
+            - aws-portal:*
+            - budgets:*
+            - ce:*
+            - chime:*
+            - cloudfront:*
+            - config:*
+            - cur:*
+            - directconnect:*
+            - ec2:DescribeRegions
+            - ec2:DescribeTransitGateways
+            - ec2:DescribeVpnGateways
+            - fms:*
+            - globalaccelerator:*
+            - health:*
+            - iam:*
+            - importexport:*
+            - kms:*
+            - mobileanalytics:*
+            - networkmanager:*
+            - organizations:*
+            - pricing:*
+            - route53:*
+            - route53domains:*
+            - s3:GetAccountPublic*
+            - s3:ListAllMyBuckets
+            - s3:PutAccountPublic*
+            - shield:*
+            - sts:*
+            - support:*
+            - trustedadvisor:*
+            - waf-regional:*
+            - waf:*
+            - wafv2:*
+            - wellarchitected:*
+          Resource: "*"
+          Condition:
+            StringNotEquals:
+              aws:RequestedRegion:
+                - us-west-1
+                - us-west-2
+                - us-east-1
+                - us-east-2
+
+  RestrictDisableCloudwatchSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictDisableCloudwatch
+      Description: Restrict users from disabling cloudwatch
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyDisableCloudwatch
+            Effect: Deny
+            Action:
+              - 'config:DeleteConfigRule'
+              - 'config:DeleteConfigurationRecorder'
+              - 'config:DeleteDeliveryChannel'
+              - 'config:StopConfigurationRecorder'
+            Resource: '*'
+
+  RestrictDisableCloudtrailSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictDisableCloudtrail
+      Description: Restrict users from disabling cloudtrail
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyDisableCloudtrail
+            Effect: Deny
+            Action:
+              - 'cloudtrail:StopLogging'
+              - 'cloudtrail:DeleteTrail'
+            Resource: '*'
+
+  # A login profile allows a user to access the AWS console.
+  # In effect this allows the creation of service users but will restrict creation of human users
+  RestrictIamLoginProfileSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictIamLoginProfile
+      Description: Restrict creation or adding IAM login profile to user accounts
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyCreateIamLoginProfile
+            Effect: Deny
+            Action:
+              - 'iam:CreateLoginProfile'
+            Resource: '*'
+
+  RestrictDisableGuarddutySCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictDisableGuardduty
+      Description: Restrict users from disabling guard duty
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyDisableGuardduty
+            Effect: Deny
+            Action:
+              - 'guardduty:AcceptInvitation'
+              - 'guardduty:CreateDetector'
+              - 'guardduty:CreateFilter'
+              - 'guardduty:CreateIPSet'
+              - 'guardduty:CreateMembers'
+              - 'guardduty:CreatePublishingDestination'
+              - 'guardduty:CreateThreatIntelSet'
+              - 'guardduty:DeclineInvitations'
+              - 'guardduty:DeleteDetector'
+              - 'guardduty:DeleteFilter'
+              - 'guardduty:DeleteInvitations'
+              - 'guardduty:DeleteIPSet'
+              - 'guardduty:DeleteMembers'
+              - 'guardduty:DeletePublishingDestination'
+              - 'guardduty:DeleteThreatIntelSet'
+              - 'guardduty:DisassociateFromMasterAccount'
+              - 'guardduty:DisassociateMembers'
+              - 'guardduty:InviteMembers'
+              - 'guardduty:StartMonitoringMembers'
+              - 'guardduty:StopMonitoringMembers'
+              - 'guardduty:TagResource'
+              - 'guardduty:UnarchiveFindings'
+              - 'guardduty:UntagResource'
+              - 'guardduty:UpdateDetector'
+              - 'guardduty:UpdateFilter'
+              - 'guardduty:UpdateFindingsFeedback'
+              - 'guardduty:UpdateIPSet'
+              - 'guardduty:UpdatePublishingDestination'
+              - 'guardduty:UpdateThreatIntelSet'
+            Resource: '*'
+
+  RestrictDnsRegistrationSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictDnsRegistration
+      Description: Restrict users from registring domain names
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyDnsRegistration
+            Effect: Deny
+            Action:
+              - 'route53domains:RegisterDomain'
+              - 'route53domains:TransferDomain'
+            Resource: '*'
+
+  # from https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-deny-region
+  RestrictLeaveOrganizationSCP:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RestrictLeaveOrganization
+      Description: Administrators of member accounts can't remove their accounts from the organization
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyLeaveOrganization
+            Effect: Deny
+            Action:
+              - organizations:LeaveOrganization
+            Resource: "*"

@@ -14,6 +14,7 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
         - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -51,9 +52,6 @@ Resources:
                   - "iam:AttachRolePolicy"
                   - "iam:DeletePolicy"
                   - "iam:TagRole"
-                  - "secretsmanager:CreateSecret"
-                  - "secretsmanager:TagResource"
-                  - "secretsmanager:DeleteSecret"
                   - "events:*"
                 Resource: '*'
 Outputs:
