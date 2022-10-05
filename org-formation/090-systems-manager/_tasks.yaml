@@ -23,10 +23,11 @@ PatchResourceGroup:
   Type: update-stacks
   Template: patch-resource-group.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-patch-resource-group'
-  StackDescription: A resource group for the patch managemer
+  StackDescription: A group of resources to apply patches to
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    Account: !Ref accountId
+    Account: '*'
+    IncludeMasterAccount: true
 
 PatchManager:
   Type: update-stacks
