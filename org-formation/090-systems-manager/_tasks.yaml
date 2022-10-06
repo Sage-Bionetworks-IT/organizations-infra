@@ -48,6 +48,8 @@ PatchManager:
     ResourceGroupName: !CopyValue sagebase-systemsmanager-patch-resource-group-TagBasedGroupName
     RunPatchBaselineOperation: "Install"
     TargetRegionIds: "us-east-1"
+    TargetLocationMaxConcurrency: "10%"
+    TargetLocationMaxErrors: "10%"
 
 PatchMembers:
   Type: update-stacks
