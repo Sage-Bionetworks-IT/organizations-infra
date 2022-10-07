@@ -1,0 +1,9 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'All Cost Categories'
+Resources:
+  ProgramCodeCostCategory:
+    Type: 'AWS::CE::CostCategory'
+    Properties:
+      Name: 'Program Code'
+      RuleVersion: 'CostCategoryExpression.v1'
+      Rules: !ReadFile program-code-rules.json
