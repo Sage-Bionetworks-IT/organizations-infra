@@ -277,6 +277,8 @@ SsoDeveloper:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/PowerUserAccess'
       - 'arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk'
+      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+      - !CopyValue [ !Sub '${primaryRegion}-cost-explorer-access-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT12H'
     inlinePolicy: >-
       {
@@ -312,6 +314,8 @@ SsoAuditor:
       - 'arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
+      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+      - !CopyValue [ !Sub '${primaryRegion}-cost-explorer-access-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
 
@@ -331,7 +335,10 @@ SsoViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref adminGroup
     permissionSetName: 'Viewer'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess' ]
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+      - !CopyValue [ !Sub '${primaryRegion}-cost-explorer-access-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
@@ -360,6 +367,8 @@ SsoViewerPlus:
       - arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSLambda_ReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+      - !CopyValue [ !Sub '${primaryRegion}-cost-explorer-access-policy-ManagedPolicyArn' ]
 
 SsoViewerSupporter:
   Type: update-stacks
