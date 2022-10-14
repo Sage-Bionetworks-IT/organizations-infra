@@ -182,7 +182,7 @@ CostExplorerAccessPolicy:
     Region: !Ref primaryRegion
   Parameters:
     PolicyDocument: '{
-      "Version": "2012-10-17"
+      "Version": "2012-10-17",
       "Statement": [
           "Sid": "CostExplorerAccess",
           "Effect": "Allow",
@@ -196,6 +196,7 @@ CostExplorerAccessPolicy:
               "ce:*Report"
           ],
           "Resource": "*"
+      ]
     }'
 
 # An access role allowing Saturn Cloud access to our AWS account running their product
