@@ -184,6 +184,7 @@ CostExplorerAccessPolicy:
     PolicyDocument: '{
       "Version": "2012-10-17",
       "Statement": [
+        {
           "Sid": "CostExplorerAccess",
           "Effect": "Allow",
           "Action": [
@@ -196,6 +197,7 @@ CostExplorerAccessPolicy:
               "ce:*Report"
           ],
           "Resource": "*"
+        }
       ]
     }'
 
