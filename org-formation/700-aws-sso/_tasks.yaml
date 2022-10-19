@@ -257,7 +257,10 @@ SsoAdministratorSupporter:
 
 SsoDeveloper:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-developer'
   StackDescription: 'Read and Write role used by Developer group within SDLC organizational units'
   TerminationProtection: false
@@ -278,7 +281,6 @@ SsoDeveloper:
       - 'arn:aws:iam::aws:policy/PowerUserAccess'
       - 'arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
-      - !CopyValue [ !Sub '${primaryRegion}-cost-explorer-access-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT12H'
     inlinePolicy: >-
       {
@@ -294,7 +296,10 @@ SsoDeveloper:
 
 SsoAuditor:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-auditor'
   StackDescription: 'Audit role used by Auditor group within whole organization'
   TerminationProtection: false
@@ -315,13 +320,15 @@ SsoAuditor:
       - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
-      - !CopyValue [ !Sub '${primaryRegion}-cost-explorer-access-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
 
 SsoViewer:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-viewer'
   StackDescription: 'Read-only role used by Admin group within whole organization'
   TerminationProtection: false
@@ -338,13 +345,15 @@ SsoViewer:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
-      - !CopyValue [ !Sub '${primaryRegion}-cost-explorer-access-policy-ManagedPolicyArn' ]
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
 SsoViewerPlus:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-viewer-plus'
   StackDescription: 'Read-only role with access to additional services'
   TerminationProtection: false
@@ -368,7 +377,6 @@ SsoViewerPlus:
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSLambda_ReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
-      - !CopyValue [ !Sub '${primaryRegion}-cost-explorer-access-policy-ManagedPolicyArn' ]
 
 SsoViewerSupporter:
   Type: update-stacks

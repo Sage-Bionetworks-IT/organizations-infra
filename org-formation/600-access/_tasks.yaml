@@ -177,29 +177,33 @@ CostExplorerAccessPolicy:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/managed-policy.yaml
   StackName: cost-explorer-access-policy
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    Account: !Ref MasterAccount
-    Region: !Ref primaryRegion
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
   Parameters:
-    PolicyDocument: '{
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Sid": "CostExplorerAccess",
-          "Effect": "Allow",
-          "Action": [
-              "aws-portal:ViewUsage",
-              "ce:Describe*",
-              "ce:Get*",
-              "ce:List*",
-              "ce:*AnomalyMonitor",
-              "ce:*AnomalySubscription",
-              "ce:*Report"
-          ],
-          "Resource": "*"
-        }
-      ]
-    }'
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+                "aws-portal:ViewUsage",
+                "ce:Describe*",
+                "ce:Get*",
+                "ce:List*",
+                "ce:*AnomalyMonitor",
+                "ce:*AnomalySubscription",
+                "ce:*Report"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    PolicyName: !Ref CostExplorerPolicyName
 
 # An access role allowing Saturn Cloud access to our AWS account running their product
 # https://dev.saturncloud.io/docs/enterprise/installation/
