@@ -20,3 +20,7 @@ allRegions:
 AdminCentralCfnBucket:
   Type: String
   Default: bootstrap-awss3cloudformationbucket-19qromfd235z9
+
+CostExplorerPolicyName:
+  Type: String
+  Default: cost-explorer-access-policy-CostExplorerAccess
