@@ -109,13 +109,12 @@ Resources:
               SSEAlgorithm: AES256
       VersioningConfiguration:
         Status: Enabled
-      # Move data to glacier after 90 days then move to deep archive after 180 days then delete after 360 days
+      # Move data to glacier after 90 days then move to deep archive after 180 days then delete after 365 days
       LifecycleConfiguration:
         Rules:
         - Id: DataLifecycleRule
           Status: Enabled
-          ExpirationInDays: 360
-          ExpiredObjectDeleteMarker: true
+          ExpirationInDays: 365
           Transitions:
             - TransitionInDays: 90
               StorageClass: GLACIER
