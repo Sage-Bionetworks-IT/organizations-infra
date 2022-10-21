@@ -175,7 +175,7 @@ DnTDevCIServiceAccounts:
 
 CostExplorerAccessPolicy:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/managed-policy.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
   StackName: cost-explorer-access-policy
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
