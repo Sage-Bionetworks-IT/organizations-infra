@@ -177,12 +177,10 @@ CostExplorerAccessPolicy:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
   StackName: cost-explorer-access-policy
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: '*'
+    Account: '*'
+    Region: !Ref primaryRegion
   Parameters:
     PolicyDocument: >-
       {
