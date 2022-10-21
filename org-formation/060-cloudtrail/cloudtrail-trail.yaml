@@ -115,7 +115,7 @@ Resources:
         - Id: DataLifecycleRule
           Status: Enabled
           ExpirationInDays: 360
-          ExpiredObjectDeleteMarker: 360
+          ExpiredObjectDeleteMarker: true
           Transitions:
             - TransitionInDays: 90
               StorageClass: GLACIER
