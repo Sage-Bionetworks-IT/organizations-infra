@@ -1,0 +1,31 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'CloudWatch2S3'
+
+  accountId:
+    Type: String
+    Description: The identifier from the account used as the main account
+    Default: !Ref LogCentralAccount
+
+Cloudwatch2S3-main:
+  Type: update-stacks
+  Template: CloudWatch2S3.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  Parameters:
+    LogGroupNamePrefix: "null"  # do not archive any logs from logcentral account
+
+Cloudwatch2S3-vpn:
+  Type: update-stacks
+  Template: CloudWatch2S3-member.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-vpn'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref TransitAccount
+  Parameters:
+    LogGroupNamePrefix: "/aws/vpn"
