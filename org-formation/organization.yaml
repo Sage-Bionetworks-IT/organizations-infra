@@ -136,6 +136,7 @@ Organization:
         - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictUnsupportedRegionsSCP
+        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref SynapseDevAccount
         - !Ref SynapseDWAccount
@@ -151,6 +152,7 @@ Organization:
         - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictUnsupportedRegionsSCP
+        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref BridgeDevAccount
         - !Ref BridgeProdAccount
