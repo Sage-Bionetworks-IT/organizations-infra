@@ -29,24 +29,6 @@ EbsVolumeCleanup:
     Account: '*'
     Region: !Ref primaryRegion
 
-SceptreCloudformationBucket:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/S3/public-bucket.yaml
-  StackName: sceptre-cloudformation-bucket
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
-    Region: !Ref primaryRegion
-
-SceptreLambdaBucket:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/S3/public-bucket.yaml
-  StackName: sceptre-lambda-bucket
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
-    Region: !Ref primaryRegion
-
 ItKmsKey:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/KMS/kms-key.yaml

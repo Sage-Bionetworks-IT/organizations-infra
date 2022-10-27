@@ -9,4 +9,3 @@ parameters:
   NewRelicAccountId: "754728514883"
   NewRelicExternalId: !ssm /infra/NewRelicExternalId
   OperatorEmail: bridgeops-develop@sagebase.org
-  VpcPeeringRequesterAwsAccountId: !ssm /infra/VpcPeeringRequesterAwsAccountId

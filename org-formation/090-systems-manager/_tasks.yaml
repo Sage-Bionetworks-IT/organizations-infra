@@ -10,14 +10,24 @@ Parameters:
     Description: The identifier from the account used to manage this service
     Default: !Ref SysmanCentralAccount
 
+SysmanAutomationServiceRole:
+  Type: update-stacks
+  Template: AWS-SystemsManager-AutomationServiceRole.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sysman-automation-service-role'
+  StackDescription: Service role for AWS System Manager automation
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+
 PatchResourceGroup:
   Type: update-stacks
   Template: patch-resource-group.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-patch-resource-group'
-  StackDescription: A resource group for the patch managemer
+  StackDescription: A group of resources to apply patches to
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    Account: !Ref accountId
+    Account: '*'
+    IncludeMasterAccount: true
 
 PatchManager:
   Type: update-stacks
@@ -34,8 +44,9 @@ PatchManager:
       IncludeMasterAccount: true
   Parameters:
     EventBridgeRuleSchedule: "cron(15 22 ? * TUE *)"
+    RunPatchBaselineRebootOption: "RebootIfNeeded"
     ResourceGroupName: !CopyValue sagebase-systemsmanager-patch-resource-group-TagBasedGroupName
-    RunPatchBaselineOperation: "Scan"
+    RunPatchBaselineOperation: "Install"
     TargetRegionIds: "us-east-1"
 
 PatchMembers:

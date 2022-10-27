@@ -173,6 +173,36 @@ DnTDevCIServiceAccounts:
       - !Ref DnTDevAccount
     Region: us-east-1
 
+CostExplorerAccessPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: cost-explorer-access-policy
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+                "aws-portal:ViewUsage",
+                "ce:Describe*",
+                "ce:Get*",
+                "ce:List*",
+                "ce:*AnomalyMonitor",
+                "ce:*AnomalySubscription",
+                "ce:*Report"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    PolicyName: !Ref CostExplorerPolicyName
+
 # An access role allowing Saturn Cloud access to our AWS account running their product
 # https://dev.saturncloud.io/docs/enterprise/installation/
 SaturnCloudAccessRole:

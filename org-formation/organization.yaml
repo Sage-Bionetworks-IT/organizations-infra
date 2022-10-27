@@ -103,6 +103,7 @@ Organization:
         - !Ref SecurityCentralAccount
         - !Ref IpamAccount
         - !Ref SysmanCentralAccount
+        - !Ref IdentityCentralAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -253,7 +254,6 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
-        CloudwatchCloudTrailLogRetentionPeriod: 3653
 
   SecurityCentralAccount:
     Type: OC::ORG::Account
@@ -570,6 +570,16 @@ Organization:
       AccountName: org-sagebase-sysmancentral
       RootEmail: aws.sysmancentral@sagebase.org
       Alias: org-sagebase-sysmancentral
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
+
+  IdentityCentralAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-identitycentral
+      RootEmail: aws.identitycentral@sagebase.org
+      Alias: org-sagebase-identitycentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml

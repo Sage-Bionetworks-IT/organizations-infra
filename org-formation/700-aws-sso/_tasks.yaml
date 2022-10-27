@@ -197,6 +197,10 @@ Parameters:
     Type: String
     Default: '906769aa66-1d010ba3-e9cd-451b-98fd-f60bb7e3965d'
 
+  identityCentralS3ExternalCollabGroup:      #JC aws-identitycentral-s3-external-collab
+    Type: String
+    Default: 'e4880448-e061-70b3-2487-e2c54abce711'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -245,7 +249,10 @@ SsoAdministratorSupporter:
 
 SsoDeveloper:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-developer'
   StackDescription: 'Read and Write role used by Developer group within SDLC organizational units'
   TerminationProtection: false
@@ -265,6 +272,7 @@ SsoDeveloper:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/PowerUserAccess'
       - 'arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk'
+      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
     sessionDuration: 'PT12H'
     inlinePolicy: >-
       {
@@ -280,7 +288,10 @@ SsoDeveloper:
 
 SsoAuditor:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-auditor'
   StackDescription: 'Audit role used by Auditor group within whole organization'
   TerminationProtection: false
@@ -300,12 +311,16 @@ SsoAuditor:
       - 'arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
+      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
 
 SsoViewer:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-viewer'
   StackDescription: 'Read-only role used by Admin group within whole organization'
   TerminationProtection: false
@@ -319,13 +334,18 @@ SsoViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref adminGroup
     permissionSetName: 'Viewer'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess' ]
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
 SsoViewerPlus:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-viewer-plus'
   StackDescription: 'Read-only role with access to additional services'
   TerminationProtection: false
@@ -348,6 +368,7 @@ SsoViewerPlus:
       - arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSLambda_ReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
 
 SsoViewerSupporter:
   Type: update-stacks
@@ -1098,6 +1119,26 @@ SsoScicompIncludeDccCollab:
           }
         ]
       }
+
+# allows users full access to s3 in other AWS accounts while also denying access to s3 in the identitycentral account.
+SsoIdentityCentralS3ExternalCollab:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-identitycentral-s3-external-collab'
+  StackDescription: 'SSO: role to allow s3 cross account access to other accounts'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref IdentityCentralAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref identityCentralS3ExternalCollabGroup
+    permissionSetName: 'S3ExternalCollab'
+    sessionDuration: 'PT12H'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/AmazonS3FullAccess' ]
+    inlinePolicy: !Join ["", ['{"Version":"2012-10-17","Statement":[{"Effect":"Deny","Action":"*","Resource":"*","Condition":{"ForAnyValue:StringEquals":{"s3:ResourceAccount":["', !Ref IdentityCentralAccount, '"]}}}]}']]
 
 SsoAgoraProdAdmin:
   Type: update-stacks

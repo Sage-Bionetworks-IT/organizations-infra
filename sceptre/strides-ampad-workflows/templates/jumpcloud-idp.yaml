@@ -12,6 +12,23 @@ Parameters:
     Description: "Public certificate for the towerviewer JumpCloud AWS app"
 
 Resources:
+  AWSIAMCostExplorerAccessPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - aws-portal:ViewUsage
+              - ce:Describe*
+              - ce:Get*
+              - ce:List*
+              - ce:*AnomalyMonitor
+              - ce:*AnomalySubscription
+              - ce:*Report
+            Resource: "*"
   AdminSamlProvider:
     Type: Custom::SAMLProvider
     Properties:
@@ -53,6 +70,8 @@ Resources:
       RoleName: !GetAtt AuditorSamlProvider.Name
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/SecurityAudit
+        - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+        - !Ref AWSIAMCostExplorerAccessPolicy
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -76,6 +95,9 @@ Resources:
     Properties:
       MaxSessionDuration: 28800
       RoleName: !GetAtt TowerViewerSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+        - !Ref AWSIAMCostExplorerAccessPolicy
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:

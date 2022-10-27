@@ -11,3 +11,11 @@ AnomalyDetectorService:
     Region: !Ref primaryRegion
   Parameters:
     Subscriber: !GetAtt CurrentAccount.RootEmail
+
+CostCategories:
+  Type: update-stacks
+  Template: categories.yaml
+  StackName: !Sub '${resourcePrefix}-cost-categories'
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+    Region: !Ref primaryRegion

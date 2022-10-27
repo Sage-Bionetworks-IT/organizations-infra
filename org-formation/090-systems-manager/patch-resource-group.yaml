@@ -11,7 +11,15 @@ Resources:
           "TAG_FILTERS_1_0"
         Query:
           ResourceTypeFilters:
-            - "AWS::AllSupported"
+            - "AWS::DMS::ReplicationInstance"
+            - "AWS::EC2::Instance"
+            - "AWS::EC2::ReservedInstance"
+            - "AWS::ECS::ContainerInstance"
+            - "AWS::OpsWorks::Instance"
+            - "AWS::RDS::DBInstance"
+            - "AWS::RDS::ReservedDBInstance"
+            - "AWS::SSM::ManagedInstance"
+            - "AWS::SageMaker::NotebookInstance"
           TagFilters:
             - Key: "ManagedInstanceMaintenanceTarget"
               Values:
