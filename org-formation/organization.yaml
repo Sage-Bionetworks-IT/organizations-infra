@@ -130,6 +130,12 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: synapse
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
+        - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       Accounts:
         - !Ref SynapseDevAccount
         - !Ref SynapseDWAccount
@@ -139,6 +145,12 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: bridge
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
+        - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       Accounts:
         - !Ref BridgeDevAccount
         - !Ref BridgeProdAccount
