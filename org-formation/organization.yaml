@@ -554,16 +554,6 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
-  SaturnCloudDevAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-saturncloud-dev
-      RootEmail: saturncloud-dev@sagebase.org
-      Alias: org-sagebase-saturncloud-dev
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        <<: !Include ./_platform_org_tags.yaml
-
   SysmanCentralAccount:
     Type: OC::ORG::Account
     Properties:
