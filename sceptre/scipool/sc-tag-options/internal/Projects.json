@@ -12,11 +12,11 @@
   "iAtlas",
   "imCORE",
   "Infrastructure",
+  "model-ad",
   "neurofibromatosis",
   "pson",
   "PsychENCODE",
   "recover",
   "TESLA",
-  "veo-ibd",
-  "model-ad"
+  "veo-ibd"
 ]
