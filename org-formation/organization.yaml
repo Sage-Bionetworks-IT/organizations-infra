@@ -83,7 +83,6 @@ Organization:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref SceptreDevAccount
-        - !Ref SaturnCloudDevAccount
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
