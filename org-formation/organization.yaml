@@ -83,7 +83,6 @@ Organization:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref SceptreDevAccount
-        - !Ref SaturnCloudDevAccount
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -254,7 +253,6 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
-        CloudwatchCloudTrailLogRetentionPeriod: 3653
 
   SecurityCentralAccount:
     Type: OC::ORG::Account
@@ -551,16 +549,6 @@ Organization:
       AccountName: org-sagebase-sceptredev
       RootEmail: aws.sceptredev@sagebase.org
       Alias: org-sagebase-sceptredev
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        <<: !Include ./_platform_org_tags.yaml
-
-  SaturnCloudDevAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-saturncloud-dev
-      RootEmail: saturncloud-dev@sagebase.org
-      Alias: org-sagebase-saturncloud-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
