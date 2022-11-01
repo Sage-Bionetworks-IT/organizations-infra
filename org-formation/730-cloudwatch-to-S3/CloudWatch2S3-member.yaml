@@ -24,7 +24,7 @@ Resources:
     Properties:
       Location:
         ApplicationId: arn:aws:serverlessrepo:us-east-1:859319237877:applications/CloudWatch2S3-additional-account
-        SemanticVersion: 1.0.4
+        SemanticVersion: 1.0.5
       Parameters:
         # hello
         LogDestination: !Ref LogDestination
