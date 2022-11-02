@@ -35,7 +35,7 @@ Cloudwatch2S3-main:
     LogGroupNamePrefix: "null"  # do not archive any logs from logcentral account
     BucketName: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-${appName}-bucket-BucketArn']
 
-#---- Forward app logs into central account  ---
+#---- Forward app logs into central logging account  ---
 Cloudwatch2S3-vpnlog:
   Type: update-stacks
   Template: CloudWatch2S3-member.yaml
