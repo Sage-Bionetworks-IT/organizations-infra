@@ -22,7 +22,11 @@ Resources:
         SemanticVersion: 1.0.5
       Parameters:
         # Comma separated list of external account numbers allowed to export logs to this bucket (leave as '0' to disallow external accounts)
-        # AllowedAccounts: '0' # Uncomment to override default value
+        # Fn::EnumTargetAccounts is specific to org-formation. It returns all LogMemberBinding account IDs defined in _tasks.yaml
+        AllowedAccounts:
+          Fn::Join:
+            - ","
+            - - Fn::EnumTargetAccounts LogMemberBinding ${account}
         # ARN of bucket where all logs will be exported (leave empty to automatically create)
         BucketName: !Ref BucketName # Uncomment to override default value
         # Prefix to prepend to all exported file names
