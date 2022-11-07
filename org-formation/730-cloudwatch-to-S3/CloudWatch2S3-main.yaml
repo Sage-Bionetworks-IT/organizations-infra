@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Continuously dump all matching CloudWatch Log groups to a bucket for long-term storage (by CloudSnorkel)
+Parameters:
+  BucketName:
+    Default: ''
+    Description: ARN of bucket where all logs will be exported (leave empty to automatically
+      create)
+    Type: String
+  LogGroupNamePrefix:
+    Default: ''
+    Description: Prefix to match against log group that should be exported (leave
+      empty to export all log groups)
+    Type: String
+Resources:
+  CloudWatch2S3:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location:
+        ApplicationId: arn:aws:serverlessrepo:us-east-1:859319237877:applications/CloudWatch2S3
+        SemanticVersion: 1.0.5
+      Parameters:
+        # Comma separated list of external account numbers allowed to export logs to this bucket (leave as '0' to disallow external accounts)
+        # Fn::EnumTargetAccounts is specific to org-formation. It returns all LogMemberBinding account IDs defined in _tasks.yaml
+        AllowedAccounts:
+          Fn::Join:
+            - ","
+            - - Fn::EnumTargetAccounts LogMemberBinding ${account}
+        # ARN of bucket where all logs will be exported (leave empty to automatically create)
+        BucketName: !Ref BucketName # Uncomment to override default value
+        # Prefix to prepend to all exported file names
+        # BucketPrefix: 'logs/' # Uncomment to override default value
+        # Firehose buffering interval hint (in seconds)
+        # BufferIntervalHint: '300' # Uncomment to override default value
+        # Firehose buffering size hint (in megabytes)
+        # BufferSizeHint: '50' # Uncomment to override default value
+        # Name of log destination (must be unique across this account)
+        # DestinationName: 'BucketBackupLogDestination' # Uncomment to override default value
+        # KMS Key id to encrypt Kinesis stream and S3 bucket at rest (leave empty to disable encryption)
+        # KeyArn: '' # Uncomment to override default value
+        # Format in which logs will be saved in the bucket
+        # LogFormat: 'Raw' # Uncomment to override default value
+        # Prefix to match against log group that should be exported (leave empty to export all log groups)
+        LogGroupNamePrefix: !Ref LogGroupNamePrefix # Uncomment to override default value
+        # Processing Lambda buffer timeout (in seconds, only in raw format mode)
+        # ProcessorBufferIntervalHint: '60' # Uncomment to override default value
+        # Processing Lambda buffer size (in megabytes, only in raw format mode) -- keep this low as uncompressed buffer data must not exceed Lambda's limit of 6MB response
+        # ProcessorBufferSizeHint: '1' # Uncomment to override default value
+        # Number of hours records remain in Kinesis in case delivery is slow or fails
+        # Retention: '24' # Uncomment to override default value
+        # Number of Kinesis stream shards each capable of 1MB/s or 1000 log records per second
+        # ShardCount: '1' # Uncomment to override default value
+        # Schedule to look for new log groups for export (in case CloudTrail missed something)
+        # SubscribeSchedule: 'rate(1 hour)' # Uncomment to override default value
