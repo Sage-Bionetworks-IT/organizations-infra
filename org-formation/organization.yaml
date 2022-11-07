@@ -32,6 +32,7 @@ Organization:
         - !Ref RestrictDisableCloudwatchSCP
         - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       Accounts:
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringDevAccount
@@ -50,6 +51,7 @@ Organization:
         - !Ref RestrictDisableCloudwatchSCP
         - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       Accounts:
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
@@ -68,6 +70,7 @@ Organization:
         - !Ref RestrictDisableCloudwatchSCP
         - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       OrganizationalUnits:
         - !Ref SynapseOU
         - !Ref BridgeOU
@@ -81,6 +84,7 @@ Organization:
         - !Ref RestrictDisableCloudwatchSCP
         - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       Accounts:
         - !Ref SceptreDevAccount
 
@@ -93,6 +97,7 @@ Organization:
         - !Ref RestrictDisableCloudwatchSCP
         - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       Accounts:
         - !Ref TransitAccount
         - !Ref AdminCentralAccount
@@ -120,6 +125,7 @@ Organization:
         - !Ref RestrictDisableCloudwatchSCP
         - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       Accounts:
         - !Ref BmgfkiAccount
         - !Ref ScipoolDevAccount
@@ -151,6 +157,7 @@ Organization:
         - !Ref RestrictDisableCloudwatchSCP
         - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       Accounts:
         - !Ref 8dxfh53Account
 
