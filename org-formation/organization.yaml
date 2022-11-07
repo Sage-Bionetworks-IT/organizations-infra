@@ -105,13 +105,6 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: synapse
-      ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
-        - !Ref RestrictDnsRegistrationSCP
-        - !Ref RestrictUnsupportedRegionsSCP
-        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref SynapseDevAccount
         - !Ref SynapseDWAccount
@@ -122,12 +115,8 @@ Organization:
     Properties:
       OrganizationalUnitName: bridge
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictUnsupportedRegionsSCP
-        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref BridgeDevAccount
         - !Ref BridgeProdAccount
@@ -200,6 +189,9 @@ Organization:
   SynapseProdAccount:
     Type: OC::ORG::Account
     Properties:
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       AccountName: org-sagebase-synapseprod
       AccountId: '325565585839'
       RootEmail: platform@sagebase.org
