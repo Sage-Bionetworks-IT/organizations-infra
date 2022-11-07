@@ -6,31 +6,21 @@ Organization:
   #------- Service Control Policies -----------
   <<: !Include ./_scp.yaml
 
-  MasterAccount:
-    Type: OC::ORG::MasterAccount
-    Properties:
-      AccountName: organizations
-      AccountId: '531805629419'
-      RootEmail: aws.organizations@sagebase.org
-      Alias: org-sagebase-organizations
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        <<: !Include ./_platform_org_tags.yaml
-
+  #------- Organizational Units -----------
   OrganizationRoot:
     Type: OC::ORG::OrganizationRoot
     Properties:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
 
-  #------- Organizational Units -----------
   ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ScienceDev
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictDisableGuarddutySCP
       Accounts:
@@ -47,9 +37,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceProd
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictDisableGuarddutySCP
       Accounts:
@@ -66,9 +53,6 @@ Organization:
     Properties:
       OrganizationalUnitName: Platform
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictDisableGuarddutySCP
       OrganizationalUnits:
@@ -80,23 +64,16 @@ Organization:
     Properties:
       OrganizationalUnitName: ItDev
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref SceptreDevAccount
-        - !Ref SaturnCloudDevAccount
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ItProd
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictDisableGuarddutySCP
       Accounts:
@@ -122,9 +99,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ServiceCatalog
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictDisableGuarddutySCP
       Accounts:
@@ -154,15 +128,23 @@ Organization:
     Properties:
       OrganizationalUnitName: personal
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
         - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref 8dxfh53Account
 
   #------- Accounts -----------
+  MasterAccount:
+    Type: OC::ORG::MasterAccount
+    Properties:
+      AccountName: organizations
+      AccountId: '531805629419'
+      RootEmail: aws.organizations@sagebase.org
+      Alias: org-sagebase-organizations
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
+
   BridgeDevAccount:
     Type: OC::ORG::Account
     Properties:
@@ -557,16 +539,6 @@ Organization:
       AccountName: org-sagebase-sceptredev
       RootEmail: aws.sceptredev@sagebase.org
       Alias: org-sagebase-sceptredev
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        <<: !Include ./_platform_org_tags.yaml
-
-  SaturnCloudDevAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-saturncloud-dev
-      RootEmail: saturncloud-dev@sagebase.org
-      Alias: org-sagebase-saturncloud-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
