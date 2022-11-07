@@ -85,3 +85,8 @@ ClientVpn:
   Type: include
   DependsOn: [ Types ]
   Path: ./720-client-vpn/_tasks.yaml
+
+CloudWatch2S3:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./730-cloudwatch-to-S3/_tasks.yaml

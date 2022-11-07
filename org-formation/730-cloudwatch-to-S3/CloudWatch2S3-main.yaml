@@ -19,7 +19,7 @@ Resources:
     Properties:
       Location:
         ApplicationId: arn:aws:serverlessrepo:us-east-1:859319237877:applications/CloudWatch2S3
-        SemanticVersion: 1.0.5
+        SemanticVersion: 1.0.6
       Parameters:
         # Comma separated list of external account numbers allowed to export logs to this bucket (leave as '0' to disallow external accounts)
         # Fn::EnumTargetAccounts is specific to org-formation. It returns all LogMemberBinding account IDs defined in _tasks.yaml
