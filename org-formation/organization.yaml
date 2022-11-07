@@ -6,31 +6,21 @@ Organization:
   #------- Service Control Policies -----------
   <<: !Include ./_scp.yaml
 
-  MasterAccount:
-    Type: OC::ORG::MasterAccount
-    Properties:
-      AccountName: organizations
-      AccountId: '531805629419'
-      RootEmail: aws.organizations@sagebase.org
-      Alias: org-sagebase-organizations
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        <<: !Include ./_platform_org_tags.yaml
-
+  #------- Organizational Units -----------
   OrganizationRoot:
     Type: OC::ORG::OrganizationRoot
     Properties:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
+      ServiceControlPolicies:
+        - !Ref RestrictDisableCloudtrailSCP
+        - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictIamLoginProfileSCP
 
-  #------- Organizational Units -----------
   ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ScienceDev
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref SandboxAccount
@@ -46,9 +36,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ScienceProd
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref ScicompAccount
@@ -64,9 +51,6 @@ Organization:
     Properties:
       OrganizationalUnitName: Platform
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
       OrganizationalUnits:
         - !Ref SynapseOU
@@ -77,9 +61,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ItDev
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref SceptreDevAccount
@@ -89,9 +70,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ItProd
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref TransitAccount
@@ -116,9 +94,6 @@ Organization:
     Properties:
       OrganizationalUnitName: ServiceCatalog
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref BmgfkiAccount
@@ -147,14 +122,22 @@ Organization:
     Properties:
       OrganizationalUnitName: personal
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictIamLoginProfileSCP
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref 8dxfh53Account
 
   #------- Accounts -----------
+  MasterAccount:
+    Type: OC::ORG::MasterAccount
+    Properties:
+      AccountName: organizations
+      AccountId: '531805629419'
+      RootEmail: aws.organizations@sagebase.org
+      Alias: org-sagebase-organizations
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
+
   BridgeDevAccount:
     Type: OC::ORG::Account
     Properties:
