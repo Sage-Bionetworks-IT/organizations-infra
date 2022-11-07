@@ -6,6 +6,7 @@ Organization:
   #------- Service Control Policies -----------
   <<: !Include ./_scp.yaml
 
+  #------- Organizational Units -----------
   OrganizationRoot:
     Type: OC::ORG::OrganizationRoot
     Properties:
@@ -15,7 +16,6 @@ Organization:
         - !Ref RestrictDisableCloudwatchSCP
         - !Ref RestrictIamLoginProfileSCP
 
-  #------- Organizational Units -----------
   ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
