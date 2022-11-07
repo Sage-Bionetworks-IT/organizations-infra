@@ -14,6 +14,7 @@ Organization:
       ServiceControlPolicies:
         - !Ref RestrictDisableCloudtrailSCP
         - !Ref RestrictDisableCloudwatchSCP
+        - !Ref RestrictDisableGuarddutySCP
         - !Ref RestrictIamLoginProfileSCP
 
   ScienceDevOU:
@@ -22,7 +23,6 @@ Organization:
       OrganizationalUnitName: ScienceDev
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
-        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringDevAccount
@@ -38,7 +38,6 @@ Organization:
       OrganizationalUnitName: ScienceProd
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
-        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
@@ -54,7 +53,6 @@ Organization:
       OrganizationalUnitName: Platform
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
-        - !Ref RestrictDisableGuarddutySCP
       OrganizationalUnits:
         - !Ref SynapseOU
         - !Ref BridgeOU
@@ -65,7 +63,6 @@ Organization:
       OrganizationalUnitName: ItDev
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
-        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref SceptreDevAccount
 
@@ -75,7 +72,6 @@ Organization:
       OrganizationalUnitName: ItProd
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
-        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref TransitAccount
         - !Ref AdminCentralAccount
@@ -100,7 +96,6 @@ Organization:
       OrganizationalUnitName: ServiceCatalog
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
-        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref BmgfkiAccount
         - !Ref ScipoolDevAccount
@@ -129,7 +124,6 @@ Organization:
       OrganizationalUnitName: personal
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
-        - !Ref RestrictDisableGuarddutySCP
       Accounts:
         - !Ref 8dxfh53Account
 
