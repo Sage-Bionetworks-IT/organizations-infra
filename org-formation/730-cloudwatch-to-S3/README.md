@@ -8,6 +8,12 @@ the logs in that S3 buckets, for example, based on [S3 notifications](https://do
 A common use-case is to do analysis on application related events, anomaly detection or forensics.
 
 
+### Forwarding application logs
+
+To forward logs from member accounts to the logcentral account follow the
+[pattern used to forward the VPN logs](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/org-formation/730-cloudwatch-to-S3/_tasks.yaml#L39-L48).
+
+
 ### Acknowledgement
 
 This design and implementation of this solution is found at [CloudSnorkel/CloudWatch2S3 project](https://github.com/CloudSnorkel/CloudWatch2S3).
