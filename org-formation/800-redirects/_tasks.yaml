@@ -16,6 +16,6 @@ SsoRedirect:   # Redirect sso.sageit.org to the AWS SSO Start URL
     # ID of the sageit.org zone (in sageit account)
     SourceHostedZoneId: "Z0478495257GEB73WFM63"
     # the endpoint we are redirecting to (AWS SSO) in organizations account
-    TargetHostName: "https://d-906769aa66.awsapps.com"
+    TargetHostName: "d-906769aa66.awsapps.com"
     # and a path to our specific config
     TargetKey: "/start"
