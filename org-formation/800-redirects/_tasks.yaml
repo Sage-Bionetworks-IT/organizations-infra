@@ -1,0 +1,21 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+SsoRedirect:   # Redirect sso.sageit.org to the AWS SSO Start URL
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.8/templates/s3-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-sso-redirect'
+  StackDescription: Setup a redirect to the SSO start URL
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceHostName: "sso.sageit.org"
+    SourceAcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-sageit-org-acm-cert-CertificateArn']
+    # ID of the sageit.org zone (in sageit account)
+    SourceHostedZoneId: "Z0478495257GEB73WFM63"
+    # the endpoint we are redirecting to (AWS SSO) in organizations account
+    TargetHostName: "https://d-906769aa66.awsapps.com"
+    # and a path to our specific config
+    TargetKey: "/start"
