@@ -31,7 +31,6 @@ TransitGateway:
   Parameters:
     Principals:
       - !Ref ITSandboxAccount
-      - !Ref SandboxAccount
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount
@@ -164,7 +163,6 @@ TransitGatewaySpokeA:
   DefaultOrganizationBinding:
     Account:
       - !Ref ITSandboxAccount
-      - !Ref SandboxAccount
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount

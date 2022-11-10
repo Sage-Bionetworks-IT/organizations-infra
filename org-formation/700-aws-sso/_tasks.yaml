@@ -389,40 +389,6 @@ SsoViewerSupporter:
     principalId: !Ref scienceSupporterGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
-SsoSandboxDeveloper:
-  Type: update-stacks
-  DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sandbox-developer'
-  StackDescription: 'SSO: Developer role used by sandbox developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SandboxAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref sandboxDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
-SsoSandboxAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sandbox-admin'
-  StackDescription: 'SSO: Administrator role used by sandbox admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SandboxAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref sandboxAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
 scicompViewer:
   Type: update-stacks
   DependsOn: SsoViewer

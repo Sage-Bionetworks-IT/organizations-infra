@@ -24,7 +24,6 @@ Organization:
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
-        - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringDevAccount
         - !Ref HtanDevAccount
         - !Ref NlpSandboxAccount
@@ -315,16 +314,6 @@ Organization:
       AccountId: '055273631518'
       RootEmail: aws.scicomp@sagebase.org
       Alias: org-sagebase-scicomp
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-
-  SandboxAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-sandbox
-      AccountId: '563295687221'
-      RootEmail: aws.sandbox@sagebase.org
-      Alias: org-sagebase-sandbox
       Tags:
         <<: !Include ./_default_org_tags.yaml
 
