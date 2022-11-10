@@ -26,7 +26,7 @@ __Note__: master-profile is a profile that can assume the account's `organizatio
 * run `pip install sceptre sceptre-ssm-resolver sceptre-date-resolver git+git://github.com/Sceptre/sceptre-file-resolver.git`
 * cd sceptre/_folder_  (i.e. sceptre/sandbox)
 * uncomment `# profile: {{ var.profile | default("default") }}` in config/configs.yaml
-* run `sceptre --var "profile=member-profile" --var "region=us-east-1" launch prod/AccountAlertTopics.yaml`
+* run `sceptre --var "profile=member-profile" --var "region=us-east-1" launch prod/my-template.yaml`
 
 __Note__: member-profile is a profile that can assume the member account's `OrganizationAccountAccessRole` role
 
