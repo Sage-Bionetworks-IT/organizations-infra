@@ -90,3 +90,8 @@ CloudWatch2S3:
   Type: include
   DependsOn: [ Types ]
   Path: ./730-cloudwatch-to-S3/_tasks.yaml
+
+Redirects:
+  Type: include
+  DependsOn: [ AwsSso, ClientVpn ]
+  Path: ./800-redirects/_tasks.yaml
