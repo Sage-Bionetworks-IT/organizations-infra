@@ -18,4 +18,4 @@ SsoRedirect:   # Redirect sso.sageit.org to the AWS SSO Start URL
     # the endpoint we are redirecting to (AWS SSO) in organizations account
     TargetHostName: "d-906769aa66.awsapps.com"
     # and a path to our specific config
-    TargetKey: "/start"
+    TargetKey: "start#/"
