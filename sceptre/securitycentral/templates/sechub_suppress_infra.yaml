@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Provision queues and policies to support automatic suppression of Security Hub findings 
+  Provision queues and policies to support automatic suppression of Security Hub findings
 Resources:
   SecurityHubBatchUpdateSuppressionManagedPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -263,7 +263,7 @@ Resources:
 Outputs:
   SecurityHubBatchUpdateSuppressionRoleArn:
     Value: !GetAtt SecurityHubBatchUpdateSuppressionRole.Arn
-    Description: Arn of batch update role 
+    Description: Arn of batch update role
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-SecurityHubBatchUpdateSuppressionRoleArn'
   SecurityHubFindingsQueueArn:
