@@ -233,35 +233,6 @@ Resources:
         Version: '2012-10-17'
       Queues:
       - Ref: SecurityHubFindingsQueue
-      
-  # # In every account, suppress findings for S3.2 on bootstrap and essentials buckets
-  # SecurityHubSuppressionexampleSecurityHubSuppressionrule:
-  #   Type: AWS::Events::Rule
-  #   Properties:
-  #     Description: SecurityHub Suppression rule
-  #     EventPattern:
-  #       detail:
-  #         findings:
-  #           GeneratorId:
-  #             - 'aws-foundational-security-best-practices/v/1.0.0/S3.2'
-  #           Resources:
-  #             Id:
-  #             - prefix: arn:aws:s3:::bootstrap-awss3cloudformationbucket-
-  #             - prefix: arn:aws:s3:::essentials-awss3lambdaartifactsbucket-
-  #           Workflow:
-  #             Status:
-  #             - NEW
-  #       detail-type:
-  #       - Security Hub Findings - Imported
-  #       source:
-  #       - aws.securityhub
-  #     State: DISABLED
-  #     Targets:
-  #     - Arn:
-  #         Fn::GetAtt:
-  #         - SecurityHubFindingsQueue
-  #         - Arn
-  #       Id: Target0
 
   # In every account, suppress findings for CIS4.3 and CIS1.14
   SecurityHubSuppressionruleCIS43:
@@ -288,42 +259,6 @@ Resources:
           - SecurityHubFindingsQueue
           - Arn
         Id: Target0
-
-  # # In every account, suppress findings for CIS4.1 on Bastion SGs
-  # SecurityHubSuppressionruleCIS41:
-  #   Type: AWS::Events::Rule
-  #   Properties:
-  #     Description: SecHubSuppress CIS4.1 on Bastion SGs
-  #     EventPattern:
-  #       detail:
-  #         findings:
-  #           GeneratorId:
-  #             - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.1'
-  #           Workflow:
-  #             Status:
-  #             - NEW
-  #           "Resources": {
-  #             "Id": [{
-  #               "equals": "arn:aws:ec2:us-east-1:055273631518:security-group/sg-017d8398957a0d199"
-  #             }, {
-  #               "equals": "arn:aws:ec2:us-east-1:055273631518:security-group/sg-0fb7cd3ecd8c0a304"
-  #             }, {
-  #               "equals": "arn:aws:ec2:us-east-1:055273631518:security-group/sg-0fb7cd3ecd8c0a304"
-  #             }, {
-  #               "equals": "arn:aws:ec2:us-east-1:386990716034:security-group/sg-08ad30c64961e5534"
-  #             }]
-  #           },
-  #       detail-type:
-  #       - Security Hub Findings - Imported
-  #       source:
-  #       - aws.securityhub
-  #     State: ENABLED
-  #     Targets:
-  #     - Arn:
-  #         Fn::GetAtt:
-  #         - SecurityHubFindingsQueue
-  #         - Arn
-  #       Id: Target0
 
 Outputs:
   SecurityHubBatchUpdateSuppressionRoleArn:
