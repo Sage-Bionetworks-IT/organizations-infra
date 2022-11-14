@@ -11,7 +11,7 @@ SsoRedirect:   # Redirect sso.sageit.org to the AWS SSO Start URL
     Account: !Ref SageITAccount
   Parameters:
     # the endpoint we are redirecting from
-    SourceHostName: "sso.sageit.org"
+    SourceHostName: "aws-sso.sageit.org"
     SourceAcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-sageit-org-acm-cert-CertificateArn']
     # ID of the sageit.org zone (in sageit account)
     SourceHostedZoneId: "Z0478495257GEB73WFM63"
