@@ -14,7 +14,7 @@ Parameters:
     Description: List of user/role/account ARNs that can administer the key
 Resources:
   KmsKey:
-    OrganizationBinding: !Ref MasterBinding
+    OrganizationBinding: !Ref AllBinding
     Type: "AWS::KMS::Key"
     Properties:
       Description: !Sub '${AWS::StackName} created key'
@@ -176,6 +176,7 @@ Resources:
       EnableLogFileValidation: true
       CloudWatchLogsLogGroupArn: !Ref CloudWatchLogsLogGroupArn
       CloudWatchLogsRoleArn: !Ref CloudWatchLogsRoleArn
+      KMSKeyId: !Ref KmsKey
 
 Outputs:
   CloudTrailBucketName:
