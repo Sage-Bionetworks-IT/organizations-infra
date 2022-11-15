@@ -24,7 +24,7 @@ CloudTrail:
     Account: '*'
     IncludeMasterAccount: true
   OrganizationBindings:
-    MasterBinding:
+    ManagementBinding:
       Account: !Ref LogCentralAccount
     MemberBinding:
       Account: '*'

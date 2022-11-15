@@ -14,7 +14,6 @@ Parameters:
     Description: List of user/role/account ARNs that can administer the key
 Resources:
   KmsKey:
-    OrganizationBinding: !Ref MasterBinding
     Type: "AWS::KMS::Key"
     Properties:
       Description: !Sub '${AWS::StackName} created key'
@@ -86,7 +85,7 @@ Resources:
               kms:EncryptionContext:aws:cloudtrail:arn: !Sub 'arn:aws:cloudtrail:*:${AWS::AccountId}:trail/*'
 
   CloudTrailBucket:
-    OrganizationBinding: !Ref MasterBinding
+    OrganizationBinding: !Ref ManagementBinding
     Type: AWS::S3::Bucket
     Metadata:
       cfn-lint:
@@ -122,7 +121,7 @@ Resources:
               StorageClass: DEEP_ARCHIVE
 
   CloudTrailBucketPolicy:
-    OrganizationBinding: !Ref MasterBinding
+    OrganizationBinding: !Ref ManagementBinding
     Type: AWS::S3::BucketPolicy
     Metadata:
       cfn-lint:
@@ -152,7 +151,7 @@ Resources:
               s3:x-amz-acl: bucket-owner-full-control
 
   CloudTrail:
-    OrganizationBinding: !Ref MasterBinding
+    OrganizationBinding: !Ref ManagementBinding
     Type: AWS::CloudTrail::Trail
     Properties:
       S3BucketName: !Ref CloudTrailBucket
@@ -176,6 +175,7 @@ Resources:
       EnableLogFileValidation: true
       CloudWatchLogsLogGroupArn: !Ref CloudWatchLogsLogGroupArn
       CloudWatchLogsRoleArn: !Ref CloudWatchLogsRoleArn
+      KMSKeyId: !Ref KmsKey
 
 Outputs:
   CloudTrailBucketName:
