@@ -1,3 +1,0 @@
-template:
-  path: sechub_suppress_infra.yaml
-stack_name: sechub-suppress-infra
