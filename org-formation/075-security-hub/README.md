@@ -16,7 +16,7 @@ more details.
 To suppress findings, add or modify rules in the security-hub-suppress-infra.yaml template. The event pattern
 for Security Hub findings is defined at https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cwe-all-findings.html.
 
-###List of suppression rules
+### List of suppression rules
 | rule resourcename | description |
 | --- | --- |
 | SecurityHubSuppressionRule1 | Suppress<br>CIS4.3: Ensure the default security group of every VPC restricts all traffic<br>CIS1.14: Ensure hardware MFA is enabled for the root account<br>in all accounts |
