@@ -113,6 +113,9 @@ Resources:
               - "iam:RemoveRoleFromInstanceProfile"
               - "iam:AddRoleToInstanceProfile"
               - "iam:AttachRolePolicy"
+              - "iam:CreatePolicy"
+              - "iam:ListPolicies"
+              - "kms:*"
             Resource: "*"
 
   AWSIAMAdminRole:
@@ -281,3 +284,7 @@ Outputs:
     Value: !GetAtt AWSIAMAdminRole.RoleId
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-AWSIAMAdminRoleId'
+  AWSIAMDevelopersDeployRightsPolicy:
+    Value: !Ref AWSIAMDevelopersDeployRightsPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AWSIAMDevelopersDeployRightsPolicy'
