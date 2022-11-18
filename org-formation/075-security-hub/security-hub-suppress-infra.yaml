@@ -1,0 +1,278 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Provision queues and policies to support automatic suppression of Security Hub findings
+Resources:
+  SecurityHubBatchUpdateSuppressionManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action:
+          - logs:CreateLogGroup
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+          Effect: Allow
+          Resource:
+            Fn::Join:
+            - ''
+            - - 'arn:aws:logs:'
+              - Ref: AWS::Region
+              - ":"
+              - Ref: AWS::AccountId
+              - ":log-group:/aws/lambda/security-hub-batch-update-suppression:*"
+          Sid: CloudWatchLogs
+        - Action: securityhub:BatchUpdateFindings
+          Effect: Allow
+          Resource: "*"
+          Sid: SecurityHubBatchUpdateFindings
+        Version: '2012-10-17'
+      Description: Suppression policy for Security Hub implementing batch update findings
+      Path: "/"
+  SecurityHubBatchUpdateSuppressionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      Description: Suppression role for Security Hub batch update findings
+      ManagedPolicyArns:
+      - Ref: SecurityHubBatchUpdateSuppressionManagedPolicy
+      Path: "/"
+  SecurityHubBatchUpdateSuppressionRoleDefaultPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: kms:Decrypt
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - SqsEncryptionKey
+            - Arn
+        - Action:
+          - sqs:ReceiveMessage
+          - sqs:ChangeMessageVisibility
+          - sqs:GetQueueUrl
+          - sqs:DeleteMessage
+          - sqs:GetQueueAttributes
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - SecurityHubFindingsQueue
+            - Arn
+        Version: '2012-10-17'
+      PolicyName: SecurityHubBatchUpdateSuppressionRoleDefaultPolicy
+      Roles:
+      - Ref: SecurityHubBatchUpdateSuppressionRole
+  SecurityHubFindingsQueueAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            AWS: 'arn:aws:sts::140124849929:assumed-role/AWSReservedSSO_Administrator_1de765cf1298ed53/x.schildwachter@sagebase.org'
+        Version: '2012-10-17'
+      Description: Access to encrypted queue for SSO roles
+      Path: "/"
+  SecurityHubFindingsQueueAccessRoleDefaultPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: kms:Decrypt
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - SqsEncryptionKey
+            - Arn
+        Version: '2012-10-17'
+      PolicyName: SecurityHubFindingsQueueAccessRoleDefaultPolicy
+      Roles:
+      - Ref: SecurityHubFindingsQueueAccessRole
+  SqsEncryptionKey:
+    Type: AWS::KMS::Key
+    Properties:
+      KeyPolicy:
+        Statement:
+        - Action:
+          - kms:Create*
+          - kms:Describe*
+          - kms:Enable*
+          - kms:List*
+          - kms:Put*
+          - kms:Update*
+          - kms:Revoke*
+          - kms:Disable*
+          - kms:Get*
+          - kms:Delete*
+          - kms:ScheduleKeyDeletion
+          - kms:CancelKeyDeletion
+          - kms:GenerateDataKey
+          - kms:TagResource
+          - kms:UntagResource
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::Join:
+              - ''
+              - - 'arn:'
+                - Ref: AWS::Partition
+                - ":iam::"
+                - Ref: AWS::AccountId
+                - ":root"
+          Resource: "*"
+        - Action: kms:Decrypt
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::GetAtt:
+              - SecurityHubBatchUpdateSuppressionRole
+              - Arn
+          Resource: "*"
+        - Action:
+          - kms:Decrypt
+          - kms:Encrypt
+          - kms:ReEncrypt*
+          - kms:GenerateDataKey*
+          Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Resource: "*"
+        Version: '2012-10-17'
+      EnableKeyRotation: true
+      PendingWindowInDays: 30
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+  SqsEncryptionKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: alias/SQSEncryptionKey
+      TargetKeyId:
+        Fn::GetAtt:
+        - SqsEncryptionKey
+        - Arn
+  SecurityhubFindingsDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      KmsMasterKeyId:
+        Fn::GetAtt:
+        - SqsEncryptionKey
+        - Arn
+      MessageRetentionPeriod: 172800
+      VisibilityTimeout: 130
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  SecurityHubFindingsDeadLetterQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: sqs:*
+          Condition:
+            Bool:
+              aws:secureTransport: 'false'
+          Effect: Deny
+          Principal: "*"
+          Resource:
+            Fn::GetAtt:
+            - SecurityhubFindingsDeadLetterQueue
+            - Arn
+          Sid: Enforce TLS for all principals
+        Version: '2012-10-17'
+      Queues:
+      - Ref: SecurityhubFindingsDeadLetterQueue
+  SecurityHubFindingsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      KmsMasterKeyId:
+        Fn::GetAtt:
+        - SqsEncryptionKey
+        - Arn
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+          - SecurityhubFindingsDeadLetterQueue
+          - Arn
+        maxReceiveCount: 1
+      VisibilityTimeout: 130
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  SecurityHubFindingsQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: sqs:*
+          Condition:
+            Bool:
+              aws:secureTransport: 'false'
+          Effect: Deny
+          Principal: "*"
+          Resource:
+            Fn::GetAtt:
+            - SecurityHubFindingsQueue
+            - Arn
+          Sid: Enforce TLS for all principals
+        - Action:
+          - sqs:SendMessage
+          - sqs:GetQueueAttributes
+          - sqs:GetQueueUrl
+          Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Resource:
+            Fn::GetAtt:
+            - SecurityHubFindingsQueue
+            - Arn
+        Version: '2012-10-17'
+      Queues:
+      - Ref: SecurityHubFindingsQueue
+
+  # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
+  # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
+
+  # In every account, suppress findings for
+  # CIS4.3: Ensure the default security group of every VPC restricts all traffic
+  # CIS1.14: Ensure hardware MFA is enabled for the root account
+  SecurityHubSuppressionRule1:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress CIS4.3 and 1.14 for all accounts
+      EventPattern:
+        detail:
+          findings:
+            GeneratorId:
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.3'
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14'
+            Workflow:
+              Status:
+              - NEW
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
+
+Outputs:
+  SecurityHubBatchUpdateSuppressionRoleArn:
+    Value: !GetAtt SecurityHubBatchUpdateSuppressionRole.Arn
+    Description: Arn of batch update role
+    Export:
+      Name: !Sub '${AWS::StackName}-SecurityHubBatchUpdateSuppressionRoleArn'
+  SecurityHubFindingsQueueArn:
+    Value: !GetAtt SecurityHubFindingsQueue.Arn
+    Description: Arn of the findings queue
+    Export:
+      Name: !Sub '${AWS::StackName}-SecurityHubFindingsQueueArn'

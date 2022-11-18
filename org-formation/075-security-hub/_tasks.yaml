@@ -32,3 +32,13 @@ SecurityHubNotifications:
       # refer to https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html for valid list of protocol and endpoints
       - Protocol: "email"
         Endpoints: ["it-alert-inbox@sagebase.org"]
+
+SecurityHubSuppressionInfra:
+  DependsOn: [ SecurityHub ]
+  Type: update-stacks
+  Template: security-hub-suppress-infra.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-suppression-infra'
+  StackDescription: SecurityHub findings suppression queues and policies
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
