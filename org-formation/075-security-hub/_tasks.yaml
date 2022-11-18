@@ -41,4 +41,4 @@ SecurityHubSuppressionInfra:
   StackDescription: SecurityHub findings suppression queues and policies
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    Account: !Ref accountId
+    Account: !Ref SecurityCentralAccount
