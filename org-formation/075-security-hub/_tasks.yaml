@@ -34,6 +34,7 @@ SecurityHubNotifications:
         Endpoints: ["it-alert-inbox@sagebase.org"]
 
 SecurityHubSuppressionInfra:
+  DependsOn: [ SecurityHub ]
   Type: update-stacks
   Template: security-hub-suppress-infra.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-suppression-infra'
