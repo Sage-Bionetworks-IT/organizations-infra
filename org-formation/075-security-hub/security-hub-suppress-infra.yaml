@@ -265,6 +265,47 @@ Resources:
           - Arn
         Id: Target0
 
+  # In every account, suppress findings for Bastion SGs
+  # CIS4.1: Ensure no security groups allow ingress from 0.0.0.0/0 to port 22
+  # CIS4.2: Ensure no security groups allow ingress from 0.0.0.0/0 to port 3389
+  # Start with accounts in scope, SynapseProd/DW do not have BastionSG
+  SecurityHubSuppressionRule2:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress CIS4.1 and CIS4.2 on Bastion SGs
+      EventPattern:
+        detail:
+          findings:
+            GeneratorId:
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.1'
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.2'
+            Workflow:
+              Status:
+              - NEW
+            "Resources": {
+              "Id": [{
+                # scicomp - snowflakevpc
+                "equals": "arn:aws:ec2:us-east-1:055273631518:security-group/sg-017d8398957a0d199"
+              }, {
+                # scicomp - computevpc
+                "equals": "arn:aws:ec2:us-east-1:055273631518:security-group/sg-0fb7cd3ecd8c0a304"
+              }, {
+                # transit - vpn endpoint
+                "equals": "arn:aws:ec2:us-east-1:153370007719:security-group/sg-0642b65f82adbca1a"
+              }]
+            }
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
+
 Outputs:
   SecurityHubBatchUpdateSuppressionRoleArn:
     Value: !GetAtt SecurityHubBatchUpdateSuppressionRole.Arn
