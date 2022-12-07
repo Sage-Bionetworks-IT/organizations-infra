@@ -31,6 +31,7 @@ Organization:
         - !Ref WorkflowsNextflowDevAccount
         - !Ref AgoraDevAccount
         - !Ref DnTDevAccount
+        - !Ref RecoverDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -562,6 +563,22 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
+
+  RecoverDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-recover-dev
+      AccountId: '634761300905'
+      RootEmail: aws-recover-dev@sagebase.org
+      Alias: org-sagebase-recover-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DNT
+        Project: RECOVER
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: MGH RECOVER / 122500
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-recover-dev@sagebase.org
 
   #------------ Personal Accounts -----------
   8dxfh53Account:
