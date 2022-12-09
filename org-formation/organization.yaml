@@ -568,7 +568,6 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: org-sagebase-recover-prod
-      AccountId: '634761300905'
       RootEmail: aws-recover-prod@sagebase.org
       Alias: org-sagebase-recover-prod
       Tags:
