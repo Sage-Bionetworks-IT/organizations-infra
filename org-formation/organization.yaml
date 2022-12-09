@@ -563,6 +563,19 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
+  DCAProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: dca-prod
+      RootEmail: aws-dca-prod@sagebase.org
+      Alias: org-sagebase-dca-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: FAIR
+        Project: DCA
+        AccountOwner: milen.nikolov@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+
   #------------ Personal Accounts -----------
   8dxfh53Account:
     Type: OC::ORG::Account
