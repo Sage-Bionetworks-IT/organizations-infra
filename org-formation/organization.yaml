@@ -47,6 +47,7 @@ Organization:
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
         - !Ref IncludeChopProdAccount
+        - !Ref RecoverProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -563,6 +564,21 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
+
+  RecoverProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-recover-prod
+      RootEmail: aws-recover-prod@sagebase.org
+      Alias: org-sagebase-recover-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DNT
+        Project: RECOVER
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: MGH RECOVER / 122500
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-recover-prod@sagebase.org
 
   RecoverDevAccount:
     Type: OC::ORG::Account
