@@ -14,7 +14,7 @@ Organization:
       ServiceControlPolicies:
         - !Ref RestrictDisableCloudtrailSCP
         - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictDisableGuarddutySCP
+#        - !Ref RestrictDisableGuarddutySCP   # automation to vend aws accounts updates GD
         - !Ref RestrictIamLoginProfileSCP
 
   ScienceDevOU:
