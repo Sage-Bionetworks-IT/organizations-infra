@@ -50,7 +50,7 @@ Resources:
       GroupDescription: !Sub '${AWS::StackName} Security Group'
       VpcId: !Ref VpcId
       SecurityGroupIngress:
-        - CidrIp: "0.0.0.0/0"
+        - CidrIp: !Ref ClientCidrBlock
           FromPort: -1
           ToPort: -1
           IpProtocol: "-1"

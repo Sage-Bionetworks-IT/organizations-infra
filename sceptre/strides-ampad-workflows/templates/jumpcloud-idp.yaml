@@ -7,8 +7,28 @@ Parameters:
   AuditorMetadata:
     Type: String
     Description: "Public certificate for the auditor Jumpcloud AWS app"
+  TowerViewerMetadata:
+    Type: String
+    Description: "Public certificate for the towerviewer JumpCloud AWS app"
 
 Resources:
+  AWSIAMCostExplorerAccessPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - aws-portal:ViewUsage
+              - ce:Describe*
+              - ce:Get*
+              - ce:List*
+              - ce:*AnomalyMonitor
+              - ce:*AnomalySubscription
+              - ce:*Report
+            Resource: "*"
   AdminSamlProvider:
     Type: Custom::SAMLProvider
     Properties:
@@ -50,6 +70,8 @@ Resources:
       RoleName: !GetAtt AuditorSamlProvider.Name
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/SecurityAudit
+        - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+        - !Ref AWSIAMCostExplorerAccessPolicy
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -60,6 +82,42 @@ Resources:
             Condition:
               StringEquals:
                 "SAML:aud": "https://signin.aws.amazon.com/saml"
+  TowerViewerSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "strides-ampad-workflows-towerviewer"
+      Metadata: !Ref TowerViewerMetadata
+      URL: ""
+  TowerViewerSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt TowerViewerSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+        - !Ref AWSIAMCostExplorerAccessPolicy
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref TowerViewerSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+      Path: /
+      Policies:
+        - PolicyName: TowerViewerPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              Action:
+                - batch:ListJobs
+              Effect: Allow
+              Resource: "*"
 Outputs:
   AdminSamlProviderArn:
     Value: !Ref AdminSamlProvider
@@ -77,3 +135,11 @@ Outputs:
     Value: !GetAtt AuditorSamlProviderRole.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-AuditorSamlProviderRoleArn'
+  TowerViewerSamlProviderArn:
+    Value: !Ref TowerViewerSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TowerViewerSamlProviderArn'
+  TowerViewerSamlProviderRoleArn:
+    Value: !GetAtt TowerViewerSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-TowerViewerSamlProviderRoleArn'

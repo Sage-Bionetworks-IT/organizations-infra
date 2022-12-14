@@ -56,7 +56,9 @@ Resources:
       RoleName: !GetAtt StridesCommunityMgrSamlProvider.Name
       ManagedPolicyArns:
         - !Ref AWSIAMCommunityMgrAccessPolicy
+        - !Ref AWSIAMCostExplorerAccessPolicy
         - "arn:aws:iam::aws:policy/AWSSupportAccess"
+        - "arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess"
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -77,11 +79,27 @@ Resources:
             Effect: "Allow"
             Action:
               - aws-portal:ViewUsage
-              - aws-portal:ViewBilling
               - cur:DescribeReportDefinitions
               - cur:PutReportDefinition
               - cur:DeleteReportDefinition
               - cur:ModifyReportDefinition
+            Resource: "*"
+  AWSIAMCostExplorerAccessPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - aws-portal:ViewUsage
+              - ce:Describe*
+              - ce:Get*
+              - ce:List*
+              - ce:*AnomalyMonitor
+              - ce:*AnomalySubscription
+              - ce:*Report
             Resource: "*"
   StridesViewerSamlProvider:
     Type: Custom::SAMLProvider
@@ -98,6 +116,8 @@ Resources:
       RoleName: !GetAtt StridesViewerSamlProvider.Name
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+        - !Ref AWSIAMCostExplorerAccessPolicy
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -123,6 +143,8 @@ Resources:
       RoleName: !GetAtt StridesAuditorSamlProvider.Name
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/SecurityAudit
+        - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+        - !Ref AWSIAMCostExplorerAccessPolicy
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:

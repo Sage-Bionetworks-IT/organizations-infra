@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Continuously dump all matching CloudWatch Log groups to a bucket in a
+  central account for long-term storage (by CloudSnorkel)
+Parameters:
+  LogDestination:
+    AllowedPattern: arn:[a-z\-]+:logs:[a-z1-9\-]+:[0-9]+:destination:.*
+    Description: Log destination ARN from the outputs of the main template
+    Type: String
+  LogGroupNamePrefix:
+    Default: ''
+    Description: Prefix to match against log group that should be exported (leave
+      empty to export all log groups)
+    Type: String
+  SubscribeSchedule:
+    Default: rate(1 hour)
+    Description: Schedule to look for new log groups for export (in case CloudTrail
+      missed something)
+    Type: String
+Resources:
+  CloudWatch2S3additionalaccount:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location:
+        ApplicationId: arn:aws:serverlessrepo:us-east-1:859319237877:applications/CloudWatch2S3-additional-account
+        SemanticVersion: 1.0.6
+      Parameters:
+        # hello
+        LogDestination: !Ref LogDestination
+        # Prefix to match against log group that should be exported (leave empty to export all log groups)
+        LogGroupNamePrefix: !Ref LogGroupNamePrefix
+        # Schedule to look for new log groups for export (in case CloudTrail missed something)
+        SubscribeSchedule: !Ref SubscribeSchedule

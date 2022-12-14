@@ -195,7 +195,7 @@ VpnAuthRoutes:
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/s3-redirector.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.8/templates/s3-redirector.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-redirect'
   StackDescription: Setup a redirect to the VPN URL endpoint
   DefaultOrganizationBindingRegion: !Ref primaryRegion

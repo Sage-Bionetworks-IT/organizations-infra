@@ -29,6 +29,7 @@ Resources:
         - '-'
         - - !Ref AWS::StackName
           - "InfraKey"
+      EnableKeyRotation: "true"
       KeyPolicy:
         Version: "2012-10-17"
         Statement:
@@ -38,7 +39,6 @@ Resources:
             Principal:
               AWS:
                 - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
-                - !ImportValue us-east-1-bootstrap-TravisUserArn
                 - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
             Action:
               - "kms:Create*"
@@ -60,7 +60,6 @@ Resources:
             Principal:
               AWS:
                 - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
-                - !ImportValue us-east-1-bootstrap-TravisUserArn
                 - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
             Action:
               - "kms:Encrypt"

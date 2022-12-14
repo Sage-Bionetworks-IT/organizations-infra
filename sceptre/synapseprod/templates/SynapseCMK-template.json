@@ -86,21 +86,7 @@
                                 },
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "iam:CreateRole",
-                                        "iam:DeleteRole",
-                                        "iam:UpdateRole",
-                                        "iam:GetRole",
-                                        "iam:PassRole",
-                                        "iam:CreateRolePolicy",
-                                        "iam:DeleteRolePolicy",
-                                        "iam:PutRolePolicy",
-                                        "iam:CreateInstanceProfile",
-                                        "iam:DeleteInstanceProfile",
-                                        "iam:GetInstanceProfile",
-                                        "iam:RemoveRoleFromInstanceProfile",
-                                        "iam:AddRoleToInstanceProfile"
-                                    ],
+                                    "Action": "iam:*",
                                     "Resource": "*"
                                 },
                                 {
@@ -185,6 +171,21 @@
                                     "Effect": "Allow",
                                     "Action": "sts:*",
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "states:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "lambda:*",
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "events:*",
+                                    "Resource": "*"
                                 }
                             ]
                         }
@@ -207,7 +208,7 @@
             "Type": "AWS::KMS::Key",
             "Properties": {
                 "Description": "The master encryption key used to encypt/decrypt all Synapse master secrets",
-                "EnableKeyRotation": false,
+                "EnableKeyRotation": true,
                 "KeyPolicy": {
                     "Version": "2012-10-17",
                     "Id": "key-default-1",

@@ -1,0 +1,2 @@
+# ignore AWS account numbers
+\d{12}

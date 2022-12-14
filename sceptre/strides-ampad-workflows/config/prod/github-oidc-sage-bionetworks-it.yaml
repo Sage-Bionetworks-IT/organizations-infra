@@ -1,0 +1,14 @@
+template:
+  type: http
+  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.1/templates/IAM/github-oidc-provider.j2
+stack_name: github-oidc-sage-bionetworks-it
+parameters:
+  ManagedPolicyArns:
+    - "arn:aws:iam::aws:policy/AdministratorAccess"
+  ThumbprintList:
+    - "6938fd4d98bab03faadb97b34396831e3780aea1"
+  GitHubOrg: "Sage-Bionetworks-IT"
+sceptre_user_data:
+  Repositories:
+    - name: "organizations-infra"
+      branch: "master"
