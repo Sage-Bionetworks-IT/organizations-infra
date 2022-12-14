@@ -38,4 +38,3 @@ CloudTrail:
       - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
       - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
       - 'arn:aws:iam::531805629419:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1EY1CRUF48VP5'
-
