@@ -1309,3 +1309,54 @@ Sso8dxfh53Admin:
     instanceArn: !Ref instanceArn
     principalId: !Ref 8dxfh53AdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoRecoverDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-dev-admin'
+  StackDescription: 'SSO: Administrator role used by recover admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref RecoverDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoRecoverDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-dev-developer'
+  StackDescription: 'SSO: Developer role used by recover developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref RecoverDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoRecoverDevViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-dev-viewer'
+  StackDescription: 'SSO: Viewer role used by recover viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref RecoverDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverDevViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
