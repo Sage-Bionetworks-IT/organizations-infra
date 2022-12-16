@@ -72,7 +72,7 @@ GuardDutyConnectStridesAmpadWorkflows:
 # bucket that contains the trusted IP addresses that are excluded from GuardDuty findings
 GuardDutyTrustedIpsBucket:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/GuardDuty/trusted-ips-bucket.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.2/templates/GuardDuty/trusted-ips-bucket.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-trusted-ips-bucket'
   StackDescription: GuardDuty - Trusted IPs bucket
   DefaultOrganizationBindingRegion: !Ref primaryRegion
