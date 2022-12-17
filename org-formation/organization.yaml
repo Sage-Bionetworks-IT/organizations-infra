@@ -578,6 +578,8 @@ Organization:
         Project: DCA
         AccountOwner: milen.nikolov@sagebase.org
         CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-dca-prod@sagebase.org
 
   RecoverProdAccount:
     Type: OC::ORG::Account
