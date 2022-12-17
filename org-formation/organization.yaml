@@ -12,10 +12,11 @@ Organization:
     Properties:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictDisableGuarddutySCP
         - !Ref RestrictIamLoginProfileSCP
+# automation attempts to update these services when vending new aws accounts
+#        - !Ref RestrictDisableCloudtrailSCP
+#        - !Ref RestrictDisableCloudwatchSCP
+#        - !Ref RestrictDisableGuarddutySCP
 
   ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
@@ -31,6 +32,7 @@ Organization:
         - !Ref WorkflowsNextflowDevAccount
         - !Ref AgoraDevAccount
         - !Ref DnTDevAccount
+        - !Ref RecoverDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -46,6 +48,7 @@ Organization:
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
         - !Ref IncludeChopProdAccount
+        - !Ref RecoverProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -575,6 +578,38 @@ Organization:
         Project: Genie
         AccountOwner: thomas.yu@sagebase.org
         CostCenter: Genie-AACR BPC / 312100
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-genie-prod@sagebase.org
+
+  RecoverProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-recover-prod
+      RootEmail: aws-recover-prod@sagebase.org
+      Alias: org-sagebase-recover-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DNT
+        Project: RECOVER
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: MGH RECOVER / 122500
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-recover-prod@sagebase.org
+
+  RecoverDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-recover-dev
+      RootEmail: aws-recover-dev@sagebase.org
+      Alias: org-sagebase-recover-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DNT
+        Project: RECOVER
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: MGH RECOVER / 122500
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-recover-dev@sagebase.org
 
   #------------ Personal Accounts -----------
   8dxfh53Account:
