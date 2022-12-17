@@ -49,6 +49,7 @@ Organization:
         - !Ref AgoraProdAccount
         - !Ref IncludeChopProdAccount
         - !Ref RecoverProdAccount
+        - !Ref DCAProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
