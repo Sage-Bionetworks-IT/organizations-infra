@@ -49,6 +49,7 @@ Organization:
         - !Ref AgoraProdAccount
         - !Ref IncludeChopProdAccount
         - !Ref RecoverProdAccount
+        - !Ref GenieProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
