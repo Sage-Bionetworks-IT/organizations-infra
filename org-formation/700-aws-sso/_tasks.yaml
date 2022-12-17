@@ -1326,6 +1326,9 @@ SsoRecoverProdAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref recoverProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    recoverProdAdminGroup:      #JC aws-recover-prod-admins
+    Type: String
+    Default: '54d83448-10a1-7000-7e72-cae28f0caacf'
 
 SsoRecoverProdDeveloper:
   Type: update-stacks
@@ -1343,6 +1346,9 @@ SsoRecoverProdDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref recoverProdDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    recoverProdDeveloperGroup:      #JC aws-recover-prod-developers
+    Type: String
+    Default: 'a468b478-f021-7010-535b-4ad779417559'
 
 SsoRecoverProdViewer:
   Type: update-stacks
@@ -1360,3 +1366,6 @@ SsoRecoverProdViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref recoverProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+    recoverProdViewerGroup:      #JC aws-recover-prod-viewers
+    Type: String
+    Default: 'b4e86468-f091-70e2-0ea9-64cf3addcdf1'
