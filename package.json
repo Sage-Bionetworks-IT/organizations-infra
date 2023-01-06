@@ -12,7 +12,7 @@
     "ci-perform-tasks-parallel": "npx org-formation perform-tasks ./org-formation/_tasks.yaml --verbose --print-stack --max-concurrent-stacks 10 --max-concurrent-tasks 10 --perform-cleanup",
     "validate-tasks": "npx org-formation validate-tasks ./org-formation/_tasks.yaml --verbose --print-stack --failed-tasks-tolerance 0  --max-concurrent-stacks 100 --max-concurrent-tasks 100",
     "cfn-lint": "cfn-lint ./.printed-stacks/**/*.yaml -i W2001,E3001,E1019,W1020,W2509,E3021",
-    "generate-bootstrap-cdk-template": "npx cdk bootstrap --show-template > org-formation/200-baseline/cdk-bootstrap.yaml"
+    "generate-cdk-bootstrap-template": "npx cdk bootstrap --show-template > org-formation/200-baseline/cdk-bootstrap.yaml"
   },
   "repository": {
     "type": "git",
