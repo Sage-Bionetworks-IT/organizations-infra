@@ -20,3 +20,14 @@ OrgFormationBuildAccessRole:
     IncludeMasterAccount: true
     Account: '*'
     Region: !Ref primaryRegion
+
+CdkBootstrap:
+  Type: update-stacks
+  Template: cdk-boostrap.yaml  # auto generated from "cdk bootstrap --show-template > cdk-bootstrap.yaml"
+  StackName: cdk-bootstrap
+  Parameters:
+    MasterAccountId: !Ref MasterAccount
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
