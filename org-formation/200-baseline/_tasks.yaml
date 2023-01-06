@@ -3,7 +3,7 @@ Parameters:
 
 PasswordPolicy:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.0/templates/ORG/password-policy.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.3/templates/ORG/password-policy.yaml
   StackName: baseline-password-policy
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
