@@ -1326,6 +1326,9 @@ SsoRecoverDevAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref recoverDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+    recoverDevAdminGroup: #JC aws-recover-dev-admins
+    Type: String
+    Default: 94a8e488-00d1-70a4-1c05-d864077490d6
 
 SsoRecoverDevDeveloper:
   Type: update-stacks
@@ -1343,6 +1346,9 @@ SsoRecoverDevDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref recoverDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+    recoverDevDeveloperGroup: #JC aws-recover-dev-developers
+    Type: String
+    Default: 54e8e448-1051-70e2-2607-b109750355bd
 
 SsoRecoverDevViewer:
   Type: update-stacks
@@ -1360,3 +1366,6 @@ SsoRecoverDevViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref recoverDevViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+    recoverDevViewerGroup: #JC aws-recover-dev-viewers
+    Type: String
+    Default: a46824e8-e0d1-709b-457d-90d57d6a71be
