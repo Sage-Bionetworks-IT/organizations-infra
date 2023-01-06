@@ -21,12 +21,10 @@ OrgFormationBuildAccessRole:
     Account: '*'
     Region: !Ref primaryRegion
 
-CdkBootstrap:
+CdkBootstrapDefault:
   Type: update-stacks
-  Template: cdk-boostrap.yaml  # auto generated from "cdk bootstrap --show-template > cdk-bootstrap.yaml"
-  StackName: cdk-bootstrap
-  Parameters:
-    MasterAccountId: !Ref MasterAccount
+  Template: cdk-boostrap.yaml  # auto generated from "npx cdk bootstrap --show-template > cdk-bootstrap.yaml"
+  StackName: cdk-bootstrap-default
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
