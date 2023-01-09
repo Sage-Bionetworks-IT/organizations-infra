@@ -8,7 +8,7 @@ Parameters:
 # Enable AWS Config in all member accounts and send Findings and Config history to the centralized s3 bucket in the archive account
 ConfigBase:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/Config/config.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.1/templates/Config/config.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-base'
   StackDescription: AWS Config - Base
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -21,18 +21,3 @@ ConfigBase:
   Parameters:
     resourcePrefix: !Ref resourcePrefix
     bucketName: !Sub '${resourcePrefix}-${appName}-${CurrentAccount.AccountId}'
-
-ConfigSumoLogicRole:
-  Type: update-stacks
-  DependsOn: [ "ConfigBase" ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.13/templates/sumologic-role.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sumologic-role'
-  StackDescription: Allow Sumologic to access AWS config data
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref LogCentralAccount
-    IncludeMasterAccount: false
-  Parameters:
-    ExternalID: "us2:00000000001E813D"
-    Actions: 's3:GetObject,s3:GetObjectVersion,s3:ListBucketVersions,s3:ListBucket'
-    Resource: !CopyValue [ !Sub '${primaryRegion}-${resourcePrefix}-${appName}-base-ConfigAuditBucketArn' ]
