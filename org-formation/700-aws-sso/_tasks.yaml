@@ -225,6 +225,14 @@ Parameters:
     Type: String
     Default: 'b4e86468-f091-70e2-0ea9-64cf3addcdf1'
 
+  dcaProdViewersGroup:      #JC aws-dca-prod-viewers
+    Type: String
+    Default: '14187418-6081-7044-6e34-07f86b336cdd'
+
+  dcaProdViewersPlusGroup:      #JC aws-dca-prod-viewers-plus
+    Type: String
+    Default: 'c448e498-60d1-7084-5cf5-14d77b82a42b'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -1435,3 +1443,38 @@ SsoRecoverProdViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref recoverProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoDCAProdViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-dca-prod-viewer'
+  StackDescription: 'SSO: Viewer role used by DCA viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DCAProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dcaProdViewersGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoDCAProdViewerPlus:
+  Type: update-stacks
+  DependsOn: SsoViewerPlus
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-dca-prod-viewer-plus'
+  StackDescription: 'SSO: Viewer Plus role used by DCA viewer-plus group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DCAProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dcaProdViewersPlusGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+    
