@@ -201,6 +201,30 @@ Parameters:
     Type: String
     Default: 'e4880448-e061-70b3-2487-e2c54abce711'
 
+  recoverDevAdminGroup:      #JC aws-recover-dev-admins
+    Type: String
+    Default: '94a8e488-00d1-70a4-1c05-d864077490d6'
+
+  recoverDevDeveloperGroup:      #JC aws-recover-dev-developers
+    Type: String
+    Default: '54e8e448-1051-70e2-2607-b109750355bd'
+
+  recoverDevViewerGroup:      #JC aws-recover-dev-viewers
+    Type: String
+    Default: 'a46824e8-e0d1-709b-457d-90d57d6a71be'
+
+  recoverProdAdminGroup:      #JC aws-recover-prod-admins
+    Type: String
+    Default: '54d83448-10a1-7000-7e72-cae28f0caacf'
+
+  recoverProdDeveloperGroup:      #JC aws-recover-prod-developers
+    Type: String
+    Default: 'a468b478-f021-7010-535b-4ad779417559'
+
+  recoverProdViewerGroup:      #JC aws-recover-prod-viewers
+    Type: String
+    Default: 'b4e86468-f091-70e2-0ea9-64cf3addcdf1'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -1309,3 +1333,105 @@ Sso8dxfh53Admin:
     instanceArn: !Ref instanceArn
     principalId: !Ref 8dxfh53AdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoRecoverDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-dev-admin'
+  StackDescription: 'SSO: Administrator role used by recover admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref RecoverDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoRecoverDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-dev-developer'
+  StackDescription: 'SSO: Developer role used by recover developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref RecoverDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoRecoverDevViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-dev-viewer'
+  StackDescription: 'SSO: Viewer role used by recover viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref RecoverDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverDevViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoRecoverProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-prod-admin'
+  StackDescription: 'SSO: Administrator role used by recover admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref RecoverProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoRecoverProdDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-prod-developer'
+  StackDescription: 'SSO: Developer role used by recover developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref RecoverProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoRecoverProdViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-prod-viewer'
+  StackDescription: 'SSO: Viewer role used by recover viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref RecoverProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverProdViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
