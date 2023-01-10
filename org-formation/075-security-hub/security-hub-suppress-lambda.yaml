@@ -1,12 +1,16 @@
 ---
 Transform: AWS::Serverless-2016-10-31
+Description: >-
+  This lambda takes the findings from the findings queue defined in 'security-hub-suppress-infra.yaml' and 
+  does the actual suppression. See https://aws.amazon.com/blogs/security/how-to-create-auto-suppression-rules-in-aws-security-hub/ for
+  more details.
 Resources:
   AWSLambdaPowertoolsApplication:
     Type: AWS::Serverless::Application
     Properties:
       Location:
         ApplicationId: arn:aws:serverlessrepo:eu-west-1:057560766410:applications/aws-lambda-powertools-python-layer
-        SemanticVersion: 1.17.0
+        SemanticVersion: 2.4.0
     Metadata:
       aws:cdk:path: sechub-finding-suppression/AWSLambdaPowertoolsApplication
   BatchupdateLambdaFct:
@@ -22,7 +26,7 @@ Resources:
           import json, boto3
           import botocore.exceptions as boto3exceptions
 
-          from aws_lambda_powertools.utilities.batch import PartialSQSProcessor
+          from aws_lambda_powertools.utilities.batch import BatchProcessor, EventType
 
           sh_client = boto3.client("securityhub")
 
@@ -47,7 +51,7 @@ Resources:
                   return self.finding_identifiers
 
           """
-          Uses the Lambda Powertools PartialSQSProcessor in order to build the findings id list.
+          Uses the Lambda Powertools BatchProcessor in order to build the findings id list.
           Lambda powertools is used to prevent successfully processed messages being returned to SQS
           https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/batch/
           """
@@ -55,7 +59,7 @@ Resources:
               records = event["Records"]
               logger.info(f"records {records}")
 
-              processor = PartialSQSProcessor()
+              processor = BatchProcessor(event_type=EventType.SQS)
 
               rh = RecordsHandler()
               with processor(records, rh.record_handler) as proc:
@@ -88,8 +92,7 @@ Resources:
 
               return {"statusCode": 200}
       Role:
-        Fn::ImportValue:
-          !Sub 'sagebase-securityhub-suppression-infra-SecurityHubBatchUpdateSuppressionRoleArn'
+        !ImportValue 'sagebase-securityhub-suppression-infra-SecurityHubBatchUpdateSuppressionRoleArn'
 
       Description: Suppression lambda for Security Hub implements batch update findings
       Handler: index.handler
