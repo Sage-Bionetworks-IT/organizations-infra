@@ -49,6 +49,7 @@ Organization:
         - !Ref AgoraProdAccount
         - !Ref IncludeChopProdAccount
         - !Ref RecoverProdAccount
+        - !Ref GenieProdAccount
         - !Ref DCAProdAccount
 
   PlatformOU:
@@ -566,6 +567,21 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
+
+  GenieProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-genie-prod
+      RootEmail: aws-genie-prod@sagebase.org
+      Alias: org-sagebase-genie-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DPE
+        Project: Genie
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: Genie-AACR BPC / 312100
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-genie-prod@sagebase.org
 
   DCAProdAccount:
     Type: OC::ORG::Account
