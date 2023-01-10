@@ -50,6 +50,7 @@ Organization:
         - !Ref IncludeChopProdAccount
         - !Ref RecoverProdAccount
         - !Ref GenieProdAccount
+        - !Ref DCAProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -581,6 +582,21 @@ Organization:
         CostCenter: Genie-AACR BPC / 312100
         budget-alarm-threshold: 1000
         budget-alarm-threshold-email-recipient: aws-genie-prod@sagebase.org
+
+  DCAProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-dca-prod
+      RootEmail: aws-dca-prod@sagebase.org
+      Alias: org-sagebase-dca-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: FAIR
+        Project: DCA
+        AccountOwner: milen.nikolov@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-dca-prod@sagebase.org
 
   RecoverProdAccount:
     Type: OC::ORG::Account
