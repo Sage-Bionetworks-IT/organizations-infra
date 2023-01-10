@@ -640,6 +640,7 @@ Organization:
         Department: DNT
         Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
+        CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-dpe-dev@sagebase.org
 
