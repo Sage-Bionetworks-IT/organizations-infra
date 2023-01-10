@@ -44,6 +44,8 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: npm install
+      - name: Generate AWS CDK bootstrap template
+        run: npm run generate-cdk-bootstrap-template
       - name: Validate ofn templates
         run: npm run validate-tasks
       - name: Validate with print-task
