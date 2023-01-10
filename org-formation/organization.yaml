@@ -570,7 +570,7 @@ Organization:
   GenieProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: genie-prod
+      AccountName: org-sagebase-genie-prod
       RootEmail: aws-genie-prod@sagebase.org
       Alias: org-sagebase-genie-prod
       Tags:
