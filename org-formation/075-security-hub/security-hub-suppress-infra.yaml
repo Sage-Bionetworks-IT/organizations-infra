@@ -9,18 +9,15 @@ Resources:
         Statement:
         - Action:
           - logs:CreateLogGroup
+          Effect: Allow
+          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+          Sid: CloudWatchLogs1
+        - Action:
           - logs:CreateLogStream
           - logs:PutLogEvents
           Effect: Allow
-          Resource:
-            Fn::Join:
-            - ''
-            - - 'arn:aws:logs:'
-              - Ref: AWS::Region
-              - ":"
-              - Ref: AWS::AccountId
-              - ":log-group:/aws/lambda/security-hub-batch-update-suppression:*"
-          Sid: CloudWatchLogs
+          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/securityhub-suppress-findings:*"
+          Sid: CloudWatchLogs2
         - Action: securityhub:BatchUpdateFindings
           Effect: Allow
           Resource: "*"

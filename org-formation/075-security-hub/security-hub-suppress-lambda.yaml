@@ -18,15 +18,14 @@ Resources:
     Properties:
       Code:
         ZipFile: |
-          import logging
-
-          logger = logging.getLogger()
-          logger.setLevel(logging.INFO)
-
           import json, boto3
           import botocore.exceptions as boto3exceptions
 
           from aws_lambda_powertools.utilities.batch import BatchProcessor, EventType
+          from aws_lambda_powertools import Logger
+          from aws_lambda_powertools.utilities.typing import LambdaContext
+
+          logger =  Logger()
 
           sh_client = boto3.client("securityhub")
 
@@ -55,6 +54,7 @@ Resources:
           Lambda powertools is used to prevent successfully processed messages being returned to SQS
           https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/batch/
           """
+          @logger.inject_lambda_context(log_event=True)
           def handler(event, context):
               records = event["Records"]
               logger.info(f"records {records}")
