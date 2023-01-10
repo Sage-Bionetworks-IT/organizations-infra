@@ -570,7 +570,7 @@ Organization:
   DCAProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: dca-prod
+      AccountName: org-sagebase-dca-prod
       RootEmail: aws-dca-prod@sagebase.org
       Alias: org-sagebase-dca-prod
       Tags:
