@@ -19,3 +19,23 @@ GithubOidcSageBionetworksIt:
     IncludeMasterAccount: true
     Account: '*'
     Region: us-east-1
+
+GithubOidcSageBionetworksRecover:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.1/templates/IAM/github-oidc-provider.j2
+  StackName: github-oidc-sage-bionetworks-recover
+  Parameters:
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+    ThumbprintList:
+      - "6938fd4d98bab03faadb97b34396831e3780aea1"
+    GitHubOrg: "Sage-Bionetworks"
+  TemplatingContext:
+    Repositories:
+      - name: "recover"
+        branch: "main"
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref RecoverProdAccount
+      - !Ref RecoverDevAccount
+    Region: us-east-1
