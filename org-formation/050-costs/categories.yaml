@@ -1,0 +1,119 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'All Cost Categories'
+Resources:
+  ProgramCodeCostCategory:
+    Type: 'AWS::CE::CostCategory'
+    Properties:
+      Name: 'Program Code'
+      RuleVersion: 'CostCategoryExpression.v1'
+      Rules:
+        Fn::Transform:
+          - Name: SageCostRuleGenerator
+        # Account names can be found at https://d-906769aa66.awsapps.com/start#/
+        RegularValues:
+          - Value: '990300 Platform Infrastructure'
+            Accounts:
+              - "531805629419"  # organizations
+              - "140124849929"  # org-sagebase-securitycentral
+              - "254940560790"  # org-sagebase-ipam
+              - "231505186444"  # org-sagebase-logcentral
+              - "153370007719"  # org-sagebase-transit
+              - "087547153226"  # org-sagebase-sysmancentral
+              - "797640923903"  # org-sagebase-sageit
+              - "867686887310"  # org-sagebase-imagecentral
+              - "420786776710"  # org-sagebase-bridgedevelop
+              - "745159704268"  # org-sagebase-admincentral
+              - "325565585839"  # org-sagebase-synapseprod
+              - "383874245509"  # org-sagebase-synapsedw
+              - "449435941126"  # org-sagebase-synapsedev
+              - "649232250620"  # org-sagebase-bridgeprod
+              - "804034162148"  # org-sagebase-itsandbox
+              - "743644221192"  # org-sagebase-sceptredev
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "990300"
+          - Value: '30144 BMGF Ki'
+            Accounts:
+              - "464102568320"
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "30144"
+          - Value: '113300 CD2H CU'
+            Accounts:
+              - "841415736403"
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "113300"
+          - Value: '122000 INCLUDE CHOP'
+            Accounts:
+              - "975466401039"
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "122000"
+          - Value: '101600 NIH ITCR'
+            Accounts:
+              - "216152803258"
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "101600"
+          - Value: '112501 Mobile Toolbox Project Core'
+            Accounts:
+              - "634761300905"
+              - "611413694531"
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "112501"
+          - Value: '314900 iAtlas'
+            Accounts:
+              - "386990716034"
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "314900"
+          - Value: '120100 HTAN DFCI'
+            Accounts:
+              - "888810830951"
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "120100"
+          - Value: '101500 NIA AMP AD CC'
+            Accounts:
+              - "607346494281"
+              - "681175625864"
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "101500"
+          - Value: '312000 Genie AACR'
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "312000"
+          - Value: '000000 NO PROGRAM'
+            TagNames:
+              - CostCenterOther
+              - CostCenter
+            TagEndsWith:
+              - "000000"
+        InheritedValues:
+          TagOrder:
+            - CostCenterOther
+            - CostCenter
+          RulePosition: Last

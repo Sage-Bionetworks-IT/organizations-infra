@@ -138,3 +138,6 @@ lerna-debug.log
 
 # ofn
 .printed-stacks/
+
+# auto generated files
+org-formation/200-baseline/cdk-bootstrap.yaml

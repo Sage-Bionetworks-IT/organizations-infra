@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.4.0/VPC/vpc-mini.yaml
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.5.2/VPC/vpc-mini.yaml
 stack_name: scheduledjobsvpc
 stack_tags:
   Department: "Platform"
@@ -11,3 +11,4 @@ dependencies:
 parameters:
   VpcSubnetPrefix: "10.255.39"
   VpcName: "scheduledjobsvpc"
+  IncludeBastianSecurityGroup: "false"

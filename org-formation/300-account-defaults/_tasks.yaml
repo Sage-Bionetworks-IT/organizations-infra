@@ -20,19 +20,10 @@ Ec2NoVpcDefaults:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
 
-SceptreCloudformationBucket:
+EbsVolumeCleanup:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/S3/public-bucket.yaml
-  StackName: sceptre-cloudformation-bucket
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
-    Region: !Ref primaryRegion
-
-SceptreLambdaBucket:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/S3/public-bucket.yaml
-  StackName: sceptre-lambda-bucket
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-ebs-cleanup/master/lambda-ebs-cleanup.yaml'
+  StackName: lambda-ebs-cleanup
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
@@ -46,26 +37,10 @@ ItKmsKey:
     AliasName: alias/it-infra
     AdminPrincipalArns:
       - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
-      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationFormationBuildAccessRole'
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
     UserPrincipalArns:
-      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationFormationBuildAccessRole'
+      - !Sub 'arn:aws:iam::${AWS::AccountId}:role/OrganizationAccountAccessRole'
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
     Region: !Ref primaryRegion
-
-VpcPeeringRequest:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.12/templates/VPC/vpc-peering-request.yaml
-  StackName: !Sub '${resourcePrefix}-vpc-peering-request'
-  StackDescription: 'Authorize VPC peering requests'
-  Parameters:
-    VpcPeeringRequesterAwsAccountId: !Ref AdminCentralAccount
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account:
-      - !Ref NlpSandboxAccount
-      - !Ref WorkflowsNextflowDevAccount
-      - !Ref WorkflowsNextflowProdAccount
-      - !Ref MobileHealthDataEngineeringDevAccount

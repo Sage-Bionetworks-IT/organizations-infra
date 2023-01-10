@@ -1,0 +1,48 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'CloudWatch2S3'
+
+  accountId:
+    Type: String
+    Description: The identifier from the account used as the main account
+    Default: !Ref LogCentralAccount
+
+#---- Storage for application logs  ---
+Cloudwatch2S3-bucket:
+  Type: update-stacks
+  Template: CloudWatch2S3-bucket.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bucket'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+
+#---- Central account for application logs  ---
+Cloudwatch2S3-main:
+  Type: update-stacks
+  Template: CloudWatch2S3-main.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    LogMemberBinding:
+      Account: '*'
+      IncludeMasterAccount: true
+  Parameters:
+    LogGroupNamePrefix: "null"  # do not archive any logs from logcentral account
+    BucketName: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-${appName}-bucket-BucketArn']
+
+#---- Forward app logs into central logging account  ---
+Cloudwatch2S3-vpnlog:
+  Type: update-stacks
+  Template: CloudWatch2S3-member.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-vpnlog'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref TransitAccount
+  Parameters:
+    LogGroupNamePrefix: "/aws/vpn"
+    LogDestination: "arn:aws:logs:us-east-1:231505186444:destination:BucketBackupLogDestination"

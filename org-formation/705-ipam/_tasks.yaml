@@ -1,0 +1,12 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+Ipam:
+  Type: update-stacks
+  Template: ipam.yaml
+  StackName: ipam
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref IpamAccount
+    Region: us-east-1

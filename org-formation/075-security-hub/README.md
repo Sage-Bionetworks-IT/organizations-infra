@@ -7,3 +7,11 @@ and helps you check your environment against security industry standards and bes
 Security Hub collects security data from across AWS accounts, services, and supported third-party
 partner products and helps you analyze your security trends and identify the highest priority
 security issues.
+
+The Security Hub findings are sent to EventBridge's default event bus. Rules are defined on the event bus
+to filter findings that can be suppressed and send them to an SQS queue, where a lambda will suppress them.
+See https://aws.amazon.com/blogs/security/how-to-create-auto-suppression-rules-in-aws-security-hub/ for
+more details.
+
+To suppress findings, add or modify rules in the [security-hub-suppress-infra.yaml](https://github.com/Sage-Bionetworks-IT/organizations-infra/tree/master/org-formation/075-security-hub/security-hub-suppress-infra.yaml) template. The event pattern
+for Security Hub findings is defined at https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cwe-all-findings.html.

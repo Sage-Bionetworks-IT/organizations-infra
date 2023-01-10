@@ -1,6 +1,14 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
+CostCategoryRuleGenerator:
+  Type: update-stacks
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/cfn-macro-cost-rules/master/cfn-macro-cost-rules.yaml'
+  StackName: !Sub '${resourcePrefix}-cost-rule-generator'
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+    Region: !Ref primaryRegion
+
 AnomalyDetectorService:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.3/templates/Cost/anomaly-detector-service.yaml
@@ -11,3 +19,28 @@ AnomalyDetectorService:
     Region: !Ref primaryRegion
   Parameters:
     Subscriber: !GetAtt CurrentAccount.RootEmail
+
+# Deploy a general-use microservice for interacting with MIPS in admincentral
+MipsMicroservice:
+  Type: update-stacks
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-mips-api/master/lambda-mips-api.yaml'
+  StackName: !Sub '${resourcePrefix}-mips-microservice'
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref AdminCentralAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    MipsOrganization: 'SAGE_24146'
+    SsmKeyAdminArns:
+      - 'arn:aws:sts::745159704268:assumed-role/AWSReservedSSO_Administrator_30244677b3ea9498/joni.harker@sagebase.org'
+      - !Sub 'arn:aws:iam::${CurrentAccount.AccountId}:root'
+      - 'arn:aws:iam::745159704268:role/github-oidc-sage-bionetwo-ProviderRoleorganization-93H11ERK3F4N'
+
+CostCategories:
+  Type: update-stacks
+  Template: categories.yaml
+  StackName: !Sub '${resourcePrefix}-cost-categories'
+  DependsOn: CostCategoryRuleGenerator
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+    Region: !Ref primaryRegion

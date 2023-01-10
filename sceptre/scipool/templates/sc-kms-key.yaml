@@ -35,6 +35,7 @@ Resources:
     Type: AWS::KMS::Key
     Properties:
       Description: !Sub '${AWS::StackName}-KmsKey'
+      EnableKeyRotation: "true"
       KeyPolicy:
         Version: "2012-10-17"
         Statement:

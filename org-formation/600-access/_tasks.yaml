@@ -17,27 +17,27 @@ AgoraCIServiceAccount:
       - !Ref AgoraProdAccount
     Region: us-east-1
 
-# Setup Agora collaborator access
-AgoraCollaboratorAccess:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
-  StackName: agora-collaborator-access
-  Parameters:
-    PrincipalArns:
-      - arn:aws:iam::155057775224:user/MattC    # Matthias Courville from GenUI
-    ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account: !Ref AgoraDevAccount
-    Region: us-east-1
-
 # A service account for https://github.com/Sage-Bionetworks/iatlas-infra
 iAtlasCIServiceAccount:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/IAM/service-account.yaml
   StackName: iatlas-prod-ci-access
   Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref iAtlasProdAccount
+    Region: us-east-1
+
+# Setup iAtlas collaborator access
+iAtlasCollaboratorAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.8/templates/IAM/cross-account-access.yaml
+  StackName: iatlas-collaborator-access
+  Parameters:
+    PrincipalArns:
+      - arn:aws:iam::556856096938:user/ebs_automation    # Jon Ryser from GenUI
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AdministratorAccess
   DefaultOrganizationBinding:
@@ -160,37 +160,45 @@ SceptreCIServiceAccount:
       - !Ref SceptreDevAccount
     Region: us-east-1
 
-# =====================================================================================================
-# Some of our accounts, like org-sagebase-strides, are not part of the Sage organization therefore we need
-# to manage them as external entities. To allow strides account to send cloudtrail and config artifacts to
-# logcentral account we need to setup external access to the master buckets.
-AwsCloudtrailExternalAccountAccess:
+DnTDevCIServiceAccounts:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.9/templates/Cloudtrail/CloudtrailLogAccess.njk
-  StackName: aws-cloudtrail-ext-access
-  TemplatingContext:
-    cloudtrail_bucket: sagebase-cloudtrail-231505186444
-    accounts:
-      - "423819316185"    # org-sagebase-strides
-      - "751556145034"    # org-sagebase-strides-ampad-workflows
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
+  StackName: dnt-dev-ci-service-account
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
-      - !Ref LogCentralAccount
+      - !Ref DnTDevAccount
     Region: us-east-1
 
-AwsConfigExternalAccountAccess:
+CostExplorerAccessPolicy:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.9/templates/Config/ConfigLogAccess.njk
-  StackName: aws-config-ext-access
-  TemplatingContext:
-    config_bucket: sagebase-config-231505186444
-    accounts:
-      - "423819316185"    # org-sagebase-strides
-      - "751556145034"    # org-sagebase-strides-ampad-workflows
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: cost-explorer-access-policy
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account:
-      - !Ref LogCentralAccount
-    Region: us-east-1
-# ========================================================================================================
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+                "aws-portal:ViewUsage",
+                "ce:Describe*",
+                "ce:Get*",
+                "ce:List*",
+                "ce:*AnomalyMonitor",
+                "ce:*AnomalySubscription",
+                "ce:*Report"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    PolicyName: !Ref CostExplorerPolicyName

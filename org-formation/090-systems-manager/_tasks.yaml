@@ -1,0 +1,62 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'systemsmanager'
+
+  accountId:
+    Type: String
+    Description: The identifier from the account used to manage this service
+    Default: !Ref SysmanCentralAccount
+
+SysmanAutomationServiceRole:
+  Type: update-stacks
+  Template: AWS-SystemsManager-AutomationServiceRole.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sysman-automation-service-role'
+  StackDescription: Service role for AWS System Manager automation
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+
+PatchResourceGroup:
+  Type: update-stacks
+  Template: patch-resource-group.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-patch-resource-group'
+  StackDescription: A group of resources to apply patches to
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: '*'
+    IncludeMasterAccount: true
+
+PatchManager:
+  Type: update-stacks
+  DependsOn: PatchResourceGroup
+  Template: Scheduled-Patch-Automation.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-patchmanager'
+  StackDescription: Setup Systems manager patch management for the manager
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    PatchMemberBinding:
+      Account: '*'
+      IncludeMasterAccount: true
+  Parameters:
+    EventBridgeRuleSchedule: "cron(15 22 ? * TUE *)"
+    RunPatchBaselineRebootOption: "RebootIfNeeded"
+    ResourceGroupName: !CopyValue sagebase-systemsmanager-patch-resource-group-TagBasedGroupName
+    RunPatchBaselineOperation: "Install"
+    TargetRegionIds: "us-east-1"
+
+PatchMembers:
+  Type: update-stacks
+  Template: AWS-SystemsManager-AutomationExecutionRole.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-patchmember'
+  StackDescription: Setup Systems manager patch management for the member
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: '*'
+    IncludeMasterAccount: true
+  Parameters:
+    ManagementAccountNumber: !Ref accountId

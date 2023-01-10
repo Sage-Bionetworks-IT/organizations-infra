@@ -2,25 +2,28 @@ AWSTemplateFormatVersion: '2010-09-09-OC'
 Description: Manage AWS organizations with master account
 
 Organization:
-  MasterAccount:
-    Type: OC::ORG::MasterAccount
-    Properties:
-      AccountName: organizations
-      AccountId: '531805629419'
-      RootEmail: aws.organizations@sagebase.org
-      Alias: org-sagebase-organizations
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
 
+  #------- Service Control Policies -----------
+  <<: !Include ./_scp.yaml
+
+  #------- Organizational Units -----------
   OrganizationRoot:
     Type: OC::ORG::OrganizationRoot
     Properties:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
+      ServiceControlPolicies:
+        - !Ref RestrictIamLoginProfileSCP
+# automation attempts to update these services when vending new aws accounts
+#        - !Ref RestrictDisableCloudtrailSCP
+#        - !Ref RestrictDisableCloudwatchSCP
+#        - !Ref RestrictDisableGuarddutySCP
 
   ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ScienceDev
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref SandboxAccount
         - !Ref MobileHealthDataEngineeringDevAccount
@@ -29,11 +32,14 @@ Organization:
         - !Ref WorkflowsNextflowDevAccount
         - !Ref AgoraDevAccount
         - !Ref DnTDevAccount
+        - !Ref RecoverDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ScienceProd
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref ScicompAccount
         - !Ref iAtlasProdAccount
@@ -42,11 +48,16 @@ Organization:
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
         - !Ref IncludeChopProdAccount
+        - !Ref RecoverProdAccount
+        - !Ref GenieProdAccount
+        - !Ref DCAProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: Platform
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
       OrganizationalUnits:
         - !Ref SynapseOU
         - !Ref BridgeOU
@@ -55,6 +66,8 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ItDev
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref SceptreDevAccount
 
@@ -62,6 +75,8 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ItProd
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref TransitAccount
         - !Ref AdminCentralAccount
@@ -70,6 +85,8 @@ Organization:
         - !Ref ImageCentralAccount
         - !Ref SecurityCentralAccount
         - !Ref IpamAccount
+        - !Ref SysmanCentralAccount
+        - !Ref IdentityCentralAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -82,6 +99,8 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: ServiceCatalog
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref BmgfkiAccount
         - !Ref ScipoolDevAccount
@@ -100,9 +119,33 @@ Organization:
     Type: OC::ORG::OrganizationalUnit
     Properties:
       OrganizationalUnitName: bridge
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       Accounts:
         - !Ref BridgeDevAccount
         - !Ref BridgeProdAccount
+
+  PersonalAccountsOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: personal
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
+      Accounts:
+        - !Ref 8dxfh53Account
+
+  #------- Accounts -----------
+  MasterAccount:
+    Type: OC::ORG::MasterAccount
+    Properties:
+      AccountName: organizations
+      AccountId: '531805629419'
+      RootEmail: aws.organizations@sagebase.org
+      Alias: org-sagebase-organizations
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   BridgeDevAccount:
     Type: OC::ORG::Account
@@ -113,6 +156,7 @@ Organization:
       Alias: org-sagebase-bridgedevelop
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   BridgeProdAccount:
     Type: OC::ORG::Account
@@ -123,6 +167,7 @@ Organization:
       Alias: org-sagebase-bridgeprod
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SynapseDevAccount:
     Type: OC::ORG::Account
@@ -133,6 +178,7 @@ Organization:
       Alias: org-sagebase-synapsedev
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SynapseDWAccount:
     Type: OC::ORG::Account
@@ -143,16 +189,21 @@ Organization:
       Alias: org-sagebase-synapsedw
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SynapseProdAccount:
     Type: OC::ORG::Account
     Properties:
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
+        - !Ref RestrictUnsupportedRegionsSCP
       AccountName: org-sagebase-synapseprod
       AccountId: '325565585839'
       RootEmail: platform@sagebase.org
       Alias: org-sagebase-synapseprod
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   TransitAccount:
     Type: OC::ORG::Account
@@ -163,6 +214,7 @@ Organization:
       Alias: org-sagebase-transit
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   AdminCentralAccount:
     Type: OC::ORG::Account
@@ -173,6 +225,7 @@ Organization:
       Alias: org-sagebase-admincentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SageITAccount:
     Type: OC::ORG::Account
@@ -183,6 +236,7 @@ Organization:
       Alias: org-sagebase-sageit
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   LogCentralAccount:
     Type: OC::ORG::Account
@@ -193,7 +247,7 @@ Organization:
       Alias: org-sagebase-logcentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        CloudwatchCloudTrailLogRetentionPeriod: 3653
+        <<: !Include ./_platform_org_tags.yaml
 
   SecurityCentralAccount:
     Type: OC::ORG::Account
@@ -204,6 +258,7 @@ Organization:
       Alias: org-sagebase-securitycentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   ImageCentralAccount:
     Type: OC::ORG::Account
@@ -214,6 +269,7 @@ Organization:
       Alias: org-sagebase-imagecentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   ITSandboxAccount:
     Type: OC::ORG::Account
@@ -224,6 +280,7 @@ Organization:
       Alias: org-sagebase-itsandbox
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   ScipoolDevAccount:
     Type: OC::ORG::Account
@@ -254,6 +311,7 @@ Organization:
       Alias: org-sagebase-bmgfki
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        CostCenter: 'BMGF-Ki / 30144'
 
   ScicompAccount:
     Type: OC::ORG::Account
@@ -404,7 +462,6 @@ Organization:
         Department: IBC
         Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
-        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
@@ -420,7 +477,6 @@ Organization:
         Department: IBC
         Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
-        CostCenter: NO PROGRAM / 000000  # resource-level cost center tags will override this default
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
 
@@ -436,7 +492,6 @@ Organization:
         Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
-        CostCenter: NO PROGRAM / 000000
         AccountOwner: thomas.yu@sagebase.org
 
   AgoraDevAccount:
@@ -481,6 +536,7 @@ Organization:
       Alias: org-sagebase-ipam
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   SceptreDevAccount:
     Type: OC::ORG::Account
@@ -490,3 +546,97 @@ Organization:
       Alias: org-sagebase-sceptredev
       Tags:
         <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
+
+  SysmanCentralAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-sysmancentral
+      RootEmail: aws.sysmancentral@sagebase.org
+      Alias: org-sagebase-sysmancentral
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
+
+  IdentityCentralAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-identitycentral
+      RootEmail: aws.identitycentral@sagebase.org
+      Alias: org-sagebase-identitycentral
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
+
+  GenieProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-genie-prod
+      RootEmail: aws-genie-prod@sagebase.org
+      Alias: org-sagebase-genie-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DPE
+        Project: Genie
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: Genie-AACR BPC / 312100
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-genie-prod@sagebase.org
+
+  DCAProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-dca-prod
+      RootEmail: aws-dca-prod@sagebase.org
+      Alias: org-sagebase-dca-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: FAIR
+        Project: DCA
+        AccountOwner: milen.nikolov@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-dca-prod@sagebase.org
+
+  RecoverProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-recover-prod
+      RootEmail: aws-recover-prod@sagebase.org
+      Alias: org-sagebase-recover-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DNT
+        Project: RECOVER
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: MGH RECOVER / 122500
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-recover-prod@sagebase.org
+
+  RecoverDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-recover-dev
+      RootEmail: aws-recover-dev@sagebase.org
+      Alias: org-sagebase-recover-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DNT
+        Project: RECOVER
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: MGH RECOVER / 122500
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-recover-dev@sagebase.org
+
+  #------------ Personal Accounts -----------
+  8dxfh53Account:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-8dxfh53
+      RootEmail: aws.8dxfh53@sagebase.org
+      Alias: org-sagebase-8dxfh53
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: vijay.yadav@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws.8dxfh53@sagebase.org
