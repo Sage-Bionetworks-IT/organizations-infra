@@ -93,7 +93,7 @@ Resources:
               return {"statusCode": 200}
       Role:
         !ImportValue 'sagebase-securityhub-suppression-infra-SecurityHubBatchUpdateSuppressionRoleArn'
-
+      FunctionName: securityhub-suppress-findings
       Description: Suppression lambda for Security Hub implements batch update findings
       Handler: index.handler
       Layers:
