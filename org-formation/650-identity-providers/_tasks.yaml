@@ -33,7 +33,7 @@ GithubOidcSageBionetworksRecover:
   TemplatingContext:
     Repositories:
       - name: "recover"
-        branch: "main"
+        branch: "*"
   DefaultOrganizationBinding:
     Account:
       - !Ref RecoverProdAccount
