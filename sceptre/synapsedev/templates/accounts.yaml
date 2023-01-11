@@ -71,10 +71,10 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-  AWSIAMPeterHarveyUser:
+  AWSIAMLeonLiUser:
     Type: 'AWS::IAM::User'
     Properties:
-      UserName: peter.harvey@sagebase.org
+      UserName: leon.li@sagebase.org
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
