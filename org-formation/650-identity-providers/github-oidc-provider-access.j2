@@ -1,8 +1,14 @@
-{# Allow Github to access AWS without giving github AWS credentials #}
-{# Must pass in the following templating parameters                 #}
-{#   Repositories:                                                  #}
-{#     - name: "organizations-infra"                                #}
-{#       branch: "master"                                           #}
+{# Allow Github to access AWS without giving github AWS credentials               #}
+{# Must pass in the following templating parameters                               #}
+{#  Parameters:                                                                   #}
+{#    GitHubOrg: "Sage-Bionetworks"                                               #}
+{#    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ] #}
+{#    ManagedPolicyArns:                                                          #}
+{#      - "arn:aws:iam::aws:policy/AdministratorAccess"                           #}
+{#  TemplatingContext:                                                            #}
+{#    Repositories:                                                               #}
+{#      - name: "myrepo"                                                          #}
+{#        branch: "master"                                                        #}
 
 {# Make template compatible with both sceptre and org-formation     #}
 {% if sceptre_user_data.Repositories is defined %}
@@ -10,7 +16,7 @@
 {% endif %}
 
 AWSTemplateFormatVersion: 2010-09-09
-Description: Github OIDC
+Description: Setup github OIDC access
 Parameters:
   ClientIdList:
     Type: List<String>
