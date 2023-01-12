@@ -1,7 +1,7 @@
 ---
 Transform: AWS::Serverless-2016-10-31
 Description: >-
-  This lambda takes the findings from the findings queue defined in 'security-hub-suppress-infra.yaml' and 
+  This lambda takes the findings from the findings queue defined in 'security-hub-suppress-infra.yaml' and
   does the actual suppression. See https://aws.amazon.com/blogs/security/how-to-create-auto-suppression-rules-in-aws-security-hub/ for
   more details.
 Resources:
