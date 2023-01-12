@@ -71,16 +71,15 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-  AWSIAMLeonLiUser:
+# Attempt to setup a service user, the only use
+# is to provide a id/secret to run the dev synapse stack under
+  AWSIAMLeonLiSvc:
     Type: 'AWS::IAM::User'
     Properties:
-      UserName: leon.li@sagebase.org
+      UserName: svc.leon.li
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
 
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
