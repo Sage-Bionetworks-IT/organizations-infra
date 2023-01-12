@@ -117,6 +117,5 @@ Resources:
       BatchSize: 10
       Enabled: true
       EventSourceArn:
-        Fn::ImportValue:
-          !Sub 'sagebase-securityhub-suppression-infra-SecurityHubFindingsQueueArn'
+        Fn::ImportValue: 'sagebase-securityhub-suppression-infra-SecurityHubFindingsQueueArn'
       MaximumBatchingWindowInSeconds: 10
