@@ -10,7 +10,7 @@ Resources:
     Properties:
       Location:
         ApplicationId: arn:aws:serverlessrepo:eu-west-1:057560766410:applications/aws-lambda-powertools-python-layer
-        SemanticVersion: 2.4.0
+        SemanticVersion: 2.5.0
     Metadata:
       aws:cdk:path: sechub-finding-suppression/AWSLambdaPowertoolsApplication
   BatchupdateLambdaFct:
