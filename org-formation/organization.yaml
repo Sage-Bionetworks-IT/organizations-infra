@@ -634,7 +634,7 @@ Organization:
     Properties:
       AccountName: org-sagebase-dpe-dev
       RootEmail: aws-dpe-dev@sagebase.org
-      Alias: org-sagebase-dpe-dpe
+      Alias: org-sagebase-dpe-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
         Department: DNT
