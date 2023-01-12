@@ -1476,4 +1476,4 @@ SsoDCAProdViewerPlus:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref dcaProdViewersPlusGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
