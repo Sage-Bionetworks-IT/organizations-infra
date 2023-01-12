@@ -234,9 +234,12 @@ Resources:
   # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
   # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
 
-  # In every account, suppress findings for
+  # In every account, suppress findings in every account for:
   # CIS4.3: Ensure the default security group of every VPC restricts all traffic
   # CIS1.14: Ensure hardware MFA is enabled for the root account
+  # AWSFoundationalSecurityBestPracticesIAM.6: Hardware MFA should be enabled for the root user
+  # AWSFoundationalSecurityBestPracticesEC2.2 The VPC default security group should not allow inbound and outbound traffic
+  # CIS2.7: Ensure CloudTrail logs are encrypted at rest using KMS CMKs  SecurityHubSuppressionRule1:
   SecurityHubSuppressionRule1:
     Type: AWS::Events::Rule
     Properties:
@@ -246,7 +249,10 @@ Resources:
           findings:
             GeneratorId:
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.3'
+              - 'aws-foundational-security-best-practices/v/1.0.0/EC2.2'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14'
+              - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
             Workflow:
               Status:
               - NEW
