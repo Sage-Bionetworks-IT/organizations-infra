@@ -1,16 +1,33 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
-GithubOidcSageBionetworksIt:
+  appName:
+    Type: String
+    Default: 'github-oidc'
+
+GithubOidcSageBionetworks:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.4.1/templates/IAM/github-oidc-provider.j2
-  StackName: github-oidc-sage-bionetworks-it
+  Template: oidc-provider.yaml
+  StackName: !Sub ${resourcePrefix}-${appName}
   Parameters:
-    ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AdministratorAccess"
+    Url: "https://token.actions.githubusercontent.com"
     ThumbprintList:
       - "6938fd4d98bab03faadb97b34396831e3780aea1"
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: us-east-1
+
+GithubOidcSageBionetworksIt:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it
+  Parameters:
     GitHubOrg: "Sage-Bionetworks-IT"
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
     Repositories:
       - name: "organizations-infra"
@@ -18,4 +35,24 @@ GithubOidcSageBionetworksIt:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
+    Region: us-east-1
+
+GithubOidcSageBionetworksRecover:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-recover
+  Parameters:
+    GitHubOrg: "Sage-Bionetworks"
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    Repositories:
+      - name: "recover"
+        branch: "*"
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref RecoverProdAccount
+      - !Ref RecoverDevAccount
     Region: us-east-1

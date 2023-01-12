@@ -233,6 +233,14 @@ Parameters:
     Type: String
     Default: 'c448e498-60d1-7084-5cf5-14d77b82a42b'
 
+  genieProdViewerGroup:      #JC aws-genie-prod-viewers
+    Type: String
+    Default: '9478a4f8-3001-707d-dadb-0c9fffb968be'
+
+  genieProdViewerPlusGroup:      #JC aws-genie-prod-viewers-plus
+    Type: String
+    Default: '4428e4d8-d0e1-7042-59a1-85b676374bb9'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -1476,4 +1484,38 @@ SsoDCAProdViewerPlus:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref dcaProdViewersPlusGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
+
+SsoGenieProdViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-genie-prod-viewer'
+  StackDescription: 'SSO: Viewer role used by Genie viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref GenieProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref genieProdViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoGenieProdViewerPlus:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-genie-prod-viewer-plus'
+  StackDescription: 'SSO: Viewer role used by Genie viewer-plus group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref GenieProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref genieProdViewerPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
