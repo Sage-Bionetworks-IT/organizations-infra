@@ -10,6 +10,7 @@ GithubOidcSageBionetworks:
   Template: oidc-provider.yaml
   StackName: !Sub ${resourcePrefix}-${appName}
   Parameters:
+    Url: "https://token.actions.githubusercontent.com"
     ThumbprintList:
       - "6938fd4d98bab03faadb97b34396831e3780aea1"
   DefaultOrganizationBinding:

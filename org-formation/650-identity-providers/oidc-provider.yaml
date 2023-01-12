@@ -15,7 +15,6 @@ Parameters:
   Url:
     Type: String
     Description: "The URL that the IAM OIDC provider resource object is associated with"
-    Default: "https://token.actions.githubusercontent.com"
 Resources:
   Provider:
     Type: AWS::IAM::OIDCProvider
