@@ -1476,4 +1476,4 @@ SsoGenieProdViewerPlus:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref genieProdViewerPlusGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
