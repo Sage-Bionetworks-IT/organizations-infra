@@ -33,7 +33,6 @@ Organization:
         - !Ref AgoraDevAccount
         - !Ref DnTDevAccount
         - !Ref RecoverDevAccount
-        - !Ref DpeDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -52,6 +51,7 @@ Organization:
         - !Ref RecoverProdAccount
         - !Ref GenieProdAccount
         - !Ref DCAProdAccount
+        - !Ref DpeProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -629,19 +629,19 @@ Organization:
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-recover-dev@sagebase.org
 
-  DpeDevAccount:
+  DpeProdAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: org-sagebase-dpe-dev
-      RootEmail: aws-dpe-dev@sagebase.org
-      Alias: org-sagebase-dpe-dpe
+      AccountName: org-sagebase-dpe-prod
+      RootEmail: aws-dpe-prod@sagebase.org
+      Alias: org-sagebase-dpe-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
         Department: DNT
         Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
         budget-alarm-threshold: 10000
-        budget-alarm-threshold-email-recipient: aws-dpe-dev@sagebase.org
+        budget-alarm-threshold-email-recipient: aws-dpe-prod@sagebase.org
 
   #------------ Personal Accounts -----------
   8dxfh53Account:
