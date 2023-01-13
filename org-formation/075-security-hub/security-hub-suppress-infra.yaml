@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   Provision queues and policies to support automatic suppression of Security Hub findings
+Parameters:
+  SecHubSuppressLambdaFctName:
+    Type: String
+    Description: The name of the Lambda function to suppress findings
 Resources:
   SecurityHubBatchUpdateSuppressionManagedPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -16,7 +20,7 @@ Resources:
           - logs:CreateLogStream
           - logs:PutLogEvents
           Effect: Allow
-          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/securityhub-suppress-findings:*"
+          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${SecHubSuppressLambdaFctName}:*"
           Sid: CloudWatchLogs2
         - Action: securityhub:BatchUpdateFindings
           Effect: Allow
@@ -234,16 +238,11 @@ Resources:
   # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
   # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
 
-  # In every account, suppress findings in every account for:
-  # CIS4.3: Ensure the default security group of every VPC restricts all traffic
-  # CIS1.14: Ensure hardware MFA is enabled for the root account
-  # AWSFoundationalSecurityBestPracticesIAM.6: Hardware MFA should be enabled for the root user
-  # AWSFoundationalSecurityBestPracticesEC2.2 The VPC default security group should not allow inbound and outbound traffic
-  # CIS2.7: Ensure CloudTrail logs are encrypted at rest using KMS CMKs  SecurityHubSuppressionRule1:
+  # This rules suppresses findings for the given controls (GeneratorId) in all the accounts
   SecurityHubSuppressionRule1:
     Type: AWS::Events::Rule
     Properties:
-      Description: SecHubSuppress CIS4.3 and 1.14 for all accounts
+      Description: SecHubSuppress findings (identified by generatorId) for all accounts
       EventPattern:
         detail:
           findings:
@@ -279,3 +278,8 @@ Outputs:
     Description: Arn of the findings queue
     Export:
       Name: !Sub '${AWS::StackName}-SecurityHubFindingsQueueArn'
+  SecurityHubFindingsSuppressionLambdaFctName:
+    Value: !Ref SecHubSuppressLambdaFctName
+    Description: Name of the Lambda function that suppresses findings
+    Export:
+      Name: !Sub '${AWS::StackName}-SecHubSuppressLambdaFctName'
