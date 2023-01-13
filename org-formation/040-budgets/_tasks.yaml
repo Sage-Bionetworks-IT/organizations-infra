@@ -12,25 +12,3 @@ BudgetAlarms:
     budgetName: !Sub '${resourcePrefix}-budget-${CurrentAccount.AccountId}'
     budgetAmount: !GetAtt CurrentAccount.Tags.budget-alarm-threshold
     emailAddress: !GetAtt CurrentAccount.Tags.budget-alarm-threshold-email-recipient
-
-CostReportLambda:
-  Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-cost-reports/0.0.3/lambda-cost-reports.yaml'
-  StackName: !Sub '${resourcePrefix}-cost-reports-lambda'
-  DefaultOrganizationBinding:
-    Account: !Ref MasterAccount
-    Region: !Ref primaryRegion
-  Parameters:
-    bucketName: !Sub "${resourcePrefix}-cost-reports"
-
-CostAndUsageReports:
-  Type: update-stacks
-  Template: cur.yaml
-  StackName: !Sub '${resourcePrefix}-cost-reports'
-  DefaultOrganizationBinding:
-    Account: !Ref MasterAccount
-    Region: !Ref primaryRegion
-  Parameters:
-    resourcePrefix: !Ref resourcePrefix
-    bucketName: !Sub "${resourcePrefix}-cost-reports"
-    lambdaArn: !CopyValue [ !Sub "${resourcePrefix}-cost-reports-lambda-CostReportFunctionArn" ]

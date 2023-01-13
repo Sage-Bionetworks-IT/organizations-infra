@@ -23,7 +23,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::531805629419:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1EY1CRUF48VP5
+          role-to-assume: arn:aws:iam::531805629419:role/sagebase-github-oidc-sage-ProviderRoleorganization-ACD5KR6KZP3U
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Use Node.js
@@ -44,6 +44,8 @@ jobs:
             ${{ runner.os }}-
       - name: Install dependencies
         run: npm install
+      - name: Generate AWS CDK bootstrap template
+        run: npm run generate-cdk-bootstrap-template
       - name: Validate ofn templates
         run: npm run validate-tasks
       - name: Validate with print-task
@@ -77,7 +79,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::531805629419:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1EY1CRUF48VP5
+          role-to-assume: arn:aws:iam::531805629419:role/sagebase-github-oidc-sage-ProviderRoleorganization-ACD5KR6KZP3U
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -112,7 +114,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::745159704268:role/github-oidc-sage-bionetwo-ProviderRoleorganization-93H11ERK3F4N
+          role-to-assume: arn:aws:iam::745159704268:role/sagebase-github-oidc-sage-ProviderRoleorganization-QJWJ1AG8LNON
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -147,7 +149,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::804034162148:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1HOMAZA6V6MZF
+          role-to-assume: arn:aws:iam::804034162148:role/sagebase-github-oidc-sage-ProviderRoleorganization-W6F7T5K05CUC
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -182,7 +184,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::563295687221:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1W3Y2BTXS0IHN
+          role-to-assume: arn:aws:iam::563295687221:role/sagebase-github-oidc-sage-ProviderRoleorganization-S2QDPFPZIN4G
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -217,7 +219,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::055273631518:role/github-oidc-sage-bionetwo-ProviderRoleorganization-4FAIL7WJ3XUJ
+          role-to-assume: arn:aws:iam::055273631518:role/sagebase-github-oidc-sage-ProviderRoleorganization-CAP7YJ19OWKJ
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -322,7 +324,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::465877038949:role/github-oidc-sage-bionetwo-ProviderRoleorganization-12N6ZXXUHHIAE
+          role-to-assume: arn:aws:iam::465877038949:role/sagebase-github-oidc-sage-ProviderRoleorganization-1KLJKMGDP6Z79
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -357,7 +359,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::237179673806:role/github-oidc-sage-bionetwo-ProviderRoleorganization-10OXGCTGE0A2S
+          role-to-assume: arn:aws:iam::237179673806:role/sagebase-github-oidc-sage-ProviderRoleorganization-2ZIH68YL4TR5
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -437,7 +439,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::464102568320:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1I3FAZB5NGCL6
+          role-to-assume: arn:aws:iam::464102568320:role/sagebase-github-oidc-sage-ProviderRoleorganization-1JABD7X9E254U
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -476,7 +478,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::797640923903:role/github-oidc-sage-bionetwo-ProviderRoleorganization-I97YJEULPXRB
+          role-to-assume: arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-ProviderRoleorganization-RNY2NBNS9MDD
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy staging with sceptre
@@ -516,7 +518,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::231505186444:role/github-oidc-sage-bionetwo-ProviderRoleorganization-VQLGWAN33424
+          role-to-assume: arn:aws:iam::231505186444:role/sagebase-github-oidc-sage-ProviderRoleorganization-1RDFA554CNNWG
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -551,7 +553,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::383874245509:role/github-oidc-sage-bionetwo-ProviderRoleorganization-5CKE8W1T0QQN
+          role-to-assume: arn:aws:iam::383874245509:role/sagebase-github-oidc-sage-ProviderRoleorganization-DLPCB1X4MONE
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -586,7 +588,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::449435941126:role/github-oidc-sage-bionetwo-ProviderRoleorganization-JYEP5VLBM0OD
+          role-to-assume: arn:aws:iam::449435941126:role/sagebase-github-oidc-sage-ProviderRoleorganization-1K1MGUYPL5JUO
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -621,7 +623,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::325565585839:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1VA1E6MRNQ9LY
+          role-to-assume: arn:aws:iam::325565585839:role/sagebase-github-oidc-sage-ProviderRoleorganization-AIZUJ4CS2ML0
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -656,7 +658,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::140124849929:role/github-oidc-sage-bionetwo-ProviderRoleorganization-1Y0ZL6QUYBBXP
+          role-to-assume: arn:aws:iam::140124849929:role/sagebase-github-oidc-sage-ProviderRoleorganization-1MXL0NMCKNS3I
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -691,7 +693,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::420786776710:role/github-oidc-sage-bionetwo-ProviderRoleorganization-ZML8QW5KQAJI
+          role-to-assume: arn:aws:iam::420786776710:role/sagebase-github-oidc-sage-ProviderRoleorganization-14ZBOQI8IBLF0
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -726,7 +728,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::649232250620:role/github-oidc-sage-bionetwo-ProviderRoleorganization-2YBQPKY1HZSY
+          role-to-assume: arn:aws:iam::649232250620:role/sagebase-github-oidc-sage-ProviderRoleorganization-6F7084KBODPE
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
@@ -761,7 +763,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::867686887310:role/github-oidc-sage-bionetwo-ProviderRoleorganization-Q3961B67OXY7
+          role-to-assume: arn:aws:iam::867686887310:role/sagebase-github-oidc-sage-ProviderRoleorganization-ZG12T771KREH
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: 1200
       - name: Deploy with sceptre
