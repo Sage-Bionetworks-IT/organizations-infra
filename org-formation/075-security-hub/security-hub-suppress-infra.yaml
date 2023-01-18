@@ -238,8 +238,8 @@ Resources:
   # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
   # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
 
-  # This rules suppresses findings for the given controls (GeneratorId) in all the accounts
-  SecurityHubSuppressionRule1:
+  # This rule suppresses findings for the given controls (GeneratorId) in all the accounts
+  SuppressFindingsInAllAccountsRule:
     Type: AWS::Events::Rule
     Properties:
       Description: SecHubSuppress findings (identified by generatorId) for all accounts
