@@ -42,3 +42,13 @@ SecurityHubSuppressionInfra:
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SecurityCentralAccount
+
+SecurityHubSuppressionLambda:
+  DependsOn: [ SecurityHub,  SecurityHubSuppressionInfra]
+  Type: update-stacks
+  Template: security-hub-suppress-lambda.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-suppression-lambda'
+  StackDescription: SecurityHub findings suppression lambda function
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SecurityCentralAccount
