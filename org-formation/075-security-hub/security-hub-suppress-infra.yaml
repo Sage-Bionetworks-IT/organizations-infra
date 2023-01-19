@@ -73,7 +73,7 @@ Resources:
         - Action: sts:AssumeRole
           Effect: Allow
           Principal:
-            AWS: 'arn:aws:sts::140124849929:assumed-role/AWSReservedSSO_Administrator_1de765cf1298ed53/x.schildwachter@sagebase.org'
+            AWS: 'arn:aws:sts::140124849929:assumed-role/AWSReservedSSO_Administrator_1de765cf1298ed53/*'
         Version: '2012-10-17'
       Description: Access to encrypted queue for SSO roles
       Path: "/"
@@ -337,8 +337,7 @@ Resources:
   BatchUpdateLambdaFctEventSourceEventSourceMapping:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
-      FunctionName:
-        Ref: BatchupdateLambdaFct
+      FunctionName: suppress-security-hub-findings
       BatchSize: 10
       Enabled: true
       EventSourceArn: !GetAtt SecurityHubFindingsQueue.Arn
