@@ -1,10 +1,6 @@
-AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
 Description: >-
-  Provision queues and policies to support automatic suppression of Security Hub findings
-Parameters:
-  SecHubSuppressLambdaFctName:
-    Type: String
-    Description: The name of the Lambda function to suppress findings
+  Provision queues, policies and a lambda to support automatic suppression of Security Hub findings
 Resources:
   SecurityHubBatchUpdateSuppressionManagedPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -20,7 +16,7 @@ Resources:
           - logs:CreateLogStream
           - logs:PutLogEvents
           Effect: Allow
-          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${SecHubSuppressLambdaFctName}:*"
+          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/suppress-security-hub-findings:*"
           Sid: CloudWatchLogs2
         - Action: securityhub:BatchUpdateFindings
           Effect: Allow
@@ -267,19 +263,115 @@ Resources:
           - Arn
         Id: Target0
 
-Outputs:
-  SecurityHubBatchUpdateSuppressionRoleArn:
-    Value: !GetAtt SecurityHubBatchUpdateSuppressionRole.Arn
-    Description: Arn of batch update role
-    Export:
-      Name: !Sub '${AWS::StackName}-SecurityHubBatchUpdateSuppressionRoleArn'
-  SecurityHubFindingsQueueArn:
-    Value: !GetAtt SecurityHubFindingsQueue.Arn
-    Description: Arn of the findings queue
-    Export:
-      Name: !Sub '${AWS::StackName}-SecurityHubFindingsQueueArn'
-  SecurityHubFindingsSuppressionLambdaFctName:
-    Value: !Ref SecHubSuppressLambdaFctName
-    Description: Name of the Lambda function that suppresses findings
-    Export:
-      Name: !Sub '${AWS::StackName}-SecHubSuppressLambdaFctName'
+  AWSLambdaPowertoolsApplication:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location:
+        ApplicationId: arn:aws:serverlessrepo:eu-west-1:057560766410:applications/aws-lambda-powertools-python-layer
+        SemanticVersion: 2.5.0
+    Metadata:
+      aws:cdk:path: sechub-finding-suppression/AWSLambdaPowertoolsApplication
+  BatchupdateLambdaFct:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          import json, boto3
+          import botocore.exceptions as boto3exceptions
+
+          from aws_lambda_powertools.utilities.batch import BatchProcessor, EventType
+          from aws_lambda_powertools import Logger
+          from aws_lambda_powertools.utilities.typing import LambdaContext
+
+          logger =  Logger()
+
+          sh_client = boto3.client("securityhub")
+
+          """
+          Used by the lambda to tracks all of the Security Hub finding ids that will be suppressed.
+          Each Lambda invocation will create a separate instance of this class.
+          """
+          class RecordsHandler:
+              def __init__(self):
+                  self.finding_identifiers = []
+
+              def record_handler(self, record):
+                  payload = json.loads(record["body"])
+                  logger.info(f"payload {payload}")
+                  finding_identifier = {
+                      "Id": payload["detail"]["findings"][0]["Id"],
+                      "ProductArn": payload["detail"]["findings"][0]["ProductArn"],
+                  }
+                  self.finding_identifiers.append(finding_identifier)
+
+              def get_finding_identifiers(self):
+                  return self.finding_identifiers
+
+          """
+          Uses the Lambda Powertools BatchProcessor in order to build the findings id list.
+          Lambda powertools is used to prevent successfully processed messages being returned to SQS
+          https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/batch/
+          """
+          @logger.inject_lambda_context(log_event=True)
+          def handler(event, context):
+              records = event["Records"]
+              logger.info(f"records {records}")
+
+              processor = BatchProcessor(event_type=EventType.SQS)
+
+              rh = RecordsHandler()
+              with processor(records, rh.record_handler) as proc:
+                  proc.process()
+
+              finding_identifiers = rh.get_finding_identifiers()
+              logger.info(f"finding_identifiers {finding_identifiers}")
+
+              try:
+                  response = sh_client.batch_update_findings(
+                      FindingIdentifiers=finding_identifiers,
+                      Workflow={"Status": "SUPPRESSED"},
+                  )
+                  for processed_findings in response["ProcessedFindings"]:
+                      logger.info(
+                          f"processed and suppressed id {processed_findings['Id']} productarn {processed_findings['ProductArn']}"
+                      )
+
+                  for unprocessed_findings in response["UnprocessedFindings"]:
+                      logger.error(
+                          f"unprocessed finding id {unprocessed_findings['FindingIdentifier']['Id']} productarn {unprocessed_findings['FindingIdentifier']['ProductArn']} error code {unprocessed_findings['ErrorCode']} error message {unprocessed_findings['ErrorMessage']}"
+                      )
+
+              except boto3exceptions.ClientError as error:
+                  logger.exception("client error")
+                  raise ConnectionError(f"Client error invoking batch update findings {error}")
+              except boto3exceptions.ParamValidationError as error:
+                  logger.exception("invalid parameters")
+                  raise ValueError(f"The parameters you provided are incorrect: {error}")
+
+              return {"statusCode": 200}
+      Role: !GetAtt SecurityHubBatchUpdateSuppressionRole.Arn
+      FunctionName: suppress-security-hub-findings
+      Description: Suppression lambda for Security Hub implements batch update findings
+      Handler: index.handler
+      Layers:
+      - Fn::GetAtt:
+        - AWSLambdaPowertoolsApplication
+        - Outputs.LayerVersionArn
+      Runtime: python3.8
+      Timeout: 120
+  BatchupdateEventInvokeConfig:
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      FunctionName:
+        Ref: BatchupdateLambdaFct
+      Qualifier: "$LATEST"
+      MaximumRetryAttempts: 2
+  BatchUpdateLambdaFctEventSourceEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      FunctionName:
+        Ref: BatchupdateLambdaFct
+      BatchSize: 10
+      Enabled: true
+      EventSourceArn: !GetAtt SecurityHubFindingsQueue.Arn
+      MaximumBatchingWindowInSeconds: 10

@@ -42,5 +42,3 @@ SecurityHubSuppressionInfra:
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SecurityCentralAccount
-  Parameters:
-    SecHubSuppressLambdaFctName: securityhub-suppress-findings
