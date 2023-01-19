@@ -231,38 +231,6 @@ Resources:
       Queues:
       - Ref: SecurityHubFindingsQueue
 
-  # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
-  # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
-
-  # This rule suppresses findings for the given controls (GeneratorId) in all the accounts
-  SuppressFindingsInAllAccountsRule:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: SecHubSuppress findings (identified by generatorId) for all accounts
-      EventPattern:
-        detail:
-          findings:
-            GeneratorId:
-              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.3'
-              - 'aws-foundational-security-best-practices/v/1.0.0/EC2.2'
-              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14'
-              - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
-              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
-            Workflow:
-              Status:
-              - NEW
-        detail-type:
-        - Security Hub Findings - Imported
-        source:
-        - aws.securityhub
-      State: ENABLED
-      Targets:
-      - Arn:
-          Fn::GetAtt:
-          - SecurityHubFindingsQueue
-          - Arn
-        Id: Target0
-
   AWSLambdaPowertoolsApplication:
     Type: AWS::Serverless::Application
     Properties:
@@ -375,3 +343,35 @@ Resources:
       Enabled: true
       EventSourceArn: !GetAtt SecurityHubFindingsQueue.Arn
       MaximumBatchingWindowInSeconds: 10
+
+  # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
+  # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
+
+  # This rule suppresses findings for the given controls (GeneratorId) in all the accounts
+  SuppressFindingsInAllAccountsRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress findings (identified by generatorId) for all accounts
+      EventPattern:
+        detail:
+          findings:
+            GeneratorId:
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.3'
+              - 'aws-foundational-security-best-practices/v/1.0.0/EC2.2'
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14'
+              - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
+            Workflow:
+              Status:
+              - NEW
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
