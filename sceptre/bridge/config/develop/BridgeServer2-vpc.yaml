@@ -7,3 +7,4 @@ dependencies:
 parameters:
   VpcName: BridgeServer2-develop-vpc
   VpcSubnetPrefix: "172.48"
+  IncludeBastianSecurityGroup: "false"

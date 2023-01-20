@@ -5,3 +5,4 @@ stack_name: snowflakevpc
 parameters:
   VpcSubnetPrefix: "10.25"
   VpcName: snowflakevpc
+  IncludeBastianSecurityGroup: "false"

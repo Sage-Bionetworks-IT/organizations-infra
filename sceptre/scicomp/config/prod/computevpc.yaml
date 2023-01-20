@@ -5,3 +5,4 @@ stack_name: computevpc
 parameters:
   VpcSubnetPrefix: "10.5"
   VpcName: computevpc
+  IncludeBastianSecurityGroup: "false"
