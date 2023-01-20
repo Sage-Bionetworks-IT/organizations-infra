@@ -1,6 +1,8 @@
 Transform: AWS::Serverless-2016-10-31
 Description: >-
-  Provision queues, policies and a lambda to support automatic suppression of Security Hub findings
+  Provision queues, policies and a lambda to support automatic suppression of Security Hub findings.
+  See https://aws.amazon.com/blogs/security/how-to-create-auto-suppression-rules-in-aws-security-hub/ for
+  more details.
 Resources:
   SecurityHubBatchUpdateSuppressionManagedPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -16,7 +18,7 @@ Resources:
           - logs:CreateLogStream
           - logs:PutLogEvents
           Effect: Allow
-          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/suppress-security-hub-findings:*"
+          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${SecurityHubFindingsSuppressionLambdaFct}:*"
           Sid: CloudWatchLogs2
         - Action: securityhub:BatchUpdateFindings
           Effect: Allow
@@ -239,7 +241,7 @@ Resources:
         SemanticVersion: 2.5.0
     Metadata:
       aws:cdk:path: sechub-finding-suppression/AWSLambdaPowertoolsApplication
-  BatchupdateLambdaFct:
+  SecurityHubFindingsSuppressionLambdaFct:
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -318,7 +320,7 @@ Resources:
 
               return {"statusCode": 200}
       Role: !GetAtt SecurityHubBatchUpdateSuppressionRole.Arn
-      FunctionName: suppress-security-hub-findings
+      FunctionName: SecurityHubFindingsSuppressionLambdaFct
       Description: Suppression lambda for Security Hub implements batch update findings
       Handler: index.handler
       Layers:
@@ -330,13 +332,13 @@ Resources:
   BatchupdateEventInvokeConfig:
     Type: AWS::Lambda::EventInvokeConfig
     Properties:
-      FunctionName: suppress-security-hub-findings
+      FunctionName: !Ref SecurityHubFindingsSuppressionLambdaFct
       Qualifier: "$LATEST"
       MaximumRetryAttempts: 2
   BatchUpdateLambdaFctEventSourceEventSourceMapping:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
-      FunctionName: suppress-security-hub-findings
+      FunctionName: !Ref SecurityHubFindingsSuppressionLambdaFct
       BatchSize: 10
       Enabled: true
       EventSourceArn: !GetAtt SecurityHubFindingsQueue.Arn
