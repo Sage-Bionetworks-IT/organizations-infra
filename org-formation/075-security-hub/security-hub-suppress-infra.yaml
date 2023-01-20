@@ -330,8 +330,7 @@ Resources:
   BatchupdateEventInvokeConfig:
     Type: AWS::Lambda::EventInvokeConfig
     Properties:
-      FunctionName:
-        Ref: BatchupdateLambdaFct
+      FunctionName: suppress-security-hub-findings
       Qualifier: "$LATEST"
       MaximumRetryAttempts: 2
   BatchUpdateLambdaFctEventSourceEventSourceMapping:
