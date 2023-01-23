@@ -3,6 +3,10 @@ Description: >-
   Provision queues, policies and a lambda to support automatic suppression of Security Hub findings.
   See https://aws.amazon.com/blogs/security/how-to-create-auto-suppression-rules-in-aws-security-hub/ for
   more details.
+Parameters:
+  AccessToQueueUserArnList:
+    Type: List<String>
+    Description: A list of users' ARNs that can access the findings queue
 Resources:
   SecurityHubBatchUpdateSuppressionManagedPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -75,7 +79,7 @@ Resources:
         - Action: sts:AssumeRole
           Effect: Allow
           Principal:
-            AWS: 'arn:aws:sts::140124849929:assumed-role/AWSReservedSSO_Administrator_1de765cf1298ed53/*'
+            AWS: !Ref AccessToQueueUserArnList
         Version: '2012-10-17'
       Description: Access to encrypted queue for SSO roles
       Path: "/"
