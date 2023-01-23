@@ -42,3 +42,6 @@ SecurityHubSuppressionInfra:
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SecurityCentralAccount
+  Parameters:
+    AccessToQueueUserArnList:
+    - 'arn:aws:sts::140124849929:assumed-role/AWSReservedSSO_Administrator_1de765cf1298ed53/x.schildwachter@sagebase.org'
