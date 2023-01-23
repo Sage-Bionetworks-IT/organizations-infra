@@ -22,7 +22,7 @@ Resources:
           - logs:CreateLogStream
           - logs:PutLogEvents
           Effect: Allow
-          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${SecurityHubFindingsSuppressionLambdaFct}:*"
+          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/SecurityHubFindingsSuppressionLambdaFct:*"
           Sid: CloudWatchLogs2
         - Action: securityhub:BatchUpdateFindings
           Effect: Allow
@@ -247,6 +247,7 @@ Resources:
       aws:cdk:path: sechub-finding-suppression/AWSLambdaPowertoolsApplication
   SecurityHubFindingsSuppressionLambdaFct:
     Type: AWS::Lambda::Function
+    DependsOn: SecurityHubBatchUpdateSuppressionRole
     Properties:
       Code:
         ZipFile: |
@@ -335,12 +336,14 @@ Resources:
       Timeout: 120
   BatchupdateEventInvokeConfig:
     Type: AWS::Lambda::EventInvokeConfig
+    DependsOn: SecurityHubFindingsSuppressionLambdaFct
     Properties:
       FunctionName: !Ref SecurityHubFindingsSuppressionLambdaFct
       Qualifier: "$LATEST"
       MaximumRetryAttempts: 2
   BatchUpdateLambdaFctEventSourceEventSourceMapping:
     Type: AWS::Lambda::EventSourceMapping
+    DependsOn: SecurityHubFindingsSuppressionLambdaFct
     Properties:
       FunctionName: !Ref SecurityHubFindingsSuppressionLambdaFct
       BatchSize: 10
