@@ -260,24 +260,6 @@ Resources:
         IndexDocument: index.html
         ErrorDocument: error.html
     DeletionPolicy: Retain
-  # Allow access to bastian hosts
-  BastianSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: Security Group for bastians
-      VpcId:
-        Ref: "AwsDefaultVpcId"
-      SecurityGroupIngress:
-        - CidrIp: "0.0.0.0/0"
-          FromPort: 22
-          ToPort: 22
-          IpProtocol: tcp
-          Description: "Allow SSH connection"
-      SecurityGroupEgress:
-        - CidrIp: "0.0.0.0/0"
-          FromPort: -1
-          ToPort: -1
-          IpProtocol: "-1"
 Outputs:
   AwsDefaultVpcId:
     Value: !Ref AwsDefaultVpcId
@@ -296,9 +278,3 @@ Outputs:
         - !GetAtt AWSS3AndroidAppBucket.DomainName
     Export:
       Name: !Sub '${AWS::StackName}-AndroidAppBucketSecureURL'
-  BastianSecurityGroup:
-    Description: "Bastian Security Group Id"
-    Value: !Ref BastianSecurityGroup
-    Export:
-      Name:
-        !Join ['-', [!Sub '${AWS::StackName}', 'BastianSecurityGroup']]

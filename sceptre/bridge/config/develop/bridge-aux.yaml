@@ -7,3 +7,4 @@ dependencies:
 parameters:
   VpcSubnetPrefix: "172.51"
   VpcName: bridge-aux
+  IncludeBastianSecurityGroup: "false"
