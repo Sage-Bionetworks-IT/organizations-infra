@@ -21,7 +21,7 @@ GithubOidcSageBionetworks:
 GithubOidcSageBionetworksIt:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.j2
+  Template: github-oidc-provider-access.njk
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it
   Parameters:
     GitHubOrg: "Sage-Bionetworks-IT"
@@ -40,7 +40,7 @@ GithubOidcSageBionetworksIt:
 GithubOidcSageBionetworksRecover:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.j2
+  Template: github-oidc-provider-access.njk
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-recover
   Parameters:
     GitHubOrg: "Sage-Bionetworks"
@@ -60,7 +60,7 @@ GithubOidcSageBionetworksRecover:
 GithubOidcSageBionetworksDataCuratorInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.j2
+  Template: github-oidc-provider-access.njk
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-data-curator-infra
   Parameters:
     GitHubOrg: "Sage-Bionetworks"
