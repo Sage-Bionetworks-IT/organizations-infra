@@ -243,15 +243,15 @@ Parameters:
 
   dpeProdAdminGroup:      #JC aws-dpe-prod-admins
     Type: String
-    Default: ''
+    Default: 'c408c488-e0c1-70cb-91fa-fe5b3e113bb0'
 
   dpeProdDeveloperGroup:      #JC aws-dpe-prod-developers
     Type: String
-    Default: ''
+    Default: '34b8b4a8-90e1-70c0-9223-4a663d28e2ff'
 
   dpeProdViewerGroup:      #JC aws-dpe-prod-viewers
     Type: String
-    Default: ''
+    Default: '64284488-1061-70c9-eacb-f465d1988789'
 
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
