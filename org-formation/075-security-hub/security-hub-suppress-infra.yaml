@@ -383,6 +383,35 @@ Resources:
           - Arn
         Id: Target0
 
+  # This rule suppresses findings with the given generator IDs only for the bootstrap and essentials buckets
+  SuppressFindingsForPublicBucketsRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress findings (identified by generatorId) for the bootstrap and essentials buckets in all accounts
+      EventPattern:
+        detail:
+          findings:
+            Resources:
+              Id:
+                - prefix: 'arn:aws:s3:::bootstrap-awss3cloudformationbucket-'
+                - prefix: 'arn:aws:s3:::essentials-awss3lambdaartifactsbucket-'
+            GeneratorId:
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.1'
+            Workflow:
+              Status:
+              - NEW
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
+
   # This rule suppresses findings with the given generator IDs only for the IAM accounts specified
   SuppressFindingsForIAMsRule:
     Type: AWS::Events::Rule
