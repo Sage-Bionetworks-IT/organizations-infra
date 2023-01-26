@@ -445,11 +445,11 @@ Resources:
           - Arn
         Id: Target0
 
-  # This rule suppresses findings with the given generator IDs only for the bootstrap and essentials buckets
+  # This rule suppresses findings with the given generator IDs only for the given keys (account are in keyIds)
   SuppressFindingsForCMKRotationRule:
     Type: AWS::Events::Rule
     Properties:
-      Description: SecHubSuppress findings (identified by generatorId) for the bootstrap and essentials buckets in all accounts
+      Description: SecHubSuppress findings (identified by generatorId) for the specified keys in all accounts
       EventPattern:
         detail:
           findings:
