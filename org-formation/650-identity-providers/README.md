@@ -15,7 +15,8 @@ Login to the AWS account then navigate
 -> cloudformation -> find the stack named something like `Sagebase-github-oidc-*` -> outputs -> ProviderRoleArn
 ```
 
-4. Take the ProviderRoleArn and use it in the `configure-aws-credentials` action
+4. Take the ProviderRoleArn value, it should look something like `arn:aws:iam::XXXXXXXXX:role/sagebase-github-oidc-sage-ProviderRoleorganization-XXXXXX`
+and set it to `role-to-assume` in the `configure-aws-credentials` github action.
 
 Example:
 ```
