@@ -56,3 +56,22 @@ GithubOidcSageBionetworksRecover:
       - !Ref RecoverProdAccount
       - !Ref RecoverDevAccount
     Region: us-east-1
+
+GithubOidcSageBionetworksDataCuratorInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-data-curator-infra
+  Parameters:
+    GitHubOrg: "Sage-Bionetworks"
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    Repositories:
+      - name: "data_curator-infra"
+        branch: "main"
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DnTDevAccount
+    Region: us-east-1
