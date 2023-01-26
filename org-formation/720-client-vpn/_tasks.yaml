@@ -64,7 +64,7 @@ Vpn:
     LogRetentionInDays: "3653"
     # manually generated and imported server cert, saved to lastpass "Sage VPN Certificate"
     # https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-getting-started.html#cvpn-getting-started-certs
-    ServerCertificateArn: !Sub 'arn:aws:acm:${primaryRegion}:${accountId}:certificate/a720b333-8d21-43f1-856d-c2d63b1bc465'
+    ServerCertificateArn: !Sub 'arn:aws:acm:${primaryRegion}:${accountId}:certificate/e749946e-981f-42b9-869e-f2adf362b2a8'
     SplitTunnel: !Ref splitTunnel
     VpnDnsServers: ["10.50.0.2", "8.8.8.8"]
 
