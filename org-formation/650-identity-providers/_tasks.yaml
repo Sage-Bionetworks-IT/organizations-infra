@@ -75,3 +75,22 @@ GithubOidcSageBionetworksDataCuratorInfra:
     Account:
       - !Ref DnTDevAccount
     Region: us-east-1
+
+GithubOidcSageBionetworksSecuityHubToJira:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-security-hub-to-jira
+  Parameters:
+    GitHubOrg: "Sage-Bionetworks"
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess"
+  TemplatingContext:
+    Repositories:
+      - name: "security-hub-to-jira"
+        branch: "main"
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SecurityCentralAccount
+    Region: us-east-1
