@@ -78,11 +78,14 @@ Resources:
           -
             Effect: "Allow"
             Action:
-              - aws-portal:ViewUsage
+              - billing:GetBilling*
+              - consolidatedbilling:Get*
+              - consolidatedbilling:List*
               - cur:DescribeReportDefinitions
               - cur:PutReportDefinition
               - cur:DeleteReportDefinition
               - cur:ModifyReportDefinition
+              - freetier:Get*
             Resource: "*"
   AWSIAMCostExplorerAccessPolicy:
     Type: "AWS::IAM::ManagedPolicy"
@@ -93,7 +96,6 @@ Resources:
           -
             Effect: "Allow"
             Action:
-              - aws-portal:ViewUsage
               - ce:Describe*
               - ce:Get*
               - ce:List*

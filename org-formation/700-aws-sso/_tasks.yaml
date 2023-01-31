@@ -983,12 +983,14 @@ SsoScipoolDevCommunityManager:
           {
             "Effect": "Allow",
             "Action": [
-              "aws-portal:ViewUsage",
-              "aws-portal:ViewBilling",
+              "billing:GetBilling*",
+              "consolidatedbilling:Get*",
+              "consolidatedbilling:List*",
               "cur:DescribeReportDefinitions",
               "cur:PutReportDefinition",
               "cur:DeleteReportDefinition",
-              "cur:ModifyReportDefinition"
+              "cur:ModifyReportDefinition",
+              "freetier:Get*",
             ],
             "Resource": "*"
           }
