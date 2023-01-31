@@ -45,7 +45,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Generate AWS CDK bootstrap template
-        run: npx cdk bootstrap --json --show-template > org-formation/200-baseline/tmptemplate.json
+        run: generate-cdk-bootstrap-template
       - name: Add EnableKeyRotation property to CDK assets key
         run: jq '.Resources.FileAssetsBucketEncryptionKey.Properties += {"EnableKeyRotation" :true}' org-formation/200-baseline/tmptemplate.json > org-formation/200-baseline/cdk-bootstrap.json
       - name: Validate ofn templates
