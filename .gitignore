@@ -140,4 +140,5 @@ lerna-debug.log
 .printed-stacks/
 
 # auto generated files
-org-formation/200-baseline/cdk-bootstrap.yaml
+org-formation/200-baseline/cdk-bootstrap.json
+org-formation/200-baseline/tmptemplate.json
