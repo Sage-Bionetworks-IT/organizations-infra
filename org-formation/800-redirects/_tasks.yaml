@@ -19,3 +19,20 @@ SsoRedirect:   # Redirect sso.sageit.org to the AWS SSO Start URL
     TargetHostName: "d-906769aa66.awsapps.com"
     # and a path to our specific config
     TargetKey: "start#/"
+
+FinopsApiRedirect:  # redirect finops-api.sageit.org to lambda-mips-api cloudfront distribution
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.3/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-finops-api-redirect'
+  StackDescription: Setup a redirect to the lambda-mips-api cloudfront distribution
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceHostName: "finops-api.sageit.org"
+    SourceAcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-sageit-org-acm-cert-CertificateArn']
+    # ID of the sageit.org zone (in sageit account)
+    SourceHostedZoneId: "Z0478495257GEB73WFM63"
+    # the endpoint we are redirecting to in organizations account
+    TargetHostName: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-mips-microservice-CloudfrontDomain']
