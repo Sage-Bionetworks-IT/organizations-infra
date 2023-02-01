@@ -23,7 +23,7 @@ OrgFormationBuildAccessRole:
 
 CdkBootstrapDefault:
   Type: update-stacks
-  Template: cdk-bootstrap.yaml  # auto generated from "npx cdk bootstrap --show-template > cdk-bootstrap.yaml"
+  Template: cdk-bootstrap.json  # auto generated from "npx cdk bootstrap --json --show-template > org-formation/200-baseline/tmptemplate.json and jq"
   StackName: cdk-bootstrap-default
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
