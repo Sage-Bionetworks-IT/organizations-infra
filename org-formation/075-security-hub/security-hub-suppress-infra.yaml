@@ -395,8 +395,10 @@ Resources:
               Id:
                 - prefix: 'arn:aws:s3:::bootstrap-awss3cloudformationbucket-'
                 - prefix: 'arn:aws:s3:::essentials-awss3lambdaartifactsbucket-'
+                - prefix: 'arn:aws:s3:::cf-templates-'
             GeneratorId:
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.1'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2'
             Workflow:
               Status:
               - NEW
