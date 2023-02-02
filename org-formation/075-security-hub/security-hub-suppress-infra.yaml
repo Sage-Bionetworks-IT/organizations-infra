@@ -368,6 +368,7 @@ Resources:
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14'
               - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/3.7'
             Workflow:
               Status:
               - NEW
