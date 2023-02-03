@@ -990,7 +990,7 @@ SsoScipoolDevCommunityManager:
               "cur:PutReportDefinition",
               "cur:DeleteReportDefinition",
               "cur:ModifyReportDefinition",
-              "freetier:Get*",
+              "freetier:Get*"
             ],
             "Resource": "*"
           }
