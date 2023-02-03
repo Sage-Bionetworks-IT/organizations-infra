@@ -384,11 +384,11 @@ Resources:
           - Arn
         Id: Target0
 
-  # This rule suppresses findings with the given generator IDs only for the bootstrap and essentials buckets
+  # This rule suppresses findings with the given generator IDs only for the infra resources
   SuppressFindingsForPublicBucketsRule:
     Type: AWS::Events::Rule
     Properties:
-      Description: SecHubSuppress findings (identified by generatorId) for the bootstrap and essentials buckets in all accounts
+      Description: SecHubSuppress findings (identified by generatorId) for the infra resources in all accounts
       EventPattern:
         detail:
           findings:
@@ -397,9 +397,12 @@ Resources:
                 - prefix: 'arn:aws:s3:::bootstrap-awss3cloudformationbucket-'
                 - prefix: 'arn:aws:s3:::essentials-awss3lambdaartifactsbucket-'
                 - prefix: 'arn:aws:s3:::cf-templates-'
+                # This should only match with 2.1.5.1
+                - 'AWS::::Account:140124849929'
             GeneratorId:
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.1'
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1'
             Workflow:
               Status:
               - NEW
