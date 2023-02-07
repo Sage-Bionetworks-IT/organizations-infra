@@ -29,10 +29,10 @@ FinopsApiRedirect:  # redirect finops-api.sageit.org to lambda-mips-api cloudfro
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
   Parameters:
-    # the endpoint we are redirecting from
+    # the name of the CNAME record
     SourceHostName: "finops-api.sageit.org"
     SourceAcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-sageit-org-acm-cert-CertificateArn']
     # ID of the sageit.org zone (in sageit account)
     SourceHostedZoneId: "Z0478495257GEB73WFM63"
-    # the endpoint we are redirecting to in organizations account
-    TargetHostName: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-mips-microservice-CloudfrontDomain']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-mips-microservice-CloudfrontDomain', !Ref AdminCentralAccount]
