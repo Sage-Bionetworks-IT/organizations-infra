@@ -22,7 +22,7 @@ SsoRedirect:   # Redirect sso.sageit.org to the AWS SSO Start URL
 
 FinopsApiRedirect:  # redirect finops-api.sageit.org to lambda-mips-api cloudfront distribution
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.3/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-finops-api-redirect'
   StackDescription: Setup a redirect to the lambda-mips-api cloudfront distribution
   DefaultOrganizationBindingRegion: !Ref primaryRegion
