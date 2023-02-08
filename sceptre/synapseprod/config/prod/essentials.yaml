@@ -4,5 +4,3 @@ template:
 stack_name: essentials
 dependencies:
   - prod/bootstrap.yaml
-parameters:
-  VpcPeeringRequesterAwsAccountId: !ssm /infra/AdmincentralAwsAccountId
