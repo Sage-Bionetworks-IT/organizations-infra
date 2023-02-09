@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.5/templates/essentials.yaml
+  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.6/templates/essentials.yaml
 stack_name: essentials
 dependencies:
   - prod/bootstrap.yaml
