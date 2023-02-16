@@ -237,7 +237,7 @@ Parameters:
     Type: String
     Default: 'c448e498-60d1-7084-5cf5-14d77b82a42b'
 
-  dcaProdApplicationManagerGroup:	#JC aws-dca-prod-application-managers
+  dcaProdApplicationManagerGroup:      # JC aws-dca-prod-application-managers
     Type: String
     Default: '540864c8-1021-7048-7142-4563c3f12645'
 
