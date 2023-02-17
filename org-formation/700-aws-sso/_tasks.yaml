@@ -445,6 +445,7 @@ SsoApplicationManager:
       Account: '*'
   Parameters:
     instanceArn: !Ref instanceArn
+    principalId: !Ref adminGroup # by default we admit admin's.  Below we 'inherit' this stack for specific user groups
     permissionSetName: 'application-manager'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
@@ -1381,7 +1382,7 @@ SsoDntDevViewer:
 SsoDntDevProdApplicationManager:
   Type: update-stacks
   DependsOn: SsoApplicationManager
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   StackName: !Sub '${resourcePrefix}-${appName}-dntdev-application-manager'
   StackDescription: 'SSO: Application Manager role used by DntDev application-manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -1551,7 +1552,7 @@ SsoDCAProdViewerPlus:
 SsoDCAProdApplicationManager:
   Type: update-stacks
   DependsOn: SsoApplicationManager
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   StackName: !Sub '${resourcePrefix}-${appName}-dca-prod-application-manager'
   StackDescription: 'SSO: Application Manager role used by DCA application-manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
