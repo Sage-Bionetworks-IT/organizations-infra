@@ -434,6 +434,7 @@ SsoViewerPlus:
 SsoApplicationManager:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
   StackName: !Sub '${resourcePrefix}-${appName}-application-manager'
   StackDescription: 'Read-only role plus access to secrets manager'
   TerminationProtection: false
@@ -1383,6 +1384,7 @@ SsoDntDevProdApplicationManager:
   Type: update-stacks
   DependsOn: SsoApplicationManager
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
   StackName: !Sub '${resourcePrefix}-${appName}-dntdev-application-manager'
   StackDescription: 'SSO: Application Manager role used by DntDev application-manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -1390,7 +1392,7 @@ SsoDntDevProdApplicationManager:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref DntDevAccount
+      Account: !Ref DnTDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref dntDevApplicationManagerGroup
@@ -1553,6 +1555,7 @@ SsoDCAProdApplicationManager:
   Type: update-stacks
   DependsOn: SsoApplicationManager
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
   StackName: !Sub '${resourcePrefix}-${appName}-dca-prod-application-manager'
   StackDescription: 'SSO: Application Manager role used by DCA application-manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
