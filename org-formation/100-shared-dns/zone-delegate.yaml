@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Enables member accounts to modify name server records in route53 for delegating subdomains to zones in member accounts.
+
+Parameters:
+  PolicyName:
+    Type: String
+    Default: "ZoneDelegationPolicy"
+
+Resources:
+  ZoneDelegationPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Ref PolicyName
+      PolicyDocument: >-
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "route53:ChangeResourceRecordSets"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "route53:ChangeResourceRecordSetsRecordTypes": "NS"
+                }
+              },
+              "Resource": "*"
+            }
+          ]
+        }
