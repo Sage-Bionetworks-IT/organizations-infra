@@ -3,7 +3,7 @@ Parameters:
 
 AppZone:  # Zone for application front-end DNS names, e.g. 'dca.app.sagebionetworks.org'
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.5/templates/R53-hostedzone.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.7/templates/R53-hostedzone.yaml
   StackName: !Sub '${resourcePrefix}-shared-app-zone'
   StackDescription: Create a shared hosted zone for application domains
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -17,7 +17,7 @@ AppZone:  # Zone for application front-end DNS names, e.g. 'dca.app.sagebionetwo
 
 ApiZone:  # Zone for intra-API DNS names, e.g. 'schematic.api.sagebionetworks.org'
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.5/templates/R53-hostedzone.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.7/templates/R53-hostedzone.yaml
   StackName: !Sub '${resourcePrefix}-shared-api-zone'
   StackDescription: Create a shared hosted zone for api domains
   DefaultOrganizationBindingRegion: !Ref primaryRegion
