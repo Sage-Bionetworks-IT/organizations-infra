@@ -20,6 +20,7 @@ SagebioAppZoneAcmCertificate:  # Wildcard certificate for '*.app.sagebionetworks
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     # We need a copy of this certificate in every account where it will be used
+    # Each certificate needs to be manually verified
     Account:
       - !Ref DnTDevAccount
       - !Ref DCAProdAccount
@@ -46,6 +47,7 @@ SagebioApiZoneAcmCertificate:  # Wildcard certificate for '*.api.sagebionetworks
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     # We need a copy of this certificate in every account where it will be used
+    # Each certificate needs to be manually verified
     Account:
       - !Ref DnTDevAccount
       - !Ref DCAProdAccount
