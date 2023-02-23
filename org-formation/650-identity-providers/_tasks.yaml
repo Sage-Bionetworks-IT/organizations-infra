@@ -93,7 +93,7 @@ GithubOidcSageBionetworksSchematicInfra:
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
-      - !Ref SchematicProdAccount
+      - !Ref DCAProdAccount
     Region: us-east-1
 
 GithubOidcSageBionetworksSecuityHubToJira:
