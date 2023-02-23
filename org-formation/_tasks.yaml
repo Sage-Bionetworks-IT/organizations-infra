@@ -46,6 +46,11 @@ AwsSystemsManager:
   DependsOn: [ Types ]
   Path: ./090-systems-manager/_tasks.yaml
 
+SharedDNS:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./100-shared-dns/_tasks.yaml
+
 Baseline:
   Type: include
   DependsOn: [ Types ]
