@@ -57,4 +57,4 @@ DcaDevAppRedirect:
     # ID of the app.sagebionetworks.org zone (in sageit account)
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
     # the value of the CNAME record
-    TargetHostName: !CopyValue [!Sub 'dca-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
+    TargetHostName: !CopyValue ['dca-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
