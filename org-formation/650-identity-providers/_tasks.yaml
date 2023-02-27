@@ -70,7 +70,7 @@ GithubOidcSageBionetworksDataCuratorInfra:
   TemplatingContext:
     Repositories:
       - name: "data_curator-infra"
-        branch: "main"
+        branch: "*"
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
@@ -90,7 +90,7 @@ GithubOidcSageBionetworksSchematicInfra:
   TemplatingContext:
     Repositories:
       - name: "schematic-infra"
-        branch: "main"
+        branch: "*"
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
