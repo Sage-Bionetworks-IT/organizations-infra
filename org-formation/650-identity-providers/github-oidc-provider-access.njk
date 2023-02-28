@@ -87,9 +87,14 @@ Resources:
             Principal:
               Federated: !Ref ProviderArn
             Condition:
-              ForAllValues:StringEquals:
+              StringEquals:
                 token.actions.githubusercontent.com:aud: !Ref ClientIdList
+  {% if Repository.branch == '*' %}
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/{{ Repository.name }}:{{Repository.branch }}
+  {% else %}
                 token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/{{ Repository.name }}:ref:refs/heads/{{ Repository.branch }}
+  {% endif %}
 {% endfor %}
 Outputs:
 {% for Repository in Repositories %}
