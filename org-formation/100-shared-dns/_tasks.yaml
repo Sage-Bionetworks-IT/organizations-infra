@@ -1,6 +1,23 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
+# The dns zone for this certificate was created manually, and a
+# certificate for the zone is created in the sageit account in sceptre:
+# ./sceptre/sageit/config/prod/sageit-org-acm-cert.yaml
+#
+# Create a second sageit certificate in admincentral for the finops lambdas
+SageItCertificate:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
+  StackName: !Sub '${resourcePrefix}-sageit-cert'
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref AdminCentralAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    DnsDomainName: 'sageit.org'
+
 SagebioAppZone:  # Zone for application front-end DNS names, e.g. 'dca.app.sagebionetworks.org'
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/R53-hostedzone.yaml
