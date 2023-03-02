@@ -115,3 +115,21 @@ GithubOidcSageBionetworksSecuityHubToJira:
     Account:
       - !Ref SecurityCentralAccount
     Region: us-east-1
+
+GithubOidcSageBionetworksAdmincentral:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-admincentral
+  Parameters:
+    GitHubOrg: "Sage-Bionetworks"
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    Repositories:
+      - name: "aws-infra"
+        branch: "master"
+  DefaultOrganizationBinding:
+    Account: !Ref AdminCentralAccount
+    Region: us-east-1
