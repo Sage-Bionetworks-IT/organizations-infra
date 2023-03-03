@@ -116,16 +116,32 @@ GithubOidcSageBionetworksSecuityHubToJira:
       - !Ref SecurityCentralAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksAdmincentral:
+GithubOidcSageBionetworksAwsInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-admincentral
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-awsinfra
   Parameters:
     GitHubOrg: "Sage-Bionetworks"
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AdministratorAccess"
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
+              "Resource": [ "bootstrap-awss3cloudformationbucket-19qromfd235z9" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject" ],
+              "Resource": ["bootstrap-awss3cloudformationbucket-19qromfd235z9/aws-infra/*"]
+          }
+        ]
+      }
   TemplatingContext:
     Repositories:
       - name: "aws-infra"
