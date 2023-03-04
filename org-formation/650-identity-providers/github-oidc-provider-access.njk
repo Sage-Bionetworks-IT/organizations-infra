@@ -1,0 +1,105 @@
+{# Allow Github to access AWS without giving github AWS credentials               #}
+{# Must pass in the following templating parameters                               #}
+{#  Parameters:                                                                   #}
+{#    GitHubOrg: "Sage-Bionetworks"                                               #}
+{#    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ] #}
+{#    ManagedPolicyArns:                                                          #}
+{#      - "arn:aws:iam::aws:policy/AdministratorAccess"                           #}
+{#  TemplatingContext:                                                            #}
+{#    Repositories:                                                               #}
+{#      - name: "myrepo"                                                          #}
+{#        branch: "master"                                                        #}
+
+{# Make template compatible with both sceptre and org-formation     #}
+{% if sceptre_user_data.Repositories is defined %}
+    {% set Repositories = sceptre_user_data.Repositories %}
+{% endif %}
+
+AWSTemplateFormatVersion: 2010-09-09
+Description: Setup github OIDC access
+Parameters:
+  ClientIdList:
+    Type: List<String>
+    Description: >-
+      A list of client IDs (also known as audiences) that are associated with
+      the specified IAM OIDC provider resource object
+    Default: "sts.amazonaws.com"
+  ProviderArn:
+    Type: String
+    Description: "The OIDC provider ARN"
+  GitHubOrg:
+    Type: String
+    Description: "The name of the github organization"
+  # Must provide either a list of ManagePolicyArns or a custom PolicyDocument.
+  # Can also provide both a list of ManagePolicyArns and a custom PolicyDocument.
+  ManagedPolicyArns:
+    Type: CommaDelimitedList
+    Default: ""
+    Description: >-
+      A list of managed policies for the role. Required if PolicyDocument not provided.
+      Example:
+        ["arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess", "arn:aws:iam::1111111111:policy/MY-EXISTING-POLICY"]
+  PolicyDocument:
+    Type: String
+    Default: ""
+    Description: >-
+      A JSON policy document to define a custom policy for the role. Required if ManagedPolicyArns not provided.
+      Example:
+        {
+          "Version":"2012-10-17",
+          "Statement":[
+            {
+              "Sid":"PublicRead",
+              "Effect":"Allow",
+              "Principal": "*",
+              "Action":["s3:GetObject","s3:GetObjectVersion"],
+              "Resource":["arn:aws:s3:::EXAMPLE-BUCKET/*"]
+            }
+          ]
+        }
+Conditions:
+  HasManagedPolicyArns: !Not
+    - !Equals
+      - !Join ["", !Ref ManagedPolicyArns]
+      - ''
+  HasPolicyDocument: !Not [!Equals [!Ref PolicyDocument, ""]]
+Resources:
+  ServicePolicy:
+    Condition: HasPolicyDocument
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument: !Ref PolicyDocument
+{% for Repository in Repositories %}
+  ProviderRole{{ Repository.name | replace('-','') | replace('_','') }}:
+    Type: AWS::IAM::Role
+    Properties:
+      # Concatinate managed policy and custom policy
+      ManagedPolicyArns: !Split
+        - ","
+        - !Join
+            - ","
+            - - !If [HasPolicyDocument, !Ref ServicePolicy, !Ref 'AWS::NoValue']
+              - !If [HasManagedPolicyArns, !Join [",", !Ref "ManagedPolicyArns"], !Ref 'AWS::NoValue']
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRoleWithWebIdentity
+            Principal:
+              Federated: !Ref ProviderArn
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: !Ref ClientIdList
+  {% if Repository.branch == '*' %}
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/{{ Repository.name }}:{{Repository.branch }}
+  {% else %}
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/{{ Repository.name }}:ref:refs/heads/{{ Repository.branch }}
+  {% endif %}
+{% endfor %}
+Outputs:
+{% for Repository in Repositories %}
+  ProviderRoleArn{{ Repository.name | replace('-','') | replace('_','') }}:
+    Value: !GetAtt ProviderRole{{ Repository.name | replace('-','') | replace('_','') }}.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProviderRoleArn-{{ Repository.name | replace('-','') | replace('_','') }}'
+{% endfor %}

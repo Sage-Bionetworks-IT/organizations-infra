@@ -12,10 +12,11 @@ Organization:
     Properties:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
       ServiceControlPolicies:
-        - !Ref RestrictDisableCloudtrailSCP
-        - !Ref RestrictDisableCloudwatchSCP
-        - !Ref RestrictDisableGuarddutySCP
         - !Ref RestrictIamLoginProfileSCP
+# automation attempts to update these services when vending new aws accounts
+#        - !Ref RestrictDisableCloudtrailSCP
+#        - !Ref RestrictDisableCloudwatchSCP
+#        - !Ref RestrictDisableGuarddutySCP
 
   ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit
@@ -30,6 +31,7 @@ Organization:
         - !Ref WorkflowsNextflowDevAccount
         - !Ref AgoraDevAccount
         - !Ref DnTDevAccount
+        - !Ref RecoverDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -45,6 +47,10 @@ Organization:
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
         - !Ref IncludeChopProdAccount
+        - !Ref RecoverProdAccount
+        - !Ref GenieProdAccount
+        - !Ref DCAProdAccount
+        - !Ref DpeProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -138,7 +144,6 @@ Organization:
       RootEmail: aws.organizations@sagebase.org
       Alias: org-sagebase-organizations
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   BridgeDevAccount:
@@ -149,7 +154,6 @@ Organization:
       RootEmail: bridge.dev@sagebase.org
       Alias: org-sagebase-bridgedevelop
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   BridgeProdAccount:
@@ -160,7 +164,6 @@ Organization:
       RootEmail: bridgeIT@sagebase.org
       Alias: org-sagebase-bridgeprod
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   SynapseDevAccount:
@@ -171,7 +174,6 @@ Organization:
       RootEmail: synapse.dev@sagebase.org
       Alias: org-sagebase-synapsedev
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   SynapseDWAccount:
@@ -182,7 +184,6 @@ Organization:
       RootEmail: synapse.dw@sagebase.org
       Alias: org-sagebase-synapsedw
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   SynapseProdAccount:
@@ -196,7 +197,6 @@ Organization:
       RootEmail: platform@sagebase.org
       Alias: org-sagebase-synapseprod
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   TransitAccount:
@@ -207,7 +207,6 @@ Organization:
       RootEmail: aws.transit@sagebase.org
       Alias: org-sagebase-transit
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   AdminCentralAccount:
@@ -218,7 +217,6 @@ Organization:
       RootEmail: aws.admincentral@sagebase.org
       Alias: org-sagebase-admincentral
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   SageITAccount:
@@ -229,7 +227,6 @@ Organization:
       RootEmail: aws-it@sagebase.org
       Alias: org-sagebase-sageit
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   LogCentralAccount:
@@ -240,7 +237,6 @@ Organization:
       RootEmail: aws.logcentral@sagebase.org
       Alias: org-sagebase-logcentral
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   SecurityCentralAccount:
@@ -251,7 +247,6 @@ Organization:
       RootEmail: aws.securitycentral@sagebase.org
       Alias: org-sagebase-securitycentral
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   ImageCentralAccount:
@@ -262,7 +257,6 @@ Organization:
       RootEmail: aws.amirepo@sagebase.org
       Alias: org-sagebase-imagecentral
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   ITSandboxAccount:
@@ -273,7 +267,6 @@ Organization:
       RootEmail: aws.itsandbox@sagebase.org
       Alias: org-sagebase-itsandbox
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   ScipoolDevAccount:
@@ -519,7 +512,6 @@ Organization:
       RootEmail: aws.ipam@sagebase.org
       Alias: org-sagebase-ipam
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   SceptreDevAccount:
@@ -529,7 +521,6 @@ Organization:
       RootEmail: aws.sceptredev@sagebase.org
       Alias: org-sagebase-sceptredev
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   SysmanCentralAccount:
@@ -539,7 +530,6 @@ Organization:
       RootEmail: aws.sysmancentral@sagebase.org
       Alias: org-sagebase-sysmancentral
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
 
   IdentityCentralAccount:
@@ -549,8 +539,82 @@ Organization:
       RootEmail: aws.identitycentral@sagebase.org
       Alias: org-sagebase-identitycentral
       Tags:
-        <<: !Include ./_default_org_tags.yaml
         <<: !Include ./_platform_org_tags.yaml
+
+  GenieProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-genie-prod
+      RootEmail: aws-genie-prod@sagebase.org
+      Alias: org-sagebase-genie-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DPE
+        Project: Genie
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: Genie-AACR BPC / 312100
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-genie-prod@sagebase.org
+
+  DCAProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-dca-prod
+      RootEmail: aws-dca-prod@sagebase.org
+      Alias: org-sagebase-dca-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: FAIR
+        Project: DCA
+        AccountOwner: milen.nikolov@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-dca-prod@sagebase.org
+
+  RecoverProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-recover-prod
+      RootEmail: aws-recover-prod@sagebase.org
+      Alias: org-sagebase-recover-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DNT
+        Project: RECOVER
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: MGH RECOVER / 122500
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-recover-prod@sagebase.org
+
+  RecoverDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-recover-dev
+      RootEmail: aws-recover-dev@sagebase.org
+      Alias: org-sagebase-recover-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DNT
+        Project: RECOVER
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: MGH RECOVER / 122500
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-recover-dev@sagebase.org
+
+  DpeProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-dpe-prod
+      RootEmail: aws-dpe-prod@sagebase.org
+      Alias: org-sagebase-dpe-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: DNT
+        Project: Infrastructure
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-dpe-prod@sagebase.org
 
   #------------ Personal Accounts -----------
   8dxfh53Account:

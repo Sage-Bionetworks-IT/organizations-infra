@@ -189,7 +189,6 @@ CostExplorerAccessPolicy:
           {
             "Effect": "Allow",
             "Action": [
-                "aws-portal:ViewUsage",
                 "ce:Describe*",
                 "ce:Get*",
                 "ce:List*",

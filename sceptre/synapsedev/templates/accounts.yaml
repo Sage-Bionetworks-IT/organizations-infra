@@ -71,16 +71,15 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-  AWSIAMPeterHarveyUser:
+# Attempt to setup a service user, the only use
+# is to provide a id/secret to run the dev synapse stack under
+  AWSIAMLeonLiSvc:
     Type: 'AWS::IAM::User'
     Properties:
-      UserName: peter.harvey@sagebase.org
+      UserName: svc.leon.li
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
 
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
@@ -113,6 +112,9 @@ Resources:
               - "iam:RemoveRoleFromInstanceProfile"
               - "iam:AddRoleToInstanceProfile"
               - "iam:AttachRolePolicy"
+              - "iam:CreatePolicy"
+              - "iam:ListPolicies"
+              - "kms:*"
             Resource: "*"
 
   AWSIAMAdminRole:
@@ -281,3 +283,7 @@ Outputs:
     Value: !GetAtt AWSIAMAdminRole.RoleId
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-AWSIAMAdminRoleId'
+  AWSIAMDevelopersDeployRightsPolicy:
+    Value: !Ref AWSIAMDevelopersDeployRightsPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-AWSIAMDevelopersDeployRightsPolicy'

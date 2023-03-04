@@ -208,7 +208,7 @@
             "Type": "AWS::KMS::Key",
             "Properties": {
                 "Description": "The master encryption key used to encypt/decrypt all Synapse master secrets",
-                "EnableKeyRotation": false,
+                "EnableKeyRotation": true,
                 "KeyPolicy": {
                     "Version": "2012-10-17",
                     "Id": "key-default-1",

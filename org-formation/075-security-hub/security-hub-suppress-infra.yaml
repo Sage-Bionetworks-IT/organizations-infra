@@ -1,0 +1,452 @@
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  Provision queues, policies and a lambda to support automatic suppression of Security Hub findings.
+  See https://aws.amazon.com/blogs/security/how-to-create-auto-suppression-rules-in-aws-security-hub/ for
+  more details.
+Parameters:
+  AccessToQueueUserArnList:
+    Type: List<String>
+    Description: A list of users' ARNs that can access the findings queue
+Resources:
+  SecurityHubBatchUpdateSuppressionManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action:
+          - logs:CreateLogGroup
+          Effect: Allow
+          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+          Sid: CloudWatchLogs1
+        - Action:
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+          Effect: Allow
+          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/SecurityHubFindingsSuppressionLambdaFct:*"
+          Sid: CloudWatchLogs2
+        - Action: securityhub:BatchUpdateFindings
+          Effect: Allow
+          Resource: "*"
+          Sid: SecurityHubBatchUpdateFindings
+        Version: '2012-10-17'
+      Description: Suppression policy for Security Hub implementing batch update findings
+      Path: "/"
+  SecurityHubBatchUpdateSuppressionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      Description: Suppression role for Security Hub batch update findings
+      ManagedPolicyArns:
+      - Ref: SecurityHubBatchUpdateSuppressionManagedPolicy
+      Path: "/"
+  SecurityHubBatchUpdateSuppressionRoleDefaultPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: kms:Decrypt
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - SqsEncryptionKey
+            - Arn
+        - Action:
+          - sqs:ReceiveMessage
+          - sqs:ChangeMessageVisibility
+          - sqs:GetQueueUrl
+          - sqs:DeleteMessage
+          - sqs:GetQueueAttributes
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - SecurityHubFindingsQueue
+            - Arn
+        Version: '2012-10-17'
+      PolicyName: SecurityHubBatchUpdateSuppressionRoleDefaultPolicy
+      Roles:
+      - Ref: SecurityHubBatchUpdateSuppressionRole
+  SecurityHubFindingsQueueAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            AWS: !Ref AccessToQueueUserArnList
+        Version: '2012-10-17'
+      Description: Access to encrypted queue for SSO roles
+      Path: "/"
+  SecurityHubFindingsQueueAccessRoleDefaultPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: kms:Decrypt
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - SqsEncryptionKey
+            - Arn
+        Version: '2012-10-17'
+      PolicyName: SecurityHubFindingsQueueAccessRoleDefaultPolicy
+      Roles:
+      - Ref: SecurityHubFindingsQueueAccessRole
+  SqsEncryptionKey:
+    Type: AWS::KMS::Key
+    Properties:
+      KeyPolicy:
+        Statement:
+        - Action:
+          - kms:Create*
+          - kms:Describe*
+          - kms:Enable*
+          - kms:List*
+          - kms:Put*
+          - kms:Update*
+          - kms:Revoke*
+          - kms:Disable*
+          - kms:Get*
+          - kms:Delete*
+          - kms:ScheduleKeyDeletion
+          - kms:CancelKeyDeletion
+          - kms:GenerateDataKey
+          - kms:TagResource
+          - kms:UntagResource
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::Join:
+              - ''
+              - - 'arn:'
+                - Ref: AWS::Partition
+                - ":iam::"
+                - Ref: AWS::AccountId
+                - ":root"
+          Resource: "*"
+        - Action: kms:Decrypt
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::GetAtt:
+              - SecurityHubBatchUpdateSuppressionRole
+              - Arn
+          Resource: "*"
+        - Action:
+          - kms:Decrypt
+          - kms:Encrypt
+          - kms:ReEncrypt*
+          - kms:GenerateDataKey*
+          Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Resource: "*"
+        Version: '2012-10-17'
+      EnableKeyRotation: true
+      PendingWindowInDays: 30
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+  SqsEncryptionKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: alias/SQSEncryptionKey
+      TargetKeyId:
+        Fn::GetAtt:
+        - SqsEncryptionKey
+        - Arn
+  SecurityhubFindingsDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      KmsMasterKeyId:
+        Fn::GetAtt:
+        - SqsEncryptionKey
+        - Arn
+      MessageRetentionPeriod: 172800
+      VisibilityTimeout: 130
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  SecurityHubFindingsDeadLetterQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: sqs:*
+          Condition:
+            Bool:
+              aws:secureTransport: 'false'
+          Effect: Deny
+          Principal: "*"
+          Resource:
+            Fn::GetAtt:
+            - SecurityhubFindingsDeadLetterQueue
+            - Arn
+          Sid: Enforce TLS for all principals
+        Version: '2012-10-17'
+      Queues:
+      - Ref: SecurityhubFindingsDeadLetterQueue
+  SecurityHubFindingsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      KmsMasterKeyId:
+        Fn::GetAtt:
+        - SqsEncryptionKey
+        - Arn
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+          - SecurityhubFindingsDeadLetterQueue
+          - Arn
+        maxReceiveCount: 1
+      VisibilityTimeout: 130
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  SecurityHubFindingsQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: sqs:*
+          Condition:
+            Bool:
+              aws:secureTransport: 'false'
+          Effect: Deny
+          Principal: "*"
+          Resource:
+            Fn::GetAtt:
+            - SecurityHubFindingsQueue
+            - Arn
+          Sid: Enforce TLS for all principals
+        - Action:
+          - sqs:SendMessage
+          - sqs:GetQueueAttributes
+          - sqs:GetQueueUrl
+          Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Resource:
+            Fn::GetAtt:
+            - SecurityHubFindingsQueue
+            - Arn
+        Version: '2012-10-17'
+      Queues:
+      - Ref: SecurityHubFindingsQueue
+
+  AWSLambdaPowertoolsApplication:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location:
+        ApplicationId: arn:aws:serverlessrepo:eu-west-1:057560766410:applications/aws-lambda-powertools-python-layer
+        SemanticVersion: 2.5.0
+    Metadata:
+      aws:cdk:path: sechub-finding-suppression/AWSLambdaPowertoolsApplication
+  SecurityHubFindingsSuppressionLambdaFct:
+    Type: AWS::Lambda::Function
+    DependsOn: SecurityHubBatchUpdateSuppressionRole
+    Properties:
+      Code:
+        ZipFile: |
+          import json, boto3
+          import botocore.exceptions as boto3exceptions
+
+          from aws_lambda_powertools.utilities.batch import BatchProcessor, EventType
+          from aws_lambda_powertools import Logger
+          from aws_lambda_powertools.utilities.typing import LambdaContext
+
+          logger =  Logger()
+
+          sh_client = boto3.client("securityhub")
+
+          """
+          Used by the lambda to tracks all of the Security Hub finding ids that will be suppressed.
+          Each Lambda invocation will create a separate instance of this class.
+          """
+          class RecordsHandler:
+              def __init__(self):
+                  self.finding_identifiers = []
+
+              def record_handler(self, record):
+                  payload = json.loads(record["body"])
+                  logger.info(f"payload {payload}")
+                  finding_identifier = {
+                      "Id": payload["detail"]["findings"][0]["Id"],
+                      "ProductArn": payload["detail"]["findings"][0]["ProductArn"],
+                  }
+                  self.finding_identifiers.append(finding_identifier)
+
+              def get_finding_identifiers(self):
+                  return self.finding_identifiers
+
+          """
+          Uses the Lambda Powertools BatchProcessor in order to build the findings id list.
+          Lambda powertools is used to prevent successfully processed messages being returned to SQS
+          https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/batch/
+          """
+          @logger.inject_lambda_context(log_event=True)
+          def handler(event, context):
+              records = event["Records"]
+              logger.info(f"records {records}")
+
+              processor = BatchProcessor(event_type=EventType.SQS)
+
+              rh = RecordsHandler()
+              with processor(records, rh.record_handler) as proc:
+                  proc.process()
+
+              finding_identifiers = rh.get_finding_identifiers()
+              logger.info(f"finding_identifiers {finding_identifiers}")
+
+              try:
+                  response = sh_client.batch_update_findings(
+                      FindingIdentifiers=finding_identifiers,
+                      Workflow={"Status": "SUPPRESSED"},
+                  )
+                  for processed_findings in response["ProcessedFindings"]:
+                      logger.info(
+                          f"processed and suppressed id {processed_findings['Id']} productarn {processed_findings['ProductArn']}"
+                      )
+
+                  for unprocessed_findings in response["UnprocessedFindings"]:
+                      logger.error(
+                          f"unprocessed finding id {unprocessed_findings['FindingIdentifier']['Id']} productarn {unprocessed_findings['FindingIdentifier']['ProductArn']} error code {unprocessed_findings['ErrorCode']} error message {unprocessed_findings['ErrorMessage']}"
+                      )
+
+              except boto3exceptions.ClientError as error:
+                  logger.exception("client error")
+                  raise ConnectionError(f"Client error invoking batch update findings {error}")
+              except boto3exceptions.ParamValidationError as error:
+                  logger.exception("invalid parameters")
+                  raise ValueError(f"The parameters you provided are incorrect: {error}")
+
+              return {"statusCode": 200}
+      Role: !GetAtt SecurityHubBatchUpdateSuppressionRole.Arn
+      FunctionName: SecurityHubFindingsSuppressionLambdaFct
+      Description: Suppression lambda for Security Hub implements batch update findings
+      Handler: index.handler
+      Layers:
+      - Fn::GetAtt:
+        - AWSLambdaPowertoolsApplication
+        - Outputs.LayerVersionArn
+      Runtime: python3.8
+      Timeout: 120
+  BatchupdateEventInvokeConfig:
+    Type: AWS::Lambda::EventInvokeConfig
+    DependsOn: SecurityHubFindingsSuppressionLambdaFct
+    Properties:
+      FunctionName: !Ref SecurityHubFindingsSuppressionLambdaFct
+      Qualifier: "$LATEST"
+      MaximumRetryAttempts: 2
+  BatchUpdateLambdaFctEventSourceEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    DependsOn: SecurityHubFindingsSuppressionLambdaFct
+    Properties:
+      FunctionName: !Ref SecurityHubFindingsSuppressionLambdaFct
+      BatchSize: 10
+      Enabled: true
+      EventSourceArn: !GetAtt SecurityHubFindingsQueue.Arn
+      MaximumBatchingWindowInSeconds: 10
+
+  # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
+  # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
+
+  # This rule suppresses findings for the given controls (GeneratorId) in all the accounts
+  SuppressFindingsInAllAccountsRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress findings (identified by generatorId) for all accounts
+      EventPattern:
+        detail:
+          findings:
+            GeneratorId:
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.3'
+              - 'aws-foundational-security-best-practices/v/1.0.0/EC2.2'
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14'
+              - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/3.7'
+            Workflow:
+              Status:
+              - NEW
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
+
+  # This rule suppresses findings with the given generator IDs only for the infra resources
+  SuppressFindingsForPublicBucketsRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress findings (identified by generatorId) for the infra resources in all accounts
+      EventPattern:
+        detail:
+          findings:
+            Resources:
+              Id:
+                - prefix: 'arn:aws:s3:::bootstrap-awss3cloudformationbucket-'
+                - prefix: 'arn:aws:s3:::essentials-awss3lambdaartifactsbucket-'
+                - prefix: 'arn:aws:s3:::cf-templates-'
+                # This should only match with 2.1.5.1
+                - 'AWS::::Account:140124849929'
+            GeneratorId:
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.1'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1'
+            Workflow:
+              Status:
+              - NEW
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
+
+  # This rule suppresses findings with the given generator IDs only for the IAM accounts specified
+  SuppressFindingsForIAMsRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress findings (identified by generatorId) for given IAM accounts in all AWS accounts
+      EventPattern:
+        detail:
+          findings:
+            Resources:
+              Id:
+                # synapsedw IT-2308, do not exempt human users
+                - 'arn:aws:iam::383874245509:user/prod-warehouse'
+                # synapseprod IT-2396, do not exempt human users
+                - 'arn:aws:iam::325565585839:user/ran-uploader'
+                # scipool IT-2315
+                - prefix: 'arn:aws:iam::237179673806:user/synapse-login-scipoolprod-ServiceUser-'
+            GeneratorId:
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.4'
+            Workflow:
+              Status:
+              - NEW
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0

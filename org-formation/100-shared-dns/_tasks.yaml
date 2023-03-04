@@ -1,0 +1,73 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+# The dns zone for this certificate was created manually, and a
+# certificate for the zone is created in the sageit account in sceptre:
+# ./sceptre/sageit/config/prod/sageit-org-acm-cert.yaml
+#
+# Create a second sageit certificate in admincentral for the finops lambdas
+SageItCertificate:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
+  StackName: !Sub '${resourcePrefix}-sageit-cert'
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref AdminCentralAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    DnsDomainName: 'sageit.org'
+
+SagebioAppZone:  # Zone for application front-end DNS names, e.g. 'dca.app.sagebionetworks.org'
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/R53-hostedzone.yaml
+  StackName: !Sub '${resourcePrefix}-sagebio-app-zone'
+  StackDescription: Create a shared hosted zone for application domains
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    DnsDomainName: "app.sagebionetworks.org"
+
+SagebioAppZoneAcmCertificate:  # Wildcard certificate for '*.app.sagebionetworks.org'
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
+  StackName: !Sub '${resourcePrefix}-sagebio-app-cert'
+  StackDescription: Create a wildcard certificate for application domains
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    # We need a copy of this certificate in every account where it will be used
+    # Each certificate needs to be manually verified
+    Account:
+      - !Ref DnTDevAccount
+      - !Ref DCAProdAccount
+      - !Ref GenieProdAccount
+  Parameters:
+    DnsDomainName: "app.sagebionetworks.org"
+
+SagebioApiZone:  # Zone for intra-API DNS names, e.g. 'schematic.api.sagebionetworks.org'
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/R53-hostedzone.yaml
+  StackName: !Sub '${resourcePrefix}-sagebio-api-zone'
+  StackDescription: Create a shared hosted zone for api domains
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    DnsDomainName: "api.sagebionetworks.org"
+
+SagebioApiZoneAcmCertificate:  # Wildcard certificate for '*.api.sagebionetworks.org'
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
+  StackName: !Sub '${resourcePrefix}-sagebio-api-cert'
+  StackDescription: Create a wildcard certificate for api domains
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    # We need a copy of this certificate in every account where it will be used
+    # Each certificate needs to be manually verified
+    Account:
+      - !Ref DnTDevAccount
+      - !Ref DCAProdAccount
+      - !Ref GenieProdAccount
+  Parameters:
+    DnsDomainName: "api.sagebionetworks.org"

@@ -21,81 +21,6 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-  AWSIAMKhaiDoUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: khai.do@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-        - !Ref AWSIAMBillingManagersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMBruceHoffUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: bruce.hoff@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-        - !Ref AWSIAMBillingManagersGroup
-        - !Ref AWSIAMAnalyticsUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMJayHodgsonUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: jay.hodgson@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMJohnHillUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: john.hill@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMSynapseEmergencyUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: synapse.emergency@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMNickGrosenbacherUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: nick.grosenbacher@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-        - !Ref AWSIAMWebEngineerUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
-  AWSIAMMarcoMarascaUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: marco.marasca@sagebase.org
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-        - !Ref AWSIAMAnalyticsUsersGroup
-      LoginProfile:
-        Password: !Ref InitNewUserPassword
-        PasswordResetRequired: true
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
@@ -124,8 +49,6 @@ Resources:
             Principal:
               AWS:
                 - !GetAtt AWSIAMXavierSchildwachterUser.Arn
-                - !GetAtt AWSIAMKhaiDoUser.Arn
-                - !GetAtt AWSIAMSynapseEmergencyUser.Arn
             Action:
               - "sts:AssumeRole"
       Path: "/"

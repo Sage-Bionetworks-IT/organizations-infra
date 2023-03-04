@@ -10,26 +10,46 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
-      - uses: pre-commit/action@v2.0.0
+      - uses: pre-commit/action@v3.0.0
   jinja-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
       - name: Install jinja libraries
-        uses: BSFishy/pip-action@v1
-        with:
-          packages: |
-            jinja2==3.0.1
+        run: |
+          python -m pip install --upgrade jinja2==3.0.1
       - name: Install jinja linter tool
         run: git clone --single-branch https://github.com/drm/jinja2-lint.git /tmp/jinja2-lint && pushd /tmp/jinja2-lint && git checkout 75dcd5a
       - name: Execute jinja linter
         run: find . -type f -name "*.j2" -exec /tmp/jinja2-lint/j2lint.py '{}' +
+  test-npm-deps:  # Useful for testing version updates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: npm install
