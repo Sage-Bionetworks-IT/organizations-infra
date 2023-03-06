@@ -132,7 +132,7 @@ GithubOidcSageBionetworksAwsInfra:
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
               "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
-              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9" ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9" ]
           },
           {
               "Sid": "AllObjectActions",
