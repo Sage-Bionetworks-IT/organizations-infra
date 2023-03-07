@@ -7,20 +7,27 @@ for a more secure integration between github action and AWS.
 
 To setup github OIDC:
 1. Create a PR similar to [#688](https://github.com/Sage-Bionetworks-IT/organizations-infra/pull/688)
-and have it reviewed and approved.
-2. Merge the PR and the CI will deploy the cloudformation template to the specified AWS account.
-3. Find the role for the OIDC integration.
-Login to the AWS account then navigate
+and have it reviewed and approved. Note the following important parameters:
+* DefaultOrganizationBinding - Set this to the AWS accounts that your repo will deploy to.
+* ManagedPolicyArns - Allows the repo to access the AWS accounts with an AWS managed policy.
+* PolicyDocument - Allows the repo to access the AWS accounts with an AWS custom policy.
+
+  Please take care to set a [least privileged policy](https://csrc.nist.gov/glossary/term/least_privilege) for your OIDC integration.
+
+2. Merge the PR and the CI will deploy the new resource to the AWS account(s) specified in the `DefaultOrganizationBinding` parameter.
+3. Find the newly created role for the OIDC integration.
+
+Login to the AWS account(s) specified in `DefaultOrganizationBinding` then navigate to
 ```
--> cloudformation -> find the stack named something like `Sagebase-github-oidc-*` -> outputs -> ProviderRoleArn
+-> cloudformation -> search for a stack named something like `Sagebase-github-oidc-*` -> outputs -> ProviderRoleArn
 ```
 
 ![Cloudformation ProviderRoleArn value](aws-console-oidc-provider-role.png)
 
 4. Take the ProviderRoleArn output value and set it to `role-to-assume`
-in the `configure-aws-credentials` github action.
+in a github action to assume a role.
 
-Example:
+Example using [configure-aws-credentials GH action](https://github.com/aws-actions/configure-aws-credentials):
 ```
   - name: Assume AWS Role
     uses: aws-actions/configure-aws-credentials@v1
