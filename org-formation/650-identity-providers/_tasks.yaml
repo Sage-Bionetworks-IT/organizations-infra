@@ -97,23 +97,22 @@ GithubOidcSageBionetworksSchematicInfra:
       - !Ref DCAProdAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksDNTDevInfra:
+GithubOidcSageBionetworksDNTInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-workflows-dnt-dev-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dnt-infra
   Parameters:
-    GitHubOrg: "Sage-Bionetworks-Workflows"
+    GitHubOrg: "Sage-Bionetworks"
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
     Repositories:
-      - name: "dnt-dev-infra"
-        branch: "main"
+      - name: "dnt-infra"
+        branch: "*"
   DefaultOrganizationBinding:
     Account:
-      - !Ref DnTDevAccount
       - !Ref DPEProdAccount
     Region: us-east-1
 
