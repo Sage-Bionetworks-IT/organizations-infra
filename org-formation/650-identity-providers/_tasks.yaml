@@ -113,7 +113,8 @@ GithubOidcSageBionetworksDNTInfra:
         branch: "*"
   DefaultOrganizationBinding:
     Account:
-      - !Ref DPEProdAccount
+      - !Ref DpeProdAccount
+      - !Ref DnTDevAccount
     Region: us-east-1
 
 GithubOidcSageBionetworksSecuityHubToJira:
