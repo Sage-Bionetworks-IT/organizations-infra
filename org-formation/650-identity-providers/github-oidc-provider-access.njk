@@ -89,12 +89,15 @@ Resources:
             Condition:
               StringEquals:
                 token.actions.githubusercontent.com:aud: !Ref ClientIdList
-  {% if Repository.branch == '*' %}
               StringLike:
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/{{ Repository.name }}:{{Repository.branch }}
+                token.actions.githubusercontent.com:sub:
+  {% if Repository.branch == '*' %}
+                  - "!Sub repo:${GitHubOrg}/{{ Repository.name }}:{{Repository.branch }}",
   {% else %}
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/{{ Repository.name }}:ref:refs/heads/{{ Repository.branch }}
+                  - "!Sub repo:${GitHubOrg}/{{ Repository.name }}:ref:refs/heads/{{ Repository.branch }}",
   {% endif %}
+                  - "!Sub repo:${GitHubOrg}/{{ Repository.name }}:ref:refs/tags/*"
+
 {% endfor %}
 Outputs:
 {% for Repository in Repositories %}
