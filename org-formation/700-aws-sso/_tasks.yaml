@@ -261,7 +261,7 @@ Parameters:
     Type: String
     Default: '64284488-1061-70c9-eacb-f465d1988789'
 
-  ipamViewerGroup:      #JC aws-ipam-viewers
+  ipamViewerPlusGroup:      #JC aws-ipam-viewers-plus
     Type: String
     Default: '0498c498-5041-704e-c4bb-c3eb14f2fdbb'
 
@@ -401,7 +401,6 @@ SsoViewer:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
-      - 'arn:aws:iam::aws:policy/AWSNetworkManagerReadOnlyAccess'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
@@ -434,6 +433,8 @@ SsoViewerPlus:
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSLambda_ReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSNetworkManagerReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
 
 # Role for a user that manages an application deployed to AWS
 SsoApplicationManager:
@@ -1659,12 +1660,12 @@ SsoDpeProdViewer:
     principalId: !Ref dpeProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
-SsoIpamViewer:
+SsoIpamViewerPlus:
   Type: update-stacks
-  DependsOn: SsoViewer
+  DependsOn: SsoViewerPlus
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-ipam-viewer'
-  StackDescription: 'SSO: Viewer role used by ipam viewer group'
+  StackName: !Sub '${resourcePrefix}-${appName}-ipam-viewer-plus'
+  StackDescription: 'SSO: Viewer role used by ipam viewer plus group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -1673,5 +1674,5 @@ SsoIpamViewer:
       Account: !Ref IpamAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref ipamViewerGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+    principalId: !Ref ipamViewerPlusGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
