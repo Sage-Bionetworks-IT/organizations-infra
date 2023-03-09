@@ -261,6 +261,10 @@ Parameters:
     Type: String
     Default: '64284488-1061-70c9-eacb-f465d1988789'
 
+  ipamViewerGroup:      #JC aws-ipam-viewers
+    Type: String
+    Default: '0498c498-5041-704e-c4bb-c3eb14f2fdbb'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -397,6 +401,7 @@ SsoViewer:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AWSNetworkManagerReadOnlyAccess'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
@@ -1652,4 +1657,21 @@ SsoDpeProdViewer:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref dpeProdViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoIpamViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-ipam-viewer'
+  StackDescription: 'SSO: Viewer role used by ipam viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref IpamAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref ipamViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
