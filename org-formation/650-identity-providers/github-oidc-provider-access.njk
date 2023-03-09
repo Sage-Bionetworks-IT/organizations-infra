@@ -89,11 +89,11 @@ Resources:
               StringLike:
                 token.actions.githubusercontent.com:sub: [
   {% if Repository.branch == '*' %}
-                  "repo:{{ GitHubOrg }}/{{ Repository.name }}:{{Repository.branch }}",
+                  "repo:{{ GitHubOrg }}/{{ Repository.name }}:{{Repository.branch }}"
   {% else %}
                   "repo:{{ GitHubOrg}}/{{ Repository.name }}:ref:refs/heads/{{ Repository.branch }}",
-  {% endif %}
                   "repo:{{ GitHubOrg }}/{{ Repository.name }}:ref:refs/tags/*"
+  {% endif %}
                 ]
 {% endfor %}
 Outputs:
