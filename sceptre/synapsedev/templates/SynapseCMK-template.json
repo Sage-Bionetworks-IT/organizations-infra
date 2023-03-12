@@ -208,6 +208,13 @@
                                         "athena:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "wafv2:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }
@@ -230,7 +237,7 @@
             "Type": "AWS::KMS::Key",
             "Properties": {
                 "Description": "The master encryption key used to encypt/decrypt all Synapse master secrets",
-                "EnableKeyRotation": true,
+                "EnableKeyRotation": false,
                 "KeyPolicy": {
                     "Version": "2012-10-17",
                     "Id": "key-default-1",
