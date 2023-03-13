@@ -33,6 +33,7 @@ Organization:
         - !Ref AgoraDevAccount
         - !Ref DnTDevAccount
         - !Ref RecoverDevAccount
+        - !Ref ScceDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
