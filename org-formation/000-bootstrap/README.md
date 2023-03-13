@@ -61,8 +61,6 @@ Add a yaml section to organizations.yaml file like soo..
       Alias: org-sagebase-member-one
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: SysBio
-        Project: amp-ad
         CostCenter: NIA AMP-AD CC / 101500
         AccountOwner: member-one@sagebase.org
         budget-alarm-threshold: 1000
