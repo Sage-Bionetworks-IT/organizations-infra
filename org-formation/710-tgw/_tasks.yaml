@@ -43,6 +43,7 @@ TransitGateway:
       - !Ref ScipoolDevAccount
       - !Ref ScipoolProdAccount
       - !Ref SageITAccount
+      - !Ref DnTDevAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -118,6 +119,9 @@ TransitGatewayRoutes:
       # org-sagebase-sageit
       defaultvpc:
         CIDR: "10.13.0.0/16"
+      # org-sagebase-sageit
+      orca-vpc:
+        CIDR: "10.255.24.0/24"
 
   Parameters:
     VpcSubnetIDs:
@@ -142,6 +146,7 @@ Mappings:
       '465877038949': 'cesspoolvpc'      # org-sagebase-scipooldev
       '237179673806': 'internalpoolvpc'      # org-sagebase-scipooldev
       '797640923903': 'defaultvpc' # org-sagebase-sageit
+      '631692904429': 'defaultvpc' # org-sagebase-dnt-dev
   TgwSpokesB:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
