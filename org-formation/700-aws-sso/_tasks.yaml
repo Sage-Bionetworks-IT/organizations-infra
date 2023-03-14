@@ -440,9 +440,11 @@ SsoViewerPlus:
         "Version": "2012-10-17",
         "Statement": [
           {
+            "Sid": "IpamReadOnlyAccess",
             "Effect": "Allow",
             "Action": [
-              "ec2:Get*"
+              "ec2:GetIpam*",
+              "ec2:DescribeIpam*"
             ],
             "Resource": "*"
           }
