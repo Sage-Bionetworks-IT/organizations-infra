@@ -435,6 +435,19 @@ SsoViewerPlus:
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSNetworkManagerReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "ec2:Get*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
 
 # Role for a user that manages an application deployed to AWS
 SsoApplicationManager:
