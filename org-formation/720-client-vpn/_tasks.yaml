@@ -190,7 +190,12 @@ VpnAuthRoutes:
           - "aws-admins"
           - "scientists"
           - "sageit-users"
-
+      # org-sagebase-dnt-dev
+      orca-vpc:
+        CIDR: "10.255.24.0/24"
+        AccessGroups:
+          - "aws-admins"
+          - "scientists"
 
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]
