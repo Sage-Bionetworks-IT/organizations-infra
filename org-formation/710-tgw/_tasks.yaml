@@ -76,6 +76,9 @@ TransitGatewayRoutes:
       IncludeMasterAccount: false
   TemplatingContext:
     TgwSpokes:
+      # org-sagebase-itsandbox
+      dustbunnyvpc:
+        CIDR: "10.29.0.0/16"
       # org-sagebase-scicomp
       computevpc:
         CIDR: "10.5.0.0/16"
