@@ -56,7 +56,12 @@ This is used to share the TGW to spoke accounts.
 This is used to setup routes from unionstation VPC to VPCs in spoke accounts.
 3. Add a new entry to the `Mappings` dictionary.  This is used to setup the TGW attachments
 and routes in spoke accounts.
-4. Review and merge PR
+4. Add the account info to either TransitGatewaySpokeA, TransitGatewaySpokeB or create a new custom 
+   spoke resource.  Each `TransitGatewaySpokeA.DefaultOrganizationBinding.Account` entry corresponds
+   to a VPC. For example if there are two VPCs in AccountZZ then you need to add a Mapping for
+   `TgwSpokesA` and `TgwSpokesB` then add AccountZZ to both `TransitGatewaySpokeA` and
+   `TransitGatewaySpokeB`
+5. Have the PR reviewed and merge PR
 
 Once merged and deployed the TGW routes will be updated to route traffic from the
 hub VPC to the spoke VPC.
