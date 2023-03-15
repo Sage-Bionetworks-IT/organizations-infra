@@ -1,11 +1,11 @@
 {# Allow Github to access AWS without giving github AWS credentials               #}
 {# Must pass in the following templating parameters                               #}
 {#  Parameters:                                                                   #}
-{#    GitHubOrg: "Sage-Bionetworks"                                               #}
 {#    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ] #}
 {#    ManagedPolicyArns:                                                          #}
 {#      - "arn:aws:iam::aws:policy/AdministratorAccess"                           #}
 {#  TemplatingContext:                                                            #}
+{#    GitHubOrg: "Sage-Bionetworks"                                               #}
 {#    Repositories:                                                               #}
 {#      - name: "myrepo"                                                          #}
 {#        branch: "master"                                                        #}
@@ -27,9 +27,6 @@ Parameters:
   ProviderArn:
     Type: String
     Description: "The OIDC provider ARN"
-  GitHubOrg:
-    Type: String
-    Description: "The name of the github organization"
   # Must provide either a list of ManagePolicyArns or a custom PolicyDocument.
   # Can also provide both a list of ManagePolicyArns and a custom PolicyDocument.
   ManagedPolicyArns:
@@ -89,12 +86,15 @@ Resources:
             Condition:
               StringEquals:
                 token.actions.githubusercontent.com:aud: !Ref ClientIdList
-  {% if Repository.branch == '*' %}
               StringLike:
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/{{ Repository.name }}:{{Repository.branch }}
+                token.actions.githubusercontent.com:sub: [
+  {% if Repository.branch == '*' %}
+                  "repo:{{ GitHubOrg }}/{{ Repository.name }}:{{Repository.branch }}"
   {% else %}
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/{{ Repository.name }}:ref:refs/heads/{{ Repository.branch }}
+                  "repo:{{ GitHubOrg}}/{{ Repository.name }}:ref:refs/heads/{{ Repository.branch }}",
+                  "repo:{{ GitHubOrg }}/{{ Repository.name }}:ref:refs/tags/*"
   {% endif %}
+                ]
 {% endfor %}
 Outputs:
 {% for Repository in Repositories %}

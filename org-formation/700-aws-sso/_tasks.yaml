@@ -253,6 +253,10 @@ Parameters:
     Type: String
     Default: '64284488-1061-70c9-eacb-f465d1988789'
 
+  ipamViewerPlusGroup:      #JC aws-ipam-viewers-plus
+    Type: String
+    Default: '0498c498-5041-704e-c4bb-c3eb14f2fdbb'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -421,6 +425,23 @@ SsoViewerPlus:
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSLambda_ReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSNetworkManagerReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "IpamReadOnlyAccess",
+            "Effect": "Allow",
+            "Action": [
+              "ec2:GetIpam*",
+              "ec2:DescribeIpam*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
 
 # Role for a user that manages an application deployed to AWS
 SsoApplicationManager:
@@ -1611,3 +1632,20 @@ SsoDpeProdViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref dpeProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoIpamViewerPlus:
+  Type: update-stacks
+  DependsOn: SsoViewerPlus
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-ipam-viewer-plus'
+  StackDescription: 'SSO: Viewer role used by ipam viewer plus group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref IpamAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref ipamViewerPlusGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
