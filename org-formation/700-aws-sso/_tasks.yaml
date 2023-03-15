@@ -265,6 +265,22 @@ Parameters:
     Type: String
     Default: '0498c498-5041-704e-c4bb-c3eb14f2fdbb'
 
+  scceDevAdminGroup:      #JC aws-sccedev-admins
+    Type: String
+    Default: 'b47864c8-1001-7096-1bce-5f09fbeb1b65'
+
+  scceDevDeveloperGroup:      #JC aws-sccedev-developers
+    Type: String
+    Default: '54a83488-c0e1-7021-5286-175d851517c8'
+
+  scceDevViewerGroup:      #JC aws-sccedev-viewers
+    Type: String
+    Default: '84684498-7091-7091-4439-6c14af98c06e'
+
+  scceDevViewerPlusGroup:      #JC aws-sccedev-viewers-plus
+    Type: String
+    Default: '84d8d478-6081-7091-b9e9-b44d97a6bcb3'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -1690,4 +1706,72 @@ SsoIpamViewerPlus:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref ipamViewerPlusGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
+
+SsoScceDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sccedev-admin'
+  StackDescription: 'SSO: Viewer role used by SCCE dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScceDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scceDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+scceDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sccedev-developer'
+  StackDescription: 'SSO: Viewer role used by SCCE dev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScceDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scceDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoScceDevViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sccedev-viewer'
+  StackDescription: 'SSO: Viewer role used by SCCE dev viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScceDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scceDevViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoScceDevViewerPlus:
+  Type: update-stacks
+  DependsOn: SsoViewerPlus
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sccedev-viewer-plus'
+  StackDescription: 'SSO: Viewer role used by SCCE dev viewer plus group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScceDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scceDevViewerPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
