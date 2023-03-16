@@ -170,7 +170,7 @@ GithubOidcSageBionetworksAwsInfra:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksSciCompProvisioner:
+GithubOidcSageBionetworksScicompProvisioner:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
@@ -185,5 +185,5 @@ GithubOidcSageBionetworksSciCompProvisioner:
       - name: "scicomp-provisioner"
         branch: "master"
   DefaultOrganizationBinding:
-    Account: !Ref SciCompAccount
+    Account: !Ref ScicompAccount
     Region: us-east-1
