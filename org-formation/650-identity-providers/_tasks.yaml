@@ -169,3 +169,21 @@ GithubOidcSageBionetworksAwsInfra:
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
+
+GithubOidcSageBionetworksSciCompProvisioner:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-scicomp-provisioner
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "scicomp-provisioner"
+        branch: "master"
+  DefaultOrganizationBinding:
+    Account: !Ref SciCompAccount
+    Region: us-east-1
