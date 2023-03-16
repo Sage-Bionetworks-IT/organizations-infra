@@ -7,25 +7,22 @@ Resources:
       Name: 'Owner Email'
       RuleVersion: 'CostCategoryExpression.v1'
       Rules: >-
-        {
-          "RuleVersion": "CostCategoryExpression.v1",
-          "Rules": [
-            {
-              "Type": "INHERITED_VALUE",
-              "InheritedValue": {
-                "DimensionName": "TAG",
-                "DimensionKey": "synapse:email"
-              }
-            },
-            {
-              "Type": "INHERITED_VALUE",
-              "InheritedValue": {
-                "DimensionName": "TAG",
-                "DimensionKey": "OwnerEmail"
-              }
+        [
+          {
+            "Type": "INHERITED_VALUE",
+            "InheritedValue": {
+              "DimensionName": "TAG",
+              "DimensionKey": "synapse:email"
             }
-          ]
-        }
+          },
+          {
+            "Type": "INHERITED_VALUE",
+            "InheritedValue": {
+              "DimensionName": "TAG",
+              "DimensionKey": "OwnerEmail"
+            }
+          }
+        ]
 
   ProgramCodeCostCategory:
     Type: 'AWS::CE::CostCategory'
