@@ -113,7 +113,7 @@ GithubOidcSageBionetworksGenieBPCInfra:
         branch: "*"
   DefaultOrganizationBinding:
     Account:
-      - !Ref SynapseDevAccount
+      - !Ref DnTDevAccount
       - !Ref GenieProdAccount
     Region: us-east-1
 
