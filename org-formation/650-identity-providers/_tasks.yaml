@@ -97,6 +97,26 @@ GithubOidcSageBionetworksSchematicInfra:
       - !Ref DCAProdAccount
     Region: us-east-1
 
+GithubOidcSageBionetworksGenieBPCInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-genie-bpc-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "genie-bpc-infra"
+        branch: "*"
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DnTDevAccount
+      - !Ref GenieProdAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksDNTInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
