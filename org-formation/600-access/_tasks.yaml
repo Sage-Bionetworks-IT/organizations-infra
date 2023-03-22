@@ -173,6 +173,34 @@ DnTDevCIServiceAccounts:
       - !Ref DnTDevAccount
     Region: us-east-1
 
+SynapseProdRedashServiceAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
+  StackName: synapseprod-redash-service-account
+  Parameters:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AWSQuicksightAthenaAccess
+    PolicyDocument: >-
+      {
+        Version: 2012-10-17
+          Statement:
+            -
+              Effect:
+                - Allow
+              Action:
+                - s3:GetObject
+              Resource:
+                - 'arn:aws:s3:::prod.glue-data.sagebase.org/*'
+            -
+              Effect:
+                - Allow
+              Action:
+                - s3:GetBucketLocation
+                - s3:ListBucket
+              Resource:
+                - 'arn:aws:s3:::prod.glue-data.sagebase.org'
+      }
+
 CostExplorerAccessPolicy:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
