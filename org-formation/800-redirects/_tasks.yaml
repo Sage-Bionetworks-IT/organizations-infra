@@ -133,4 +133,3 @@ GenieBPCDevAppDnsForward:
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
     # the value of the CNAME record
     TargetHostName: !CopyValue ['genie-bpc-shiny-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
-
