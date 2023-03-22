@@ -22,7 +22,8 @@ Resources:
   {% endfor %}
 {% endif %}
 {% if sceptre_user_data.CostCenters is defined %}
-  {% for CostCenter in sceptre_user_data.CostCenters %}
+  {% set CostCenters = sceptre_user_data.CostCenters | fromjson %}
+  {% for CostCenter in CostCenters %}
   {{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
     Type: AWS::ServiceCatalog::TagOption
     Properties:
@@ -53,7 +54,8 @@ Resources:
       {% endfor %}
     {% endif %}
     {% if sceptre_user_data.CostCenters is defined %}
-      {% for CostCenter in sceptre_user_data.CostCenters %}
+      {% set CostCenters = sceptre_user_data.CostCenters | fromjson %}
+      {% for CostCenter in CostCenters %}
   {{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}TagAssociationProd{{ id.split('-')[1] }}:
     Type: AWS::ServiceCatalog::TagOptionAssociation
     Properties:
@@ -82,7 +84,8 @@ Outputs:
   {% endfor %}
 {% endif %}
 {% if sceptre_user_data.CostCenters is defined %}
-  {% for CostCenter in sceptre_user_data.CostCenters %}
+  {% set CostCenters = sceptre_user_data.CostCenters | fromjson %}
+  {% for CostCenter in CostCenters %}
   {{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
     Value: !Ref "{{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
     Export:
