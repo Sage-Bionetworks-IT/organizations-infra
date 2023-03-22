@@ -179,7 +179,7 @@ SynapseProdRedashServiceAccount:
   StackName: synapseprod-redash-service-account
   Parameters:
     ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AWSQuicksightAthenaAccess
+      - arn:aws:iam::aws:policy/service-role/AWSQuicksightAthenaAccess
     PolicyDocument: >-
       {
         "Version": "2012-10-17",
