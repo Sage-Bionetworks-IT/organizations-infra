@@ -125,7 +125,7 @@ GenieBPCDevAppDnsForward:
   StackDescription: Setup a CNAME for genie-bpc-infra dev ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    Account: !Ref DnTDevAccount
+    Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
     SourceHostName: "genie-bpc-dev.app.sagebionetworks.org"
