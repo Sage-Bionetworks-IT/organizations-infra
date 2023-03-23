@@ -61,3 +61,5 @@ CostCategories:
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
+  Parameters:
+    ProgramCodeRulesJSON: !Cmd 'wget -qO- https://cost-rules.finops.sageit.org/program-codes'
