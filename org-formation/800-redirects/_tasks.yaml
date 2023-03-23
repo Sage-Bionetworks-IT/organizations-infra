@@ -22,7 +22,7 @@ SsoRedirect:   # Redirect sso.sageit.org to the AWS SSO Start URL
     # and a path to our specific config
     TargetKey: "start#/"
 
-FinopsApiRedirect:  # redirect finops-api.sageit.org to lambda-mips-api cloudfront distribution
+FinopsApiDnsForward:  # forward finops-api.sageit.org to lambda-mips-api cloudfront distribution
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-finops-api-redirect'
@@ -41,9 +41,9 @@ FinopsApiRedirect:  # redirect finops-api.sageit.org to lambda-mips-api cloudfro
 
 # *.app.sagebionetworks.org
 
-# redirect dca-dev.app.sagebionetworks.org to data_curator-infra ALB
+# forward dca-dev.app.sagebionetworks.org to data_curator-infra ALB
 # https://github.com/Sage-Bionetworks/data_curator-infra
-DcaDevAppRedirect:
+DcaDevAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-dca-dev-cname'
@@ -59,9 +59,9 @@ DcaDevAppRedirect:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['dca-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
 
-# redirect dca.app.sagebionetworks.org to data_curator-infra ALB
+# forward dca.app.sagebionetworks.org to data_curator-infra ALB
 # https://github.com/Sage-Bionetworks/data_curator-infra
-DcaProdAppRedirect:
+DcaProdAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-dca-prod-cname'
@@ -80,13 +80,13 @@ DcaProdAppRedirect:
 
 # *.api.sagebionetworks.org
 
-# redirect schematic-dev.api.sagebionetworks.org to schematic-infra ALB
+# forward schematic-dev.api.sagebionetworks.org to schematic-infra ALB
 # https://github.com/Sage-Bionetworks/schematic-infra
-SchematicDevAppRedirect:
+SchematicDevAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-schematic-dev-cname'
-  StackDescription: Setup a CNAME for schematic-infra ALB
+  StackDescription: Setup a CNAME for schematic-infra dev ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
@@ -97,3 +97,39 @@ SchematicDevAppRedirect:
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
     # the value of the CNAME record
     TargetHostName: !CopyValue ['schematic-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
+
+# forward schematic.api.sagebionetworks.org to schematic-infra ALB
+# https://github.com/Sage-Bionetworks/schematic-infra
+SchematicProdAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-schematic-prod-cname'
+  StackDescription: Setup a CNAME for schematic-infra prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "schematic.api.sagebionetworks.org"
+    # ID of the api.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['schematic-prod-DockerFargateStack-LoadBalancerDNS', !Ref DCAProdAccount]
+
+# forward https://genie-bpc-dev.app.sagebionetworks.org to genie-bpc-infra ALB
+# https://github.com/Sage-Bionetworks/genie-bpc-infra
+GenieBPCDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-genie-bpc-dev-cname'
+  StackDescription: Setup a CNAME for genie-bpc-infra dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref DnTDevAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "genie-bpc-dev.app.sagebionetworks.org"
+    # ID of the app.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['genie-bpc-shiny-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]

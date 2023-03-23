@@ -403,6 +403,7 @@ Resources:
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.1'
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2'
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.2'
             Workflow:
               Status:
               - NEW
