@@ -241,6 +241,10 @@ Parameters:
     Type: String
     Default: '4428e4d8-d0e1-7042-59a1-85b676374bb9'
 
+  genieProdApplicationManagerGroup:      # JC aws-genie-prod-application-managers
+    Type: String
+    Default: '14e83438-3051-7019-77d3-5d1cb3ec7d42'
+
   dpeProdAdminGroup:      #JC aws-dpe-prod-admins
     Type: String
     Default: 'c408c488-e0c1-70cb-91fa-fe5b3e113bb0'
@@ -1597,6 +1601,23 @@ SsoGenieProdViewerPlus:
     instanceArn: !Ref instanceArn
     principalId: !Ref genieProdViewerPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
+
+SsoGenieProdApplicationManager:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-genie-prod-application-manager'
+  StackDescription: 'SSO: Application Manager role used by Genie application-manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref GenieProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref genieProdApplicationManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
 
 SsoDpeProdAdmin:
   Type: update-stacks
