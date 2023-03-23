@@ -6,5 +6,4 @@ admincentral_cf_bucket: "bootstrap-awss3cloudformationbucket-19qromfd235z9"
 service_catalog_library: "service-catalog-library"
 j2_environment:
   extensions:
-    - jinja2_from_json_extension
-    - FromJsonExtension
+    - jinja2_from_json_extension.FromJsonExtension
