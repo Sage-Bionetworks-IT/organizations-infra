@@ -24,7 +24,7 @@ SageITFinopsZone:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/R53-hostedzone.yaml
   StackName: !Sub '${resourcePrefix}-sageit-finops-zone'
-  StackDescription: Create a shared hosted zone for application domains
+  StackDescription: Create a shared hosted zone for finops lambdas
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
@@ -36,6 +36,7 @@ SageITFinopsCertificate:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
   StackName: !Sub '${resourcePrefix}-sageit-finops-cert'
+  StackDescription: Create a wildcard certificate for finops lambdas
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
