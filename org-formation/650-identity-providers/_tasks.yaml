@@ -212,7 +212,7 @@ GithubOidcSageBionetworksSvcCatalogLibrary:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-svc-catalog-library
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-service-catalog-library
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     PolicyDocument: |
