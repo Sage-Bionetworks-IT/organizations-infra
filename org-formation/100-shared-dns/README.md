@@ -12,16 +12,12 @@ used by the hosting service.
 
 Each wildcard cert will need to be manually verified before it can be used.
 
-### sageit.org
+### finops.sageit.org
 
-This hosted zone was created manually and is shared between finops
-microservices and some auth redirects (SSO and VPN).
+This zone is intended for cost-tracking automation, such as lambda-mips-api.
 
-A wildcard certificate has been created for this zone in sceptre:
-./sceptre/sageit/config/prod/sageit-org-acm-cert.yaml
-
-This directory is used for creating additional certificates in other
-accounts and their associated DNS records.
+The wildcard certificate created for this zone is expected to be used elsewhere
+in org-formation, but not by external infra projects (such as CDK applications).
 
 ### app.sagebionetworks.org
 
