@@ -207,3 +207,44 @@ GithubOidcSageBionetworksScicompProvisioner:
   DefaultOrganizationBinding:
     Account: !Ref ScicompAccount
     Region: us-east-1
+
+GithubOidcSageBionetworksWebMonorepoInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
+  Parameters:
+    GitHubOrg: "Sage-Bionetworks"
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
+              "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
+              "Resource": ["arn:aws:s3:::prod.accounts.sagebionetworks.org/*", "arn:aws:s3:::staging.accounts.sagebionetworks.org/*" ]
+          },
+          {
+              "Sid": "CloudfrontActions",
+              "Effect": "Allow",
+              "Action": [ "cloudfront:CreateInvalidation" ],
+              "Resource": ["arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI", "arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-web-monorepo"
+        branch: "main"
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+    Region: us-east-1
