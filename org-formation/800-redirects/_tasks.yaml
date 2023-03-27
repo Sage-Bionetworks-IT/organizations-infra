@@ -53,7 +53,7 @@ FinopsApiDnsForwardGreen:
     # the name of the CNAME record
     SourceHostName: "mips-api.finops.sageit.org"
     # ID of the sageit.org zone (in sageit account)
-    SourceHostedZoneId: "Z0478495257GEB73WFM63"
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-finops-zone-HostedZoneId']
     # the value of the CNAME record
     TargetHostName: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-mips-microservice-CloudfrontDomain', !Ref AdminCentralAccount]
 
