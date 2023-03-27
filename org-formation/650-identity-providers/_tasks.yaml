@@ -214,7 +214,6 @@ GithubOidcSageBionetworksWebMonorepoInfra:
   Template: github-oidc-provider-access.njk
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
   Parameters:
-    GitHubOrg: "Sage-Bionetworks"
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     PolicyDocument: |
       {
