@@ -223,14 +223,20 @@ GithubOidcSageBionetworksWebMonorepoInfra:
           {
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
-              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
               "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org" ]
           },
           {
               "Sid": "AllObjectActions",
               "Effect": "Allow",
-              "Action": [ "s3:PutObject", "s3:GetObject" ],
-              "Resource": ["arn:aws:s3:::prod.accounts.sagebionetworks.org/*"]
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
+              "Resource": ["arn:aws:s3:::prod.accounts.sagebionetworks.org/*", "arn:aws:s3:::staging.accounts.sagebionetworks.org/*" ]
+          },
+          {
+              "Sid": "CloudfrontActions",
+              "Effect": "Allow",
+              "Action": [ "cloudfront:CreateInvalidation" ],
+              "Resource": ["arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI", "arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI" ]
           }
         ]
       }
