@@ -23,25 +23,7 @@ SsoRedirect:   # Redirect sso.sageit.org to the AWS SSO Start URL
     TargetKey: "start#/"
 
 # forward finops-api.sageit.org to lambda-mips-api cloudfront distribution
-FinopsApiDnsForwardBlue:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-finops-api-redirect'
-  StackDescription: Setup a redirect to the lambda-mips-api cloudfront distribution
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "finops-api.sageit.org"
-    # ID of the sageit.org zone (in sageit account)
-    SourceHostedZoneId: "Z0478495257GEB73WFM63"
-    # the value of the CNAME record
-    TargetHostName: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-mips-microservice-CloudfrontDomain', !Ref AdminCentralAccount]
-
-# forward finops-api.sageit.org to lambda-mips-api cloudfront distribution
-# create a second DNS entry while migrating to the new host name
-FinopsApiDnsForwardGreen:
+FinopsApiDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-finops-api-forward'
@@ -56,7 +38,6 @@ FinopsApiDnsForwardGreen:
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-finops-zone-HostedZoneId']
     # the value of the CNAME record
     TargetHostName: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-mips-microservice-CloudfrontDomain', !Ref AdminCentralAccount]
-
 
 
 # *.app.sagebionetworks.org
