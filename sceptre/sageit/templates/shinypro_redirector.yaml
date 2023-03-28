@@ -19,13 +19,12 @@ Parameters:
     Description: Redirect function name
 Conditions:
   IsProd: !Equals [!Ref SubDomainName, 'prod']
-  IsStaging: !Equals [!Ref SubDomainName, 'staging']
 Resources:
   CloudFrontOAI:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub 'CloudFront OAI for ${SubDomainName}.${DomainName}'  
+        Comment: !Sub 'CloudFront OAI for ${SubDomainName}.${DomainName}'
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -40,7 +39,7 @@ Resources:
         BlockPublicAcls: true
         BlockPublicPolicy: true
         IgnorePublicAcls: true
-        RestrictPublicBuckets: true        
+        RestrictPublicBuckets: true
   WebsiteBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -59,7 +58,6 @@ Resources:
     Type: AWS::CloudFront::Distribution
     DependsOn:
       - WebsiteBucket
-      - RedirectFct
     Properties:
       DistributionConfig:
         Comment: Cloudfront Distribution pointing to S3 bucket
@@ -107,7 +105,7 @@ Resources:
           SslSupportMethod: sni-only
   RedirectFct:
     Type: AWS::CloudFront::Function
-    Properties: 
+    Properties:
       AutoPublish: true
       FunctionCode: |
         function handler(event) {
@@ -143,7 +141,7 @@ Resources:
                 return request;
             }
         }
-      FunctionConfig: 
+      FunctionConfig:
         Comment: Redirects requests from /Explore/Programs/DetailsPage
         Runtime: cloudfront-js-1.0
       Name: !Ref RedirectFctName
@@ -155,4 +153,4 @@ Resources:
         Bucket: !Ref WebsiteBucket
         Key: index.html
         ContentType: text/html
-      Body: '<html><h1>URI not found! Applications on https://shinypro.synapse.org have migrated to ShinyApps.io .</h1></html>'
+      Body: '<html><h1>URI not found!</h1><br><p>Applications on https://shinypro.synapse.org have migrated to ShinyApps.io .</p></html>'
