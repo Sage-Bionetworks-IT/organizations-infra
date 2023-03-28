@@ -1,0 +1,8 @@
+template:
+  path: shinypro_redirector.yaml
+stack_name: staging-shinypro-redirector
+parameters:
+  DomainName: shinypro.synapse.org
+  SubDomainName: staging
+  AcmCertificateArn: arn:aws:acm:us-east-1:797640923903:certificate/46c214c5-fb43-4853-9582-d7fe99fada3c
+  RedirectFctName: staging-shinypro-redirectfct
