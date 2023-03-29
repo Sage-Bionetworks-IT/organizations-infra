@@ -173,10 +173,10 @@ DnTDevCIServiceAccounts:
       - !Ref DnTDevAccount
     Region: us-east-1
 
-SynapseProdRedashServiceAccount:
+SynapseProdRedashServiceUser:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
-  StackName: synapseprod-redash-service-account
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-user.yaml
+  StackName: synapseprod-redash-service-user
   Parameters:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/service-role/AWSQuicksightAthenaAccess
