@@ -1,8 +1,8 @@
 # budget rules per user by synapse team id
 teams:
-  '3412679': # ADPortal_ServiceCatalogUsers
+  '3469335': # Schwannomatosis Open Research Collaborative Service Catalog Users
     amount: '100'
     period: ANNUALLY
     unit: USD
     community_manager_emails:
-      - 'sc-support@sagebase.org'
+      - 'robert.allaway@sagebase.org'
