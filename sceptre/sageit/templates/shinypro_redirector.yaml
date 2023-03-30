@@ -1,11 +1,8 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: S3Objects
 Description: >-
-  Provision a bucket and distribution for shinypro.synapse.org site
+  Provision a bucket and distribution for shiny.synapse.org site
 Parameters:
-  DomainName:
-    Type: String
-    Description: Domain name
   SubDomainName:
     Type: String
     Description: Subdomain name (prod, staging)
@@ -24,7 +21,7 @@ Resources:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub 'CloudFront OAI for ${SubDomainName}.${DomainName}'
+        Comment: !Sub 'CloudFront OAI for ${SubDomainName}.shiny.synapse.org'
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -71,8 +68,9 @@ Resources:
         HttpVersion: 'http2'
         DefaultRootObject: index.html
         Aliases:
-          - !Sub '${SubDomainName}.${DomainName}'
-          - !If [IsProd, !Ref DomainName, !Ref AWS::NoValue]
+          - !Sub '${SubDomainName}.shiny.synapse.org'
+          - !If [IsProd, 'shiny.synapse.org', !Ref AWS::NoValue]
+          - !If [IsProd, 'shinypro.synapse.org', !Ref AWS::NoValue]
         CustomErrorResponses:
           - ErrorCachingMinTTL: 60
             ErrorCode: 404
@@ -158,4 +156,4 @@ Resources:
         Bucket: !Ref WebsiteBucket
         Key: index.html
         ContentType: text/html
-      Body: '<html><h1>URI not found!</h1><br><p>Applications on https://shinypro.synapse.org have migrated to ShinyApps.io .</p></html>'
+      Body: '<html><h1>URI not found!</h1><br><p>Applications on https://shiny.synapse.org have migrated to ShinyApps.io .</p></html>'
