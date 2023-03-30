@@ -187,7 +187,7 @@ SynapseProdRedashServiceUser:
           {
             "Effect": "Allow",
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::prod.glue-data.sagebase.org/*"
+            "Resource": "arn:aws:s3:::prod.datawarehouse.sagebase.org/*"
           },
           {
             "Effect": "Allow",
@@ -195,7 +195,7 @@ SynapseProdRedashServiceUser:
               "s3:GetBucketLocation",
               "s3:ListBucket"
             ],
-            "Resource": "arn:aws:s3:::prod.glue-data.sagebase.org"
+            "Resource": "arn:aws:s3:::prod.datawarehouse.sagebase.org"
           }
         ]
       }
