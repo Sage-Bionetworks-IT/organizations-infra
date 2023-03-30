@@ -30,8 +30,8 @@ MipsMicroservice:
     Account: !Ref AdminCentralAccount
     Region: !Ref primaryRegion
   Parameters:
-    AcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-cert-CertificateArn']
-    DnsNames: "finops-api.sageit.org"
+    AcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-finops-cert-CertificateArn']
+    DnsNames: "mips-api.finops.sageit.org"
     MipsOrganization: 'SAGE_24146'
     SsmKeyAdminArns:
       - 'arn:aws:sts::745159704268:assumed-role/AWSReservedSSO_Administrator_30244677b3ea9498/joni.harker@sagebase.org'
