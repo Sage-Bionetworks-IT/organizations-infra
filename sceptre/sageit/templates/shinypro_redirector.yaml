@@ -148,6 +148,11 @@ Resources:
 
   S3Object:
     Type: AWS::S3::Object
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+          - E3001
     Properties:
       Target:
         Bucket: !Ref WebsiteBucket
