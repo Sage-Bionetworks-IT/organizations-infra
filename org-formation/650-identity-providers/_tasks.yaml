@@ -223,7 +223,7 @@ GithubOidcSageBionetworksWebMonorepoInfra:
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
               "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
-              "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org" ]
+              "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org", "arn:aws:s3:::staging.accounts.sagebionetworks.org" ]
           },
           {
               "Sid": "AllObjectActions",
@@ -235,7 +235,7 @@ GithubOidcSageBionetworksWebMonorepoInfra:
               "Sid": "CloudfrontActions",
               "Effect": "Allow",
               "Action": [ "cloudfront:CreateInvalidation" ],
-              "Resource": ["arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI", "arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI" ]
+              "Resource": ["arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI", "arn:aws:cloudfront::797640923903:distribution/EY52HOUGKDP1F" ]
           }
         ]
       }
