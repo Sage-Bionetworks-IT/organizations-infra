@@ -243,7 +243,7 @@ GithubOidcSageBionetworksWebMonorepoInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "synapse-web-monorepo"
-        branch: "main"
+        branch: "*"
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
     Region: us-east-1
