@@ -277,6 +277,14 @@ Parameters:
     Type: String
     Default: '84d8d478-6081-7091-b9e9-b44d97a6bcb3'
 
+  cnbDevAdminGroup:      #JC aws-cnb-dev-admins
+    Type: String
+    Default: 'b43864e8-a0b1-7008-924f-54a58df1ae28'
+
+  cnbDevDeveloperGroup:      #JC aws-cnb-dev-developers
+    Type: String
+    Default: '04a83488-1041-70d0-e200-31472f87c82a'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -1754,3 +1762,37 @@ SsoScceDevViewerPlus:
     instanceArn: !Ref instanceArn
     principalId: !Ref scceDevViewerPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
+
+SsoCnbDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-cnb-dev-admin'
+  StackDescription: 'SSO role used by CnB-dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref CnbDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref cnbDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoCnbDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-cnb-dev-developer'
+  StackDescription: 'SSO role used by CnB-dev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref CnbDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref cnbDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
