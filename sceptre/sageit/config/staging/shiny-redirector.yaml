@@ -1,5 +1,5 @@
 template:
-  path: shinypro_redirector.yaml
+  path: shiny_redirector.yaml
 stack_name: staging-shiny-redirector
 parameters:
   SubDomainName: staging
