@@ -173,10 +173,10 @@ DnTDevCIServiceAccounts:
       - !Ref DnTDevAccount
     Region: us-east-1
 
-SynapseProdRedashServiceAccount:
+SynapseProdRedashServiceUser:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-account.yaml
-  StackName: synapseprod-redash-service-account
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-user.yaml
+  StackName: synapseprod-redash-service-user
   Parameters:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/service-role/AWSQuicksightAthenaAccess
@@ -187,7 +187,7 @@ SynapseProdRedashServiceAccount:
           {
             "Effect": "Allow",
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::prod.glue-data.sagebase.org/*"
+            "Resource": "arn:aws:s3:::prod.datawarehouse.sagebase.org/*"
           },
           {
             "Effect": "Allow",
@@ -195,7 +195,7 @@ SynapseProdRedashServiceAccount:
               "s3:GetBucketLocation",
               "s3:ListBucket"
             ],
-            "Resource": "arn:aws:s3:::prod.glue-data.sagebase.org"
+            "Resource": "arn:aws:s3:::prod.datawarehouse.sagebase.org"
           }
         ]
       }

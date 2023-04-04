@@ -33,6 +33,7 @@ Organization:
         - !Ref DnTDevAccount
         - !Ref RecoverDevAccount
         - !Ref ScceDevAccount
+        - !Ref CnbDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -362,6 +363,21 @@ Organization:
         CostCenter: NIH-ITCR / 101600
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: cnb@sagebase.org
+
+  CnbDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-cnb-dev
+      RootEmail: aws-cnb-dev@sagebase.org
+      Alias: org-sagebase-cnb-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        Department: CNB
+        Project: Challenges
+        AccountOwner: thomas.schaffter@sagebionetworks.org
+        CostCenter: NIH-ITCR / 101600
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-cnb-dev@sagebase.org
 
   MobileHealthDataEngineeringDevAccount:
     Type: OC::ORG::Account

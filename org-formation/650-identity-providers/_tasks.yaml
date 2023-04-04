@@ -240,4 +240,52 @@ GithubOidcSageBionetworksServiceCatalogLibrary:
         branch: "master"
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
+    Region: us-east-1  
+
+GithubOidcSageBionetworksWebMonorepoInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9" ]
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
+              "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org", "arn:aws:s3:::staging.accounts.sagebionetworks.org" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject" ],
+              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/service-catalog-library/*"]
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
+              "Resource": ["arn:aws:s3:::prod.accounts.sagebionetworks.org/*", "arn:aws:s3:::staging.accounts.sagebionetworks.org/*" ]
+          },
+          {
+              "Sid": "CloudfrontActions",
+              "Effect": "Allow",
+              "Action": [ "cloudfront:CreateInvalidation" ],
+              "Resource": ["arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI", "arn:aws:cloudfront::797640923903:distribution/EY52HOUGKDP1F" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "service-catalog-library"
+        branch: "master"
+  DefaultOrganizationBinding:
+    Account: !Ref AdminCentralAccount
+      - name: "synapse-web-monorepo"
+        branch: "*"
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
     Region: us-east-1
