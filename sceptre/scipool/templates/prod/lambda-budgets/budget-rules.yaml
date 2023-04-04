@@ -1,13 +1,13 @@
 # budget rules per user by synapse team id
 teams:
-  - '3469335': # Schwannomatosis Open Research Collaborative Service Catalog Users
+  '3469335': # Schwannomatosis Open Research Collaborative Service Catalog Users
     amount: '750'
     period: MONTHLY
     unit: USD
     community_manager_emails:
       - 'robert.allaway@sagebase.org'
       - 'sasha.scott@sagebase.org'
-  - '3469336': # RECOVER Service Catalog External Users
+  '3469336': # RECOVER Service Catalog External Users
     amount: '500'
     period: YEAR
     unit: USD
