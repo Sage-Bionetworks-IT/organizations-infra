@@ -9,6 +9,4 @@ parameters:
   SynapseUserKeyName: '/lambda-send-budget-alert/synapse-username'
   SynapsePasswordKeyName: '/lambda-send-budget-alert/synapse-password'
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"

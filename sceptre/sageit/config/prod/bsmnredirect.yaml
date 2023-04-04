@@ -2,8 +2,6 @@ template:
   path: s3webredirect.yaml
 stack_name: bsmnredirect
 stack_tags:
-  Department: IT
-  Project: Infrastructure
   OwnerEmail: x.schildwachter@sagebionetworks.org
 parameters:
   RedirectFrom: brainsomaticmosaicism.org

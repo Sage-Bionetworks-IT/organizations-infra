@@ -2,8 +2,6 @@ template:
   path: "sc-product-ec2-windows-jumpcloud.j2"
 stack_name: "sc-product-ec2-windows-jumpcloud"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "strides/sc-portfolio-ec2.yaml"
