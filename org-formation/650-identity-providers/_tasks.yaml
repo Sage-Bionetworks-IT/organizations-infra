@@ -117,6 +117,25 @@ GithubOidcSageBionetworksGenieBPCInfra:
       - !Ref GenieProdAccount
     Region: us-east-1
 
+GithubOidcSageBionetworksSimpleShinyInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-simple-shiny-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "simple-shiny-infra"
+        branch: "*"
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DnTDevAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksDNTInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
