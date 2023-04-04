@@ -1,0 +1,159 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: S3Objects
+Description: >-
+  Provision a bucket and distribution for shiny.synapse.org site
+Parameters:
+  SubDomainName:
+    Type: String
+    Description: Subdomain name (prod, staging)
+  AcmCertificateArn:
+    Type: String
+    Description: The Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate.
+    AllowedPattern: "arn:aws:acm:.*"
+    ConstraintDescription: must be a valid certificate ARN
+  RedirectFctName:
+    Type: String
+    Description: Redirect function name
+Conditions:
+  IsProd: !Equals [!Ref SubDomainName, 'prod']
+Resources:
+  CloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'CloudFront OAI for ${SubDomainName}.shiny.synapse.org'
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: BucketPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: CFOAIReadForGetBucketObjects
+            Effect: Allow
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOAI.S3CanonicalUserId
+            Action: 's3:GetObject'
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref WebsiteBucket, '/*']]
+      Bucket: !Ref WebsiteBucket
+  Cloudfront:
+    Type: AWS::CloudFront::Distribution
+    DependsOn:
+      - WebsiteBucket
+    Properties:
+      DistributionConfig:
+        Comment: Cloudfront Distribution pointing to S3 bucket
+        Origins:
+          - DomainName: !Sub '${WebsiteBucket}.s3.amazonaws.com'
+            Id: S3Origin
+            S3OriginConfig:
+              OriginAccessIdentity:
+                !Join [ "", [ "origin-access-identity/cloudfront/", !Ref CloudFrontOAI ] ]
+        Enabled: true
+        HttpVersion: 'http2'
+        DefaultRootObject: index.html
+        Aliases:
+          - !Sub '${SubDomainName}.shiny.synapse.org'
+          - !If [IsProd, 'shiny.synapse.org', !Ref AWS::NoValue]
+          - !If [IsProd, 'shinypro.synapse.org', !Ref AWS::NoValue]
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 60
+            ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: '/index.html'
+          - ErrorCachingMinTTL: 60
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: '/index.html'
+        DefaultCacheBehavior:
+          DefaultTTL: 3600
+          AllowedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          TargetOriginId: S3Origin
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          FunctionAssociations:
+          -
+            EventType: viewer-request
+            FunctionARN: !GetAtt RedirectFct.FunctionARN
+          ViewerProtocolPolicy: redirect-to-https
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: !Ref AcmCertificateArn
+          MinimumProtocolVersion: TLSv1.2_2021
+          SslSupportMethod: sni-only
+  RedirectFct:
+    Type: AWS::CloudFront::Function
+    Properties:
+      AutoPublish: true
+      FunctionCode: |
+        function handler(event) {
+            var request = event.request;
+            var uri = request.uri;
+            var queryparams = request.querystring;
+            var response = {
+                statusCode: 307,
+                statusDescription: 'OK',
+                headers: {
+                    'cloudfront-functions': { value: 'generated-by-CloudFront-Functions' }
+                }
+              };
+            if (uri === '/users/kdaily/ShinyCellReport_Urrutia-et-al_20160726') {
+              response['headers']['location'] = {value: 'https://sage-bionetworks.shinyapps.io/ShinyCellReport_Urrutia-et-al'};
+              return response;
+            } else if (uri === '/users/rallaway/NF_data_curator') {
+              response['headers']['location'] = {value: 'https://sagebio.shinyapps.io/NF_data_curator'};
+              return response;
+            } else if (uri === '/users/jbanerjee/projectLive') {
+              response['headers']['location'] = {value: 'https://sagebio.shinyapps.io/projectLive_NF'};
+              return response;
+            } else if (uri === '/users/rallaway/nf-lv-viz') {
+              response['headers']['location'] = {value: 'https://sagebio.shinyapps.io/nf-lv-viz'};
+              return response;
+            } else if (uri === '/users/rallaway/kairos') {
+              response['headers']['location'] = {value: 'https://sagebio.shinyapps.io/kairos'};
+              return response;
+            } else if (uri === '/users/rallaway/polypharmacology-db') {
+              response['headers']['location'] = {value: 'https://sagebio.shinyapps.io/polypharmacology-db'};
+              return response;
+            } else {
+                return request;
+            }
+        }
+      FunctionConfig:
+        Comment: Redirects requests from /Explore/Programs/DetailsPage
+        Runtime: cloudfront-js-1.0
+      Name: !Ref RedirectFctName
+
+  S3Object:
+    Type: AWS::S3::Object
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+          - E3001
+    Properties:
+      Target:
+        Bucket: !Ref WebsiteBucket
+        Key: index.html
+        ContentType: text/html
+      Body: '<html><h1>URI not found!</h1><br><p>Applications on https://shiny.synapse.org have migrated to ShinyApps.io .</p></html>'
