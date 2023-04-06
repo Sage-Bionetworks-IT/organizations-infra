@@ -757,8 +757,7 @@ SsoSynapseAdmin:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      OrganizationalUnit:
-        - !Ref SynapseProdAccount
+      Account: !Ref SynapseProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseAdminGroup
@@ -775,8 +774,7 @@ SsoSynapseDevAdmin:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      OrganizationalUnit:
-        - !Ref SynapseDevAccount
+      Account: !Ref SynapseDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseDevAdminGroup
