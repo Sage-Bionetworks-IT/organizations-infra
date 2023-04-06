@@ -77,6 +77,10 @@ Parameters:
     Type: String
     Default: '906769aa66-1c66a9b6-ae5e-473c-a51c-4b02918c4454'
 
+  synapseDevAdminGroup:   #JC aws-synapsedev-admins
+    Type: String
+    Default: '44d844b8-60a1-70e5-cb5a-50137c984398'
+
   synapseDevDeveloperGroup:     #JC aws-synapsedev-developers
     Type: String
     Default: '906769aa66-74e6487e-6e4e-4734-ba40-0de48cd03511'
@@ -754,10 +758,28 @@ SsoSynapseAdmin:
   OrganizationBindings:
     TargetBinding:
       OrganizationalUnit:
-        - !Ref SynapseOU
+        - !Ref SynapseProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoSynapseDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsedev-admin'
+  StackDescription: 'SSO: admin role used by synapsedev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      OrganizationalUnit:
+        - !Ref SynapseDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoSynapseDevDeveloper:
