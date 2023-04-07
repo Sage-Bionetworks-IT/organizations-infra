@@ -73,10 +73,6 @@ Parameters:
     Type: String
     Default: '906769aa66-6cdd2cc1-6d3d-49d8-b105-37c22bb3d402'
 
-  synapseAdminGroup:      #JC aws-synapse-admins
-    Type: String
-    Default: '906769aa66-1c66a9b6-ae5e-473c-a51c-4b02918c4454'
-
   synapseDevAdminGroup:   #JC aws-synapsedev-admins
     Type: String
     Default: '44d844b8-60a1-70e5-cb5a-50137c984398'
@@ -748,23 +744,6 @@ SsoWorkflowNextflowProdAdmin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowProdAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
-SsoSynapseAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-synapse-admin'
-  StackDescription: 'SSO: admin role used by synapse admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SynapseProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref synapseAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoSynapseDevAdmin:
