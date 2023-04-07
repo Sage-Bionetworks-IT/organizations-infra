@@ -81,6 +81,10 @@ Parameters:
     Type: String
     Default: '44d844b8-60a1-70e5-cb5a-50137c984398'
 
+  synapseProdAdminGroup:  #JC aws-synapseprod-admins
+    Type: String
+    Default: '34783488-c0c1-701b-d093-6f4f8edcf2d7'
+
   synapseDevDeveloperGroup:     #JC aws-synapsedev-developers
     Type: String
     Default: '906769aa66-74e6487e-6e4e-4734-ba40-0de48cd03511'
@@ -778,6 +782,23 @@ SsoSynapseDevAdmin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoSynapseProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-synapseprod-admin'
+  StackDescription: 'SSO: admin role used by synapseprod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoSynapseDevDeveloper:
