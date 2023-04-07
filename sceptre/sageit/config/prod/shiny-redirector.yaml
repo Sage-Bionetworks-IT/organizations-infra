@@ -1,0 +1,7 @@
+template:
+  path: shiny_redirector.yaml
+stack_name: prod-shiny-redirector
+parameters:
+  SubDomainName: prod
+  AcmCertificateArn: arn:aws:acm:us-east-1:797640923903:certificate/5a757f47-4660-4b7f-8108-d724269a31f5
+  RedirectFctName: prod-shiny-redirectfct
