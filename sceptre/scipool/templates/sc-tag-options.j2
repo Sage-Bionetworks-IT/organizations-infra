@@ -30,6 +30,12 @@ Resources:
       Key: "CostCenter"
       Value: {{ CostCenter }}
   {% endfor %}
+  OtherCostCenterTag:
+    Type: AWS::ServiceCatalog::TagOption
+    Properties:
+      Active: true
+      Key: "CostCenter"
+      Value: "Other / 000001"
 {% endif %}
 
 {% if sceptre_user_data.ProductIDs is defined %}
@@ -60,6 +66,11 @@ Resources:
       ResourceId: "{{ id }}"
       TagOptionId: !Ref "{{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
       {% endfor %}
+  OtherTagAssociationProd{{ id.split('-')[1] }}:
+    Type: AWS::ServiceCatalog::TagOptionAssociation
+    Properties:
+      ResourceId: "{{ id }}"
+      TagOptionId: !Ref "OtherCostCenterTag"
     {% endif %}
   {% endfor %}
 {% endif %}
