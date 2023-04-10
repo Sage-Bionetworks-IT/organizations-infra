@@ -261,6 +261,40 @@ GithubOidcSageBionetworksServiceCatalogLibrary:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
 
+GithubOidcSageBionetworksSynapseLoginAwsInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-login-aws-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject" ],
+              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/synapse-login-aws-infra/*"]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-login-aws-infra"
+        branch: "master"
+  DefaultOrganizationBinding:
+    Account: !Ref SciPoolProdAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksWebMonorepoInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
