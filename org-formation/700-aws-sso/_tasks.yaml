@@ -1838,4 +1838,3 @@ SsoDccValidatorProdApplicationManager:
     instanceArn: !Ref instanceArn
     principalId: !Ref dccvalidatorProdApplicationManagerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
-
