@@ -41,6 +41,8 @@ Certificates must exist in the same account they will be used in, and so we
 must create a copy of our wildcard certificate in an application account before
 the application can be deployed to that account. For example, [the list of
 accounts for `app.sagebionetworks.org`](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/org-formation/100-shared-dns/_tasks.yaml#L70).
+When merging a change that creates new certificates, the deploy pipeline will
+fail if the certificates are not validated within the 30-minute timeout.
 
 ### Validating New Certificates
 
