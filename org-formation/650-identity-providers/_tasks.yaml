@@ -156,6 +156,28 @@ GithubOidcSageBionetworksDNTInfra:
       - !Ref DnTDevAccount
     Region: us-east-1
 
+GithubOidcSageBionetworksDccValidatorInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "dccvalidator_1kD-infra"
+      - name: "dccvalidator_PEC-infra"
+      - name: "dccmonitor_ECS-infra"
+        branch: "*"
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DccvalidatorDevAccount
+      - !Ref DccvalidatorProdAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksSecuityHubToJira:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
