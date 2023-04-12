@@ -156,11 +156,11 @@ GithubOidcSageBionetworksDNTInfra:
       - !Ref DnTDevAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksDccValidatorInfra:
+GithubOidcSageBionetworksDccValidator1kDInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-1kD-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     ManagedPolicyArns:
@@ -169,7 +169,45 @@ GithubOidcSageBionetworksDccValidatorInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "dccvalidator_1kD-infra"
+        branch: "*"
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DccvalidatorDevAccount
+      - !Ref DccvalidatorProdAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksDccValidatorPECInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-pec-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
       - name: "dccvalidator_PEC-infra"
+        branch: "*"
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DccvalidatorDevAccount
+      - !Ref DccvalidatorProdAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksDccMonitorInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccmonitor-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
       - name: "dccmonitor_ECS-infra"
         branch: "*"
   DefaultOrganizationBinding:
