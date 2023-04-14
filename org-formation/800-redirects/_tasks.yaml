@@ -204,6 +204,4 @@ DccValidator1kDDevAppDnsForward:
     # ID of the app.sagebionetworks.org zone (in sageit account)
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
     # the value of the CNAME record
-    #TargetHostName: 'dccva-dccva-1LFCR8U325PQ3-1454849979.us-east-1.elb.amazonaws.com'
-    TargetHostName: 'genie-genie-4R49TZYDXAS9-1514334147.us-east-1.elb.amazonaws.com'
-    #TargetHostName: !CopyValue ['dccvalidator-1kD-dev-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorDevAccount]
+    TargetHostName: !CopyValue ['dccvalidator-1kD-dev-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorDevAccount]
