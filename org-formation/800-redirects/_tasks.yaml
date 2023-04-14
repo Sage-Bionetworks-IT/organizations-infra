@@ -192,7 +192,7 @@ GenieBPCProdAppDnsForward:
 # https://github.com/Sage-Bionetworks/dccvalidator_1kD-infra
 DccValidator1kDDevAppDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-dccvalidator-1kD-dev-cname'
   StackDescription: Setup a CNAME for dccvalidator-1kD-infra dev ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
