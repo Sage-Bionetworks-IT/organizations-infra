@@ -25,7 +25,7 @@ SsoRedirect:   # Redirect sso.sageit.org to the AWS SSO Start URL
 # forward mips-api.finops.sageit.org to lambda-mips-api cloudfront distribution
 FinopsApiDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-finops-api-forward'
   StackDescription: Forward traffic to the lambda-mips-api cloudfront distribution
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -42,7 +42,7 @@ FinopsApiDnsForward:
 # forward cost-rules.finops.sageit.org to lambda-finops-cost-rules
 FinopsRulesDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-finops-rules-forward'
   StackDescription: Forward traffic to the lambda-finops-cost-rules api gateway
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -63,7 +63,7 @@ FinopsRulesDnsForward:
 # https://github.com/Sage-Bionetworks/data_curator-infra
 DcaDevAppDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-dca-dev-cname'
   StackDescription: Setup a CNAME for data_curator-infra dev ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -81,7 +81,7 @@ DcaDevAppDnsForward:
 # https://github.com/Sage-Bionetworks/data_curator-infra
 DcaDevNoStickyAppDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-dca-dev-no-sticky-cname'
   StackDescription: Setup a CNAME for experimental data_curator ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -99,7 +99,7 @@ DcaDevNoStickyAppDnsForward:
 # https://github.com/Sage-Bionetworks/data_curator-infra
 DcaDevStickyAppDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-dca-dev-sticky-cname'
   StackDescription: Setup a CNAME for experimental data_curator ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -117,7 +117,7 @@ DcaDevStickyAppDnsForward:
 # https://github.com/Sage-Bionetworks/data_curator-infra
 DcaProdAppDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-dca-prod-cname'
   StackDescription: Setup a CNAME for data_curator-infra prod ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -138,7 +138,7 @@ DcaProdAppDnsForward:
 # https://github.com/Sage-Bionetworks/schematic-infra
 SchematicDevAppDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-schematic-dev-cname'
   StackDescription: Setup a CNAME for schematic-infra dev ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -156,7 +156,7 @@ SchematicDevAppDnsForward:
 # https://github.com/Sage-Bionetworks/schematic-infra
 SchematicProdAppDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-schematic-prod-cname'
   StackDescription: Setup a CNAME for schematic-infra prod ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -174,7 +174,7 @@ SchematicProdAppDnsForward:
 # https://github.com/Sage-Bionetworks/genie-bpc-infra
 GenieBPCProdAppDnsForward:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.4/templates/R53/cname.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-genie-bpc-prod-cname'
   StackDescription: Setup a CNAME for genie-bpc-infra dev ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
