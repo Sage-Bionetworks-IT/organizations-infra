@@ -205,3 +205,57 @@ DccValidator1kDDevAppDnsForward:
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
     # the value of the CNAME record
     TargetHostName: !CopyValue ['dccvalidator-1kD-dev-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorDevAccount]
+
+# forward https://dccvalidator-pec-dev.app.sagebionetworks.org to dccvalidator-pec-infra ALB
+# https://github.com/Sage-Bionetworks/dccvalidator_PEC-infra
+DccValidatorPECDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-dccvalidator-pec-dev-cname'
+  StackDescription: Setup a CNAME for dccvalidator_PEC-infra dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dccvalidator-pec-dev.app.sagebionetworks.org"
+    # ID of the app.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['dccvalidator-pec-dev-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorDevAccount]
+
+# forward https://dccmonitor-1kD-dev.app.sagebionetworks.org to dccmonitor_ECS-infra 1kD dev ALB
+# https://github.com/Sage-Bionetworks/dccmonitor_ECS-infra
+DccMonitor1kDDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-dccmonitor-1kD-dev-cname'
+  StackDescription: Setup a CNAME for dccmonitor_ECS-infra 1kD dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dccmonitor-1kD-dev.app.sagebionetworks.org"
+    # ID of the app.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['dccmonitor-1kD-1kd-dev-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorDevAccount]
+
+# forward https://dccmonitor-pec-dev.app.sagebionetworks.org to dccmonitor_ECS-infra PEC dev ALB
+# https://github.com/Sage-Bionetworks/dccmonitor_ECS-infra
+DccMonitorPECDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-dccmonitor-pec-dev-cname'
+  StackDescription: Setup a CNAME for dccmonitor_ECS-infra PEC dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dccmonitor-pec-dev.app.sagebionetworks.org"
+    # ID of the app.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['dccmonitor-pec-pec-dev-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorDevAccount]
