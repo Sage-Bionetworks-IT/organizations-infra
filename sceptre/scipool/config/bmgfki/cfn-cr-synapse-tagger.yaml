@@ -3,6 +3,4 @@ template:
   url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-synapse-tagger/0.1.1/cfn-cr-synapse-tagger.yaml
 stack_name: cfn-cr-synapse-tagger
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"

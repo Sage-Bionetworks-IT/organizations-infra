@@ -3,6 +3,4 @@ template:
   url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-bucket-policy/1.0.4/cfn-cr-sc-bucket-policy.yaml
 stack_name: cfn-cr-sc-bucket-policy
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"

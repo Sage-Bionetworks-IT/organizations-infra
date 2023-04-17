@@ -323,8 +323,6 @@ Organization:
       Alias: org-sagebase-nlpsandbox
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CompOnc
-        Project: NLP-Sandbox
         AccountOwner: thomas.yu@sagebase.org
         budget-alarm-threshold: 20000
         CostCenter: CD2H-CU / 11330
@@ -339,8 +337,6 @@ Organization:
       Alias: org-sagebase-include-chop-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: IBC
-        Project: INCLUDE
         AccountOwner: thomas.yu@sagebase.org
         budget-alarm-threshold: 20000
         CostCenter: "INCLUDE - CHOP / 122000"
@@ -359,8 +355,6 @@ Organization:
       Alias: org-sagebase-cnb
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CNB
-        Project: Challenges
         AccountOwner: thomas.schaffter@sagebionetworks.org
         CostCenter: NIH-ITCR / 101600
         budget-alarm-threshold: 10000
@@ -374,8 +368,6 @@ Organization:
       Alias: org-sagebase-cnb-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CNB
-        Project: Challenges
         AccountOwner: thomas.schaffter@sagebionetworks.org
         CostCenter: NIH-ITCR / 101600
         budget-alarm-threshold: 10000
@@ -390,8 +382,6 @@ Organization:
       Alias: org-sagebase-mobilehealth-dataengineering-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: IBC
-        Project: mobile-toolbox
         AccountOwner: thomas.yu@sagebase.org
         CostCenter: Mobile Toolbox Project Core / 112501  # Difficulty here is RECOVER / 122500 will also leverage this infra.
         budget-alarm-threshold: 10000
@@ -406,8 +396,6 @@ Organization:
       Alias: org-sagebase-mobilehealth-dataengineering-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: IBC
-        Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
         CostCenter: Mobile Toolbox Project Core / 112501  # Difficulty here is RECOVER / 122500 will also leverage this infra.
         budget-alarm-threshold: 20000
@@ -422,8 +410,6 @@ Organization:
       Alias: org-sagebase-iatlas-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CompOnc
-        Project: iAtlas
         AccountOwner: brian.oconnor@sagebase.org
         CostCenter: iAtlas 3 / 314900  # TODO: Update code in June/July 2022 when iAtlas 4 starts.
         budget-alarm-threshold: 2000
@@ -439,8 +425,6 @@ Organization:
       Alias: org-sagebase-htan-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: CompOnc
-        Project: htan
         CostCenter: HTAN-DFCI / 120100
         AccountOwner: brian.oconnor@sagebase.org
         budget-alarm-threshold: 2500
@@ -455,8 +439,6 @@ Organization:
       Alias: org-sagebase-workflows-nextflow-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: IBC
-        Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
@@ -470,8 +452,6 @@ Organization:
       Alias: org-sagebase-workflows-nextflow-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: IBC
-        Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
         # More granular budget alerts (compute, storage, and other) deployed here:
         # https://github.com/Sage-Bionetworks-Workflows/nextflow-infra/tree/main/config/common
@@ -484,8 +464,6 @@ Organization:
       Alias: org-sagebase-dnt-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: IBC
-        Project: Infrastructure
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
         AccountOwner: thomas.yu@sagebase.org
@@ -498,8 +476,6 @@ Organization:
       Alias: org-sagebase-agora-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: SysBio
-        Project: amp-ad
         # Anna G confirmed that AMP-AD charges should technically
         # be charged to STRIDES account but this tag works
         CostCenter: NIA AMP-AD CC / 101500
@@ -515,8 +491,6 @@ Organization:
       Alias: org-sagebase-agora-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: SysBio
-        Project: amp-ad
         # Anna G confirmed that AMP-AD charges should technically
         # be charged to STRIDES account but this tag works
         CostCenter: NIA AMP-AD CC / 101500
@@ -568,8 +542,6 @@ Organization:
       Alias: org-sagebase-genie-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: DPE
-        Project: Genie
         AccountOwner: thomas.yu@sagebase.org
         CostCenter: Genie-AACR BPC / 312100
         budget-alarm-threshold: 1000
@@ -583,8 +555,6 @@ Organization:
       Alias: org-sagebase-dca-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: FAIR
-        Project: DCA
         AccountOwner: milen.nikolov@sagebase.org
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 1000
@@ -598,8 +568,6 @@ Organization:
       Alias: org-sagebase-recover-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: DNT
-        Project: RECOVER
         AccountOwner: thomas.yu@sagebase.org
         CostCenter: MGH RECOVER / 122500
         budget-alarm-threshold: 10000
@@ -613,8 +581,6 @@ Organization:
       Alias: org-sagebase-recover-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: DNT
-        Project: RECOVER
         AccountOwner: thomas.yu@sagebase.org
         CostCenter: MGH RECOVER / 122500
         budget-alarm-threshold: 10000
@@ -628,8 +594,6 @@ Organization:
       Alias: org-sagebase-dpe-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        Department: DNT
-        Project: Infrastructure
         AccountOwner: thomas.yu@sagebase.org
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 10000

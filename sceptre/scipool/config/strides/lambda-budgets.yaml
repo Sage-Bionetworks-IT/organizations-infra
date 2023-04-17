@@ -3,8 +3,6 @@ template:
   url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-budgets/0.1.0/lambda-budgets.yaml
 stack_name: lambda-budgets
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 parameters:
   EndUserRoleName: !stack_output_external sc-enduser-iam::ExternalEndUserRoleName

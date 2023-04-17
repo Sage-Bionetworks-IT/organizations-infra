@@ -3,8 +3,6 @@ template:
   url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.3/Cost/anomaly-detector-service.yaml
 stack_name: anomaly-detector-service
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 parameters:
   Subscriber: aws.strides@sagebase.org

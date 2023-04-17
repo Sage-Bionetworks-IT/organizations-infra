@@ -1,18 +1,6 @@
 Description: Resources for the EC2 Image Builder
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
-  Department:
-    Description: 'The department for this resource'
-    Type: String
-    AllowedPattern: '^\S*$'
-    ConstraintDescription: 'Must be string with no spaces'
-    Default: 'Platform'
-  Project:
-    Description: 'The name of the project that this resource is used for'
-    Type: String
-    AllowedPattern: '^\S*$'
-    ConstraintDescription: 'Must be string with no spaces'
-    Default: 'Infrastructure'
   OwnerEmail:
     Description: 'Email address of the owner of this resource'
     Type: String
@@ -50,10 +38,6 @@ Resources:
     Properties:
       AccessControl: PublicRead
       Tags:
-        - Key: "Department"
-          Value: !Ref Department
-        - Key: "Project"
-          Value: !Ref Project
         - Key: "OwnerEmail"
           Value: !Ref OwnerEmail
   ImageBuilderLogsManagedolicy:

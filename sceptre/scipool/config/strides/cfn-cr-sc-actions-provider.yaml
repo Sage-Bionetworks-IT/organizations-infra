@@ -3,8 +3,6 @@ template:
   url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-actions-provider/0.2.0/cfn-cr-sc-actions-provider.yaml
 stack_name: cfn-cr-sc-actions-provider
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - strides/bootstrap.yaml
