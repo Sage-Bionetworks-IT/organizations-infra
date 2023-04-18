@@ -13,7 +13,7 @@ sceptre_user_data:
   Departments: !file sc-tag-options/internal/Departments.json
   Projects: !file sc-tag-options/internal/Projects.json
   CostCenters: !from_json
-    - !request 'https://finops-api.sageit.org/tags?limit=25'
+    - !request 'https://mips-api.finops.sageit.org/tags?limit=25'
   ProductIDs:
     - !stack_output_external sc-portfolio-ec2::SCEC2portfolioId
     - !stack_output_external sc-portfolio-s3-basic::SCS3portfolioId
