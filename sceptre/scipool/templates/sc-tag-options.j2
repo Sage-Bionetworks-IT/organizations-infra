@@ -23,7 +23,7 @@ Resources:
 {% endif %}
 {% if sceptre_user_data.CostCenters is defined %}
   {% for CostCenter in sceptre_user_data.CostCenters %}
-  {{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
+  {{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
     Type: AWS::ServiceCatalog::TagOption
     Properties:
       Active: true
@@ -54,11 +54,11 @@ Resources:
     {% endif %}
     {% if sceptre_user_data.CostCenters is defined %}
       {% for CostCenter in sceptre_user_data.CostCenters %}
-  {{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}TagAssociationProd{{ id.split('-')[1] }}:
+  {{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}TagAssociationProd{{ id.split('-')[1] }}:
     Type: AWS::ServiceCatalog::TagOptionAssociation
     Properties:
       ResourceId: "{{ id }}"
-      TagOptionId: !Ref "{{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
+      TagOptionId: !Ref "{{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
       {% endfor %}
     {% endif %}
   {% endfor %}
@@ -83,9 +83,9 @@ Outputs:
 {% endif %}
 {% if sceptre_user_data.CostCenters is defined %}
   {% for CostCenter in sceptre_user_data.CostCenters %}
-  {{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
+  {{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
     Value: !Ref "{{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
     Export:
-      Name: !Sub "${AWS::Region}-${AWS::StackName}-{{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
+      Name: !Sub "${AWS::Region}-${AWS::StackName}-{{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
   {% endfor %}
 {% endif %}
