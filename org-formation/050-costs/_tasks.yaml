@@ -61,6 +61,3 @@ CostCategories:
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
-  Parameters:
-    OwnerEmailRulesJSON: !Cmd 'wget -qO- https://cost-rules.finops.sageit.org/owner-emails'
-    ProgramCodeRulesJSON: !Cmd 'wget -qO- https://cost-rules.finops.sageit.org/program-codes'
