@@ -5,21 +5,18 @@ on:
   workflow_call:
     inputs:
       aws-region:
-        required: true
         type: string
         default: us-east-1
       role-to-assume:
         required: true
         type: string
       role-duration-seconds:
-        required: true
         type: number
         default: 1200
       working-dir:
         required: true
         type: string
       sceptre-command:
-        required: true
         type: string
         default: "sceptre launch prod --prune --yes"
 
