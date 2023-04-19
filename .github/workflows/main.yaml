@@ -157,7 +157,7 @@ jobs:
       working-dir: "sceptre/scipool"
   sceptre-stridespool:
     if: github.ref == 'refs/heads/master'
-    needs: [org-formation]
+    needs: [org-formation, sceptre-strides]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
       role-to-assume: "arn:aws:iam::237179673806:role/sagebase-github-oidc-sage-ProviderRoleorganization-2ZIH68YL4TR5"
