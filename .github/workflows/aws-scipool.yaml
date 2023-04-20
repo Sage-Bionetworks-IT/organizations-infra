@@ -1,5 +1,6 @@
 # reusable template for running Sceptre deployments to AWS accounts
-name: aws-deploy
+# Deploy resources to service catalog prod environments
+name: aws-scipool
 
 on:
   workflow_call:
@@ -51,7 +52,11 @@ jobs:
           role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
           role-duration-seconds: ${{ inputs.role-duration-seconds }}
       - name: Deploy with sceptre
+        # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
         run: |
           cd ${{ inputs.working-dir }}
           mkdir -p templates/remote
+          sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker.yaml
+          sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
+          sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           ${{ inputs.sceptre-command }}

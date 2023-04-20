@@ -1,0 +1,239 @@
+name: main
+
+on:
+  pull_request:
+    branches: ['*']
+  push:
+    branches: ['*']
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - uses: pre-commit/action@v3.0.0
+  jinja-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install jinja libraries
+        run: |
+          python -m pip install --upgrade jinja2==3.0.1
+      - name: Install jinja linter tool
+        run: git clone --single-branch https://github.com/drm/jinja2-lint.git /tmp/jinja2-lint && pushd /tmp/jinja2-lint && git checkout 75dcd5a
+      - name: Execute jinja linter
+        run: find . -type f -name "*.j2" -exec /tmp/jinja2-lint/j2lint.py '{}' +
+  test-npm-deps:  # Useful for testing version updates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: npm install
+
+  org-formation:
+    if: github.ref == 'refs/heads/master'
+    needs: [pre-commit, jinja-lint, test-npm-deps]
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Assume AWS Role
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::531805629419:role/sagebase-github-oidc-sage-ProviderRoleorganization-ACD5KR6KZP3U
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
+          role-duration-seconds: 1200
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: npm install
+      - name: Generate AWS CDK bootstrap template
+        run: npm run generate-cdk-bootstrap-template
+      - name: Add EnableKeyRotation property to CDK assets key
+        run: npm run patch-cdk-bootstrap-template
+      - name: Validate ofn templates
+        run: npm run validate-tasks
+      - name: Validate with print-task
+        run: npm run print-tasks-failfast
+      - name: Deploy with ofn
+        run: npm run ci-perform-tasks-parallel
+
+  sceptre-organizations:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::531805629419:role/sagebase-github-oidc-sage-ProviderRoleorganization-ACD5KR6KZP3U"
+      working-dir: "sceptre/organizations"
+  sceptre-admincentral:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::745159704268:role/sagebase-github-oidc-sage-ProviderRoleorganization-QJWJ1AG8LNON"
+      working-dir: "sceptre/admincentral"
+  sceptre-itsandbox:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::804034162148:role/sagebase-github-oidc-sage-ProviderRoleorganization-W6F7T5K05CUC"
+      working-dir: "sceptre/itsandbox"
+  sceptre-scicomp:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::055273631518:role/sagebase-github-oidc-sage-ProviderRoleorganization-CAP7YJ19OWKJ"
+      working-dir: "sceptre/scicomp"
+  sceptre-strides:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetwo-ProviderRoleorganization-3R0K18XHN449"
+      working-dir: "sceptre/strides"
+  sceptre-strides-ampad-workflows:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::751556145034:role/github-oidc-sage-bionetwo-ProviderRoleorganization-9JE3CF75DHRZ"
+      working-dir: "sceptre/strides-ampad-workflows"
+  sceptre-scipooldev:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::465877038949:role/sagebase-github-oidc-sage-ProviderRoleorganization-1KLJKMGDP6Z79"
+      working-dir: "sceptre/scipool"
+      sceptre-command: "sceptre launch develop --prune --yes"
+  sceptre-scipoolprod:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-scipool.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::237179673806:role/sagebase-github-oidc-sage-ProviderRoleorganization-2ZIH68YL4TR5"
+      working-dir: "sceptre/scipool"
+  sceptre-stridespool:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation, sceptre-strides]
+    uses: "./.github/workflows/aws-scipool.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetwo-ProviderRoleorganization-3R0K18XHN449"
+      working-dir: "sceptre/scipool"
+      sceptre-command: "sceptre launch strides --prune --yes"
+  sceptre-bmgfki:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-scipool.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::464102568320:role/sagebase-github-oidc-sage-ProviderRoleorganization-1JABD7X9E254U"
+      working-dir: "sceptre/scipool"
+      sceptre-command: "sceptre launch bmgfki --prune --yes"
+  sceptre-sageit-staging:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-ProviderRoleorganization-RNY2NBNS9MDD"
+      working-dir: "sceptre/sageit"
+      sceptre-command: "sceptre launch staging --prune --yes"
+  sceptre-sageit-prod:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-ProviderRoleorganization-RNY2NBNS9MDD"
+      working-dir: "sceptre/sageit"
+  sceptre-logcentral:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::231505186444:role/sagebase-github-oidc-sage-ProviderRoleorganization-1RDFA554CNNWG"
+      working-dir: "sceptre/logcentral"
+  sceptre-synapsedev:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::449435941126:role/sagebase-github-oidc-sage-ProviderRoleorganization-1K1MGUYPL5JUO"
+      working-dir: "sceptre/synapsedev"
+  sceptre-synapseprod:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::325565585839:role/sagebase-github-oidc-sage-ProviderRoleorganization-AIZUJ4CS2ML0"
+      working-dir: "sceptre/synapseprod"
+  sceptre-securitycentral:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::140124849929:role/sagebase-github-oidc-sage-ProviderRoleorganization-1MXL0NMCKNS3I"
+      working-dir: "sceptre/securitycentral"
+  sceptre-bridgedev:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::420786776710:role/sagebase-github-oidc-sage-ProviderRoleorganization-14ZBOQI8IBLF0"
+      working-dir: "sceptre/bridge"
+      sceptre-command: "sceptre launch develop --prune --yes"
+  sceptre-bridgeprod:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::649232250620:role/sagebase-github-oidc-sage-ProviderRoleorganization-6F7084KBODPE"
+      working-dir: "sceptre/bridge"
+  sceptre-imagecentral:
+    if: github.ref == 'refs/heads/master'
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::867686887310:role/sagebase-github-oidc-sage-ProviderRoleorganization-ZG12T771KREH"
+      working-dir: "sceptre/imagecentral"
