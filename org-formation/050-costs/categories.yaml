@@ -1,28 +1,17 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'All Cost Categories'
+Parameters:
+  OwnerEmailRulesJSON:
+    Type: String
+    Description: JSON string representing the Rules for the 'Owner Email' Cost Category
+
 Resources:
   OwnerEmailCostCategory:
     Type: 'AWS::CE::CostCategory'
     Properties:
       Name: 'Owner Email'
       RuleVersion: 'CostCategoryExpression.v1'
-      Rules: >-
-        [
-          {
-            "Type": "INHERITED_VALUE",
-            "InheritedValue": {
-              "DimensionName": "TAG",
-              "DimensionKey": "synapse:email"
-            }
-          },
-          {
-            "Type": "INHERITED_VALUE",
-            "InheritedValue": {
-              "DimensionName": "TAG",
-              "DimensionKey": "OwnerEmail"
-            }
-          }
-        ]
+      Rules: !Ref OwnerEmailRulesJSON
 
   ProgramCodeCostCategory:
     Type: 'AWS::CE::CostCategory'
