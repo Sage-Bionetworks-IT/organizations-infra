@@ -196,7 +196,7 @@ jobs:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
-      role-to-assume: "arn:aws:iam::231505186444:role/sagebase-github-oidc-sage-ProviderRoleorganization-1RDFA554CNNWG"
+      role-to-assume: "arn:aws:iam::449435941126:role/sagebase-github-oidc-sage-ProviderRoleorganization-1K1MGUYPL5JUO"
       working-dir: "sceptre/synapsedev"
   sceptre-synapseprod:
     if: github.ref == 'refs/heads/master'
@@ -218,7 +218,7 @@ jobs:
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::420786776710:role/sagebase-github-oidc-sage-ProviderRoleorganization-14ZBOQI8IBLF0"
-      working-dir: "sceptre/bridgedev"
+      working-dir: "sceptre/bridge"
   sceptre-bridgeprod:
     if: github.ref == 'refs/heads/master'
     needs: [org-formation]
