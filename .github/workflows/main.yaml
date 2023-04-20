@@ -148,6 +148,7 @@ jobs:
     with:
       role-to-assume: "arn:aws:iam::465877038949:role/sagebase-github-oidc-sage-ProviderRoleorganization-1KLJKMGDP6Z79"
       working-dir: "sceptre/scipool"
+      sceptre-command: "sceptre launch develop --prune --yes"
   sceptre-scipoolprod:
     if: github.ref == 'refs/heads/master'
     needs: [org-formation]
@@ -162,6 +163,7 @@ jobs:
     with:
       role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetwo-ProviderRoleorganization-3R0K18XHN449"
       working-dir: "sceptre/scipool"
+      sceptre-command: "sceptre launch strides --prune --yes"
   sceptre-bmgfki:
     if: github.ref == 'refs/heads/master'
     needs: [org-formation]
@@ -169,6 +171,7 @@ jobs:
     with:
       role-to-assume: "arn:aws:iam::464102568320:role/sagebase-github-oidc-sage-ProviderRoleorganization-1JABD7X9E254U"
       working-dir: "sceptre/scipool"
+      sceptre-command: "sceptre launch bmgfki --prune --yes"
   sceptre-sageit-staging:
     if: github.ref == 'refs/heads/master'
     needs: [org-formation]
@@ -219,6 +222,7 @@ jobs:
     with:
       role-to-assume: "arn:aws:iam::420786776710:role/sagebase-github-oidc-sage-ProviderRoleorganization-14ZBOQI8IBLF0"
       working-dir: "sceptre/bridge"
+      sceptre-command: "sceptre launch develop --prune --yes"
   sceptre-bridgeprod:
     if: github.ref == 'refs/heads/master'
     needs: [org-formation]
