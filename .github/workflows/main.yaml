@@ -150,7 +150,7 @@ jobs:
       working-dir: "sceptre/scipool"
   sceptre-scipoolprod:
     if: github.ref == 'refs/heads/master'
-    needs: [org-formation, sceptre-scipooldev]
+    needs: [org-formation]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
       role-to-assume: "arn:aws:iam::237179673806:role/sagebase-github-oidc-sage-ProviderRoleorganization-2ZIH68YL4TR5"
@@ -164,7 +164,7 @@ jobs:
       working-dir: "sceptre/scipool"
   sceptre-bmgfki:
     if: github.ref == 'refs/heads/master'
-    needs: [org-formation, sceptre-scipoolprod]
+    needs: [org-formation]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
       role-to-assume: "arn:aws:iam::464102568320:role/sagebase-github-oidc-sage-ProviderRoleorganization-1JABD7X9E254U"
@@ -221,7 +221,7 @@ jobs:
       working-dir: "sceptre/bridge"
   sceptre-bridgeprod:
     if: github.ref == 'refs/heads/master'
-    needs: [org-formation, sceptre-bridgedev]
+    needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::649232250620:role/sagebase-github-oidc-sage-ProviderRoleorganization-6F7084KBODPE"
