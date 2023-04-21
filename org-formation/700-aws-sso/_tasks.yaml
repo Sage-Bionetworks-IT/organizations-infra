@@ -541,15 +541,7 @@ SsoSynapseProdAthenaUser:
                     "athena:ListDatabases",
                     "athena:ListDataCatalogs",
                     "athena:ListTableMetadata",
-                    "athena:ListWorkGroups"
-                ],
-                "Resource": [
-                    "*"
-                ]
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
+                    "athena:ListWorkGroups",
                     "athena:GetQueryExecution",
                     "athena:GetQueryResults",
                     "athena:GetWorkGroup",
