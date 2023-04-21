@@ -587,9 +587,10 @@ SsoSynapseProdAthenaUser:
                     "s3:PutObject"
                 ],
                 "Resource": [
-                    "arn:aws:s3:::athena-query-results-*",
-                    "arn:aws:s3:::athena-queries.sagebase.org",
-                    "arn:aws:s3:::athena-queries.sagebase.org/*"
+                    "arn:aws:s3:::aws-athena-query-results-325565585839-us-east-1",
+                    "arn:aws:s3:::aws-athena-query-results-325565585839-us-east-1/*",
+                    "arn:aws:s3:::prod.athena-queries.sagebase.org",
+                    "arn:aws:s3:::prod.athena-queries.sagebase.org/*"
                 ]
             },
             {
@@ -600,8 +601,8 @@ SsoSynapseProdAthenaUser:
                     "s3:ListBucket"
                 ],
                 "Resource": [
-                    "arn:aws:s3:::datawarehouse.sagebase.org",
-                    "arn:aws:s3:::datawarehouse.sagebase.org/*"
+                    "arn:aws:s3:::prod.datawarehouse.sagebase.org",
+                    "arn:aws:s3:::prod.datawarehouse.sagebase.org/*"
                 ]
             }
         ]
