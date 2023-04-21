@@ -42,7 +42,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install sceptre sceptre-ssm-resolver
+          pip install sceptre sceptre-json-resolver sceptre-request-resolver sceptre-ssm-resolver
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v2
         with:
