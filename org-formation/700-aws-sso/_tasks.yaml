@@ -93,6 +93,10 @@ Parameters:
     Type: String
     Default: '906769aa66-f671b9c2-3131-4051-b712-4668914bbfe0'
 
+  synapseProdAthenaGroup:     #JC aws-synapseprod-athena-users
+    Type: String
+    Default: '74c8e468-b0d1-702d-5d09-f2193ebf20c3'
+
   imageCentralAmiLibrarianGroup:   #JC aws-imagecentral-ami-librarians
     Type: String
     Default: '906769aa66-8bfbe918-2d30-467e-9e98-92232e9f8410'
@@ -503,6 +507,105 @@ SsoApplicationManager:
       - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
       - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+
+# Role for a user that can only access AWS Athena
+SsoSynapseProdAthenaUser:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-prod-athena-user'
+  StackDescription: 'Access to AWS Athena in Synapse Prod account'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseProdAthenaGroup
+    permissionSetName: 'athena-user'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "athena:GetDatabase",
+                    "athena:GetDataCatalog",
+                    "athena:GetTableMetadata",
+                    "athena:ListDatabases",
+                    "athena:ListDataCatalogs",
+                    "athena:ListTableMetadata",
+                    "athena:ListWorkGroups"
+                ],
+                "Resource": [
+                    "*"
+                ]
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "athena:GetQueryExecution",
+                    "athena:GetQueryResults",
+                    "athena:GetWorkGroup",
+                    "athena:StartQueryExecution",
+                    "athena:StopQueryExecution"
+                ],
+                "Resource": [
+                    "*"
+                ]
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "glue:GetDatabase",
+                    "glue:GetDatabases",
+                    "glue:GetTable",
+                    "glue:GetTables",
+                    "glue:GetPartition",
+                    "glue:GetPartitions",
+                    "glue:BatchGetPartition"
+                ],
+                "Resource": [
+                    "*"
+                ]
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetBucketLocation",
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "s3:ListBucketMultipartUploads",
+                    "s3:ListMultipartUploadParts",
+                    "s3:AbortMultipartUpload",
+                    "s3:PutObject"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::athena-query-results-*",
+                    "arn:aws:s3:::athena-queries.sagebase.org",
+                    "arn:aws:s3:::athena-queries.sagebase.org/*"
+                ]
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetBucketLocation",
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::datawarehouse.sagebase.org",
+                    "arn:aws:s3:::datawarehouse.sagebase.org/*"
+                ]
+            }
+        ]
+      }
 
 SsoViewerSupporter:
   Type: update-stacks
