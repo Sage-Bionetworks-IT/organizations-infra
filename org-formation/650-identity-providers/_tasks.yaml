@@ -380,3 +380,43 @@ GithubOidcSageBionetworksWebMonorepoInfra:
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
     Region: us-east-1
+
+GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapseprod-web-monorepo-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
+              "Resource": [ "arn:aws:s3:::staging-signin.synapse.org", "arn:aws:s3:::prod-signin-synapse-websitebucket-u91v422hx5bs" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
+              "Resource": ["arn:aws:s3:::staging-signin.synapse.org/*", "arn:aws:s3:::prod-signin-synapse-websitebucket-u91v422hx5bs/*" ]
+          },
+          {
+              "Sid": "CloudfrontActions",
+              "Effect": "Allow",
+              "Action": [ "cloudfront:CreateInvalidation" ],
+              "Resource": ["arn:aws:cloudfront::325565585839:distribution/EUE2TU70O0M2M", "arn:aws:cloudfront::325565585839:distribution/E1HPVCTTKTU4MN" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-web-monorepo"
+        branch: "*"
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+    Region: us-east-1
