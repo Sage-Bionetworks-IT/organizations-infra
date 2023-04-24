@@ -51,6 +51,7 @@ Resources:
                   - "lambda:AddPermission"
                   - "lambda:RemovePermission"
                   - "lambda:InvokeFunction"
+                  - "lambda:TagResource"
                   - "cloudformation:DescribeStackResource"
                   - "cloudformation:DescribeStackResources"
                   - "cloudformation:GetTemplate"
