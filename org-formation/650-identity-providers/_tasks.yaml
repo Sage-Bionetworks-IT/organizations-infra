@@ -341,6 +341,42 @@ GithubOidcSageBionetworksServiceCatalogLibrary:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
 
+GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-scipool-prod-sage-bionetworks-synapse-login-aws-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-login-aws-infra"
+        branch: "prod"
+  DefaultOrganizationBinding:
+    Account: !Ref SciPoolProdAccount
+    Region: us-east-1
+
+GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-scipool-dev-sage-bionetworks-synapse-login-aws-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-login-aws-infra"
+        branch: "develop"
+  DefaultOrganizationBinding:
+    Account: !Ref SciPoolDevAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksWebMonorepoInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
