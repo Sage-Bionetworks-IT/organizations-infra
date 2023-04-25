@@ -356,7 +356,7 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
       - name: "synapse-login-aws-infra"
         branch: "prod"
   DefaultOrganizationBinding:
-    Account: !Ref SciPoolProdAccount
+    Account: !Ref ScipoolProdAccount
     Region: us-east-1
 
 GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
@@ -374,7 +374,25 @@ GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
       - name: "synapse-login-aws-infra"
         branch: "develop"
   DefaultOrganizationBinding:
-    Account: !Ref SciPoolDevAccount
+    Account: !Ref ScipoolDevAccount
+    Region: us-east-1
+
+GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-bmgfki-sage-bionetworks-synapse-login-aws-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-login-aws-infra"
+        branch: "prod"
+  DefaultOrganizationBinding:
+    Account: !Ref BmgfkiAccount
     Region: us-east-1
 
 GithubOidcSageBionetworksWebMonorepoInfra:
