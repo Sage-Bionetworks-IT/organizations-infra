@@ -341,31 +341,15 @@ GithubOidcSageBionetworksServiceCatalogLibrary:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksSynapseLoginAwsInfra:
+GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-login-aws-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-scipool-prod-sage-bionetworks-synapse-login-aws-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    PolicyDocument: |
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-              "Sid": "ListObjectsInBucket",
-              "Effect": "Allow",
-              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
-              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9" ]
-          },
-          {
-              "Sid": "AllObjectActions",
-              "Effect": "Allow",
-              "Action": [ "s3:PutObject", "s3:GetObject" ],
-              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/synapse-login-aws-infra/*"]
-          }
-        ]
-      }
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -373,6 +357,24 @@ GithubOidcSageBionetworksSynapseLoginAwsInfra:
         branch: "master"
   DefaultOrganizationBinding:
     Account: !Ref SciPoolProdAccount
+    Region: us-east-1
+
+GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-scipool-dev-sage-bionetworks-synapse-login-aws-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-login-aws-infra"
+        branch: "master"
+  DefaultOrganizationBinding:
+    Account: !Ref SciPoolDevAccount
     Region: us-east-1
 
 GithubOidcSageBionetworksWebMonorepoInfra:
