@@ -2,8 +2,6 @@ template:
   path: "aws-config.yaml"
 stack_name: "aws-config"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "prod/cloudtrail.yaml"

@@ -289,6 +289,10 @@ Parameters:
     Type: String
     Default: '04a83488-1041-70d0-e200-31472f87c82a'
 
+  dccvalidatorProdApplicationManagerGroup:      # JC aws-dccvalidator-prod-application-managers
+    Type: String
+    Default: '6498b478-20e1-7031-9648-00c20c410359'
+
   #------------- personal AWS accounts ------------------
   8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
     Type: String
@@ -499,6 +503,7 @@ SsoApplicationManager:
       - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
       - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+      - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
 
 SsoViewerSupporter:
   Type: update-stacks
@@ -1407,7 +1412,7 @@ SsoDntDevViewer:
     principalId: !Ref dntDevViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
-SsoDntDevProdApplicationManager:
+SsoDntDevApplicationManager:
   Type: update-stacks
   DependsOn: SsoApplicationManager
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
@@ -1816,3 +1821,21 @@ SsoCnbDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref cnbDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoDccValidatorProdApplicationManager:
+  Type: update-stacks
+  DependsOn: SsoApplicationManager
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-dccvalidator-prod-application-manager'
+  StackDescription: 'SSO: Application Manager role used by DccValidator-Prod application-manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DccvalidatorProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dccvalidatorProdApplicationManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]

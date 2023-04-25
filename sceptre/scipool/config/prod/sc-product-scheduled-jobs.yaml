@@ -2,8 +2,6 @@ template:
   path: "sc-product-scheduled-jobs.j2"
 stack_name: "sc-product-scheduled-jobs"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "prod/sc-portfolio-scheduled-jobs.yaml"

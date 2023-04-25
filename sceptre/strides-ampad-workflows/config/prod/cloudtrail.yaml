@@ -2,8 +2,6 @@ template:
   path: "cloudtrail.yaml"
 stack_name: "cloudtrail"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 parameters:
   OperatorEmail: "aws.strides-ampad-workflows@sagebase.org"

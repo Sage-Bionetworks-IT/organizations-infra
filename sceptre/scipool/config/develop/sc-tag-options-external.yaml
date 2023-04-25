@@ -3,8 +3,6 @@ template:
   path: "sc-tag-options.j2"
 stack_name: "sc-tag-options-external"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "develop/sc-portfolio-ec2.yaml"

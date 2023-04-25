@@ -2,8 +2,6 @@ template:
   path: "cfn-ssm-param-policy.yaml"
 stack_name: "cfn-ssm-param-policy"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "strides/cfn-macro-ssm-param.yaml"

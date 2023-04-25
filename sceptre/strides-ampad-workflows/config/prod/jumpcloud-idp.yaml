@@ -2,8 +2,6 @@ template:
   path: "jumpcloud-idp.yaml"
 stack_name: "jumpcloud-idp"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 parameters:
   AdminMetadata: !file_contents idp/jumpcloud/strides-ampad-workflows-admin.xml

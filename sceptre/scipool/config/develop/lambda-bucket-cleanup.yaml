@@ -7,6 +7,4 @@ parameters:
   EnableSchedule: "true"
   Schedule: "rate(1 day)"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"

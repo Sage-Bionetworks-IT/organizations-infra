@@ -3,8 +3,6 @@ template:
   url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-oidc-idp/0.2.0/cfn-cr-oidc-idp.yaml
 stack_name: synapse-oidc-idp
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 parameters:
   Url: "https://repo-prod.prod.sagebase.org/auth/v1"
