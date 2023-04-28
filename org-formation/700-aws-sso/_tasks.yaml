@@ -570,8 +570,8 @@ SsoSynapseProdAthenaUser:
             ],
             "Resource": [
                 "arn:aws:glue:us-east-1:325565585839:catalog",
-                "arn:aws:glue:us-east-1:325565585839:database/datawarehouse",
-                "arn:aws:glue:us-east-1:325565585839:table/datawarehouse/*"
+                "arn:aws:glue:us-east-1:325565585839:database/warehouse",
+                "arn:aws:glue:us-east-1:325565585839:table/warehouse/*"
             ]
         },
         {
