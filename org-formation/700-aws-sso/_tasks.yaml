@@ -532,41 +532,63 @@ SsoSynapseProdAthenaUser:
       {
         "Version": "2012-10-17",
         "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "athena:GetDatabase",
-                    "athena:GetDataCatalog",
-                    "athena:GetTableMetadata",
-                    "athena:ListDatabases",
-                    "athena:ListDataCatalogs",
-                    "athena:ListTableMetadata",
-                    "athena:ListWorkGroups",
-                    "athena:GetQueryExecution",
-                    "athena:GetQueryResults",
-                    "athena:GetWorkGroup",
-                    "athena:StartQueryExecution",
-                    "athena:StopQueryExecution"
-                ],
-                "Resource": [
-                    "*"
-                ]
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "glue:GetDatabase",
-                    "glue:GetDatabases",
-                    "glue:GetTable",
-                    "glue:GetTables",
-                    "glue:GetPartition",
-                    "glue:GetPartitions",
-                    "glue:BatchGetPartition"
-                ],
-                "Resource": [
-                    "*"
-                ]
-            },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "athena:ListDataCatalogs",
+                "athena:ListWorkGroups"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "athena:GetDataCatalog",
+                "athena:ListDatabases",
+                "athena:GetDatabase",
+                "athena:GetTableMetadata",
+                "athena:ListTableMetadata"
+            ],
+            "Resource": [
+                "arn:aws:athena:us-east-1:325565585839:datacatalog",
+                "arn:aws:athena:us-east-1:325565585839:datacatalog/AwsDataCatalog"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "glue:GetDatabases",
+                "glue:GetDatabase",
+                "glue:GetTables",
+                "glue:GetTable",
+                "glue:GetPartitions",
+                "glue:GetPartition",
+                "glue:BatchGetPartition"
+            ],
+            "Resource": [
+                "arn:aws:glue:us-east-1:325565585839:catalog",
+                "arn:aws:glue:us-east-1:325565585839:database/datawarehouse",
+                "arn:aws:glue:us-east-1:325565585839:table/datawarehouse/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "athena:StartQueryExecution",
+                "athena:GetQueryExecution",
+                "athena:StopQueryExecution",
+                "athena:GetQueryResults",
+                "athena:GetWorkGroup",
+                "athena:GetQueryResultsStream",
+                "athena:GetQueryRuntimeStatistics",
+                "athena:ListQueryExecutions"
+            ],
+            "Resource": [
+                "arn:aws:athena:us-east-1:325565585839:workgroup/primary"
+            ]
+        },
             {
                 "Effect": "Allow",
                 "Action": [
