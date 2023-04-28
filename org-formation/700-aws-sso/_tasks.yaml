@@ -522,7 +522,7 @@ SsoSynapseProdAthenaUser:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: '*'
+      Account: !Ref SynapseProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseProdAthenaGroup
