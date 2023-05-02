@@ -152,23 +152,23 @@ SchematicDevAppDnsForward:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['schematic-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
 
-# forward schematic-uat.api.sagebionetworks.org to schematic-infra ALB
+# forward schematic-staging.api.sagebionetworks.org to schematic-infra ALB
 # https://github.com/Sage-Bionetworks/schematic-infra
-SchematicUatAppDnsForward:
+SchematicStagingAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-schematic-uat-cname'
-  StackDescription: Setup a CNAME for schematic-infra uat ALB
+  StackName: !Sub '${resourcePrefix}-schematic-staging-cname'
+  StackDescription: Setup a CNAME for schematic-infra staging ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "schematic-uat.api.sagebionetworks.org"
+    SourceHostName: "schematic-staging.api.sagebionetworks.org"
     # ID of the api.sagebionetworks.org zone (in sageit account)
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
     # the value of the CNAME record
-    TargetHostName: !CopyValue ['schematic-uat-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
+    TargetHostName: !CopyValue ['schematic-staging-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
 
 # forward schematic.api.sagebionetworks.org to schematic-infra ALB
 # https://github.com/Sage-Bionetworks/schematic-infra
