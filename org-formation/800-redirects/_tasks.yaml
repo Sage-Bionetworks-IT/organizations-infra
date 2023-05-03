@@ -170,6 +170,7 @@ SchematicStagingAppDnsForward:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['schematic-staging-DockerFargateStack-LoadBalancerDNS', !Ref DCAProdAccount]
 
+
 # forward schematic.api.sagebionetworks.org to schematic-infra ALB
 # https://github.com/Sage-Bionetworks/schematic-infra
 SchematicProdAppDnsForward:
