@@ -77,42 +77,6 @@ DcaDevAppDnsForward:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['dca-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
 
-# forward https://dca-no-sticky-dev.app.sagebionetworks.org to experimental data_curator ALB
-# https://github.com/Sage-Bionetworks/data_curator-infra
-DcaDevNoStickyAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-dca-dev-no-sticky-cname'
-  StackDescription: Setup a CNAME for experimental data_curator ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "dca-no-sticky-dev.app.sagebionetworks.org"
-    # ID of the app.sagebionetworks.org zone (in sageit account)
-    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
-    # the value of the CNAME record
-    TargetHostName: !CopyValue ['dca-no-sticky-dev-no-sticky-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
-
-# forward https://dca-sticky-dev.app.sagebionetworks.org to experimental data_curator ALB
-# https://github.com/Sage-Bionetworks/data_curator-infra
-DcaDevStickyAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-dca-dev-sticky-cname'
-  StackDescription: Setup a CNAME for experimental data_curator ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "dca-sticky-dev.app.sagebionetworks.org"
-    # ID of the app.sagebionetworks.org zone (in sageit account)
-    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
-    # the value of the CNAME record
-    TargetHostName: !CopyValue ['dca-sticky-dev-sticky-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
-
 # forward dca.app.sagebionetworks.org to data_curator-infra ALB
 # https://github.com/Sage-Bionetworks/data_curator-infra
 DcaProdAppDnsForward:
