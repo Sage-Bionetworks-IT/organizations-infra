@@ -142,3 +142,5 @@ lerna-debug.log
 # auto generated files
 org-formation/200-baseline/cdk-bootstrap.json
 org-formation/200-baseline/tmptemplate.json
+
+.project
