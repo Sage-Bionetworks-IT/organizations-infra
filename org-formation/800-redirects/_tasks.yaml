@@ -314,6 +314,24 @@ DccValidatorPECProdAppDnsForward:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['dccvalidator-pec-prod-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorProdAccount]
 
+# forward https://dccvalidator-amp-ad.app.sagebionetworks.org to dccvalidator-amp-ad-infra ALB
+# https://github.com/Sage-Bionetworks/dccvalidator_AMP-AD-infra
+DccValidatorAMPADProdAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-dccvalidator-amp-ad-prod-cname'
+  StackDescription: Setup a CNAME for dccvalidator_AMP-AD-infra prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dccvalidator-amp-ad.app.sagebionetworks.org"
+    # ID of the app.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['dccvalidator-amp-ad-prod-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorProdAccount]
+
 # forward https://dccmonitor-1kD.app.sagebionetworks.org to dccmonitor_ECS-infra 1kD prod ALB
 # https://github.com/Sage-Bionetworks/dccmonitor_ECS-infra
 DccMonitor1kDProdAppDnsForward:
@@ -349,3 +367,21 @@ DccMonitorPECProdAppDnsForward:
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
     # the value of the CNAME record
     TargetHostName: !CopyValue ['dccmonitor-pec-pec-prod-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorProdAccount]
+
+# forward https://dccmonitor-amp-ad.app.sagebionetworks.org to dccmonitor_ECS-infra AMP-AD prod ALB
+# https://github.com/Sage-Bionetworks/dccmonitor_ECS-infra
+DccMonitorAMPADProdAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-dccmonitor-amp-ad-prod-cname'
+  StackDescription: Setup a CNAME for dccmonitor_ECS-infra AMP-AD prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dccmonitor-amp-ad.app.sagebionetworks.org"
+    # ID of the app.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['dccmonitor-amp-ad-amp-ad-prod-DockerFargateStack-LoadBalancerDNS', !Ref DccvalidatorProdAccount]
