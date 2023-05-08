@@ -1,5 +1,0 @@
-template:
-  path: testCMK.json
-stack_name: test-cmk
-parameters:
-  Stack: xtest2
