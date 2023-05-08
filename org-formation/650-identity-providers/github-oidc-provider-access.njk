@@ -87,14 +87,12 @@ Resources:
                 token.actions.githubusercontent.com:aud: !Ref ClientIdList
               StringLike:
                 token.actions.githubusercontent.com:sub: [
-
 {% for Repository in Repositories %}
   {% for branch in Repository.branches %}
                   "repo:{{ GitHubOrg}}/{{ Repository.name }}:ref:refs/heads/{{ branch }}",
   {% endfor %}
                   "repo:{{ GitHubOrg }}/{{ Repository.name }}:ref:refs/tags/*",
 {% endfor %}
-
                 ]
 Outputs:
   ProviderRoleArn:
