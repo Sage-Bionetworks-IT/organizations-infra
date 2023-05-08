@@ -135,6 +135,12 @@ Resources:
             } else if (uri === '/users/rallaway/polypharmacology-db') {
               response['headers']['location'] = {value: 'https://sagebio.shinyapps.io/polypharmacology-db'};
               return response;
+            } else if (uri === '/users/awilliams/dccvalidator-ad') {
+              response['headers']['location'] = {value: 'https://dccvalidator-amp-ad.app.sagebionetworks.org'};
+              return response;
+            } else if (uri === '/users/awilliams/dccmonitor-ad') {
+              response['headers']['location'] = {value: 'https://dccmonitor-amp-ad.app.sagebionetworks.org'};
+              return response;
             } else {
                 return request;
             }
