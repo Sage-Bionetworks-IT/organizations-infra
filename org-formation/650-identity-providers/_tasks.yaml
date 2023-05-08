@@ -31,7 +31,7 @@ GithubOidcSageBionetworksIt:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
       - name: "organizations-infra"
-        branch: "master"
+        branches: ["master"]
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
@@ -50,7 +50,7 @@ GithubOidcSageBionetworksRecover:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "recover"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref RecoverProdAccount
@@ -70,7 +70,7 @@ GithubOidcSageBionetworksDataCuratorInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "data_curator-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
@@ -90,7 +90,7 @@ GithubOidcSageBionetworksSchematicInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "schematic-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
@@ -110,7 +110,7 @@ GithubOidcSageBionetworksGenieBPCInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "genie-bpc-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
@@ -130,7 +130,7 @@ GithubOidcSageBionetworksSimpleShinyInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "simple-shiny-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
@@ -149,7 +149,7 @@ GithubOidcSageBionetworksDNTInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "dnt-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DpeProdAccount
@@ -169,7 +169,7 @@ GithubOidcSageBionetworksDPEAirflowInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "dpe-mwaa-deployment"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DpeProdAccount
@@ -189,7 +189,7 @@ GithubOidcSageBionetworksS3FileHostingInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "s3-file-hosting"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
@@ -208,7 +208,7 @@ GithubOidcSageBionetworksDccValidator1kDInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "dccvalidator_1kD-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DccvalidatorDevAccount
@@ -228,7 +228,7 @@ GithubOidcSageBionetworksDccValidatorPECInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "dccvalidator_PEC-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DccvalidatorDevAccount
@@ -248,7 +248,7 @@ GithubOidcSageBionetworksDccValidatorAMPADInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "dccvalidator_AMP-AD-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DccvalidatorDevAccount
@@ -268,7 +268,7 @@ GithubOidcSageBionetworksDccMonitorInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "dccmonitor_ECS-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DccvalidatorDevAccount
@@ -288,7 +288,7 @@ GithubOidcSageBionetworksSecuityHubToJira:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "security-hub-to-jira"
-        branch: "main"
+        branches: ["main"]
   DefaultOrganizationBinding:
     Account:
       - !Ref SecurityCentralAccount
@@ -323,7 +323,7 @@ GithubOidcSageBionetworksAwsInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "aws-infra"
-        branch: "master"
+        branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
@@ -341,7 +341,7 @@ GithubOidcSageBionetworksScicompProvisioner:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "scicomp-provisioner"
-        branch: "master"
+        branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref ScicompAccount
     Region: us-east-1
@@ -375,7 +375,7 @@ GithubOidcSageBionetworksServiceCatalogLibrary:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "service-catalog-library"
-        branch: "master"
+        branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
@@ -393,7 +393,7 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "synapse-login-aws-infra"
-        branch: "prod"
+        branches: ["prod"]
   DefaultOrganizationBinding:
     Account: !Ref ScipoolProdAccount
     Region: us-east-1
@@ -411,7 +411,7 @@ GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "synapse-login-aws-infra"
-        branch: "develop"
+        branches: ["develop"]
   DefaultOrganizationBinding:
     Account: !Ref ScipoolDevAccount
     Region: us-east-1
@@ -429,7 +429,7 @@ GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "synapse-login-aws-infra"
-        branch: "prod"
+        branches: ["prod"]
   DefaultOrganizationBinding:
     Account: !Ref BmgfkiAccount
     Region: us-east-1
@@ -469,7 +469,7 @@ GithubOidcSageBionetworksWebMonorepoInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "synapse-web-monorepo"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
     Region: us-east-1
@@ -509,7 +509,7 @@ GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "synapse-web-monorepo"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account: !Ref SynapseProdAccount
     Region: us-east-1

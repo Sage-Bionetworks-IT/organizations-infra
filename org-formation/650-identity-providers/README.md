@@ -11,6 +11,25 @@ and have it reviewed and approved. Note the following important parameters:
 * DefaultOrganizationBinding - Set this to the AWS accounts that your repo will deploy to.
 * ManagedPolicyArns - Allows the repo to access the AWS accounts with an AWS managed policy.
 * PolicyDocument - Allows the repo to access the AWS accounts with an AWS custom policy.
+* GitHubOrg - The Github organization to allow OIDC access (i.e. "Sage-Bionetworks")
+* Repositories - A dictionary list of repositories and branches in the GitHubOrg to allow OIDC access
+
+Example to allow GH OIDC in Sage-Bionetworks/repoA and Sage-Bionetworks/repoB in AWS AccountX and AWS AccountY:
+```yaml
+TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "repoA"
+        branches: ["dev","prod"]
+      - name: "repoB"
+        branches: ["*"]
+DefaultOrganizationBinding:
+    Account:
+      - !Ref AccountX
+      - !Ref AccountY
+    Region: us-east-1
+```
+NOTE: `*` indicates all branches.
 
   Please take care to set a [least privileged policy](https://csrc.nist.gov/glossary/term/least_privilege) for your OIDC integration.
 
@@ -30,7 +49,7 @@ in a github action to assume a role.
 Example using [configure-aws-credentials GH action](https://github.com/aws-actions/configure-aws-credentials):
 ```
   - name: Assume AWS Role
-    uses: aws-actions/configure-aws-credentials@v1
+    uses: aws-actions/configure-aws-credentials@v2
     with:
       aws-region: us-east-1
       role-to-assume: arn:aws:iam::XXXXXXXX:role/sagebase-github-oidc-sage-ProviderRoleXXXXXXXX-XXXXXXXX

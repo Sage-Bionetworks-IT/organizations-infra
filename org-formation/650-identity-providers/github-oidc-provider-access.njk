@@ -66,8 +66,7 @@ Resources:
     Type: 'AWS::IAM::ManagedPolicy'
     Properties:
       PolicyDocument: !Ref PolicyDocument
-{% for Repository in Repositories %}
-  ProviderRole{{ Repository.name | replace('-','') | replace('_','') }}:
+  ProviderRole:
     Type: AWS::IAM::Role
     Properties:
       # Concatinate managed policy and custom policy
@@ -88,18 +87,17 @@ Resources:
                 token.actions.githubusercontent.com:aud: !Ref ClientIdList
               StringLike:
                 token.actions.githubusercontent.com:sub: [
-  {% if Repository.branch == '*' %}
-                  "repo:{{ GitHubOrg }}/{{ Repository.name }}:{{Repository.branch }}"
-  {% else %}
-                  "repo:{{ GitHubOrg}}/{{ Repository.name }}:ref:refs/heads/{{ Repository.branch }}",
-                  "repo:{{ GitHubOrg }}/{{ Repository.name }}:ref:refs/tags/*"
-  {% endif %}
-                ]
-{% endfor %}
-Outputs:
+
 {% for Repository in Repositories %}
-  ProviderRoleArn{{ Repository.name | replace('-','') | replace('_','') }}:
-    Value: !GetAtt ProviderRole{{ Repository.name | replace('-','') | replace('_','') }}.Arn
-    Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProviderRoleArn-{{ Repository.name | replace('-','') | replace('_','') }}'
+  {% for branch in Repository.branches %}
+                  "repo:{{ GitHubOrg}}/{{ Repository.name }}:ref:refs/heads/{{ branch }}",
+  {% endfor %}
+                  "repo:{{ GitHubOrg }}/{{ Repository.name }}:ref:refs/tags/*",
 {% endfor %}
+
+                ]
+Outputs:
+  ProviderRoleArn:
+    Value: !GetAtt ProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProviderRoleArn'
