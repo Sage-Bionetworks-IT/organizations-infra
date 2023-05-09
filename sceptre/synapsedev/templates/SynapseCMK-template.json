@@ -258,21 +258,9 @@
                             "Condition": {
                                 "StringNotLike": {
                                     "aws:PrincipalArn": [
-                                        {
-                                            "Fn::Join": [
-                                                "",
-                                                [
-                                                    "arn:aws:iam::",
-                                                    {
-                                                        "Ref": "AWS::AccountId"
-                                                    },
-                                                    ":root"
-                                                ]
-                                            ]
-                                        },
-                                        "arn:aws:iam::449435941126:role*",
-                                        "arn:aws:sts::449435941126:assumed-role*"
-
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role*" },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:assumed-role*" }
                                     ]
                                 }
                             }
@@ -291,24 +279,9 @@
                                     {
                                         "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn"
                                     },
-                                    {
-                                        "Fn::Join": [
-                                            "",
-                                            [
-                                                "arn:aws:iam::",
-                                                {
-                                                    "Ref": "AWS::AccountId"
-                                                },
-                                                ":root"
-                                            ]
-                                        ]
-                                    },
-                                    "arn:aws:sts::449435941126:assumed-role/AWSReservedSSO_Administrator_693a85eb20cd5043/x.schildwachter@sagebase.org",
-                                    "arn:aws:sts::449435941126:assumed-role/AWSReservedSSO_Administrator_693a85eb20cd5043/john.hill@sagebase.org",
-                                    "arn:aws:sts::449435941126:assumed-role/AWSReservedSSO_Administrator_693a85eb20cd5043/marco.marasca@sagebase.org",
-                                    "arn:aws:sts::449435941126:assumed-role/AWSReservedSSO_Administrator_693a85eb20cd5043/bruce.hoff@sagebase.org",
-                                    "arn:aws:sts::449435941126:assumed-role/AWSReservedSSO_Administrator_693a85eb20cd5043/sandhra.sokhal@sagebase.org",
-                                    "arn:aws:iam::449435941126:role/sagebase-github-oidc-sage-ProviderRoleorganization-1K1MGUYPL5JUO"
+                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
+                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:assumed-role/AWSReservedSSO_Administrator_693a85eb20cd5043" },
+                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-ProviderRoleorganization-1K1MGUYPL5JUO" }
                                 ]
                             },
                             "Action": [
