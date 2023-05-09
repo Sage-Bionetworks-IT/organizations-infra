@@ -69,6 +69,7 @@ Resources:
   ProviderRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: !Sub '${AWS::StackName}-ProviderRole'
       # Concatinate managed policy and custom policy
       ManagedPolicyArns: !Split
         - ","
@@ -98,4 +99,4 @@ Outputs:
   ProviderRoleArn:
     Value: !GetAtt ProviderRole.Arn
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ProviderRoleArn'
+      Name: !Sub '${AWS::StackName}-ProviderRoleArn'
