@@ -154,14 +154,14 @@ jobs:
     needs: [org-formation]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
-      role-to-assume: "arn:aws:iam::237179673806:role/sagebase-github-oidc-sage-ProviderRo"
+      role-to-assume: "arn:aws:iam::237179673806:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/scipool"
   sceptre-stridespool:
     if: github.ref == 'refs/heads/master'
     needs: [org-formation, sceptre-strides]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
-      role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetwo-ProviderRole"
+      role-to-assume: "arn:aws:iam::423819316185:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/scipool"
       sceptre-command: "sceptre launch strides --prune --yes"
   sceptre-bmgfki:
