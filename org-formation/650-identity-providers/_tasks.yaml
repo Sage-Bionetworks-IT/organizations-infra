@@ -25,6 +25,7 @@ GithubOidcSageBionetworksIt:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -44,6 +45,7 @@ GithubOidcSageBionetworksRecover:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-recover
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-recover
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -64,6 +66,7 @@ GithubOidcSageBionetworksDataCuratorInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-data-curator-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-data-curator-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -84,6 +87,7 @@ GithubOidcSageBionetworksSchematicInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -104,6 +108,7 @@ GithubOidcSageBionetworksGenieBPCInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-genie-bpc-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-genie-bpc-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -124,6 +129,7 @@ GithubOidcSageBionetworksSimpleShinyInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-simple-shiny-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-simple-shiny-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -143,6 +149,7 @@ GithubOidcSageBionetworksDNTInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dnt-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dnt-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -163,6 +170,7 @@ GithubOidcSageBionetworksDPEAirflowInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dpe-airflow-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dpe-airflow-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -183,6 +191,7 @@ GithubOidcSageBionetworksS3FileHostingInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-s3-file-hosting-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-s3-file-hosting-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -202,6 +211,7 @@ GithubOidcSageBionetworksDccValidator1kDInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-1kD-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-1kD-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -222,6 +232,7 @@ GithubOidcSageBionetworksDccValidatorPECInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-pec-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-1kD-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -242,6 +253,7 @@ GithubOidcSageBionetworksDccValidatorAMPADInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-amp-ad-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-amp-ad-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -262,6 +274,7 @@ GithubOidcSageBionetworksDccMonitorInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccmonitor-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccmonitor-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -282,6 +295,7 @@ GithubOidcSageBionetworksSecuityHubToJira:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-security-hub-to-jira
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-security-hub-to-jira
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess"
   TemplatingContext:
@@ -301,6 +315,7 @@ GithubOidcSageBionetworksAwsInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-awsinfra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-awsinfra
     PolicyDocument: |
       {
         "Version": "2012-10-17",
@@ -335,6 +350,7 @@ GithubOidcSageBionetworksScicompProvisioner:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-scicomp-provisioner
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-scicomp-provisioner
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -353,6 +369,7 @@ GithubOidcSageBionetworksServiceCatalogLibrary:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-service-catalog-library
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-service-catalog-library
     PolicyDocument: |
       {
         "Version": "2012-10-17",
@@ -387,6 +404,7 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-scipool-prod-sage-bionetworks-synapse-login-aws-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-scipool-prod-sage-bionetworks-synapse-login-aws-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -405,6 +423,7 @@ GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-scipool-dev-sage-bionetworks-synapse-login-aws-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-scipool-dev-sage-bionetworks-synapse-login-aws-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -423,6 +442,7 @@ GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-bmgfki-sage-bionetworks-synapse-login-aws-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-bmgfki-sage-bionetworks-synapse-login-aws-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
   TemplatingContext:
@@ -441,6 +461,7 @@ GithubOidcSageBionetworksWebMonorepoInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
     PolicyDocument: |
       {
         "Version": "2012-10-17",
@@ -481,6 +502,7 @@ GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapseprod-web-monorepo-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapseprod-web-monorepo-infra
     PolicyDocument: |
       {
         "Version": "2012-10-17",
