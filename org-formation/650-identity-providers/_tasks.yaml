@@ -35,6 +35,15 @@ GithubOidcSageBionetworksIt:
         branches: ["master"]
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
+    # temporary exclude due to "in use by essentials" error when updating stack
+    ExcludeAccount:
+      - !Ref SynapseDevAccount
+      - !Ref SynapseDWAccount
+      - !Ref SynapseProdAccount
+      - !Ref SageITAccount
+      - !Ref LogCentralAccount
+      - !Ref ImageCentralAccount
+      - !Ref ITSandboxAccount
     Account: '*'
     Region: us-east-1
 
