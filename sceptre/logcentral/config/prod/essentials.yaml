@@ -7,4 +7,4 @@ dependencies:
 parameters:
   KmsInfraKeyPrincipals:
     - arn:aws:iam::231505186444:root
-    - !stack_output_external sagebase-github-oidc-sage-bionetworks-it::ProviderRoleArnorganizationsinfra
+    - !stack_output_external sagebase-github-oidc-sage-bionetworks-it::us-east-1-sagebase-github-oidc-sage-bionetworks-it-ProviderRoleArn-organizationsinfra
