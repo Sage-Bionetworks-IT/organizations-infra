@@ -28,6 +28,7 @@ GithubOidcSageBionetworksIt:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
@@ -57,6 +58,7 @@ GithubOidcSageBionetworksRecover:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-recover
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -78,6 +80,7 @@ GithubOidcSageBionetworksDataCuratorInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-data-curator-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -99,6 +102,7 @@ GithubOidcSageBionetworksSchematicInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -120,6 +124,7 @@ GithubOidcSageBionetworksGenieBPCInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-genie-bpc-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -141,6 +146,7 @@ GithubOidcSageBionetworksSimpleShinyInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-simple-shiny-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -161,6 +167,7 @@ GithubOidcSageBionetworksDNTInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dnt-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -182,6 +189,7 @@ GithubOidcSageBionetworksDPEAirflowInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dpe-airflow-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -203,6 +211,7 @@ GithubOidcSageBionetworksS3FileHostingInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-s3-file-hosting-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -223,6 +232,7 @@ GithubOidcSageBionetworksDccValidator1kDInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-1kD-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -244,6 +254,7 @@ GithubOidcSageBionetworksDccValidatorPECInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-pec-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -265,6 +276,7 @@ GithubOidcSageBionetworksDccValidatorAMPADInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccvalidator-amp-ad-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -286,6 +298,7 @@ GithubOidcSageBionetworksDccMonitorInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dccmonitor-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -362,6 +375,7 @@ GithubOidcSageBionetworksScicompProvisioner:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-scicomp-provisioner
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -416,6 +430,7 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-scipool-prod-synapse-login-aws-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -435,6 +450,7 @@ GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-scipool-dev-synapse-login-aws-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -454,6 +470,7 @@ GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-bmgfki-synapse-login-aws-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
