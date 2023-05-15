@@ -94,7 +94,11 @@ Resources:
                 token.actions.githubusercontent.com:sub: [
 {% for Repository in Repositories %}
   {% for branch in Repository.branches %}
+      {% if branch == '*' %}
+                  "repo:{{ GitHubOrg}}/{{ Repository.name }}:{{ branch }}",
+      {% else %}
                   "repo:{{ GitHubOrg}}/{{ Repository.name }}:ref:refs/heads/{{ branch }}",
+      {% endif %}
   {% endfor %}
                   "repo:{{ GitHubOrg }}/{{ Repository.name }}:ref:refs/tags/*",
 {% endfor %}
