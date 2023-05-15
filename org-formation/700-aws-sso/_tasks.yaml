@@ -320,7 +320,9 @@ SsoAdministrator:
     instanceArn: !Ref instanceArn
     principalId: !Ref adminGroup
     permissionSetName: 'Administrator'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/AdministratorAccess'
+      - 'arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser'
     sessionDuration: 'PT8H'
     masterAccountId: !Ref MasterAccount
 
