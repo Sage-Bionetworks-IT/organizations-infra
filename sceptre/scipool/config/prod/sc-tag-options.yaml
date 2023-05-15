@@ -10,8 +10,7 @@ dependencies:
   - "prod/sc-portfolio-s3-basic.yaml"
   - "prod/sc-portfolio-scheduled-jobs.yaml"
 sceptre_user_data:
-  CostCenters: !from_json
-    - !request 'https://mips-api.finops.sageit.org/tags?limit=25&enable_other_code=true'
+  CostCenters: !file https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/tags/SageFinancialProgramCodes.json
   ProductIDs:
     - !stack_output_external sc-portfolio-ec2::SCEC2portfolioId
     - !stack_output_external sc-portfolio-s3-basic::SCS3portfolioId
