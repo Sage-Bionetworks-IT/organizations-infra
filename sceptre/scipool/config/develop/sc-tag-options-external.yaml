@@ -9,5 +9,6 @@ dependencies:
   - "develop/sc-portfolio-ec2-external.yaml"
   - "develop/sc-portfolio-s3-basic.yaml"
 sceptre_user_data:
+  CostCenters: ["NO PROGRAM / 000000"]
   ProductIDs:
     - !stack_output_external sc-portfolio-ec2-external::SCEC2portfolioId
