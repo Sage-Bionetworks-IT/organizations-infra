@@ -321,14 +321,15 @@ GithubOidcSageBionetworksSecuityHubToJira:
       - !Ref SecurityCentralAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksAwsInfra:
+# GH OIDC for cloudformation template deployments to AWS AdminCentral account
+GithubOidcCfnTemplateDeploy:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-awsinfra
+  StackName: !Sub ${resourcePrefix}-${appName}-cfn-template-deploy
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-awsinfra
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-cfn-template-deploy
     PolicyDocument: |
       {
         "Version": "2012-10-17",
@@ -352,6 +353,8 @@ GithubOidcSageBionetworksAwsInfra:
     Repositories:
       - name: "aws-infra"
         branches: ["master"]
+      - name: "service-catalog-library"
+        branch: "master"
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
@@ -374,41 +377,6 @@ GithubOidcSageBionetworksScicompProvisioner:
         branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref ScicompAccount
-    Region: us-east-1
-
-GithubOidcSageBionetworksServiceCatalogLibrary:
-  Type: update-stacks
-  DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-service-catalog-library
-  Parameters:
-    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-service-catalog-library
-    PolicyDocument: |
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-              "Sid": "ListObjectsInBucket",
-              "Effect": "Allow",
-              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
-              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9" ]
-          },
-          {
-              "Sid": "AllObjectActions",
-              "Effect": "Allow",
-              "Action": [ "s3:PutObject", "s3:GetObject" ],
-              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/service-catalog-library/*"]
-          }
-        ]
-      }
-  TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks"
-    Repositories:
-      - name: "service-catalog-library"
-        branches: ["master"]
-  DefaultOrganizationBinding:
-    Account: !Ref AdminCentralAccount
     Region: us-east-1
 
 GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
