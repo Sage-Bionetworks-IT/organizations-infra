@@ -1582,7 +1582,7 @@ SsoBuA2aDwAdmin:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref  BuA2aDwAAccount
+      Account: !Ref  BuA2aDwAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref BuA2aDwAdminGroup
