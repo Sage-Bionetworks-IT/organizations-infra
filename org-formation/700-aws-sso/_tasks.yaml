@@ -1576,7 +1576,7 @@ SsoBuA2aDwAdmin:
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-8dxfh53-admin'
-  StackDescription: 'SSO: admin role used by BuA2aDwA admin group'
+  StackDescription: 'SSO: admin role used by BuA2aDw admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
