@@ -118,7 +118,7 @@ jobs:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
-      role-to-assume: "arn:aws:iam::804034162148:role/sagebase-github-oidc-sage-ProviderRoleorganization-W6F7T5K05CUC"
+      role-to-assume: "arn:aws:iam::804034162148:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/itsandbox"
   sceptre-scicomp:
     if: github.ref == 'refs/heads/master'
@@ -177,7 +177,7 @@ jobs:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
-      role-to-assume: "arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-ProviderRoleorganization-RNY2NBNS9MDD"
+      role-to-assume: "arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/sageit"
       sceptre-command: "sceptre launch staging --prune --yes"
   sceptre-sageit-prod:
@@ -185,28 +185,28 @@ jobs:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
-      role-to-assume: "arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-ProviderRoleorganization-RNY2NBNS9MDD"
+      role-to-assume: "arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/sageit"
   sceptre-logcentral:
     if: github.ref == 'refs/heads/master'
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
-      role-to-assume: "arn:aws:iam::231505186444:role/sagebase-github-oidc-sage-ProviderRoleorganization-1RDFA554CNNWG"
+      role-to-assume: "arn:aws:iam::231505186444:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/logcentral"
   sceptre-synapsedev:
     if: github.ref == 'refs/heads/master'
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
-      role-to-assume: "arn:aws:iam::449435941126:role/sagebase-github-oidc-sage-ProviderRoleorganization-1K1MGUYPL5JUO"
+      role-to-assume: "arn:aws:iam::449435941126:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/synapsedev"
   sceptre-synapseprod:
     if: github.ref == 'refs/heads/master'
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
-      role-to-assume: "arn:aws:iam::325565585839:role/sagebase-github-oidc-sage-ProviderRoleorganization-AIZUJ4CS2ML0"
+      role-to-assume: "arn:aws:iam::325565585839:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/synapseprod"
   sceptre-securitycentral:
     if: github.ref == 'refs/heads/master'
@@ -235,5 +235,5 @@ jobs:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
-      role-to-assume: "arn:aws:iam::867686887310:role/sagebase-github-oidc-sage-ProviderRoleorganization-ZG12T771KREH"
+      role-to-assume: "arn:aws:iam::867686887310:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/imagecentral"
