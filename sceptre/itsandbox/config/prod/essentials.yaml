@@ -1,6 +1,11 @@
 template:
   type: http
-  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.6/templates/essentials.yaml
+  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.3/templates/essentials.yaml
 stack_name: "essentials"
 dependencies:
   - "prod/bootstrap.yaml"
+parameters:
+  KmsInfraKeyPrincipals:
+    - "arn:aws:iam::804034162148:root"
+    - !stack_output_external "bootstrap::AWSIAMSsmParamLambdaExecutionRoleArn"
+    - !stack_output_external "sagebase-github-oidc-sage-bionetworks-it::ProviderRoleArn"
