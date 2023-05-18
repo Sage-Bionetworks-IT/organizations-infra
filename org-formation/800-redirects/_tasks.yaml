@@ -118,7 +118,7 @@ DcaDevStickyAppDnsForward:
 DcaStagingAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-dca-staging-cname'
+  StackName: !Sub '${resourcePrefix}-dca-staging-staging-cname'
   StackDescription: Setup a CNAME for data_curator-infra staging ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
