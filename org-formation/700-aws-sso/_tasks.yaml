@@ -302,6 +302,10 @@ Parameters:
     Type: String
     Default: '906769aa66-c75c5f09-8e6e-4e8a-8a1f-cbf13f56d5e7'
 
+  BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
+    Type: String
+    Default: '14b8f4c8-60e1-70ef-e296-06e88f14d720'
+
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
@@ -1565,6 +1569,23 @@ Sso8dxfh53Admin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref 8dxfh53AdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoBuA2aDwAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-BuA2aDw-admin'
+  StackDescription: 'SSO: admin role used by BuA2aDw admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref  BuA2aDwAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref BuA2aDwAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoRecoverDevAdmin:
