@@ -304,7 +304,7 @@ Parameters:
 
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
-    Default: 'TBD'
+    Default: '14b8f4c8-60e1-70ef-e296-06e88f14d720'
 
 #----------------------------------------------------------------------------------------------
 
@@ -1575,7 +1575,7 @@ SsoBuA2aDwAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-8dxfh53-admin'
+  StackName: !Sub '${resourcePrefix}-${appName}-BuA2aDw-admin'
   StackDescription: 'SSO: admin role used by BuA2aDw admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
