@@ -138,6 +138,7 @@ Organization:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref 8dxfh53Account
+        - !Ref BuA2aDwAccount
 
   #------- Accounts -----------
   MasterAccount:
@@ -650,3 +651,15 @@ Organization:
         AccountOwner: vijay.yadav@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws.8dxfh53@sagebase.org
+
+  BuA2aDwAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-BuA2aDw
+      RootEmail: aws.BuA2aDw@sagebase.org
+      Alias: org-sagebase-BuA2aDw
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: elias.chaibub.neto@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws.BuA2aDw@sagebase.org
