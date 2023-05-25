@@ -12,6 +12,7 @@ Resources:
         - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
         - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
         - !Ref SCEnduserExpandedPolicy
+        - !Ref SCCostExplorerPolicy
         - !Ref ScCloudformationPolicy
         - !Ref SCEnduserRemoteAccessPolicy
         - !Ref BatchReadOnlyPolicy
@@ -32,6 +33,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
         - !Ref SCEnduserExpandedPolicy
+        - !Ref SCCostExplorerPolicy
         - !Ref ScCloudformationPolicy
         - !Ref SCEnduserRemoteAccessPolicy
       Path: /
@@ -57,6 +59,20 @@ Resources:
               - organizations:DescribeOrganization
               - servicecatalog:DescribeProvisionedProduct
               - cloudwatch:GetMetricData  # access to EC2 monitoring info
+            Resource: "*"
+  SCCostExplorerPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Expand permissions SC users.
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - ce:Describe*
+              - ce:Get*
+              - ce:List*
             Resource: "*"
   BatchReadOnlyPolicy:
     Type: AWS::IAM::ManagedPolicy
