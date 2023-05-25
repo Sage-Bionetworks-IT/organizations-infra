@@ -171,27 +171,6 @@ GithubOidcSageBionetworksDPEAirflowInfra:
       - !Ref DnTDevAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksS3FileHostingInfra:
-  Type: update-stacks
-  DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-s3-file-hosting-infra
-  Parameters:
-    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-s3-file-hosting-infra
-    ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AdministratorAccess"
-      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
-  TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks"
-    Repositories:
-      - name: "s3-file-hosting"
-        branches: ["*"]
-  DefaultOrganizationBinding:
-    Account:
-      - !Ref DnTDevAccount
-    Region: us-east-1
-
 # GH OIDC for DCC validator to AWS DccvalidatorDev and DccvalidatorProd accounts
 GithubOidcDccValidatorDeploy:
   Type: update-stacks
