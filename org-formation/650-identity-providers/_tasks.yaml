@@ -315,6 +315,8 @@ GithubOidcPackerImageDeploy:
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
+      - name: "packer-ami-template"
+        branches: ["master"]
       - name: "packer-base-ubuntu-jammy"
         branches: ["master"]
   DefaultOrganizationBinding:
