@@ -442,3 +442,32 @@ GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
   DefaultOrganizationBinding:
     Account: !Ref SynapseProdAccount
     Region: us-east-1
+
+GithubOidcSageBionetworksSynapseR:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapser
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-synapseprod-synapser
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "AccessRanBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:*" ],
+              "Resource": [ "arn:aws:s3:::ran.synapse.org", "arn:aws:s3:::staging-ran.synapse.org", "arn:aws:s3:::ran.synapse.org/*", "arn:aws:s3:::staging-ran.synapse.org/*" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapser"
+        branches: ["*"]
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+    Region: us-east-1
