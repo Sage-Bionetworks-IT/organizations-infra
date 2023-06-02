@@ -277,6 +277,8 @@ GithubOidcPackerImageDeploy:
         branches: ["master"]
       - name: "packer-base-ubuntu-jammy"
         branches: ["master"]
+      - name: "packer-rstudio"
+        branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
     Region: us-east-1
