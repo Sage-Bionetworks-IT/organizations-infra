@@ -469,9 +469,9 @@ GithubOidcSageBionetworksSynapseR:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "synapser"
-        branches: ["*"]
+        branches: ["master", "main", "develop"]
       - name: "synapserutils"
-        branches: ["*"]
+        branches: ["master", "main", "develop"]
   DefaultOrganizationBinding:
     Account: !Ref SynapseProdAccount
     Region: us-east-1
