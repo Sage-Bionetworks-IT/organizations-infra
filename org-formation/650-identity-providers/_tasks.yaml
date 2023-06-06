@@ -267,6 +267,7 @@ GithubOidcPackerImageDeploy:
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-packer-image-deploy
+    MaxSessionDuration: 7200
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AmazonEC2FullAccess
       - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
