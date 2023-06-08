@@ -28,6 +28,7 @@ Resources:
     Type: 'AWS::CE::CostCategory'
     Properties:
       Name: 'Program Code'
+      RuleVersion: 'CostCategoryExpression.v1' # this MUST match the contents of the S3 file
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:
