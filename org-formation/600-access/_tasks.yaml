@@ -233,3 +233,107 @@ CostExplorerAccessPolicy:
         ]
       }
     PolicyName: !Ref CostExplorerPolicyName
+
+SynapseAthenaUserAccessPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: synapse-athena-user-access-policy
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "athena:ListDataCatalogs",
+                "athena:ListWorkGroups"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "athena:GetDataCatalog",
+                "athena:ListDatabases",
+                "athena:GetDatabase",
+                "athena:GetTableMetadata",
+                "athena:ListTableMetadata"
+            ],
+            "Resource": [
+                "arn:aws:athena:us-east-1:${CurrentAccount.AccountId}:datacatalog",
+                "arn:aws:athena:us-east-1:${CurrentAccount.AccountId}:datacatalog/AwsDataCatalog"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "glue:GetDatabases",
+                "glue:GetDatabase",
+                "glue:GetTables",
+                "glue:GetTable",
+                "glue:GetPartitions",
+                "glue:GetPartition",
+                "glue:BatchGetPartition"
+            ],
+            "Resource": [
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:catalog",
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:database/*warehouse",
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:table/*warehouse/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "athena:StartQueryExecution",
+                "athena:GetQueryExecution",
+                "athena:StopQueryExecution",
+                "athena:GetQueryResults",
+                "athena:GetWorkGroup",
+                "athena:GetQueryResultsStream",
+                "athena:GetQueryRuntimeStatistics",
+                "athena:ListQueryExecutions"
+            ],
+            "Resource": [
+                "arn:aws:athena:us-east-1:${CurrentAccount.AccountId}:workgroup/primary"
+            ]
+        },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetBucketLocation",
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "s3:ListBucketMultipartUploads",
+                    "s3:ListMultipartUploadParts",
+                    "s3:AbortMultipartUpload",
+                    "s3:PutObject"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::aws-athena-query-results-${CurrentAccount.AccountId}-us-east-1",
+                    "arn:aws:s3:::aws-athena-query-results-${CurrentAccount.AccountId}-us-east-1/*",
+                    "arn:aws:s3:::*.athena-queries.sagebase.org",
+                    "arn:aws:s3:::*.athena-queries.sagebase.org/*"
+                ]
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetBucketLocation",
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::*.datawarehouse.sagebase.org",
+                    "arn:aws:s3:::*.datawarehouse.sagebase.org/*"
+                ]
+            }
+        ]
+      }
+    PolicyName: SynapseAthenaUserAccessPolicy
