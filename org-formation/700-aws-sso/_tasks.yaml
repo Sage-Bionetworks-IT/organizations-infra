@@ -93,6 +93,10 @@ Parameters:
     Type: String
     Default: '906769aa66-f671b9c2-3131-4051-b712-4668914bbfe0'
 
+  synapseDevAthenaGroup:     #JC aws-synapsedev-athena-users
+    Type: String
+    Default: 'e408d4d8-90e1-70a0-b1ab-d8edded2d3b0'
+
   synapseProdAthenaGroup:     #JC aws-synapseprod-athena-users
     Type: String
     Default: '74c8e468-b0d1-702d-5d09-f2193ebf20c3'
@@ -515,11 +519,36 @@ SsoApplicationManager:
       - arn:aws:iam::aws:policy/SecretsManagerReadWrite
       - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
 
-# Role for a user that can only access AWS Athena
+# Role for a user that can only access AWS Athena in the Synapse Dev account
+SsoSynapseDevAthenaUser:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: SynapseAthenaUserAccessPolicy
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dev-athena-user'
+  StackDescription: 'Access to AWS Athena in Synapse Dev account'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseDevAthenaGroup
+    permissionSetName: 'athena-user'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
+
+# Role for a user that can only access AWS Athena in the Synapse Prod account
 SsoSynapseProdAthenaUser:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-  TemplatingContext: {}
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: SynapseAthenaUserAccessPolicy
   StackName: !Sub '${resourcePrefix}-${appName}-synapse-prod-athena-user'
   StackDescription: 'Access to AWS Athena in Synapse Prod account'
   TerminationProtection: false
@@ -535,99 +564,6 @@ SsoSynapseProdAthenaUser:
     permissionSetName: 'athena-user'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
-    inlinePolicy: >-
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "athena:ListDataCatalogs",
-                "athena:ListWorkGroups"
-            ],
-            "Resource": [
-                "*"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "athena:GetDataCatalog",
-                "athena:ListDatabases",
-                "athena:GetDatabase",
-                "athena:GetTableMetadata",
-                "athena:ListTableMetadata"
-            ],
-            "Resource": [
-                "arn:aws:athena:us-east-1:325565585839:datacatalog",
-                "arn:aws:athena:us-east-1:325565585839:datacatalog/AwsDataCatalog"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "glue:GetDatabases",
-                "glue:GetDatabase",
-                "glue:GetTables",
-                "glue:GetTable",
-                "glue:GetPartitions",
-                "glue:GetPartition",
-                "glue:BatchGetPartition"
-            ],
-            "Resource": [
-                "arn:aws:glue:us-east-1:325565585839:catalog",
-                "arn:aws:glue:us-east-1:325565585839:database/warehouse",
-                "arn:aws:glue:us-east-1:325565585839:table/warehouse/*"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "athena:StartQueryExecution",
-                "athena:GetQueryExecution",
-                "athena:StopQueryExecution",
-                "athena:GetQueryResults",
-                "athena:GetWorkGroup",
-                "athena:GetQueryResultsStream",
-                "athena:GetQueryRuntimeStatistics",
-                "athena:ListQueryExecutions"
-            ],
-            "Resource": [
-                "arn:aws:athena:us-east-1:325565585839:workgroup/primary"
-            ]
-        },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "s3:GetBucketLocation",
-                    "s3:GetObject",
-                    "s3:ListBucket",
-                    "s3:ListBucketMultipartUploads",
-                    "s3:ListMultipartUploadParts",
-                    "s3:AbortMultipartUpload",
-                    "s3:PutObject"
-                ],
-                "Resource": [
-                    "arn:aws:s3:::aws-athena-query-results-325565585839-us-east-1",
-                    "arn:aws:s3:::aws-athena-query-results-325565585839-us-east-1/*",
-                    "arn:aws:s3:::prod.athena-queries.sagebase.org",
-                    "arn:aws:s3:::prod.athena-queries.sagebase.org/*"
-                ]
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "s3:GetBucketLocation",
-                    "s3:GetObject",
-                    "s3:ListBucket"
-                ],
-                "Resource": [
-                    "arn:aws:s3:::prod.datawarehouse.sagebase.org",
-                    "arn:aws:s3:::prod.datawarehouse.sagebase.org/*"
-                ]
-            }
-        ]
-      }
 
 SsoViewerSupporter:
   Type: update-stacks
