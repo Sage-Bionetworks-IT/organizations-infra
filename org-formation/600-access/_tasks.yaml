@@ -243,7 +243,7 @@ SynapseAthenaUserAccessPolicy:
     Account: '*'
     Region: !Ref primaryRegion
   Parameters:
-    PolicyDocument: >-
+    PolicyDocument: !Sub >-
       {
         "Version": "2012-10-17",
         "Statement": [
