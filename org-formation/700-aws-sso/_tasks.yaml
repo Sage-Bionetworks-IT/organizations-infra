@@ -538,7 +538,7 @@ SsoSynapseDevAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseDevAthenaGroup
-    permissionSetName: 'athena-user'
+    permissionSetName: 'athena-user-dev'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
@@ -561,7 +561,7 @@ SsoSynapseProdAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseProdAthenaGroup
-    permissionSetName: 'athena-user'
+    permissionSetName: 'athena-user-prod'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
