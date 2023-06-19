@@ -318,6 +318,8 @@ SynapseAthenaUserAccessPolicy:
                 "Resource": [
                     "arn:aws:s3:::aws-athena-query-results-${CurrentAccount.AccountId}-us-east-1",
                     "arn:aws:s3:::aws-athena-query-results-${CurrentAccount.AccountId}-us-east-1/*",
+                    "arn:aws:s3:::aws-athena-query-results-us-east-1-${CurrentAccount.AccountId}",
+                    "arn:aws:s3:::aws-athena-query-results-us-east-1-${CurrentAccount.AccountId}/*",
                     "arn:aws:s3:::*.athena-queries.sagebase.org",
                     "arn:aws:s3:::*.athena-queries.sagebase.org/*"
                 ]
