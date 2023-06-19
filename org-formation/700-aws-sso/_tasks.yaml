@@ -520,31 +520,35 @@ SsoApplicationManager:
       - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
 
 # Role for a user that can only access AWS Athena
-SsoSynapseAthenaUser:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-  TemplatingContext: {}
-  StackName: !Sub '${resourcePrefix}-${appName}-athena-user'
-  StackDescription: 'Access to AWS Athena'
-  TerminationProtection: false
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-  OrganizationBindings:
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref adminGroup # by default we admit admin's.  Below we 'inherit' this stack for specific user groups
-    permissionSetName: 'synapse-athena'
-    sessionDuration: 'PT12H'
-
-# Role for a user that can only access AWS Athena in the Synapse Dev account
-SsoSynapseDevAthenaUser:
+SsoSynapseDWAthenaUser:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
       - Name: SynapseAthenaUserAccessPolicy
-  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dev-athena-user'
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-user'
+  StackDescription: 'Access to Synapse Data Warehouse via AWS Athena'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref adminGroup # by default we admit admin's.  Below we 'inherit' this stack for specific user groups
+    permissionSetName: 'synapse-dw-athena'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
+
+# Role for a user that can only access AWS Athena in the Synapse Dev account
+SsoSynapseDWDevAthenaUser:
+  Type: update-stacks
+  DependsOn: SsoSynapseDWAthenaUser
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: SynapseAthenaUserAccessPolicy
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dw-dev-athena-user'
   StackDescription: 'Access to AWS Athena in Synapse Dev account'
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -556,17 +560,18 @@ SsoSynapseDevAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseDevAthenaGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-athena-permission-set-arn' ]
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-permission-set-arn' ]
     sessionDuration: 'PT12H'
 
 # Role for a user that can only access AWS Athena in the Synapse Prod account
-SsoSynapseProdAthenaUser:
+SsoSynapseDWProdAthenaUser:
   Type: update-stacks
+  DependsOn: SsoSynapseDWAthenaUser
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
       - Name: SynapseAthenaUserAccessPolicy
-  StackName: !Sub '${resourcePrefix}-${appName}-synapse-prod-athena-user'
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dw-prod-athena-user'
   StackDescription: 'Access to AWS Athena in Synapse Prod account'
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -578,7 +583,7 @@ SsoSynapseProdAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseProdAthenaGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-athena-permission-set-arn' ]
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-permission-set-arn' ]
     sessionDuration: 'PT12H'
 
 SsoViewerSupporter:
