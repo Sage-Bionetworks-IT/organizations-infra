@@ -137,7 +137,6 @@ Organization:
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
-        - !Ref 8dxfh53Account
         - !Ref BuA2aDwAccount
 
   #------- Accounts -----------
@@ -640,18 +639,6 @@ Organization:
         budget-alarm-threshold-email-recipient: aws-dccvalidator-prod@sagebase.org
 
   #------------ Personal Accounts -----------
-  8dxfh53Account:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-8dxfh53
-      RootEmail: aws.8dxfh53@sagebase.org
-      Alias: org-sagebase-8dxfh53
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        AccountOwner: vijay.yadav@sagebase.org
-        budget-alarm-threshold: 2000
-        budget-alarm-threshold-email-recipient: aws.8dxfh53@sagebase.org
-
   BuA2aDwAccount:
     Type: OC::ORG::Account
     Properties:
