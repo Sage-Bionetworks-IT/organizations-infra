@@ -477,14 +477,14 @@ GithubOidcSageBionetworksSynapseR:
     Account: !Ref SynapseProdAccount
     Region: us-east-1
 
-GithubOidcNexflowInfra:
+GithubOidcWorkflowsDevNextflowInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-nextflow-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-workflows-dev-nextflow-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-nextflow-infra
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-workflows-dev-nextflow-infra
     MaxSessionDuration: "21600"
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
@@ -493,9 +493,30 @@ GithubOidcNexflowInfra:
     GitHubOrg: "Sage-Bionetworks-Workflows"
     Repositories:
       - name: "nextflow-infra"
-        branches: ["dev", "prod"]
+        branches: ["dev"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref WorkflowsNextflowDevAccount
+    Region: us-east-1
+
+GithubOidcWorkflowsProdNextflowInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-workflows-prod-nextflow-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-workflows-prod-nextflow-infra
+    MaxSessionDuration: "21600"
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-Workflows"
+    Repositories:
+      - name: "nextflow-infra"
+        branches: ["prod"]
   DefaultOrganizationBinding:
     Account:
       - !Ref WorkflowsNextflowProdAccount
-      - !Ref WorkflowsNextflowDevAccount
     Region: us-east-1
