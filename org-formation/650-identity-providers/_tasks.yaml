@@ -481,10 +481,10 @@ GithubOidcWorkflowsDevNextflowInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-nextflow-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-workflows-dev-nextflow-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-nextflow-infra
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-workflows-dev-nextflow-infra
     MaxSessionDuration: "7200"
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
@@ -503,10 +503,10 @@ GithubOidcWorkflowsProdNextflowInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-nextflow-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-workflows-prod-nextflow-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-nextflow-infra
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-workflows-prod-nextflow-infra
     MaxSessionDuration: "21600"
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
