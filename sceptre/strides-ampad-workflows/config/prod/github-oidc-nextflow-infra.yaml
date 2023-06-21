@@ -8,7 +8,7 @@ parameters:
   ThumbprintList:
     - "6938fd4d98bab03faadb97b34396831e3780aea1"
   GitHubOrg: "Sage-Bionetworks-Workflows"
-  MaxSessionDuration: "3600"
+  MaxSessionDuration: "7200"
 sceptre_user_data:
   Repositories:
     - name: "nextflow-infra"
