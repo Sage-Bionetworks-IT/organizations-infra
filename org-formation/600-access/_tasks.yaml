@@ -89,22 +89,6 @@ HtanDevCIServiceAccount:
       - !Ref HtanDevAccount
     Region: us-east-1
 
-WorkflowsNextflowCIServiceAccounts:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.4/templates/IAM/service-account.yaml
-  StackName: workflows-nextflow-ci-service-account
-  Parameters:
-    ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AdministratorAccess
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account:
-      - !Ref WorkflowsNextflowProdAccount
-      - !Ref WorkflowsNextflowDevAccount
-      # Also deployed by Sceptre for the following non-member accounts:
-      # sceptre/strides-ampad-workflows/config/prod/workflows-nextflow-ci-service-account.yaml
-    Region: us-east-1
-
 # Service accounts for https://github.com/Sage-Bionetworks-Workflows/aws-workflows-nextflow-infra
 MobileHealthDataEngineeringCIServiceAccounts:
   Type: update-stacks
