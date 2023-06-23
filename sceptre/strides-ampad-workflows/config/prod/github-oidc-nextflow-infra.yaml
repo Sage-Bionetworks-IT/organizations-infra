@@ -1,14 +1,14 @@
 template:
   type: http
   url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.5/templates/IAM/github-oidc-provider.j2
-stack_name: github-oidc-organizations-infra
+stack_name: github-oidc-nextflow-infra
 parameters:
-  ProviderRoleName: sagebase-github-oidc-organizations-infra
+  ProviderRoleName: sagebase-github-oidc-nextflow-infra
   ProviderArn: !stack_output prod/github-oidc-provider.yaml::ProviderRoleArn
   ManagedPolicyArns:
     - "arn:aws:iam::aws:policy/AdministratorAccess"
 sceptre_user_data:
-  GitHubOrg: "Sage-Bionetworks-IT"
+  GitHubOrg: "Sage-Bionetworks-Workflows"
   Repositories:
-    - name: "organizations-infra"
-      branches: ["master"]
+    - name: "nextflow-infra"
+      branches: ["dev", "prod"]
