@@ -248,7 +248,7 @@ GithubOidcCfnTemplateDeploy:
                           "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload",
                           "s3:CreateMultipartUpload"
                         ],
-              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/aws-infra/*"]
+              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*"]
           }
         ]
       }
