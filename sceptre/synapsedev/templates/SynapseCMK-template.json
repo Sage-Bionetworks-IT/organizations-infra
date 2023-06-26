@@ -261,7 +261,7 @@
                                         { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
                                         { "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn" },
                                         { "Fn::GetAtt": [ "SynapseDeploymentRole", "Arn" ] },
-                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-ProviderRoleorganization-1K1MGUYPL5JUO" },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
                                         { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" }
                                     ]
                                 }
@@ -282,7 +282,7 @@
                                         "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn"
                                     },
                                     { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-ProviderRoleorganization-1K1MGUYPL5JUO" },
+                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
                                     { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" }
                                 ]
                             },
