@@ -100,14 +100,6 @@ VpnAuthRoutes:
         CIDR: "10.29.0.0/16"
         AccessGroups:
           - "aws-admins"
-      # org-sagebase-sandbox
-      sandcastlevpc:
-        CIDR: "10.23.0.0/16"
-        AccessGroups:
-          - "aws-admins"
-          - "aws-sandbox-admins"
-          - "aws-sandbox-developers"
-          - "scientists"
       # org-sagebase-scicomp
       computevpc:
         CIDR: "10.5.0.0/16"
@@ -190,7 +182,12 @@ VpnAuthRoutes:
           - "aws-admins"
           - "scientists"
           - "sageit-users"
-
+      # org-sagebase-dpe-prod
+      orca-vpc:
+        CIDR: "10.255.24.0/24"
+        AccessGroups:
+          - "aws-admins"
+          - "staff"
 
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]

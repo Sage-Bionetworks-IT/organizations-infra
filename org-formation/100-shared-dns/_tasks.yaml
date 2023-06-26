@@ -6,6 +6,7 @@ Parameters:
 # ./sceptre/sageit/config/prod/sageit-org-acm-cert.yaml
 #
 # Create a second sageit certificate in admincentral for the finops lambdas
+# This certificate is deprecated by the finops wildcard certificate below
 SageItCertificate:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
@@ -18,7 +19,34 @@ SageItCertificate:
   Parameters:
     DnsDomainName: 'sageit.org'
 
-SagebioAppZone:  # Zone for application front-end DNS names, e.g. 'dca.app.sagebionetworks.org'
+# Zone for finops lambdas in admincentral
+SageITFinopsZone:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/R53-hostedzone.yaml
+  StackName: !Sub '${resourcePrefix}-sageit-finops-zone'
+  StackDescription: Create a shared hosted zone for finops lambdas
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    DnsDomainName: "finops.sageit.org"
+
+# Wildcard certificate for '*.finops.sageit.org'
+SageITFinopsCertificate:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
+  StackName: !Sub '${resourcePrefix}-sageit-finops-cert'
+  StackDescription: Create a wildcard certificate for finops lambdas
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref AdminCentralAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    DnsDomainName: 'finops.sageit.org'
+
+# Zone for application front-end DNS names, e.g. 'dca.app.sagebionetworks.org'
+SagebioAppZone:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/R53-hostedzone.yaml
   StackName: !Sub '${resourcePrefix}-sagebio-app-zone'
@@ -29,7 +57,8 @@ SagebioAppZone:  # Zone for application front-end DNS names, e.g. 'dca.app.sageb
   Parameters:
     DnsDomainName: "app.sagebionetworks.org"
 
-SagebioAppZoneAcmCertificate:  # Wildcard certificate for '*.app.sagebionetworks.org'
+# Wildcard certificate for '*.app.sagebionetworks.org'
+SagebioAppZoneAcmCertificate:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
   StackName: !Sub '${resourcePrefix}-sagebio-app-cert'
@@ -42,10 +71,13 @@ SagebioAppZoneAcmCertificate:  # Wildcard certificate for '*.app.sagebionetworks
       - !Ref DnTDevAccount
       - !Ref DCAProdAccount
       - !Ref GenieProdAccount
+      - !Ref DccvalidatorDevAccount
+      - !Ref DccvalidatorProdAccount
   Parameters:
     DnsDomainName: "app.sagebionetworks.org"
 
-SagebioApiZone:  # Zone for intra-API DNS names, e.g. 'schematic.api.sagebionetworks.org'
+# Zone for intra-API DNS names, e.g. 'schematic.api.sagebionetworks.org'
+SagebioApiZone:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/R53-hostedzone.yaml
   StackName: !Sub '${resourcePrefix}-sagebio-api-zone'
@@ -56,7 +88,8 @@ SagebioApiZone:  # Zone for intra-API DNS names, e.g. 'schematic.api.sagebionetw
   Parameters:
     DnsDomainName: "api.sagebionetworks.org"
 
-SagebioApiZoneAcmCertificate:  # Wildcard certificate for '*.api.sagebionetworks.org'
+# Wildcard certificate for '*.api.sagebionetworks.org'
+SagebioApiZoneAcmCertificate:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
   StackName: !Sub '${resourcePrefix}-sagebio-api-cert'

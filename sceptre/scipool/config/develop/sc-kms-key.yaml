@@ -2,8 +2,6 @@ template:
   path: "sc-kms-key.yaml"
 stack_name: "sc-kms-key"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "develop/bootstrap.yaml"

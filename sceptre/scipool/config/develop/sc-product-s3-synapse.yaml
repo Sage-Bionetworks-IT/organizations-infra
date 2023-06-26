@@ -2,8 +2,6 @@ template:
   path: "sc-product-s3-synapse.j2"
 stack_name: "sc-product-s3-synapse"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "develop/sc-portfolio-s3-basic.yaml"

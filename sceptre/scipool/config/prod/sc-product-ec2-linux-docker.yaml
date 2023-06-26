@@ -2,8 +2,6 @@ template:
   path: "sc-product-ec2-linux-docker.j2"
 stack_name: "sc-product-ec2-linux-docker"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "prod/sc-portfolio-ec2.yaml"

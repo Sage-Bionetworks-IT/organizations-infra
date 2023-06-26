@@ -25,13 +25,15 @@ GithubOidcSageBionetworksIt:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
       - name: "organizations-infra"
-        branch: "master"
+        branches: ["master"]
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
@@ -44,13 +46,15 @@ GithubOidcSageBionetworksRecover:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-recover
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-recover
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "recover"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref RecoverProdAccount
@@ -64,13 +68,15 @@ GithubOidcSageBionetworksDataCuratorInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-data-curator-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-data-curator-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "data_curator-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
@@ -84,17 +90,41 @@ GithubOidcSageBionetworksSchematicInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "schematic-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
       - !Ref DCAProdAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksGenieBPCInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-genie-bpc-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-genie-bpc-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "genie-bpc-infra"
+        branches: ["*"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DnTDevAccount
+      - !Ref GenieProdAccount
     Region: us-east-1
 
 GithubOidcSageBionetworksDNTInfra:
@@ -104,17 +134,70 @@ GithubOidcSageBionetworksDNTInfra:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dnt-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dnt-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "dnt-infra"
-        branch: "*"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DpeProdAccount
       - !Ref DnTDevAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksDPEAirflowInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dpe-airflow-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dpe-airflow-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "dpe-mwaa-deployment"
+        branches: ["*"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DpeProdAccount
+      - !Ref DnTDevAccount
+    Region: us-east-1
+
+# GH OIDC for DCC validator to AWS DccvalidatorDev and DccvalidatorProd accounts
+GithubOidcDccValidatorDeploy:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-dccvalidator-deploy
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-dccvalidator-deploy
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "dccvalidator_1kD-infra"
+        branches: ["dev", "prod"]
+      - name: "dccvalidator_PEC-infra"
+        branches: ["dev", "prod"]
+      - name: "dccvalidator_AMP-AD-infra"
+        branches: ["dev", "prod"]
+      - name: "dccmonitor_ECS-infra"
+        branches: ["dev", "prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DccvalidatorDevAccount
+      - !Ref DccvalidatorProdAccount
     Region: us-east-1
 
 GithubOidcSageBionetworksSecuityHubToJira:
@@ -124,25 +207,28 @@ GithubOidcSageBionetworksSecuityHubToJira:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-security-hub-to-jira
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-security-hub-to-jira
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "security-hub-to-jira"
-        branch: "main"
+        branches: ["main"]
   DefaultOrganizationBinding:
     Account:
       - !Ref SecurityCentralAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksAwsInfra:
+# GH OIDC for cloudformation template deployments to AWS AdminCentral account
+GithubOidcCfnTemplateDeploy:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: github-oidc-provider-access.njk
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-awsinfra
+  StackName: !Sub ${resourcePrefix}-${appName}-cfn-template-deploy
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-cfn-template-deploy
     PolicyDocument: |
       {
         "Version": "2012-10-17",
@@ -150,14 +236,19 @@ GithubOidcSageBionetworksAwsInfra:
           {
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
-              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
+                          "s3:ListParts", "s3:ListMultipartUploads"
+                        ],
               "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9" ]
           },
           {
               "Sid": "AllObjectActions",
               "Effect": "Allow",
-              "Action": [ "s3:PutObject", "s3:GetObject" ],
-              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/aws-infra/*"]
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:DeleteObjects",
+                          "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload",
+                          "s3:CreateMultipartUpload"
+                        ],
+              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*"]
           }
         ]
       }
@@ -165,7 +256,272 @@ GithubOidcSageBionetworksAwsInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "aws-infra"
-        branch: "master"
+        branches: ["master"]
+      - name: "service-catalog-library"
+        branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
+    Region: us-east-1
+
+# GH OIDC for packer to deploy AMI images to AWS imagecentral account
+GithubOidcPackerImageDeploy:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-packer-image-deploy
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-packer-image-deploy
+    MaxSessionDuration: 7200
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+      - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "packer-ami-template"
+        branches: ["master"]
+      - name: "packer-base-ubuntu-jammy"
+        branches: ["master"]
+      - name: "packer-rstudio"
+        branches: ["master"]
+  DefaultOrganizationBinding:
+    Account: !Ref ImageCentralAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksScicompProvisioner:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-scicomp-provisioner
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-scicomp-provisioner
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "scicomp-provisioner"
+        branches: ["master"]
+  DefaultOrganizationBinding:
+    Account: !Ref ScicompAccount
+    Region: us-east-1
+
+GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-scipool-prod-synapse-login-aws-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-scipool-prod-synapse-login-aws-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-login-aws-infra"
+        branches: ["prod"]
+  DefaultOrganizationBinding:
+    Account: !Ref ScipoolProdAccount
+    Region: us-east-1
+
+GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-scipool-dev-synapse-login-aws-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-scipool-dev-synapse-login-aws-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-login-aws-infra"
+        branches: ["develop"]
+  DefaultOrganizationBinding:
+    Account: !Ref ScipoolDevAccount
+    Region: us-east-1
+
+GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-bmgfki-synapse-login-aws-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-bmgfki-synapse-login-aws-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-login-aws-infra"
+        branches: ["prod"]
+  DefaultOrganizationBinding:
+    Account: !Ref BmgfkiAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksWebMonorepoInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
+              "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org", "arn:aws:s3:::staging.accounts.sagebionetworks.org" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
+              "Resource": ["arn:aws:s3:::prod.accounts.sagebionetworks.org/*", "arn:aws:s3:::staging.accounts.sagebionetworks.org/*" ]
+          },
+          {
+              "Sid": "CloudfrontActions",
+              "Effect": "Allow",
+              "Action": [ "cloudfront:CreateInvalidation" ],
+              "Resource": ["arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI", "arn:aws:cloudfront::797640923903:distribution/EY52HOUGKDP1F" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-web-monorepo"
+        branches: ["*"]
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapseprod-web-monorepo-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-synapseprod-web-monorepo-infra
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
+              "Resource": [ "arn:aws:s3:::staging-signin.synapse.org", "arn:aws:s3:::prod-signin-synapse-websitebucket-u91v422hx5bs" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
+              "Resource": ["arn:aws:s3:::staging-signin.synapse.org/*", "arn:aws:s3:::prod-signin-synapse-websitebucket-u91v422hx5bs/*" ]
+          },
+          {
+              "Sid": "CloudfrontActions",
+              "Effect": "Allow",
+              "Action": [ "cloudfront:CreateInvalidation" ],
+              "Resource": ["arn:aws:cloudfront::325565585839:distribution/EUE2TU70O0M2M", "arn:aws:cloudfront::325565585839:distribution/E1HPVCTTKTU4MN" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-web-monorepo"
+        branches: ["*"]
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksSynapseR:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapser
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapser
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "AccessRanBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:*" ],
+              "Resource": [ "arn:aws:s3:::ran.synapse.org", "arn:aws:s3:::staging-ran.synapse.org", "arn:aws:s3:::ran.synapse.org/*", "arn:aws:s3:::staging-ran.synapse.org/*" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapser"
+        branches: ["master", "main", "develop"]
+      - name: "synapserutils"
+        branches: ["master", "main", "develop"]
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+    Region: us-east-1
+
+GithubOidcWorkflowsDevNextflowInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-workflows-dev-nextflow-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-workflows-dev-nextflow-infra
+    MaxSessionDuration: "7200"
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-Workflows"
+    Repositories:
+      - name: "nextflow-infra"
+        branches: ["dev"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref WorkflowsNextflowDevAccount
+    Region: us-east-1
+
+GithubOidcWorkflowsProdNextflowInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: github-oidc-provider-access.njk
+  StackName: !Sub ${resourcePrefix}-${appName}-workflows-prod-nextflow-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-workflows-prod-nextflow-infra
+    MaxSessionDuration: "21600"
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-Workflows"
+    Repositories:
+      - name: "nextflow-infra"
+        branches: ["prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref WorkflowsNextflowProdAccount
     Region: us-east-1

@@ -2,8 +2,6 @@ template:
   path: "sc-product-ec2-linux-jumpcloud-notebook.j2"
 stack_name: "sc-product-ec2-linux-jumpcloud-notebook"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "develop/sc-portfolio-ec2.yaml"
@@ -94,7 +92,11 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.40/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
       Name: 'v1.1.40'
-    - Description: 'Enable KMS key rotation {{ range(1, 10000) | random }}'
+    - Description: 'Enable KMS key rotation'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.1.45/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
       Name: 'v1.1.45'
+    - Description: 'Update distro, python, apache, rstudio versions {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.2.0/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
+      Name: 'v1.2.0'

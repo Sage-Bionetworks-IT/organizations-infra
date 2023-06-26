@@ -31,7 +31,6 @@ TransitGateway:
   Parameters:
     Principals:
       - !Ref ITSandboxAccount
-      - !Ref SandboxAccount
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount
@@ -43,6 +42,7 @@ TransitGateway:
       - !Ref ScipoolDevAccount
       - !Ref ScipoolProdAccount
       - !Ref SageITAccount
+      - !Ref DpeProdAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -79,9 +79,6 @@ TransitGatewayRoutes:
       # org-sagebase-itsandbox
       dustbunnyvpc:
         CIDR: "10.29.0.0/16"
-      # org-sagebase-sandbox
-      sandcastlevpc:
-        CIDR: "10.23.0.0/16"
       # org-sagebase-scicomp
       computevpc:
         CIDR: "10.5.0.0/16"
@@ -118,6 +115,9 @@ TransitGatewayRoutes:
       # org-sagebase-sageit
       defaultvpc:
         CIDR: "10.13.0.0/16"
+      # org-sagebase-dpe-prod
+      orca-vpc:
+        CIDR: "10.255.24.0/24"
 
   Parameters:
     VpcSubnetIDs:
@@ -133,7 +133,6 @@ Mappings:
   TgwSpokesA:
     VpcName:
       '804034162148': 'dustbunnyvpc'  # org-sagebase-itsandbox
-      '563295687221': 'sandcastlevpc'  # org-sagebase-sandbox
       '055273631518': 'computevpc'  # org-sagebase-scicomp
       '420786776710': 'BridgeServer2-vpc'   # org-sagebase-bridgedev
       '649232250620': 'BridgeServer2-vpc'   # org-sagebase-bridgeprod
@@ -142,6 +141,7 @@ Mappings:
       '465877038949': 'cesspoolvpc'      # org-sagebase-scipooldev
       '237179673806': 'internalpoolvpc'      # org-sagebase-scipooldev
       '797640923903': 'defaultvpc' # org-sagebase-sageit
+      '766808016710': 'orca-vpc' # org-sagebase-dpe-prod
   TgwSpokesB:
     VpcName:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
@@ -164,7 +164,6 @@ TransitGatewaySpokeA:
   DefaultOrganizationBinding:
     Account:
       - !Ref ITSandboxAccount
-      - !Ref SandboxAccount
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount
@@ -173,6 +172,7 @@ TransitGatewaySpokeA:
       - !Ref ScipoolDevAccount
       - !Ref ScipoolProdAccount
       - !Ref SageITAccount
+      - !Ref DpeProdAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports

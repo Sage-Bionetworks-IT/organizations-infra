@@ -30,13 +30,27 @@ MipsMicroservice:
     Account: !Ref AdminCentralAccount
     Region: !Ref primaryRegion
   Parameters:
-    AcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-cert-CertificateArn']
-    DnsNames: "finops-api.sageit.org"
+    AcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-finops-cert-CertificateArn']
+    DnsNames: "mips-api.finops.sageit.org"
     MipsOrganization: 'SAGE_24146'
     SsmKeyAdminArns:
       - 'arn:aws:sts::745159704268:assumed-role/AWSReservedSSO_Administrator_30244677b3ea9498/joni.harker@sagebase.org'
       - !Sub 'arn:aws:iam::${CurrentAccount.AccountId}:root'
       - 'arn:aws:iam::745159704268:role/github-oidc-sage-bionetwo-ProviderRoleorganization-93H11ERK3F4N'
+
+CostCategoryRulesMicroservice:
+  Type: update-stacks
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-cost-rules/master/lambda-finops-cost-rules.yaml'
+  StackName: !Sub '${resourcePrefix}-rules-microservice'
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref AdminCentralAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    AcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-finops-cert-CertificateArn']
+    DnsName: "cost-rules.finops.sageit.org"
+    ChartOfAccountsURL: "https://mips-api.finops.sageit.org/accounts?enable_code_filter"
+    ProgramCodeTagList: "CostCenterOther,CostCenter"
 
 CostCategories:
   Type: update-stacks

@@ -1,0 +1,20 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'macie'
+
+  accountId:
+    Type: String
+    Description: The identifier from the account used to manage this service
+    Default: !Ref MasterAccount
+
+Macie:
+  Type: update-stacks
+  Template: macie.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  StackDescription: Setup AWS Macie service
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId

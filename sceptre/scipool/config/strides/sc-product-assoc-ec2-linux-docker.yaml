@@ -2,8 +2,6 @@ template:
   path: "sc-ec2-action-associations.yaml"
 stack_name: "sc-product-assoc-ec2-linux-docker"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"
 dependencies:
   - "strides/sc-product-ec2-linux-docker.yaml"

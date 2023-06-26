@@ -29,14 +29,6 @@ Parameters:
     Type: String
     Default: '906769aa66-5d23a723-54f3-4c08-a67b-311e555f4e85'
 
-  sandboxDeveloperGroup:  #JC aws-sandbox-developers
-    Type: String
-    Default: '906769aa66-c66c6e77-3904-4bfc-b96d-98315a9bb913'
-
-  sandboxAdminGroup:    #JC aws-sandbox-admins
-    Type: String
-    Default: '906769aa66-0133decd-a118-4b53-b5a1-7ca6a3077212'
-
   scicompViewerGroup:      #JC aws-scicomp-viewers
     Type: String
     Default: '906769aa66-4796775f-cf5f-41c2-bfed-40b1d2658a3f'
@@ -81,9 +73,13 @@ Parameters:
     Type: String
     Default: '906769aa66-6cdd2cc1-6d3d-49d8-b105-37c22bb3d402'
 
-  synapseAdminGroup:      #JC aws-synapse-admins
+  synapseDevAdminGroup:   #JC aws-synapsedev-admins
     Type: String
-    Default: '906769aa66-1c66a9b6-ae5e-473c-a51c-4b02918c4454'
+    Default: '44d844b8-60a1-70e5-cb5a-50137c984398'
+
+  synapseProdAdminGroup:  #JC aws-synapseprod-admins
+    Type: String
+    Default: '34783488-c0c1-701b-d093-6f4f8edcf2d7'
 
   synapseDevDeveloperGroup:     #JC aws-synapsedev-developers
     Type: String
@@ -96,6 +92,14 @@ Parameters:
   synapseProdViewerGroup:     #JC aws-synapseprod-viewers
     Type: String
     Default: '906769aa66-f671b9c2-3131-4051-b712-4668914bbfe0'
+
+  synapseDevAthenaGroup:     #JC aws-synapsedev-athena-users
+    Type: String
+    Default: 'e408d4d8-90e1-70a0-b1ab-d8edded2d3b0'
+
+  synapseProdAthenaGroup:     #JC aws-synapseprod-athena-users
+    Type: String
+    Default: '74c8e468-b0d1-702d-5d09-f2193ebf20c3'
 
   imageCentralAmiLibrarianGroup:   #JC aws-imagecentral-ami-librarians
     Type: String
@@ -249,6 +253,10 @@ Parameters:
     Type: String
     Default: '4428e4d8-d0e1-7042-59a1-85b676374bb9'
 
+  genieProdApplicationManagerGroup:      # JC aws-genie-prod-application-managers
+    Type: String
+    Default: '14e83438-3051-7019-77d3-5d1cb3ec7d42'
+
   dpeProdAdminGroup:      #JC aws-dpe-prod-admins
     Type: String
     Default: 'c408c488-e0c1-70cb-91fa-fe5b3e113bb0'
@@ -265,10 +273,38 @@ Parameters:
     Type: String
     Default: '0498c498-5041-704e-c4bb-c3eb14f2fdbb'
 
-  #------------- personal AWS accounts ------------------
-  8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
+  scceDevAdminGroup:      #JC aws-sccedev-admins
     Type: String
-    Default: '906769aa66-c75c5f09-8e6e-4e8a-8a1f-cbf13f56d5e7'
+    Default: 'b47864c8-1001-7096-1bce-5f09fbeb1b65'
+
+  scceDevDeveloperGroup:      #JC aws-sccedev-developers
+    Type: String
+    Default: '54a83488-c0e1-7021-5286-175d851517c8'
+
+  scceDevViewerGroup:      #JC aws-sccedev-viewers
+    Type: String
+    Default: '84684498-7091-7091-4439-6c14af98c06e'
+
+  scceDevViewerPlusGroup:      #JC aws-sccedev-viewers-plus
+    Type: String
+    Default: '84d8d478-6081-7091-b9e9-b44d97a6bcb3'
+
+  cnbDevAdminGroup:      #JC aws-cnb-dev-admins
+    Type: String
+    Default: 'b43864e8-a0b1-7008-924f-54a58df1ae28'
+
+  cnbDevDeveloperGroup:      #JC aws-cnb-dev-developers
+    Type: String
+    Default: '04a83488-1041-70d0-e200-31472f87c82a'
+
+  dccvalidatorProdApplicationManagerGroup:      # JC aws-dccvalidator-prod-application-managers
+    Type: String
+    Default: '6498b478-20e1-7031-9648-00c20c410359'
+
+  #------------- personal AWS accounts ------------------
+  BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
+    Type: String
+    Default: '14b8f4c8-60e1-70ef-e296-06e88f14d720'
 
 #----------------------------------------------------------------------------------------------
 
@@ -288,7 +324,9 @@ SsoAdministrator:
     instanceArn: !Ref instanceArn
     principalId: !Ref adminGroup
     permissionSetName: 'Administrator'
-    managedPolicies: [ 'arn:aws:iam::aws:policy/AdministratorAccess' ]
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/AdministratorAccess'
+      - 'arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser'
     sessionDuration: 'PT8H'
     masterAccountId: !Ref MasterAccount
 
@@ -435,6 +473,21 @@ SsoViewerPlus:
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSNetworkManagerReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "IpamReadOnlyAccess",
+            "Effect": "Allow",
+            "Action": [
+              "ec2:GetIpam*",
+              "ec2:DescribeIpam*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
 
 # Role for a user that manages an application deployed to AWS
 SsoApplicationManager:
@@ -460,6 +513,53 @@ SsoApplicationManager:
       - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
       - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+      - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
+
+# Role for a user that can only access AWS Athena in the Synapse Dev account
+SsoSynapseDevAthenaUser:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: SynapseAthenaUserAccessPolicy
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dev-athena-user'
+  StackDescription: 'Access to AWS Athena in Synapse Dev account'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseDevAthenaGroup
+    permissionSetName: 'athena-user-dev'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
+
+# Role for a user that can only access AWS Athena in the Synapse Prod account
+SsoSynapseProdAthenaUser:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: SynapseAthenaUserAccessPolicy
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-prod-athena-user'
+  StackDescription: 'Access to AWS Athena in Synapse Prod account'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseProdAthenaGroup
+    permissionSetName: 'athena-user-prod'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
 
 SsoViewerSupporter:
   Type: update-stacks
@@ -479,40 +579,6 @@ SsoViewerSupporter:
     instanceArn: !Ref instanceArn
     principalId: !Ref scienceSupporterGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
-
-SsoSandboxDeveloper:
-  Type: update-stacks
-  DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sandbox-developer'
-  StackDescription: 'SSO: Developer role used by sandbox developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SandboxAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref sandboxDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
-SsoSandboxAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sandbox-admin'
-  StackDescription: 'SSO: Administrator role used by sandbox admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SandboxAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref sandboxAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 scicompViewer:
   Type: update-stacks
@@ -741,22 +807,38 @@ SsoWorkflowNextflowProdAdmin:
     principalId: !Ref workflowNextflowProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-SsoSynapseAdmin:
+SsoSynapseDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-synapse-admin'
-  StackDescription: 'SSO: admin role used by synapse admin group'
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsedev-admin'
+  StackDescription: 'SSO: admin role used by synapsedev admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      OrganizationalUnit:
-        - !Ref SynapseOU
+      Account: !Ref SynapseDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref synapseAdminGroup
+    principalId: !Ref synapseDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoSynapseProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-synapseprod-admin'
+  StackDescription: 'SSO: admin role used by synapseprod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoSynapseDevDeveloper:
@@ -1386,7 +1468,7 @@ SsoDntDevViewer:
     principalId: !Ref dntDevViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
-SsoDntDevProdApplicationManager:
+SsoDntDevApplicationManager:
   Type: update-stacks
   DependsOn: SsoApplicationManager
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
@@ -1404,21 +1486,21 @@ SsoDntDevProdApplicationManager:
     principalId: !Ref dntDevApplicationManagerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
 
-Sso8dxfh53Admin:
+SsoBuA2aDwAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-8dxfh53-admin'
-  StackDescription: 'SSO: admin role used by 8dxfh53 admin group'
+  StackName: !Sub '${resourcePrefix}-${appName}-BuA2aDw-admin'
+  StackDescription: 'SSO: admin role used by BuA2aDw admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref  8dxfh53Account
+      Account: !Ref  BuA2aDwAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref 8dxfh53AdminGroup
+    principalId: !Ref BuA2aDwAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoRecoverDevAdmin:
@@ -1609,6 +1691,23 @@ SsoGenieProdViewerPlus:
     principalId: !Ref genieProdViewerPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
 
+SsoGenieProdApplicationManager:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-genie-prod-application-manager'
+  StackDescription: 'SSO: Application Manager role used by Genie application-manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref GenieProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref genieProdApplicationManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
+
 SsoDpeProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -1676,3 +1775,123 @@ SsoIpamViewerPlus:
     instanceArn: !Ref instanceArn
     principalId: !Ref ipamViewerPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
+
+SsoScceDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sccedev-admin'
+  StackDescription: 'SSO: Viewer role used by SCCE dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScceDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scceDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+scceDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sccedev-developer'
+  StackDescription: 'SSO: Viewer role used by SCCE dev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScceDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scceDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoScceDevViewer:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sccedev-viewer'
+  StackDescription: 'SSO: Viewer role used by SCCE dev viewer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScceDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scceDevViewerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+SsoScceDevViewerPlus:
+  Type: update-stacks
+  DependsOn: SsoViewerPlus
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sccedev-viewer-plus'
+  StackDescription: 'SSO: Viewer role used by SCCE dev viewer plus group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ScceDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref scceDevViewerPlusGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
+
+SsoCnbDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-cnb-dev-admin'
+  StackDescription: 'SSO role used by CnB-dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref CnbDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref cnbDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoCnbDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-cnb-dev-developer'
+  StackDescription: 'SSO role used by CnB-dev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref CnbDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref cnbDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoDccValidatorProdApplicationManager:
+  Type: update-stacks
+  DependsOn: SsoApplicationManager
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-dccvalidator-prod-application-manager'
+  StackDescription: 'SSO: Application Manager role used by DccValidator-Prod application-manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DccvalidatorProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dccvalidatorProdApplicationManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]

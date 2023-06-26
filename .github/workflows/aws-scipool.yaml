@@ -1,0 +1,62 @@
+# reusable template for running Sceptre deployments to AWS accounts
+# Deploy resources to service catalog prod environments
+name: aws-scipool
+
+on:
+  workflow_call:
+    inputs:
+      aws-region:
+        type: string
+        default: us-east-1
+      role-to-assume:
+        required: true
+        type: string
+      role-duration-seconds:
+        type: number
+        default: 1200
+      working-dir:
+        required: true
+        type: string
+      sceptre-command:
+        type: string
+        default: "sceptre launch prod --prune --yes"
+
+jobs:
+  deploy:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Cache python modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sceptre sceptre-json-resolver sceptre-request-resolver sceptre-ssm-resolver
+      - name: Assume AWS Role
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ inputs.aws-region }}
+          role-to-assume: ${{ inputs.role-to-assume }}
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
+          role-duration-seconds: ${{ inputs.role-duration-seconds }}
+      - name: Deploy with sceptre
+        # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
+        run: |
+          cd ${{ inputs.working-dir }}
+          mkdir -p templates/remote
+          sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker.yaml
+          sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
+          sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
+          ${{ inputs.sceptre-command }}

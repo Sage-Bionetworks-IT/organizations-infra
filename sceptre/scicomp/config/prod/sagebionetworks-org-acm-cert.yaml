@@ -3,10 +3,6 @@ template:
   url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.3.0/acm-certificate.yaml
 stack_name: sagebionetworks-org-acm-cert
 parameters:
-  # The Sage deparment (Platform, CompOnc, SysBio, Governance, etc..)
-  Department: "Platform"
-  # The Sage project (Infrastructure, amp-ad, ntap, dream, etc..)
-  Project: "Infrastructure"
   # The resource owner
   OwnerEmail: 'khai.do@sagebase.org'
   # The domain name (i.e. acme.org)

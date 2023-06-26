@@ -36,6 +36,11 @@ SecurityHub:
   DependsOn: [ Types ]
   Path: ./075-security-hub/_tasks.yaml
 
+Macie:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./077-macie/_tasks.yaml
+
 AwsConfigInventory:
   Type: include
   DependsOn: [ Types ]

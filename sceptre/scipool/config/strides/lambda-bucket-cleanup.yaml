@@ -5,6 +5,4 @@ stack_name: lambda-sc-bucket-cleanup
 parameters:
   EnableSchedule: "true"
 stack_tags:
-  Department: "Platform"
-  Project: "Infrastructure"
   OwnerEmail: "it@sagebase.org"

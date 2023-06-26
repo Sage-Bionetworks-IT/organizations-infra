@@ -80,6 +80,13 @@ Resources:
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMPeterHarveySvc:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: svc.peter.harvey
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
 
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
