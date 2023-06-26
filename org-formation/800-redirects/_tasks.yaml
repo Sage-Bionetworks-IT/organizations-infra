@@ -79,6 +79,24 @@ DcaDevAppDnsForward:
 
 # forward dca.app.sagebionetworks.org to data_curator-infra ALB
 # https://github.com/Sage-Bionetworks/data_curator-infra
+DcaStagingAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-dca-staging-staging-cname'
+  StackDescription: Setup a CNAME for data_curator-infra staging ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dca-staging.app.sagebionetworks.org"
+    # ID of the app.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['dca-staging-staging-DockerFargateStack-LoadBalancerDNS', !Ref DCAProdAccount]
+
+# forward dca.app.sagebionetworks.org to data_curator-infra ALB
+# https://github.com/Sage-Bionetworks/data_curator-infra
 DcaProdAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
@@ -100,21 +118,23 @@ DcaProdAppDnsForward:
 
 # forward schematic-dev.api.sagebionetworks.org to schematic-infra ALB
 # https://github.com/Sage-Bionetworks/schematic-infra
-SchematicDevAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-schematic-dev-cname'
-  StackDescription: Setup a CNAME for schematic-infra dev ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "schematic-dev.api.sagebionetworks.org"
-    # ID of the api.sagebionetworks.org zone (in sageit account)
-    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
-    # the value of the CNAME record
-    TargetHostName: !CopyValue ['schematic-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
+
+# @linglp temporarily comment out due to a broken schematica-infra deployment
+#SchematicDevAppDnsForward:
+#  Type: update-stacks
+#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+#  StackName: !Sub '${resourcePrefix}-schematic-dev-cname'
+#  StackDescription: Setup a CNAME for schematic-infra dev ALB
+#  DefaultOrganizationBindingRegion: !Ref primaryRegion
+#  DefaultOrganizationBinding:
+#    Account: !Ref SageITAccount
+#  Parameters:
+#    # the name of the CNAME record
+#    SourceHostName: "schematic-dev.api.sagebionetworks.org"
+#    # ID of the api.sagebionetworks.org zone (in sageit account)
+#    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
+#    # the value of the CNAME record
+#    TargetHostName: !CopyValue ['schematic-dev-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
 
 # forward schematic-staging.api.sagebionetworks.org to schematic-infra ALB
 # https://github.com/Sage-Bionetworks/schematic-infra

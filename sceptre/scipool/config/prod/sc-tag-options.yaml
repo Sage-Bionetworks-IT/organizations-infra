@@ -10,8 +10,6 @@ dependencies:
   - "prod/sc-portfolio-s3-basic.yaml"
   - "prod/sc-portfolio-scheduled-jobs.yaml"
 sceptre_user_data:
-  Departments: !file sc-tag-options/internal/Departments.json
-  Projects: !file sc-tag-options/internal/Projects.json
   CostCenters: !from_json
     - !request 'https://mips-api.finops.sageit.org/tags?limit=25&enable_other_code=true'
   ProductIDs:

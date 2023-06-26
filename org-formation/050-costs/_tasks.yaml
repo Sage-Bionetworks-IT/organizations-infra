@@ -51,7 +51,6 @@ CostCategoryRulesMicroservice:
     DnsName: "cost-rules.finops.sageit.org"
     ChartOfAccountsURL: "https://mips-api.finops.sageit.org/accounts?enable_code_filter"
     ProgramCodeTagList: "CostCenterOther,CostCenter"
-    OwnerEmailTagList: "OwnerEmail,synapse:email,AccountOwner"
 
 CostCategories:
   Type: update-stacks
