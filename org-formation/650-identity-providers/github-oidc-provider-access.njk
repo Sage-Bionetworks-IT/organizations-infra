@@ -109,6 +109,7 @@ Resources:
       {% endif %}
   {% endfor %}
                   "repo:{{ GitHubOrg }}/{{ Repository.name }}:ref:refs/tags/*",
+                  "repo:{{ GitHubOrg }}/{{ Repository.name }}:environment:*",
 {% endfor %}
                 ]
 Outputs:
