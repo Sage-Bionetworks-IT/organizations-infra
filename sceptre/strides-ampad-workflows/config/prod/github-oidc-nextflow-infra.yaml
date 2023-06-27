@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.5/templates/IAM/github-oidc-provider.j2
+  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
 stack_name: github-oidc-nextflow-infra
 Dependencies:
   - prod/github-oidc-provider.yaml
