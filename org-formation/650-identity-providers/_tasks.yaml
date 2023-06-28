@@ -236,14 +236,19 @@ GithubOidcCfnTemplateDeploy:
           {
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
-              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
+                          "s3:ListParts", "s3:ListMultipartUploads"
+                        ],
               "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9" ]
           },
           {
               "Sid": "AllObjectActions",
               "Effect": "Allow",
-              "Action": [ "s3:PutObject", "s3:GetObject" ],
-              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/aws-infra/*"]
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:DeleteObjects",
+                          "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload",
+                          "s3:CreateMultipartUpload"
+                        ],
+              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*"]
           }
         ]
       }
