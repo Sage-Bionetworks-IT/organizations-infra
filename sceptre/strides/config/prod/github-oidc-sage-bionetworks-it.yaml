@@ -7,6 +7,7 @@ parameters:
     - "arn:aws:iam::aws:policy/AdministratorAccess"
   ThumbprintList:
     - "6938fd4d98bab03faadb97b34396831e3780aea1"
+    - "1c58a3a8518e8759bf075b76b750d4f2df264fcd"
   GitHubOrg: "Sage-Bionetworks-IT"
 sceptre_user_data:
   Repositories:
