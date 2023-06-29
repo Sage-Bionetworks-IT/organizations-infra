@@ -338,7 +338,6 @@ SynapseAthenaUserAccessPolicy:
                     "arn:aws:s3:::*.log.sagebase.org/*",
                     "arn:aws:s3:::*.filehandles.sagebase.org",
                     "arn:aws:s3:::*.filehandles.sagebase.org/*"
-
                 ]
             }
         ]
