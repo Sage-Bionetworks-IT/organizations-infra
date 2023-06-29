@@ -1,17 +1,16 @@
 template:
   type: http
   url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
-stack_name: github-oidc-sage-bionetworks
+stack_name: github-oidc-sage-bionetworks-it-admin
 Dependencies:
   - prod/github-oidc-provider.yaml
 parameters:
-  ProviderRoleName: github-oidc-sage-bionetworks
+  ProviderRoleName: github-oidc-sage-bionetworks-it-admin
   ProviderArn: !stack_output_external github-oidc-provider::ProviderArn
-  MaxSessionDuration: 14400
   ManagedPolicyArns:
     - "arn:aws:iam::aws:policy/AdministratorAccess"
 sceptre_user_data:
-  GitHubOrg: "Sage-Bionetworks"
+  GitHubOrg: "Sage-Bionetworks-IT"
   Repositories:
-    - name: "synapse-login-aws-infra"
-      branches: ["dev", "prod"]
+    - name: "organizations-infra"
+      branches: [ "master" ]
