@@ -132,6 +132,7 @@ node_modules/
 
 # sceptre
 sceptre/**/templates/remote/
+.dump/
 
 # lerna
 lerna-debug.log
