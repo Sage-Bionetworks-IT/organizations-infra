@@ -285,7 +285,9 @@ SynapseAthenaUserAccessPolicy:
             "Resource": [
                 "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:catalog",
                 "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:database/*warehouse",
-                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:table/*warehouse/*"
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:table/*warehouse/*",
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:database/*firehoselogs",
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:table/*firehoselogs/*"
             ]
         },
         {
@@ -331,7 +333,11 @@ SynapseAthenaUserAccessPolicy:
                 ],
                 "Resource": [
                     "arn:aws:s3:::*.datawarehouse.sagebase.org",
-                    "arn:aws:s3:::*.datawarehouse.sagebase.org/*"
+                    "arn:aws:s3:::*.datawarehouse.sagebase.org/*",
+                    "arn:aws:s3:::*.log.sagebase.org",
+                    "arn:aws:s3:::*.log.sagebase.org/*",
+                    "arn:aws:s3:::*.filehandles.sagebase.org",
+                    "arn:aws:s3:::*.filehandles.sagebase.org/*"
                 ]
             }
         ]
