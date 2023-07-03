@@ -52,7 +52,7 @@ Example using [configure-aws-credentials GH action](https://github.com/aws-actio
     uses: aws-actions/configure-aws-credentials@v2
     with:
       aws-region: us-east-1
-      role-to-assume: arn:aws:iam::XXXXXXXX:role/sagebase-github-oidc-sage-ProviderRoleXXXXXXXX-XXXXXXXX
+      role-to-assume: arn:aws:iam::XXXXXXXX:role/sagebase-github-oidc-sage-bionetworks-repo
       role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
       role-duration-seconds: 1200
 ```
