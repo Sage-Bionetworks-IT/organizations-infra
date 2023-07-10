@@ -1,14 +1,6 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
-CostCategoryRuleGenerator:
-  Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/cfn-macro-cost-rules/master/cfn-macro-cost-rules.yaml'
-  StackName: !Sub '${resourcePrefix}-cost-rule-generator'
-  DefaultOrganizationBinding:
-    Account: !Ref MasterAccount
-    Region: !Ref primaryRegion
-
 AnomalyDetectorService:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.3/templates/Cost/anomaly-detector-service.yaml
@@ -56,7 +48,6 @@ CostCategories:
   Type: update-stacks
   Template: categories.yaml
   StackName: !Sub '${resourcePrefix}-cost-categories'
-  DependsOn: CostCategoryRuleGenerator
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
