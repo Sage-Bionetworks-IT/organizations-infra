@@ -30,6 +30,7 @@ MipsMicroservice:
       - !Sub 'arn:aws:iam::${CurrentAccount.AccountId}:root'
       - 'arn:aws:iam::745159704268:role/github-oidc-sage-bionetwo-ProviderRoleorganization-93H11ERK3F4N'
 
+# Deploy a microservice for generating cost category rules
 CostCategoryRulesMicroservice:
   Type: update-stacks
   Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-cost-rules/master/lambda-finops-cost-rules.yaml'
@@ -51,3 +52,16 @@ CostCategories:
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
+
+# Deploy a lambda to notify users of their total cloud spend via SES;
+# use the payer account so that cost explorer aggregates member account data
+CostNotificationMicroservice:
+  Type: update-stacks
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-email-totals/master/lambda-finops-email-totals.yaml'
+  StackName: !Sub '${resourcePrefix}-cost-notifications'
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    RestrictRecipients: True
+    ApprovedRecipients: "it@sagebase.org"
