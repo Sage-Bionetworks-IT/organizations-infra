@@ -1,0 +1,5 @@
+template:
+  path: SynapseCMK-template.json
+stack_name: synapse-dev-cmk
+parameters:
+  Stack: dev
