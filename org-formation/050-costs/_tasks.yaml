@@ -41,7 +41,7 @@ CostCategoryRulesMicroservice:
   Parameters:
     AcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-finops-cert-CertificateArn']
     DnsName: "cost-rules.finops.sageit.org"
-    ChartOfAccountsURL: "https://mips-api.finops.sageit.org/accounts?enable_code_filter"
+    ChartOfAccountsURL: "https://mips-api.finops.sageit.org/accounts?enable_code_filter&disable_inactive_filter"
     ProgramCodeTagList: "CostCenterOther,CostCenter"
 
 CostCategories:
