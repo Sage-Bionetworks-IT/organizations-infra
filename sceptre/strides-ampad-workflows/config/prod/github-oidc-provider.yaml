@@ -1,8 +1,9 @@
 template:
   type: http
-  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.5/templates/IAM/oidc-provider.yaml
+  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/oidc-provider.yaml
 stack_name: github-oidc-provider
 parameters:
   ThumbprintList:
     - "6938fd4d98bab03faadb97b34396831e3780aea1"
+    - "1c58a3a8518e8759bf075b76b750d4f2df264fcd"
   Url: "https://token.actions.githubusercontent.com"
