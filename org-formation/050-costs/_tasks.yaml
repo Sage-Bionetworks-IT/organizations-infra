@@ -67,5 +67,6 @@ CostNotificationMicroservice:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
   Parameters:
+    AdminEmail: "it@sagebase.org"
     RestrictRecipients: "True"
     ApprovedRecipients: "it@sagebase.org"
