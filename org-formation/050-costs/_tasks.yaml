@@ -68,5 +68,6 @@ CostNotificationMicroservice:
     Region: !Ref primaryRegion
   Parameters:
     AdminEmail: "it@sagebase.org"
+    SkipRecipients: "bgrande@synapse.org,bruno.grande@sagebase.org,kelsey.montgomery@sagebase.org,larsson.omberg@sagebase.org,larssono@synapse.org,tess.thyer@sagebase.org"
     RestrictRecipients: "True"
     ApprovedRecipients: "it@sagebase.org"
