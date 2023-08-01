@@ -68,5 +68,6 @@ CostNotificationMicroservice:
     Region: !Ref primaryRegion
   Parameters:
     AdminEmail: "it@sagebase.org"
-    RestrictRecipients: "True"
-    ApprovedRecipients: "it@sagebase.org"
+    # Uncomment the following lines to disable user reports
+    #RestrictRecipients: "True"
+    #ApprovedRecipients: "it@sagebase.org"
