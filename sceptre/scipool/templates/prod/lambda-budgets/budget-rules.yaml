@@ -8,7 +8,7 @@ teams:
       - 'robert.allaway@sagebase.org'
       - 'sasha.scott@sagebase.org'
   '3469336': # RECOVER Service Catalog External Users
-    amount: '500'
+    amount: '250'
     period: YEAR
     unit: USD
     community_manager_emails:
