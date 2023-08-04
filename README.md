@@ -20,6 +20,8 @@ Deploy resources to master and all member accounts
 
 __Note__: master-profile is a profile that can assume the account's `organizations-admin` role
 
+Refer to [Org-Formation Overview](./org-formation/README.md) for a summary of what org-formation deploys.
+
 ### sceptre
 
 * create a python 3.x [virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
