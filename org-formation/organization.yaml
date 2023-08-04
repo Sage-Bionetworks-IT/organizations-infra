@@ -281,7 +281,7 @@ Organization:
       RootEmail: aws.scipooldev@sagebase.org
       Alias: org-sagebase-scipooldev
       Tags:
-        <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   ScipoolProdAccount:
     Type: OC::ORG::Account
