@@ -137,7 +137,6 @@ Organization:
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
-        - !Ref 8dxfh53Account
         - !Ref BuA2aDwAccount
 
   #------- Accounts -----------
@@ -282,7 +281,7 @@ Organization:
       RootEmail: aws.scipooldev@sagebase.org
       Alias: org-sagebase-scipooldev
       Tags:
-        <<: !Include ./_default_org_tags.yaml
+        <<: !Include ./_platform_org_tags.yaml
 
   ScipoolProdAccount:
     Type: OC::ORG::Account
@@ -621,7 +620,7 @@ Organization:
       Alias: org-sagebase-dccvalidator-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        AccountOwner: larsson.omberg@sagebase.org
+        AccountOwner: anna.greenwood@sagebase.org
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 1000
         budget-alarm-threshold-email-recipient: aws-dccvalidator-dev@sagebase.org
@@ -634,24 +633,12 @@ Organization:
       Alias: org-sagebase-dccvalidator-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        AccountOwner: larsson.omberg@sagebase.org
+        AccountOwner: anna.greenwood@sagebase.org
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 1000
         budget-alarm-threshold-email-recipient: aws-dccvalidator-prod@sagebase.org
 
   #------------ Personal Accounts -----------
-  8dxfh53Account:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-8dxfh53
-      RootEmail: aws.8dxfh53@sagebase.org
-      Alias: org-sagebase-8dxfh53
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        AccountOwner: vijay.yadav@sagebase.org
-        budget-alarm-threshold: 2000
-        budget-alarm-threshold-email-recipient: aws.8dxfh53@sagebase.org
-
   BuA2aDwAccount:
     Type: OC::ORG::Account
     Properties:

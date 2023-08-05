@@ -302,10 +302,6 @@ Parameters:
     Default: '6498b478-20e1-7031-9648-00c20c410359'
 
   #------------- personal AWS accounts ------------------
-  8dxfh53AdminGroup:             #JC aws-8dxfh53-admins
-    Type: String
-    Default: '906769aa66-c75c5f09-8e6e-4e8a-8a1f-cbf13f56d5e7'
-
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
     Default: '14b8f4c8-60e1-70ef-e296-06e88f14d720'
@@ -1510,23 +1506,6 @@ SsoDntDevApplicationManager:
     instanceArn: !Ref instanceArn
     principalId: !Ref dntDevApplicationManagerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
-
-Sso8dxfh53Admin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-8dxfh53-admin'
-  StackDescription: 'SSO: admin role used by 8dxfh53 admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref  8dxfh53Account
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref 8dxfh53AdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoBuA2aDwAdmin:
   Type: update-stacks

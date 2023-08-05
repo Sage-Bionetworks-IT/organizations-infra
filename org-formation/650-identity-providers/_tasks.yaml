@@ -7,12 +7,13 @@ Parameters:
 
 GithubOidcSageBionetworks:
   Type: update-stacks
-  Template: oidc-provider.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/oidc-provider.yaml
   StackName: !Sub ${resourcePrefix}-${appName}
   Parameters:
     Url: "https://token.actions.githubusercontent.com"
     ThumbprintList:
       - "6938fd4d98bab03faadb97b34396831e3780aea1"
+      - "1c58a3a8518e8759bf075b76b750d4f2df264fcd"
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
@@ -21,7 +22,7 @@ GithubOidcSageBionetworks:
 GithubOidcSageBionetworksIt:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -42,7 +43,7 @@ GithubOidcSageBionetworksIt:
 GithubOidcSageBionetworksRecover:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-recover
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -64,7 +65,7 @@ GithubOidcSageBionetworksRecover:
 GithubOidcSageBionetworksDataCuratorInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-data-curator-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -86,7 +87,7 @@ GithubOidcSageBionetworksDataCuratorInfra:
 GithubOidcSageBionetworksSchematicInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -108,7 +109,7 @@ GithubOidcSageBionetworksSchematicInfra:
 GithubOidcSageBionetworksGenieBPCInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-genie-bpc-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -130,7 +131,7 @@ GithubOidcSageBionetworksGenieBPCInfra:
 GithubOidcSageBionetworksDNTInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dnt-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -152,7 +153,7 @@ GithubOidcSageBionetworksDNTInfra:
 GithubOidcSageBionetworksDPEAirflowInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dpe-airflow-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -175,7 +176,7 @@ GithubOidcSageBionetworksDPEAirflowInfra:
 GithubOidcDccValidatorDeploy:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-dccvalidator-deploy
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -203,7 +204,7 @@ GithubOidcDccValidatorDeploy:
 GithubOidcSageBionetworksSecuityHubToJira:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-security-hub-to-jira
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -224,7 +225,7 @@ GithubOidcSageBionetworksSecuityHubToJira:
 GithubOidcCfnTemplateDeploy:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-cfn-template-deploy
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -236,14 +237,19 @@ GithubOidcCfnTemplateDeploy:
           {
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
-              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
+                          "s3:ListParts", "s3:ListMultipartUploads"
+                        ],
               "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9" ]
           },
           {
               "Sid": "AllObjectActions",
               "Effect": "Allow",
-              "Action": [ "s3:PutObject", "s3:GetObject" ],
-              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/aws-infra/*"]
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:DeleteObjects",
+                          "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload",
+                          "s3:CreateMultipartUpload"
+                        ],
+              "Resource": ["arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*"]
           }
         ]
       }
@@ -262,7 +268,7 @@ GithubOidcCfnTemplateDeploy:
 GithubOidcPackerImageDeploy:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-packer-image-deploy
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -287,7 +293,7 @@ GithubOidcPackerImageDeploy:
 GithubOidcSageBionetworksScicompProvisioner:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-scicomp-provisioner
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -307,7 +313,7 @@ GithubOidcSageBionetworksScicompProvisioner:
 GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-scipool-prod-synapse-login-aws-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -327,7 +333,7 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
 GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-scipool-dev-synapse-login-aws-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -347,7 +353,7 @@ GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
 GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-bmgfki-synapse-login-aws-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -367,7 +373,7 @@ GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
 GithubOidcSageBionetworksWebMonorepoInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -408,7 +414,7 @@ GithubOidcSageBionetworksWebMonorepoInfra:
 GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapseprod-web-monorepo-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -449,7 +455,7 @@ GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
 GithubOidcSageBionetworksSynapseR:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: github-oidc-provider-access.njk
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapser
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -475,4 +481,48 @@ GithubOidcSageBionetworksSynapseR:
         branches: ["master", "main", "develop"]
   DefaultOrganizationBinding:
     Account: !Ref SynapseProdAccount
+    Region: us-east-1
+
+GithubOidcWorkflowsDevNextflowInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-workflows-dev-nextflow-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-workflows-dev-nextflow-infra
+    MaxSessionDuration: "7200"
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-Workflows"
+    Repositories:
+      - name: "nextflow-infra"
+        branches: ["dev"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref WorkflowsNextflowDevAccount
+    Region: us-east-1
+
+GithubOidcWorkflowsProdNextflowInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-workflows-prod-nextflow-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-workflows-prod-nextflow-infra
+    MaxSessionDuration: "21600"
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-Workflows"
+    Repositories:
+      - name: "nextflow-infra"
+        branches: ["prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref WorkflowsNextflowProdAccount
     Region: us-east-1

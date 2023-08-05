@@ -28,6 +28,9 @@
                     ]
                 },
                 "Path": "/",
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+                ],
                 "Policies": [
                     {
                         "PolicyName": "SynapseDeploymentPolicy",
@@ -243,7 +246,7 @@
                     "Id": "key-default-1",
                     "Statement": [
                         {
-                            "Sid": "Allow administration of the key",
+                            "Sid": "Deny administration of the key",
                             "Effect": "Deny",
                             "Principal": {
                                 "AWS": "*"
@@ -254,57 +257,12 @@
                             "Resource": "*",
                             "Condition": {
                                 "StringNotLike": {
-                                    "aws:userid": [
-                                        {
-                                            "Fn::Join": [
-                                                "",
-                                                [
-                                                    {
-                                                        "Fn::GetAtt": [
-                                                            "SynapseDeploymentRole",
-                                                            "RoleId"
-                                                        ]
-                                                    },
-                                                    ":*"
-                                                ]
-                                            ]
-                                        },
-                                        {
-                                            "Fn::Join": [
-                                                "",
-                                                [
-                                                    {
-                                                        "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleId"
-                                                    },
-                                                    ":*"
-                                                ]
-                                            ]
-                                        },
-                                        {
-                                            "Ref": "AWS::AccountId"
-                                        },
-                                        {
-                                            "Fn::Join": [
-                                                "",
-                                                [
-                                                    {
-                                                        "Fn::ImportValue": "us-east-1-jumpcloud-idp-SynapseDevDeveloperSamlProviderRoleId"
-                                                    },
-                                                    ":*"
-                                                ]
-                                            ]
-                                        },
-                                        {
-                                            "Fn::Join": [
-                                                "",
-                                                [
-                                                    {
-                                                        "Fn::ImportValue": "us-east-1-jumpcloud-idp-SynapseDevAdminSamlProviderRoleId"
-                                                    },
-                                                    ":*"
-                                                ]
-                                            ]
-                                        }
+                                    "aws:PrincipalArn": [
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
+                                        { "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn" },
+                                        { "Fn::GetAtt": [ "SynapseDeploymentRole", "Arn" ] },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" }
                                     ]
                                 }
                             }
@@ -323,24 +281,9 @@
                                     {
                                         "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn"
                                     },
-                                    {
-                                        "Fn::Join": [
-                                            "",
-                                            [
-                                                "arn:aws:iam::",
-                                                {
-                                                    "Ref": "AWS::AccountId"
-                                                },
-                                                ":root"
-                                            ]
-                                        ]
-                                    },
-                                    {
-                                        "Fn::ImportValue": "us-east-1-jumpcloud-idp-SynapseDevDeveloperSamlProviderRoleArn"
-                                    },
-                                    {
-                                        "Fn::ImportValue": "us-east-1-jumpcloud-idp-SynapseDevAdminSamlProviderRoleArn"
-                                    }
+                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
+                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
+                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" }
                                 ]
                             },
                             "Action": [

@@ -1,2 +1,3 @@
 CloudwatchCloudTrailLogRetentionPeriod: 90
 CostCenter: 'Platform Infrastructure / 990300'
+AccountOwner: 'it@sagebase.org'
