@@ -531,7 +531,6 @@ SsoSynapseDWAthenaUser:
   OrganizationBindings:
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref adminGroup # by default we admit admin's.  Below we 'inherit' this stack for specific user groups
     permissionSetName: 'synapse-dw-athena'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
@@ -556,7 +555,7 @@ SsoSynapseDWDevAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseDevAthenaGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-permission-set-arn' ]
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-user-permission-set-arn' ]
     sessionDuration: 'PT12H'
 
 # Role for a user that can only access AWS Athena in the Synapse Prod account
@@ -579,7 +578,7 @@ SsoSynapseDWProdAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseProdAthenaGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-permission-set-arn' ]
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-user-permission-set-arn' ]
     sessionDuration: 'PT12H'
 
 SsoViewerSupporter:
