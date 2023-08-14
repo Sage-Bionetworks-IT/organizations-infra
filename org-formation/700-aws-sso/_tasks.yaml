@@ -518,7 +518,6 @@ SsoApplicationManager:
 # Role for a user that can only access AWS Athena in the Synapse Dev account
 SsoSynapseDWDevAthenaUser:
   Type: update-stacks
-  DependsOn: SsoSynapseDWAthenaUser
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
@@ -543,7 +542,6 @@ SsoSynapseDWDevAthenaUser:
 # Role for a user that can only access AWS Athena in the Synapse Prod account
 SsoSynapseDWProdAthenaUser:
   Type: update-stacks
-  DependsOn: SsoSynapseDWAthenaUser
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
