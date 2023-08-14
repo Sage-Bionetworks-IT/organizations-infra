@@ -515,26 +515,6 @@ SsoApplicationManager:
       - arn:aws:iam::aws:policy/SecretsManagerReadWrite
       - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
 
-# Role for a user that can only access AWS Athena
-SsoSynapseDWAthenaUser:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-  TemplatingContext:
-    customerManagedPolicies:
-      - Name: SynapseAthenaUserAccessPolicy
-  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-user'
-  StackDescription: 'Access to Synapse Data Warehouse via AWS Athena'
-  TerminationProtection: false
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-  Parameters:
-    instanceArn: !Ref instanceArn
-    permissionSetName: 'synapse-dw-athena'
-    sessionDuration: 'PT12H'
-    masterAccountId: !Ref MasterAccount
-
 # Role for a user that can only access AWS Athena in the Synapse Dev account
 SsoSynapseDWDevAthenaUser:
   Type: update-stacks
@@ -548,15 +528,17 @@ SsoSynapseDWDevAthenaUser:
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref SynapseDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseDevAthenaGroup
+    permissionSetName: 'synapse-dw-athena-dev'
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-user-permission-set-arn' ]
     sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
 
 # Role for a user that can only access AWS Athena in the Synapse Prod account
 SsoSynapseDWProdAthenaUser:
@@ -571,15 +553,17 @@ SsoSynapseDWProdAthenaUser:
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref SynapseProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseProdAthenaGroup
+    permissionSetName: 'synapse-dw-athena-prod'
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-user-permission-set-arn' ]
     sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
 
 SsoViewerSupporter:
   Type: update-stacks
