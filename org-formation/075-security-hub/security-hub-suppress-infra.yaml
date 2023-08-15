@@ -369,6 +369,9 @@ Resources:
               - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
               - 'cis-aws-foundations-benchmark/v/1.4.0/3.7'
+              # SecHub Recommendation: no security group allows unrestricted ingress access to port 22.
+              # Supression Reason: Allow for bastian hosts and testing
+              - 'cis-aws-foundations-benchmark/v/1.2.0/rule/4.1'
             Workflow:
               Status:
               - NEW
