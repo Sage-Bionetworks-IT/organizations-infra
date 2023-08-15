@@ -516,13 +516,13 @@ SsoApplicationManager:
       - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
-SsoSynapseDevAthenaUser:
+SsoSynapseDWDevAthenaUser:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
       - Name: SynapseAthenaUserAccessPolicy
-  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dev-athena-user'
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dw-dev-athena-user'
   StackDescription: 'Access to AWS Athena in Synapse Dev account'
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -534,18 +534,18 @@ SsoSynapseDevAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseDevAthenaGroup
-    permissionSetName: 'athena-user-dev'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
+    permissionSetName: 'synapse-dw-athena-dev'
 
 # Role for a user that can only access AWS Athena in the Synapse Prod account
-SsoSynapseProdAthenaUser:
+SsoSynapseDWProdAthenaUser:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
       - Name: SynapseAthenaUserAccessPolicy
-  StackName: !Sub '${resourcePrefix}-${appName}-synapse-prod-athena-user'
+  StackName: !Sub '${resourcePrefix}-${appName}-synapse-dw-prod-athena-user'
   StackDescription: 'Access to AWS Athena in Synapse Prod account'
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -557,9 +557,9 @@ SsoSynapseProdAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseProdAthenaGroup
-    permissionSetName: 'athena-user-prod'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
+    permissionSetName: 'synapse-dw-athena-prod'
 
 SsoViewerSupporter:
   Type: update-stacks
