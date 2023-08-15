@@ -536,6 +536,7 @@ SsoSynapseDWDevAthenaUser:
     principalId: !Ref synapseDevAthenaGroup
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
+    permissionSetName: 'synapse-dw-athena-dev'
 
 # Role for a user that can only access AWS Athena in the Synapse Prod account
 SsoSynapseDWProdAthenaUser:
@@ -558,6 +559,7 @@ SsoSynapseDWProdAthenaUser:
     principalId: !Ref synapseProdAthenaGroup
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
+    permissionSetName: 'synapse-dw-athena-prod'
 
 SsoViewerSupporter:
   Type: update-stacks
