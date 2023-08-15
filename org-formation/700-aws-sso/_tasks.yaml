@@ -534,7 +534,6 @@ SsoSynapseDWDevAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseDevAthenaGroup
-    permissionSetName: 'synapse-dw-athena-dev'
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-user-permission-set-arn' ]
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
@@ -558,7 +557,6 @@ SsoSynapseDWProdAthenaUser:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref synapseProdAthenaGroup
-    permissionSetName: 'synapse-dw-athena-prod'
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapse-dw-athena-user-permission-set-arn' ]
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
