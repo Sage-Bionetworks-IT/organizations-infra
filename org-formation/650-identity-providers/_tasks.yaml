@@ -259,7 +259,7 @@ GithubOidcCfnTemplateDeploy:
       - name: "aws-infra"
         branches: ["master"]
       - name: "service-catalog-library"
-        branches: ["master"]
+        branches: [ "master", "v1.1.45" ]
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
