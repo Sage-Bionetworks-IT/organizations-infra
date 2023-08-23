@@ -264,6 +264,136 @@ GithubOidcCfnTemplateDeploy:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
 
+# GH OIDC for lambda template deployments in AdminCentral from Sage-Bionetworks
+GithubOidcLambdaTemplateDeploySage:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-lambda-template-deploy-sage
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-lambda-template-deploy-sage
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListMyBuckets",
+              "Effect": "Allow",
+              "Action": [ "s3:ListAllMyBuckets", ],
+              "Resource": [ "arn:aws:s3:::*", ]
+          },
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
+                          "s3:ListParts", "s3:ListMultipartUploads"
+                        ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9",
+                            "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw"
+                          ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:GetObjectAcl", "s3:DeleteObject", "s3:DeleteObjects",
+                          "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload", "s3:CreateMultipartUpload" ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*",
+                            "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw/*"
+                          ]
+          },
+          {
+              "Sid": "SamValidate",
+              "Effect": "Allow",
+              "Action": [ "iam:ListPolicies", ],
+              "Resource": [ "arn:aws:iam:::*", ]
+          },
+          {
+              "Sid": "ManageServerlessRepo",
+              "Effect": "Allow",
+              "Action": [ "serverlessrepo:*", ],
+              "Resource": [ "arn:aws:serverlessrepo:::*", ]
+          },
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "ecmonsen-emorypipeline-lambda-code"
+        branches: ["master"]
+      - name: "s3-synapse-sync"
+        branches: ["master"]
+  DefaultOrganizationBinding:
+    Account: !Ref AdminCentralAccount
+    Region: us-east-1
+
+# GH OIDC for lambda template deployments in AdminCentral from Sage-Bionetworks-IT
+GithubOidcLambdaTemplateDeploySageIT:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-lambda-template-deploy-sageit
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-lambda-template-deploy-sageit
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListMyBuckets",
+              "Effect": "Allow",
+              "Action": [ "s3:ListAllMyBuckets", ],
+              "Resource": [ "arn:aws:s3:::*", ]
+          },
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
+                          "s3:ListParts", "s3:ListMultipartUploads"
+                        ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9",
+                            "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw"
+                          ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:GetObjectAcl", "s3:DeleteObject", "s3:DeleteObjects",
+                          "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload", "s3:CreateMultipartUpload" ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*",
+                            "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw/*"
+                          ]
+          },
+          {
+              "Sid": "SamValidate",
+              "Effect": "Allow",
+              "Action": [ "iam:ListPolicies", ],
+              "Resource": [ "arn:aws:iam:::*", ]
+          },
+          {
+              "Sid": "ManageServerlessRepo",
+              "Effect": "Allow",
+              "Action": [ "serverlessrepo:*", ],
+              "Resource": [ "arn:aws:serverlessrepo:::*", ]
+          },
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "lambda-*"
+        branches: ["master"]
+      - name: "cfn-cr-*"
+        branches: ["master"]
+      - name: "cfn-macro-*"
+        branches: ["master"]
+      - name: "cfn-s3objects-macro"
+        branches: ["master"]
+  DefaultOrganizationBinding:
+    Account: !Ref AdminCentralAccount
+    Region: us-east-1
+
 # GH OIDC for packer to deploy AMI images to AWS imagecentral account
 GithubOidcPackerImageDeploy:
   Type: update-stacks
