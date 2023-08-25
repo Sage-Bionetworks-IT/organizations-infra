@@ -42,7 +42,7 @@ CostCategoryRulesMicroservice:
   Parameters:
     AcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-finops-cert-CertificateArn']
     DnsName: "cost-rules.finops.sageit.org"
-    ChartOfAccountsURL: "https://mips-api.finops.sageit.org/accounts?enable_code_filter&disable_inactive_filter"
+    ChartOfAccountsURL: "https://mips-api.finops.sageit.org/accounts?show_inactive_codes=on"
     ProgramCodeTagList: "CostCenterOther,CostCenter"
 
 # The underlying template uses AWS::Include, but CloudFormation will not detect changes in the included
