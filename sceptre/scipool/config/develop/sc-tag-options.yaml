@@ -10,8 +10,10 @@ dependencies:
   - "develop/sc-portfolio-s3-basic.yaml"
   - "develop/sc-portfolio-scheduled-jobs.yaml"
 sceptre_user_data:
+  # We prioritize the following program codes to ensure they are in the Service Catalog drop-down menu:
+  # 122500: MGH RECOVER
   CostCenters: !from_json
-    - !request 'https://mips-api.finops.sageit.org/tags?limit=25&enable_other_code=true'
+    - !request 'https://mips-api.finops.sageit.org/tags?limit=25&show_other_code=true&priority_codes=122500'
   ProductIDs:
     - !stack_output_external sc-portfolio-ec2::SCEC2portfolioId
     - !stack_output_external sc-portfolio-s3-basic::SCS3portfolioId
