@@ -514,6 +514,21 @@ SsoApplicationManager:
       - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
       - arn:aws:iam::aws:policy/SecretsManagerReadWrite
       - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ExecuteEcsTasks",
+            "Effect": "Allow",
+            "Action": [
+              "ecs:RunTask",
+              "ecs:StartTask"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
 SsoSynapseDWDevAthenaUser:
