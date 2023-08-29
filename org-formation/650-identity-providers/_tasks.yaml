@@ -388,7 +388,7 @@ GithubOidcLambdaTemplateDeploySageIT:
         branches: ["master"]
       - name: "cfn-macro-*"
         branches: ["master"]
-      - name: "cfn-s3objects-macro"
+      - name: "cfn-*-macro"
         branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
