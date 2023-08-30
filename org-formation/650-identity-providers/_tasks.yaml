@@ -313,7 +313,7 @@ GithubOidcLambdaTemplateDeploySage:
               "Effect": "Allow",
               "Action": [ "serverlessrepo:*" ],
               "Resource": [ "arn:aws:serverlessrepo:::*" ]
-          },
+          }
         ]
       }
   TemplatingContext:
@@ -376,7 +376,7 @@ GithubOidcLambdaTemplateDeploySageIT:
               "Effect": "Allow",
               "Action": [ "serverlessrepo:*" ],
               "Resource": [ "arn:aws:serverlessrepo:::*" ]
-          },
+          }
         ]
       }
   TemplatingContext:
