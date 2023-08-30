@@ -280,8 +280,8 @@ GithubOidcLambdaTemplateDeploySage:
           {
               "Sid": "ListMyBuckets",
               "Effect": "Allow",
-              "Action": [ "s3:ListAllMyBuckets", ],
-              "Resource": [ "arn:aws:s3:::*", ]
+              "Action": [ "s3:ListAllMyBuckets" ],
+              "Resource": [ "arn:aws:s3:::*" ]
           },
           {
               "Sid": "ListObjectsInBucket",
@@ -305,14 +305,14 @@ GithubOidcLambdaTemplateDeploySage:
           {
               "Sid": "SamValidate",
               "Effect": "Allow",
-              "Action": [ "iam:ListPolicies", ],
-              "Resource": [ "arn:aws:iam:::*", ]
+              "Action": [ "iam:ListPolicies" ],
+              "Resource": [ "arn:aws:iam:::*" ]
           },
           {
               "Sid": "ManageServerlessRepo",
               "Effect": "Allow",
-              "Action": [ "serverlessrepo:*", ],
-              "Resource": [ "arn:aws:serverlessrepo:::*", ]
+              "Action": [ "serverlessrepo:*" ],
+              "Resource": [ "arn:aws:serverlessrepo:::*" ]
           },
         ]
       }
@@ -343,8 +343,8 @@ GithubOidcLambdaTemplateDeploySageIT:
           {
               "Sid": "ListMyBuckets",
               "Effect": "Allow",
-              "Action": [ "s3:ListAllMyBuckets", ],
-              "Resource": [ "arn:aws:s3:::*", ]
+              "Action": [ "s3:ListAllMyBuckets" ],
+              "Resource": [ "arn:aws:s3:::*" ]
           },
           {
               "Sid": "ListObjectsInBucket",
@@ -368,14 +368,14 @@ GithubOidcLambdaTemplateDeploySageIT:
           {
               "Sid": "SamValidate",
               "Effect": "Allow",
-              "Action": [ "iam:ListPolicies", ],
-              "Resource": [ "arn:aws:iam:::*", ]
+              "Action": [ "iam:ListPolicies" ],
+              "Resource": [ "arn:aws:iam:::*" ]
           },
           {
               "Sid": "ManageServerlessRepo",
               "Effect": "Allow",
-              "Action": [ "serverlessrepo:*", ],
-              "Resource": [ "arn:aws:serverlessrepo:::*", ]
+              "Action": [ "serverlessrepo:*" ],
+              "Resource": [ "arn:aws:serverlessrepo:::*" ]
           },
         ]
       }
