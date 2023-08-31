@@ -511,7 +511,7 @@ SsoApplicationManager:
     masterAccountId: !Ref MasterAccount
     managedPolicies:
       - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
-      - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
+      - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
       - arn:aws:iam::aws:policy/SecretsManagerReadWrite
       - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
     inlinePolicy: >-
