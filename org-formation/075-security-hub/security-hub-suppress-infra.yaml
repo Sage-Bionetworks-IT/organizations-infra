@@ -403,6 +403,8 @@ Resources:
                 - prefix: 'arn:aws:s3:::bootstrap-awss3cloudformationbucket-'
                 - prefix: 'arn:aws:s3:::essentials-awss3lambdaartifactsbucket-'
                 - prefix: 'arn:aws:s3:::cf-templates-'
+                - prefix: 'arn:aws:s3:::cloudformationmanageduploadinfra'
+                - prefix: 'arn:aws:s3:::cost-and-usage-reports.sagebase.org'
                 # This should only match with 2.1.5.1
                 - 'AWS::::Account:140124849929'
             GeneratorId:
