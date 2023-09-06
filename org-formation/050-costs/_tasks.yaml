@@ -15,7 +15,7 @@ AnomalyDetectorService:
 # Deploy a general-use microservice for interacting with MIPS in admincentral
 MipsMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-mips-api/master/lambda-mips-api.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-mips-api/1.0.0/lambda-mips-api.yaml'
   StackName: !Sub '${resourcePrefix}-mips-microservice'
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
@@ -33,7 +33,7 @@ MipsMicroservice:
 # Deploy a microservice for generating cost category rules
 CostCategoryRulesMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-cost-rules/master/lambda-finops-cost-rules.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-cost-rules/1.0.0/lambda-finops-cost-rules.yaml'
   StackName: !Sub '${resourcePrefix}-rules-microservice'
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
@@ -61,7 +61,7 @@ CostCategories:
 # use the payer account so that cost explorer aggregates member account data
 CostNotificationMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-email-totals/master/lambda-finops-email-totals.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-email-totals/1.0.0/lambda-finops-email-totals.yaml'
   StackName: !Sub '${resourcePrefix}-cost-notifications'
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
