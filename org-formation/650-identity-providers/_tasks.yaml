@@ -656,3 +656,44 @@ GithubOidcWorkflowsProdNextflowInfra:
     Account:
       - !Ref WorkflowsNextflowProdAccount
     Region: us-east-1
+
+GithubOidcSageBionetworksMTBSageIT:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-mtb-sageit
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-mtb-sageit
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
+              "Resource": [ "arn:aws:s3:::staging.studies.mobiletoolbox.org", "arn:aws:s3:::prod.studies.mobiletoolbox.org" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
+              "Resource": ["arn:aws:s3:::staging.studies.mobiletoolbox.org/*", "arn:aws:s3:::prod.studies.mobiletoolbox.org/*" ]
+          },
+          {
+              "Sid": "CloudfrontActions",
+              "Effect": "Allow",
+              "Action": [ "cloudfront:CreateInvalidation" ],
+              "Resource": ["arn:aws:cloudfront::797640923903:distribution/E2H7LCB4G4JGGA", "arn:aws:cloudfront::797640923903:distribution/E1NB88XGDVLVG9" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "mtb"
+        branches: ["main", "feature"]
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+    Region: us-east-1
