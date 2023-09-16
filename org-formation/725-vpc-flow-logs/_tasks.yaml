@@ -1,0 +1,34 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'vpc-flow-logs'
+
+# Create a central S3 bucket in LogCentral account
+VpcFlowLogsBucket:
+  Type: update-stacks
+  Template: bucket.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bucket'
+  StackDescription: "VPC flow logs bucket"
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref LogCentralAccount
+  Parameters:
+    EnableDataLifeCycle: "Enabled"
+    LifecycleDataStorageClass: "Glacier"
+    LifecycleDataExpiration: "360"
+
+# Use AWS config to enable VPC flow logs and configure it to send logs the central S3 bucket
+AutoEnableVpcFlowLogs:
+  Type: update-stacks
+  Template: aws-config-rule.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-remediate'
+  StackDescription: Use AWS config to automatically enable VPC flow logs
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+  Parameters:
+    CentralizedS3LoggingBucket: !CopyValue [!Sub '${resourcePrefix}-${appName}-bucket-BucketName', !Ref LogCentralAccount]

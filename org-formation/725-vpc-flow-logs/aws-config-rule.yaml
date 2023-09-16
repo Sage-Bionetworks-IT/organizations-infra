@@ -1,0 +1,107 @@
+# this template is from https://aws.amazon.com/blogs/mt/how-to-enable-vpc-flow-logs-automatically-using-aws-config-rules/
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'This template will deploy an AWS Config rule to automatically remediate VPC Flow Logs enablement'
+Parameters:
+  CustomConfigRuleName:
+    Description: Name that you want to give to the AWS Config Rule.
+    Type: String
+    Default: ConfigRuleForEnableVpcFlowLogs
+  TrafficType:
+    Type: String
+    AllowedValues:
+      - ACCEPT
+      - REJECT
+      - ALL
+    Description: The value for the VPC Flow Logs traffic type.
+    Default: ALL
+  MaxExecutionFrequency:
+    Type: String
+    AllowedValues:
+      - One_Hour
+      - Three_Hours
+      - Six_Hours
+      - Twelve_Hours
+      - TwentyFour_Hours
+    Description: The maximum frequency with which AWS Config runs evaluations for a rule.
+    Default: One_Hour
+  CentralizedS3LoggingBucket:
+    Description: Name of the S3 bucket in the logging account to send VPC Flow Logs.
+    Type: String
+Resources:
+  ConfigRemediationRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service:
+                - 'ssm.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      Path: '/'
+      Policies:
+        - PolicyName: aws-config-remediate-vpc-flow-logs-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - ec2:CreateFlowLogs
+                  - logs:CreateLogDelivery
+                  - logs:DeleteLogDelivery
+                Resource: arn:aws:logs:*:*:*
+  ConfigRuleForEnableVpcFlowLogs:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: !Ref CustomConfigRuleName
+      Description: ConfigPermissionToInvokeAnAutomaticRemediation
+      InputParameters:
+        trafficType: !Ref TrafficType
+      MaximumExecutionFrequency: !Ref MaxExecutionFrequency
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::EC2::VPC
+      Source:
+        Owner: AWS
+        SourceIdentifier: VPC_FLOW_LOGS_ENABLED
+  VpcFlowLogsRemediationConfiguration:
+    DependsOn: ConfigRuleForEnableVpcFlowLogs
+    Type: AWS::Config::RemediationConfiguration
+    Properties:
+        ConfigRuleName: !Ref CustomConfigRuleName
+        Automatic: true
+        MaximumAutomaticAttempts: 5 #minutes
+        RetryAttemptSeconds: 50 #seconds
+        ResourceType: AWS::EC2::VPC
+        Parameters:
+          VPCIds:
+            ResourceValue:
+              Value: 'RESOURCE_ID'
+          LogDestinationType:
+            StaticValue:
+              Values:
+                - s3
+          LogDestinationArn:
+            StaticValue:
+              Values:
+                - !Sub 'arn:aws:s3:::${CentralizedS3LoggingBucket}'
+          TrafficType:
+            StaticValue:
+              Values:
+                - !Ref TrafficType
+          AutomationAssumeRole:
+            StaticValue:
+              Values:
+                - !GetAtt ConfigRemediationRole.Arn
+        TargetId: AWS-EnableVPCFlowLogs
+        TargetType: SSM_DOCUMENT
+        TargetVersion: 1
+Outputs:
+  ConfigRuleForEnableVpcFlowLogsArn:
+    Description: Arn of the AWS Config Rule to enable VPC Flow Logs
+    Value: !GetAtt ConfigRuleForEnableVpcFlowLogs.Arn
+  ConfigRemediationRoleArn:
+    Description: Arn of the IAM Role to perform auto-emediation
+    Value: !GetAtt ConfigRemediationRole.Arn
