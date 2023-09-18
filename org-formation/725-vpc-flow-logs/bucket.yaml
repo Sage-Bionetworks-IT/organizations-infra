@@ -90,8 +90,8 @@ Outputs:
   BucketName:
     Value: !Ref Bucket
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-Bucket'
+      Name: !Sub '${AWS::StackName}-BucketName'
   BucketArn:
     Value: !GetAtt Bucket.Arn
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-BucketArn'
+      Name: !Sub '${AWS::StackName}-BucketArn'

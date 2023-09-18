@@ -20,7 +20,7 @@ VpcFlowLogsBucket:
     LifecycleDataStorageClass: "Glacier"
     LifecycleDataExpiration: "360"
 
-# Use AWS config to enable VPC flow logs and configure it to send logs the central S3 bucket
+# Use AWS config to enable VPC flow logs and configure it to send logs to the central S3 bucket
 AutoEnableVpcFlowLogs:
   Type: update-stacks
   Template: aws-config-rule.yaml
