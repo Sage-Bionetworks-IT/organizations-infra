@@ -17,11 +17,12 @@ VpcFlowLogsBucket:
     Account: !Ref LogCentralAccount
   Parameters:
     EnableDataLifeCycle: "Enabled"
-    LifecycleDataStorageClass: "Glacier"
+    LifecycleDataStorageClass: "GLACIER"
     LifecycleDataExpiration: "360"
 
 # Use AWS config to enable VPC flow logs and configure it to send logs to the central S3 bucket
 AutoEnableVpcFlowLogs:
+  DependsOn: VpcFlowLogsBucket
   Type: update-stacks
   Template: aws-config-rule.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-remediate'
