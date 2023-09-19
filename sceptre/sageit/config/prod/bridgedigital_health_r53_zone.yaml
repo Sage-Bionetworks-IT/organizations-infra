@@ -1,6 +1,0 @@
-template:
-  type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.7.6/R53-hostedzone.yaml
-stack_name: bridgedigital_health_hosted_zone
-parameters:
-  DnsDomainName: bridgedigital.health
