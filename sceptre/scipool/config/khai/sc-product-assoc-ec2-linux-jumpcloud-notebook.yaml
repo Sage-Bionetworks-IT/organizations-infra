@@ -1,0 +1,9 @@
+template:
+  path: "sc-ec2-action-associations.yaml"
+stack_name: "khai-sc-product-assoc-ec2-linux-jumpcloud-notebook"
+stack_tags:
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "khai/khai-sc-product-ec2-linux-jumpcloud-notebook.yaml"
+parameters:
+  ProductId: !stack_output_external sc-product-ec2-linux-jumpcloud-notebook::ProductId

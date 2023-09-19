@@ -1,0 +1,18 @@
+# Tag options for internal Sage teams
+template:
+  path: "sc-tag-options.j2"
+stack_name: "khai-sc-tag-options"
+stack_tags:
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "khai/khai-sc-portfolio-ec2.yaml"
+  - "khai/khai-sc-portfolio-ec2-external.yaml"
+  - "khai/khai-sc-portfolio-s3-basic.yaml"
+  - "khai/khai-sc-portfolio-scheduled-jobs.yaml"
+sceptre_user_data:
+  CostCenters: !from_json
+    - !request 'https://mips-api.finops.sageit.org/tags?limit=25&enable_other_code=true'
+  ProductIDs:
+    - !stack_output_external sc-portfolio-ec2::SCEC2portfolioId
+    - !stack_output_external sc-portfolio-s3-basic::SCS3portfolioId
+    - !stack_output_external sc-portfolio-scheduled-jobs::SCScheduledJobsPortfolioId

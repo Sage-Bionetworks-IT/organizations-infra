@@ -1,0 +1,9 @@
+template:
+  path: "sc-portfolio-ec2-external.yaml"
+stack_name: "khai-sc-portfolio-ec2-external"
+#dependencies:
+#  - "khai/sc-ec2vpc-launchrole.yaml"
+#  - "khai/sc-enduser-iam.yaml"
+parameters:
+  PorfolioName: "Collaborator EC2 Porfolio"
+  PorfolioDescription: "EC2 Products for Sage Bionetworks collaborators"
