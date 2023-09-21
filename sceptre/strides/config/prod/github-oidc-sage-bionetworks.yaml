@@ -14,3 +14,7 @@ sceptre_user_data:
   Repositories:
     - name: "synapse-login-aws-infra"
       branches: ["dev", "prod"]
+    - name: "synapse-login-aws-infra"
+      branches: ["develop", "prod"]
+    - name: "synapse-login-scipool"
+      branches: ["develop", "prod"]
