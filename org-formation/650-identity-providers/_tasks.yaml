@@ -456,6 +456,8 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
     Repositories:
       - name: "synapse-login-aws-infra"
         branches: ["prod"]
+      - name: "synapse-login-scipool"
+        branches: ["prod"]
   DefaultOrganizationBinding:
     Account: !Ref ScipoolProdAccount
     Region: us-east-1
@@ -476,6 +478,8 @@ GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
     Repositories:
       - name: "synapse-login-aws-infra"
         branches: ["develop"]
+      - name: "synapse-login-scipool"
+        branches: ["develop"]
   DefaultOrganizationBinding:
     Account: !Ref ScipoolDevAccount
     Region: us-east-1
@@ -495,7 +499,9 @@ GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "synapse-login-aws-infra"
-        branches: ["prod"]
+        branches: ["bmgfki"]
+      - name: "synapse-login-scipool"
+        branches: ["bmgfki"]
   DefaultOrganizationBinding:
     Account: !Ref BmgfkiAccount
     Region: us-east-1
