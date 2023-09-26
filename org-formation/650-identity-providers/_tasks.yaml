@@ -415,7 +415,7 @@ GithubOidcPackerImageDeploy:
       - name: "packer-base-ubuntu-jammy"
         branches: ["master"]
       - name: "packer-rstudio"
-        branches: ["master", "v2.1.3"]
+        branches: ["master"]
       - name: "packer-amazonlinux-docker"
         branches: ["master"]
   DefaultOrganizationBinding:
