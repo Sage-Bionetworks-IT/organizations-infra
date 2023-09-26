@@ -416,6 +416,8 @@ GithubOidcPackerImageDeploy:
         branches: ["master"]
       - name: "packer-rstudio"
         branches: ["master"]
+      - name: "packer-amazonlinux-docker"
+        branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
     Region: us-east-1
@@ -459,7 +461,9 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
       - name: "synapse-login-scipool"
         branches: ["prod"]
   DefaultOrganizationBinding:
-    Account: !Ref ScipoolProdAccount
+    Account:
+      - !Ref ScipoolProdAccount
+      - !Ref BmgfkiAccount
     Region: us-east-1
 
 GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
@@ -482,28 +486,6 @@ GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
         branches: ["develop"]
   DefaultOrganizationBinding:
     Account: !Ref ScipoolDevAccount
-    Region: us-east-1
-
-GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
-  Type: update-stacks
-  DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-bmgfki-synapse-login-aws-infra
-  Parameters:
-    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-bmgfki-synapse-login-aws-infra
-    ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AdministratorAccess"
-      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
-  TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks"
-    Repositories:
-      - name: "synapse-login-aws-infra"
-        branches: ["bmgfki"]
-      - name: "synapse-login-scipool"
-        branches: ["bmgfki"]
-  DefaultOrganizationBinding:
-    Account: !Ref BmgfkiAccount
     Region: us-east-1
 
 GithubOidcSageBionetworksWebMonorepoInfra:
