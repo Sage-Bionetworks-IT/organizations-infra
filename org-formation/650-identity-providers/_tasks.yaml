@@ -416,6 +416,8 @@ GithubOidcPackerImageDeploy:
         branches: ["master"]
       - name: "packer-rstudio"
         branches: ["master", "v2.1.3"]
+      - name: "packer-amazonlinux-docker"
+        branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
     Region: us-east-1
