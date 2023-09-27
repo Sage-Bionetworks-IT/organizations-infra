@@ -661,19 +661,37 @@ GithubOidcSageBionetworksMTBSageIT:
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
               "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
-              "Resource": [ "arn:aws:s3:::staging.studies.mobiletoolbox.org", "arn:aws:s3:::prod.studies.mobiletoolbox.org" ]
+              "Resource": [
+                "arn:aws:s3:::staging.studies.mobiletoolbox.org",
+                "arn:aws:s3:::prod.studies.mobiletoolbox.org",
+                "arn:aws:s3:::staging-arcdashboard-sagebionetwork-websitebucket-bd4g741peby9",
+                "arn:aws:s3:::prod-arcdashboard-sagebionetworks-o-websitebucket-1f1fae0cp8k4e",
+                "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl"
+              ]
           },
           {
               "Sid": "AllObjectActions",
               "Effect": "Allow",
               "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
-              "Resource": ["arn:aws:s3:::staging.studies.mobiletoolbox.org/*", "arn:aws:s3:::prod.studies.mobiletoolbox.org/*" ]
+              "Resource": [
+                "arn:aws:s3:::staging.studies.mobiletoolbox.org/*",
+                "arn:aws:s3:::prod.studies.mobiletoolbox.org/*",
+                "arn:aws:s3:::staging-arcdashboard-sagebionetwork-websitebucket-bd4g741peby9/*",
+                "arn:aws:s3:::prod-arcdashboard-sagebionetworks-o-websitebucket-1f1fae0cp8k4e/*",
+                "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl/*"
+              ]
           },
           {
               "Sid": "CloudfrontActions",
               "Effect": "Allow",
               "Action": [ "cloudfront:CreateInvalidation" ],
-              "Resource": ["arn:aws:cloudfront::797640923903:distribution/E2H7LCB4G4JGGA", "arn:aws:cloudfront::797640923903:distribution/E1NB88XGDVLVG9" ]
+              "Resource": [
+                "arn:aws:cloudfront::797640923903:distribution/E2H7LCB4G4JGGA",
+                "arn:aws:cloudfront::797640923903:distribution/E1NB88XGDVLVG9",
+                "arn:aws:cloudfront::797640923903:distribution/EU2UCL46LHZST",
+                "arn:aws:cloudfront::797640923903:distribution/E4NMTZ3W9RYFH",
+                "arn:aws:cloudfront::797640923903:distribution/E3S5F61K1105VI"
+              ]
           }
         ]
       }
@@ -681,7 +699,7 @@ GithubOidcSageBionetworksMTBSageIT:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "mtb"
-        branches: ["main", "feature"]
+        branches: [ "main", "feature", "staging", "production" ]
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
     Region: us-east-1
