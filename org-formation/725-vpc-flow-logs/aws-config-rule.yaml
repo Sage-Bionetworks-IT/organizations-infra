@@ -51,7 +51,7 @@ Resources:
                   - ec2:CreateFlowLogs
                   - logs:CreateLogDelivery
                   - logs:DeleteLogDelivery
-                Resource: arn:aws:logs:*:*:*
+                Resource: '*'
   ConfigRuleForEnableVpcFlowLogs:
     Type: AWS::Config::ConfigRule
     Properties:
