@@ -414,6 +414,7 @@ SsoAuditor:
       - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AmazonMacieReadOnlyAccess'
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
 
