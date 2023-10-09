@@ -8,4 +8,4 @@ parameters:
   KmsInfraKeyPrincipals:
     - "arn:aws:iam::751556145034:root"
     - !stack_output_external "bootstrap::AWSIAMSsmParamLambdaExecutionRoleArn"
-    - !stack_output_external "sagebase-github-oidc-sage-bionetworks-it::ProviderRoleArn"
+    - !stack_output_external "github-oidc-sage-bionetworks-it-ProviderRoleArn"
