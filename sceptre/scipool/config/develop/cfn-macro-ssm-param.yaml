@@ -5,5 +5,5 @@ stack_name: "cfn-macro-ssm-param"
 dependencies:
   - "develop/bootstrap.yaml"
 parameters:
-  CfnExportLambdaExecutionRole: "us-east-1-bootstrap-SsmParamLambdaExecutionRoleArn"
-  CfnExportLambdaServiceRoleArn: "us-east-1-bootstrap-CfServiceRoleArn"
+  CfnExportLambdaExecutionRole: !stack_output_external "bootstrap::AWSIAMSsmParamLambdaExecutionRole"
+  CfnExportLambdaServiceRoleArn: !stack_output_external "bootstrap::AWSIAMCfServiceRole"
