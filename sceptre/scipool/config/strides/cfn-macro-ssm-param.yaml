@@ -5,5 +5,5 @@ stack_name: "cfn-macro-ssm-param"
 dependencies:
   - "strides/bootstrap.yaml"
 parameters:
-  LambdaExecutionRoleArn: !stack_output_external "bootstrap::AWSIAMSsmParamLambdaExecutionRole"
-  LambdaServiceRoleArn: !stack_output_external "bootstrap::AWSIAMCfServiceRole"
+  LambdaExecutionRoleArn: !stack_output_external "bootstrap::AWSIAMSsmParamLambdaExecutionRoleArn"
+  LambdaServiceRoleArn: !stack_output_external "bootstrap::AWSIAMCfServiceRoleArn"
