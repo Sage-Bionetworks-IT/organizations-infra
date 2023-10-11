@@ -1,4 +1,6 @@
-Description: Setup cross account IAM access.  Give user in another AWS account access to resources.
+Description: >
+  Setup cross account IAM access for Snowflake.
+  See https://docs.snowflake.com/en/user-guide/data-load-s3-config-storage-integration
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   SnowflakeAccountArn:
@@ -30,7 +32,7 @@ Resources:
                   "Resource": "arn:aws:s3:::prod.datawarehouse.sagebase.org",
                   "Condition": {
                       "StringLike": {
-                        "s3:prefix": [ "warehouse/*" ]                            
+                        "s3:prefix": [ "warehouse/*" ]
                       }
                   }
               }
@@ -58,4 +60,4 @@ Outputs:
   SnowflakeServiceRoleArn:
     Value: !GetAtt SnowflakeServiceRole.Arn
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-SnowflakeServiceRoleArn'
+      Name: !Sub '${AWS::StackName}-SnowflakeServiceRoleArn'
