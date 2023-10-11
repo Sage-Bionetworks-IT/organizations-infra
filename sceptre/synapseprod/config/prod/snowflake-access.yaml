@@ -1,0 +1,6 @@
+template:
+  path: snowflake-access.yaml
+stack_name: snowflake-accesss
+parameters:
+  SnowflakeAccountArn: !ssm /infra/SnowflakeAccountArn
+  SnowflakeAccountExternalId: !ssm /infra/SnowflakeAccountExternalId
