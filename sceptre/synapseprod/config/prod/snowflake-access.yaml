@@ -2,5 +2,5 @@ template:
   path: snowflake-access.yaml
 stack_name: snowflake-accesss
 parameters:
-  SnowflakeAccountArn: "arn:aws:iam::449435941126:user/someUser"
+  SnowflakeAccountArn: "arn:aws:iam::449435941126:user/x.schildwachter@sagebase.org"
   SnowflakeAccountExternalId: !ssm /infra/SnowflakeAccountExternalId
