@@ -270,8 +270,21 @@ SynapseAthenaUserAccessPolicy:
                 "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:catalog",
                 "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:database/*warehouse",
                 "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:table/*warehouse/*",
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:database/scratch",
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:table/scratch/*",
                 "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:database/*firehoselogs",
                 "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:table/*firehoselogs/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "glue:CreateTable"
+            ],
+            "Resource": [
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:catalog",
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:database/scratch",
+                "arn:aws:glue:us-east-1:${CurrentAccount.AccountId}:table/scratch/*"
             ]
         },
         {
@@ -282,12 +295,16 @@ SynapseAthenaUserAccessPolicy:
                 "athena:StopQueryExecution",
                 "athena:GetQueryResults",
                 "athena:GetWorkGroup",
+                "athena:CreateWorkGroup",
+                "athena:CreateNamedQuery",
+                "athena:ListNamedQueries",
+                "athena:BatchGetNamedQuery",
                 "athena:GetQueryResultsStream",
                 "athena:GetQueryRuntimeStatistics",
                 "athena:ListQueryExecutions"
             ],
             "Resource": [
-                "arn:aws:athena:us-east-1:${CurrentAccount.AccountId}:workgroup/primary"
+                "arn:aws:athena:us-east-1:${CurrentAccount.AccountId}:workgroup/*"
             ]
         },
             {
