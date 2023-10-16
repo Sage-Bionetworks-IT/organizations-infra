@@ -7,6 +7,6 @@ dependencies:
   - "strides/bootstrap.yaml"
 parameters:
   AdminRoleArns:
-    - !stack_output_external bootstrap::AWSIAMCfServiceRoleArn
+    - !stack_output_external "github-oidc-sage-bionetworks-it::ProviderRoleArn"
     - "arn:aws:sts::423819316185:assumed-role/strides-admin/khai.do@sagebase.org"
     - "arn:aws:sts::423819316185:assumed-role/strides-admin/x.schildwachter@sagebase.org"

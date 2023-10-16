@@ -6,4 +6,4 @@ dependencies:
   - "strides/bootstrap.yaml"
 parameters:
   LambdaExecutionRoleArn: !stack_output_external "bootstrap::AWSIAMSsmParamLambdaExecutionRoleArn"
-  LambdaServiceRoleArn: !stack_output_external "bootstrap::AWSIAMCfServiceRoleArn"
+  LambdaServiceRoleArn: !stack_output_external "github-oidc-sage-bionetworks-it::ProviderRoleArn"
