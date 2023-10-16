@@ -1,0 +1,5 @@
+template:
+  path: SynapseCMK-template.json
+stack_name: synapse-prod-cmk
+parameters:
+  Stack: prod
