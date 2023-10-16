@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/0.1.0/cfn-cr-alb-rule.yaml
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/0.1.2/cfn-cr-alb-rule.yaml
 stack_name: cfn-cr-alb-rule
 stack_tags:
   OwnerEmail: "it@sagebase.org"

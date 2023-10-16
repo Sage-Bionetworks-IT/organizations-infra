@@ -132,7 +132,7 @@ jobs:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
-      role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetwo-ProviderRoleorganization-3R0K18XHN449"
+      role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/strides"
   sceptre-strides-ampad-workflows:
     if: github.ref == 'refs/heads/master'
@@ -161,7 +161,7 @@ jobs:
     needs: [org-formation, sceptre-strides]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
-      role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetwo-ProviderRoleorganization-3R0K18XHN449"
+      role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/scipool"
       sceptre-command: "sceptre launch strides --prune --yes"
   sceptre-bmgfki:

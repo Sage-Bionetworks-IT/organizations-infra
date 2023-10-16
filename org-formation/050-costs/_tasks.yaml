@@ -15,7 +15,7 @@ AnomalyDetectorService:
 # Deploy a general-use microservice for interacting with MIPS in admincentral
 MipsMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-mips-api/master/lambda-mips-api.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-mips-api/1.0.0/lambda-mips-api.yaml'
   StackName: !Sub '${resourcePrefix}-mips-microservice'
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
@@ -30,9 +30,10 @@ MipsMicroservice:
       - !Sub 'arn:aws:iam::${CurrentAccount.AccountId}:root'
       - 'arn:aws:iam::745159704268:role/github-oidc-sage-bionetwo-ProviderRoleorganization-93H11ERK3F4N'
 
+# Deploy a microservice for generating cost category rules
 CostCategoryRulesMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-cost-rules/master/lambda-finops-cost-rules.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-cost-rules/1.0.0/lambda-finops-cost-rules.yaml'
   StackName: !Sub '${resourcePrefix}-rules-microservice'
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
@@ -41,13 +42,32 @@ CostCategoryRulesMicroservice:
   Parameters:
     AcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-finops-cert-CertificateArn']
     DnsName: "cost-rules.finops.sageit.org"
-    ChartOfAccountsURL: "https://mips-api.finops.sageit.org/accounts?enable_code_filter"
+    ChartOfAccountsURL: "https://mips-api.finops.sageit.org/accounts?show_inactive_codes=on"
     ProgramCodeTagList: "CostCenterOther,CostCenter"
 
+# The underlying template uses AWS::Include, but CloudFormation will not detect changes in the included
+# template unless there are also changes to categories.yaml; force deployment of the stack to apply any
+# changes in the included file.
 CostCategories:
   Type: update-stacks
   Template: categories.yaml
   StackName: !Sub '${resourcePrefix}-cost-categories'
+  ForceDeploy: true
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
+
+# Deploy a lambda to notify users of their total cloud spend via SES;
+# use the payer account so that cost explorer aggregates member account data
+CostNotificationMicroservice:
+  Type: update-stacks
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-email-totals/1.0.0/lambda-finops-email-totals.yaml'
+  StackName: !Sub '${resourcePrefix}-cost-notifications'
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    AdminEmail: "it@sagebase.org"
+    # Uncomment the following lines to disable user reports
+    #RestrictRecipients: "True"
+    #ApprovedRecipients: "it@sagebase.org"

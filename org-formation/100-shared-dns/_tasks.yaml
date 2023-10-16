@@ -104,3 +104,15 @@ SagebioApiZoneAcmCertificate:
       - !Ref GenieProdAccount
   Parameters:
     DnsDomainName: "api.sagebionetworks.org"
+
+# Hosted zone for 'bridgedigital.health'
+BridgeDigitalHealhHostedZone:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/R53-hostedzone.yaml
+  StackName: !Sub '${resourcePrefix}-bridgedigitalhealth-zone'
+  StackDescription: Create a hosted zone for bridgedigital.health
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    DnsDomainName: "bridgedigital.health"

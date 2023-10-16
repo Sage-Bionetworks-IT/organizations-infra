@@ -369,9 +369,15 @@ Resources:
               - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
               - 'cis-aws-foundations-benchmark/v/1.4.0/3.7'
+              # SecHub Recommendation: no security group allows unrestricted ingress access to port 22/3389.
+              # Supression Reason: Allow for bastian hosts and testing
+              - 'cis-aws-foundations-benchmark/v/1.2.0/rule/4.1'
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.1'
+              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.2'
             Workflow:
               Status:
               - NEW
+              - NOTIFIED
         detail-type:
         - Security Hub Findings - Imported
         source:
@@ -397,6 +403,8 @@ Resources:
                 - prefix: 'arn:aws:s3:::bootstrap-awss3cloudformationbucket-'
                 - prefix: 'arn:aws:s3:::essentials-awss3lambdaartifactsbucket-'
                 - prefix: 'arn:aws:s3:::cf-templates-'
+                - prefix: 'arn:aws:s3:::cloudformationmanageduploadinfra'
+                - prefix: 'arn:aws:s3:::cost-and-usage-reports.sagebase.org'
                 # This should only match with 2.1.5.1
                 - 'AWS::::Account:140124849929'
             GeneratorId:
@@ -407,6 +415,7 @@ Resources:
             Workflow:
               Status:
               - NEW
+              - NOTIFIED
         detail-type:
         - Security Hub Findings - Imported
         source:
@@ -440,6 +449,7 @@ Resources:
             Workflow:
               Status:
               - NEW
+              - NOTIFIED
         detail-type:
         - Security Hub Findings - Imported
         source:

@@ -96,6 +96,11 @@ ClientVpn:
   DependsOn: [ Types ]
   Path: ./720-client-vpn/_tasks.yaml
 
+VpcFlowLogs:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./725-vpc-flow-logs/_tasks.yaml
+
 CloudWatch2S3:
   Type: include
   DependsOn: [ Types ]

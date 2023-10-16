@@ -259,6 +259,136 @@ GithubOidcCfnTemplateDeploy:
       - name: "aws-infra"
         branches: ["master"]
       - name: "service-catalog-library"
+        branches: [ "master", "v1.1.45" ]
+  DefaultOrganizationBinding:
+    Account: !Ref AdminCentralAccount
+    Region: us-east-1
+
+# GH OIDC for lambda template deployments in AdminCentral from Sage-Bionetworks
+GithubOidcLambdaTemplateDeploySage:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-lambda-template-deploy-sage
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-lambda-template-deploy-sage
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListMyBuckets",
+              "Effect": "Allow",
+              "Action": [ "s3:ListAllMyBuckets" ],
+              "Resource": [ "arn:aws:s3:::*" ]
+          },
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
+                          "s3:ListParts", "s3:ListMultipartUploads"
+                        ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9",
+                            "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw"
+                          ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:GetObjectAcl", "s3:DeleteObject", "s3:DeleteObjects",
+                          "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload", "s3:CreateMultipartUpload" ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*",
+                            "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw/*"
+                          ]
+          },
+          {
+              "Sid": "SamValidate",
+              "Effect": "Allow",
+              "Action": [ "iam:ListPolicies" ],
+              "Resource": [ "arn:aws:iam:::*" ]
+          },
+          {
+              "Sid": "ManageServerlessRepo",
+              "Effect": "Allow",
+              "Action": [ "serverlessrepo:*" ],
+              "Resource": [ "arn:aws:serverlessrepo:::*" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "ecmonsen-emorypipeline-lambda-code"
+        branches: ["master"]
+      - name: "s3-synapse-sync"
+        branches: ["master"]
+  DefaultOrganizationBinding:
+    Account: !Ref AdminCentralAccount
+    Region: us-east-1
+
+# GH OIDC for lambda template deployments in AdminCentral from Sage-Bionetworks-IT
+GithubOidcLambdaTemplateDeploySageIT:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-lambda-template-deploy-sageit
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-lambda-template-deploy-sageit
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListMyBuckets",
+              "Effect": "Allow",
+              "Action": [ "s3:ListAllMyBuckets" ],
+              "Resource": [ "arn:aws:s3:::*" ]
+          },
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
+                          "s3:ListParts", "s3:ListMultipartUploads"
+                        ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9",
+                            "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw"
+                          ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:GetObjectAcl", "s3:DeleteObject", "s3:DeleteObjects",
+                          "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload", "s3:CreateMultipartUpload" ],
+              "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*",
+                            "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw/*"
+                          ]
+          },
+          {
+              "Sid": "SamValidate",
+              "Effect": "Allow",
+              "Action": [ "iam:ListPolicies" ],
+              "Resource": [ "arn:aws:iam:::*" ]
+          },
+          {
+              "Sid": "ManageServerlessRepo",
+              "Effect": "Allow",
+              "Action": [ "serverlessrepo:*" ],
+              "Resource": [ "arn:aws:serverlessrepo:::*" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "lambda-*"
+        branches: ["master"]
+      - name: "cfn-cr-*"
+        branches: ["master"]
+      - name: "cfn-macro-*"
+        branches: ["master"]
+      - name: "cfn-*-macro"
         branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
@@ -285,6 +415,8 @@ GithubOidcPackerImageDeploy:
       - name: "packer-base-ubuntu-jammy"
         branches: ["master"]
       - name: "packer-rstudio"
+        branches: ["master"]
+      - name: "packer-amazonlinux-docker"
         branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
@@ -326,8 +458,12 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
     Repositories:
       - name: "synapse-login-aws-infra"
         branches: ["prod"]
+      - name: "synapse-login-scipool"
+        branches: ["prod"]
   DefaultOrganizationBinding:
-    Account: !Ref ScipoolProdAccount
+    Account:
+      - !Ref ScipoolProdAccount
+      - !Ref BmgfkiAccount
     Region: us-east-1
 
 GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
@@ -346,28 +482,10 @@ GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
     Repositories:
       - name: "synapse-login-aws-infra"
         branches: ["develop"]
+      - name: "synapse-login-scipool"
+        branches: ["develop"]
   DefaultOrganizationBinding:
     Account: !Ref ScipoolDevAccount
-    Region: us-east-1
-
-GithubOidcBmgfkiSageBionetworksSynapseLoginAwsInfra:
-  Type: update-stacks
-  DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-bmgfki-synapse-login-aws-infra
-  Parameters:
-    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-bmgfki-synapse-login-aws-infra
-    ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AdministratorAccess"
-      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
-  TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks"
-    Repositories:
-      - name: "synapse-login-aws-infra"
-        branches: ["prod"]
-  DefaultOrganizationBinding:
-    Account: !Ref BmgfkiAccount
     Region: us-east-1
 
 GithubOidcSageBionetworksWebMonorepoInfra:
@@ -525,4 +643,63 @@ GithubOidcWorkflowsProdNextflowInfra:
   DefaultOrganizationBinding:
     Account:
       - !Ref WorkflowsNextflowProdAccount
+    Region: us-east-1
+
+GithubOidcBridgeDigitalHealthOpenBridgeWeb:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-bridgedigitalhealth-openbridgeweb
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-bridgedigitalhealth-openbridgeweb
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
+              "Resource": [
+                "arn:aws:s3:::staging.studies.mobiletoolbox.org",
+                "arn:aws:s3:::prod.studies.mobiletoolbox.org",
+                "arn:aws:s3:::staging-arcdashboard-sagebionetwork-websitebucket-bd4g741peby9",
+                "arn:aws:s3:::prod-arcdashboard-sagebionetworks-o-websitebucket-1f1fae0cp8k4e",
+                "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl"
+              ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
+              "Resource": [
+                "arn:aws:s3:::staging.studies.mobiletoolbox.org/*",
+                "arn:aws:s3:::prod.studies.mobiletoolbox.org/*",
+                "arn:aws:s3:::staging-arcdashboard-sagebionetwork-websitebucket-bd4g741peby9/*",
+                "arn:aws:s3:::prod-arcdashboard-sagebionetworks-o-websitebucket-1f1fae0cp8k4e/*",
+                "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl/*"
+              ]
+          },
+          {
+              "Sid": "CloudfrontActions",
+              "Effect": "Allow",
+              "Action": [ "cloudfront:CreateInvalidation" ],
+              "Resource": [
+                "arn:aws:cloudfront::797640923903:distribution/E2H7LCB4G4JGGA",
+                "arn:aws:cloudfront::797640923903:distribution/E1NB88XGDVLVG9",
+                "arn:aws:cloudfront::797640923903:distribution/EU2UCL46LHZST",
+                "arn:aws:cloudfront::797640923903:distribution/E4NMTZ3W9RYFH",
+                "arn:aws:cloudfront::797640923903:distribution/E3S5F61K1105VI"
+              ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "BridgeDigitalHealth"
+    Repositories:
+      - name: "open-bridge-web"
+        branches: [ "main", "feature", "staging", "production" ]
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
     Region: us-east-1
