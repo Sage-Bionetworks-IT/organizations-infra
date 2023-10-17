@@ -7,6 +7,6 @@ dependencies:
   - "develop/bootstrap.yaml"
 parameters:
   AdminRoleArns:
-    - !stack_output_external bootstrap::AWSIAMCfServiceRoleArn
+    - !stack_output_external "sagebase-github-oidc-sage-bionetworks-it::ProviderRoleArn"
     - "arn:aws:sts::465877038949:assumed-role/AWSReservedSSO_Administrator_a99f9cc4789c4254/khai.do@sagebase.org"
     - "arn:aws:sts::465877038949:assumed-role/AWSReservedSSO_Administrator_a99f9cc4789c4254/x.schildwachter@sagebase.org"

@@ -7,5 +7,5 @@ dependencies:
   - "bmgfki/bootstrap.yaml"
 parameters:
   AdminRoleArns:
-    - !stack_output_external bootstrap::AWSIAMCfServiceRoleArn
+    - !stack_output_external "sagebase-github-oidc-sage-bionetworks-it::ProviderRoleArn"
     - "arn:aws:iam::464102568320:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_686ebad4f95d49f9"
