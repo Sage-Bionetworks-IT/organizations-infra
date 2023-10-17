@@ -2,8 +2,6 @@ template:
   type: http
   url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.5.2/vpc.yaml
 stack_name: stridespoolvpc
-dependencies:
-  - strides/bootstrap.yaml
 parameters:
   VpcSubnetPrefix: "10.49"
   VpcName: stridespoolvpc

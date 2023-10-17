@@ -4,8 +4,6 @@ template:
 stack_name: scheduledjobsvpc
 stack_tags:
   OwnerEmail: "it@sagebase.org"
-dependencies:
-  - strides/bootstrap.yaml
 parameters:
   VpcSubnetPrefix: "10.255.41"
   VpcName: "scheduledjobsvpc"

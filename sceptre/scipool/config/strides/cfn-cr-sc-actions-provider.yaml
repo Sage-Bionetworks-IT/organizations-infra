@@ -4,5 +4,3 @@ template:
 stack_name: cfn-cr-sc-actions-provider
 stack_tags:
   OwnerEmail: "it@sagebase.org"
-dependencies:
-  - strides/bootstrap.yaml

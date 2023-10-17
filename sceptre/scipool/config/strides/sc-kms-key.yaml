@@ -3,8 +3,6 @@ template:
 stack_name: "sc-kms-key"
 stack_tags:
   OwnerEmail: "it@sagebase.org"
-dependencies:
-  - "strides/bootstrap.yaml"
 parameters:
   AdminRoleArns:
     - !stack_output_external "github-oidc-sage-bionetworks-it::ProviderRoleArn"
