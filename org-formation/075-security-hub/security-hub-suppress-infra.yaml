@@ -444,6 +444,8 @@ Resources:
                 - 'arn:aws:iam::325565585839:user/ran-uploader'
                 # scipool IT-2315
                 - prefix: 'arn:aws:iam::237179673806:user/synapse-login-scipoolprod-ServiceUser-'
+                # synapseprod IT-2396, service account for redash
+                - 'arn:aws:iam::325565585839:user/synapseprod-redash-service-user-ServiceUser-1AC3PZO3ZDILM'
             GeneratorId:
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.4'
             Workflow:
