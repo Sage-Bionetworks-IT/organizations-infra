@@ -301,6 +301,14 @@ Parameters:
     Type: String
     Default: '6498b478-20e1-7031-9648-00c20c410359'
 
+  financeAuditorGroup:  # JC aws-finance-auditors
+    Type: String
+    Default: 'd438e4d8-90e1-7030-6998-cad12c0d3296'
+
+  securityAuditorGroup:     # JC aws-security-auditors
+    Type: String
+    Default: '2448e4e8-50b1-70e5-def0-07e0f4fcd60e'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -407,6 +415,58 @@ SsoAuditor:
     instanceArn: !Ref instanceArn
     principalId: !Ref auditorGroup
     permissionSetName: 'Auditor'
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/SecurityAudit'
+      - 'arn:aws:iam::aws:policy/job-function/SupportUser'
+      - 'arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
+      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AmazonMacieReadOnlyAccess'
+    sessionDuration: 'PT1H'
+    masterAccountId: !Ref MasterAccount
+
+SsoFinanceAuditor:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
+  StackName: !Sub '${resourcePrefix}-${appName}-finance-auditor'
+  StackDescription: 'Role used by Finance Auditor group within whole organization'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref financeAuditorGroup
+    permissionSetName: 'FinanceAuditor'
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/job-function/SupportUser'
+      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+    sessionDuration: 'PT1H'
+    masterAccountId: !Ref MasterAccount
+
+SsoSecurityAuditor:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-security-auditor'
+  StackDescription: 'Role used by Security Auditor group within whole organization'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref securityAuditorGroup
+    permissionSetName: 'SecurityAuditor'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/SecurityAudit'
       - 'arn:aws:iam::aws:policy/job-function/SupportUser'
