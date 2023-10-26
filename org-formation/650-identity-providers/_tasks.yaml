@@ -666,7 +666,8 @@ GithubOidcBridgeDigitalHealthOpenBridgeWeb:
                 "arn:aws:s3:::prod.studies.mobiletoolbox.org",
                 "arn:aws:s3:::staging-arcdashboard-sagebionetwork-websitebucket-bd4g741peby9",
                 "arn:aws:s3:::prod-arcdashboard-sagebionetworks-o-websitebucket-1f1fae0cp8k4e",
-                "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl"
+                "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl",
+                "arn:aws:s3:::staging-bridgedigital-health-static-websitebucket-16zqwmvoy16o"
               ]
           },
           {
@@ -678,7 +679,8 @@ GithubOidcBridgeDigitalHealthOpenBridgeWeb:
                 "arn:aws:s3:::prod.studies.mobiletoolbox.org/*",
                 "arn:aws:s3:::staging-arcdashboard-sagebionetwork-websitebucket-bd4g741peby9/*",
                 "arn:aws:s3:::prod-arcdashboard-sagebionetworks-o-websitebucket-1f1fae0cp8k4e/*",
-                "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl/*"
+                "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl/*",
+                "arn:aws:s3:::staging-bridgedigital-health-static-websitebucket-16zqwmvoy16o/*"
               ]
           },
           {
@@ -690,7 +692,8 @@ GithubOidcBridgeDigitalHealthOpenBridgeWeb:
                 "arn:aws:cloudfront::797640923903:distribution/E1NB88XGDVLVG9",
                 "arn:aws:cloudfront::797640923903:distribution/EU2UCL46LHZST",
                 "arn:aws:cloudfront::797640923903:distribution/E4NMTZ3W9RYFH",
-                "arn:aws:cloudfront::797640923903:distribution/E3S5F61K1105VI"
+                "arn:aws:cloudfront::797640923903:distribution/E3S5F61K1105VI",
+                "arn:aws:cloudfront::797640923903:distribution/E2ZGRN11WZ963H"
               ]
           }
         ]
@@ -699,6 +702,8 @@ GithubOidcBridgeDigitalHealthOpenBridgeWeb:
     GitHubOrg: "BridgeDigitalHealth"
     Repositories:
       - name: "open-bridge-web"
+        branches: [ "main", "feature", "staging", "production" ]
+      - name: "open-bridge-static"
         branches: [ "main", "feature", "staging", "production" ]
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
