@@ -12,7 +12,7 @@ Parameters:
 
 GuardDuty:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/GuardDuty/guard-duty.yaml
+  Template: ./GuardDuty.yaml
   StackName: !Sub '${resourcePrefix}-${appName}'
   StackDescription: GuardDuty - Base
   DefaultOrganizationBindingRegion: !Ref primaryRegion
