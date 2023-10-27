@@ -454,6 +454,7 @@ SsoFinanceAuditor:
 SsoSecurityAuditor:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
   StackName: !Sub '${resourcePrefix}-${appName}-security-auditor'
   StackDescription: 'Role used by Security Auditor group within whole organization'
   TerminationProtection: false
