@@ -448,7 +448,7 @@ SsoFinanceAuditor:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/job-function/SupportUser'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
-    sessionDuration: 'PT1H'
+    sessionDuration: 'PT8H'
     masterAccountId: !Ref MasterAccount
 
 SsoSecurityAuditor:
