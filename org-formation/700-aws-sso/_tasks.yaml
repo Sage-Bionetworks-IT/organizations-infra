@@ -17,10 +17,6 @@ Parameters:
     Type: String
     Default: '906769aa66-4b16d4b3-7c9c-44b7-85e0-adbf41dbf49d'
 
-  auditorGroup:       #JC aws-auditors
-    Type: String
-    Default: '906769aa66-57ea4266-0644-4316-b5a4-fe0108301d30'
-
   developerGroup:     #JC aws-develoers
     Type: String
     Default: '906769aa66-49d7689b-ae36-472b-bc3d-893753529227'
@@ -395,36 +391,6 @@ SsoDeveloper:
               }
           ]
       }
-
-SsoAuditor:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-  TemplatingContext:
-    customerManagedPolicies:
-      - Name: !Ref CostExplorerPolicyName
-  StackName: !Sub '${resourcePrefix}-${appName}-auditor'
-  StackDescription: 'Audit role used by Auditor group within whole organization'
-  TerminationProtection: false
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: '*'
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref auditorGroup
-    permissionSetName: 'Auditor'
-    managedPolicies:
-      - 'arn:aws:iam::aws:policy/SecurityAudit'
-      - 'arn:aws:iam::aws:policy/job-function/SupportUser'
-      - 'arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess'
-      - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
-      - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
-      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
-      - 'arn:aws:iam::aws:policy/AmazonMacieReadOnlyAccess'
-    sessionDuration: 'PT1H'
-    masterAccountId: !Ref MasterAccount
 
 SsoFinanceAuditor:
   Type: update-stacks
