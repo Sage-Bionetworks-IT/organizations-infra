@@ -418,6 +418,8 @@ GithubOidcPackerImageDeploy:
         branches: ["master"]
       - name: "packer-amazonlinux-docker"
         branches: ["master"]
+      - name: "imagecentral-dashboard"
+        branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
     Region: us-east-1
