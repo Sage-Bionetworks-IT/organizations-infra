@@ -1,0 +1,153 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Provision a bucket and distribution for install.studies.bridgedigital.health
+Parameters:
+  # Removed domain name as specific to install.studies.bridgedigital.health
+  SubDomainName:
+    Type: String
+    Description: Subdomain name (prod, staging)
+  AcmCertificateArn:
+    Type: String
+    Description: The Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate.
+    AllowedPattern: "arn:aws:acm:.*"
+    ConstraintDescription: must be a valid certificate ARN
+  RedirectFctName:
+    Type: String
+    Description: Redirect function name
+Conditions:
+  IsProd: !Equals [!Ref SubDomainName, 'prod']
+Resources:
+  CloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'CloudFront OAI for ${SubDomainName}.install.studies.bridgedigital.health'  
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true        
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: BucketPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: CFOAIReadForGetBucketObjects
+            Effect: Allow
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOAI.S3CanonicalUserId
+            Action: 's3:GetObject'
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref WebsiteBucket, '/*']]
+      Bucket: !Ref WebsiteBucket
+  Cloudfront:
+    Type: AWS::CloudFront::Distribution
+    DependsOn:
+      - WebsiteBucket
+      - RedirectFct
+    Properties:
+      DistributionConfig:
+        Comment: Cloudfront Distribution pointing to S3 bucket
+        Origins:
+          - DomainName: !Sub '${WebsiteBucket}.s3.amazonaws.com'
+            Id: S3Origin
+            S3OriginConfig:
+              OriginAccessIdentity:
+                !Join [ "", [ "origin-access-identity/cloudfront/", !Ref CloudFrontOAI ] ]
+        Enabled: true
+        HttpVersion: 'http2'
+        DefaultRootObject: index.html
+        Aliases:
+          - !Sub '${SubDomainName}.install.studies.bridgedigital.health'
+          - !If [IsProd, install.studies.bridgedigital.health, !Ref AWS::NoValue]
+        # CustomErrorResponses:
+        #   - ErrorCachingMinTTL: 60
+        #     ErrorCode: 404
+        #     ResponseCode: 200
+        #     ResponsePagePath: '/index.html'
+        #   - ErrorCachingMinTTL: 60
+        #     ErrorCode: 403
+        #     ResponseCode: 200
+        #     ResponsePagePath: '/index.html'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html
+          # Caching optimized 
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          Compress: true
+          DefaultTTL: 0
+          FunctionAssociations:
+          -
+            EventType: viewer-request
+            FunctionARN: !GetAtt RedirectFct.FunctionARN
+          # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html
+          # UserAgentRefererHeaders
+          OriginRequestPolicyId: acba4595-bd28-49b8-b9fe-13317c0390fa
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: !Ref AcmCertificateArn
+          MinimumProtocolVersion: TLSv1.2_2021
+          SslSupportMethod: sni-only
+  RedirectFct:
+    Type: AWS::CloudFront::Function
+    Properties: 
+      AutoPublish: true
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          var headers = request.headers;
+
+          console.log(headers);
+
+          if (headers["user-agent"]) {
+            if (headers["user-agent"].value.match("iPhone")) {
+              console.log("IOS detected");
+              return {
+                statusCode: 302,
+                statusDescription: "Found",
+                headers: {
+                  location: {
+                    value: "https://apps.apple.com/us/app/mobile-toolbox-app/id1578358408",
+                  },
+                },
+              };
+            }
+          }
+
+          if (headers["user-agent"]) {
+            if (headers["user-agent"].value.match("Android")) {
+                console.log("Android detected");
+                return {
+                  statusCode: 302,
+                  statusDescription: "Found",
+                  headers: {
+                    location: {
+                      value: "https://play.google.com/store/apps/details?id=org.sagebionetworks.research.mobiletoolbox.app",
+                    },
+                  },
+                };
+            }
+          }
+
+          return request; 
+        }
+            
+      FunctionConfig: 
+        Comment: Redirects requests based on agent
+        Runtime: cloudfront-js-1.0
+      Name: !Ref RedirectFctName
