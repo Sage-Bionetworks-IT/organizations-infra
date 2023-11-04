@@ -21,7 +21,7 @@ Resources:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub 'CloudFront OAI for ${SubDomainName}.install.studies.bridgedigital.health'  
+        Comment: !Sub 'CloudFront OAI for ${SubDomainName}.install.studies.bridgedigital.health'
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -36,7 +36,7 @@ Resources:
         BlockPublicAcls: true
         BlockPublicPolicy: true
         IgnorePublicAcls: true
-        RestrictPublicBuckets: true        
+        RestrictPublicBuckets: true
   WebsiteBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -53,9 +53,6 @@ Resources:
       Bucket: !Ref WebsiteBucket
   Cloudfront:
     Type: AWS::CloudFront::Distribution
-    DependsOn:
-      - WebsiteBucket
-      - RedirectFct
     Properties:
       DistributionConfig:
         Comment: Cloudfront Distribution pointing to S3 bucket
@@ -85,7 +82,7 @@ Resources:
             - GET
             - HEAD
           # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html
-          # Caching optimized 
+          # Caching optimized
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
           Compress: true
           DefaultTTL: 0
@@ -105,7 +102,7 @@ Resources:
           SslSupportMethod: sni-only
   RedirectFct:
     Type: AWS::CloudFront::Function
-    Properties: 
+    Properties:
       AutoPublish: true
       FunctionCode: |
         function handler(event) {
@@ -144,10 +141,10 @@ Resources:
             }
           }
 
-          return request; 
+          return request;
         }
-            
-      FunctionConfig: 
+
+      FunctionConfig:
         Comment: Redirects requests based on agent
         Runtime: cloudfront-js-1.0
       Name: !Ref RedirectFctName
