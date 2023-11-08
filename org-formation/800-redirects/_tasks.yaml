@@ -170,6 +170,24 @@ SchematicProdAppDnsForward:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['schematic-prod-DockerFargateStack-LoadBalancerDNS', !Ref DCAProdAccount]
 
+# forward schematic-dev-refactor.api.sagebionetworks.org to schematic-infra ALB
+# https://github.com/Sage-Bionetworks/schematic-infra
+SchematicDevRefactorAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-schematic-dev-refactor-cname'
+  StackDescription: Setup a CNAME for schematic-infra dev-refactor ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "schematic-dev-refactor.api.sagebionetworks.org"
+    # ID of the api.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['schematic-dev-refactor-dev-refactor-DockerFargateStack-LoadBalancerDNS', !Ref DnTDevAccount]
+
 # forward https://genie-bpc.app.sagebionetworks.org to genie-bpc-infra ALB
 # https://github.com/Sage-Bionetworks/genie-bpc-infra
 GenieBPCProdAppDnsForward:
