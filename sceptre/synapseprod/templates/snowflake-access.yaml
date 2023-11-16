@@ -21,10 +21,7 @@ Resources:
                       "s3:GetObject",
                       "s3:GetObjectVersion"
                   ],
-                  "Resource": [
-                    "arn:aws:s3:::prod.datawarehouse.sagebase.org/warehouse/*",
-                    "arn:aws:s3:::prod.inventory.sagebase.org/inventory/proddata.sagebase.org/defaultInventory/*"
-                  ]
+                  "Resource": "arn:aws:s3:::prod.datawarehouse.sagebase.org/warehouse/*"
               },
               {
                   "Effect": "Allow",
@@ -36,19 +33,6 @@ Resources:
                   "Condition": {
                       "StringLike": {
                         "s3:prefix": [ "warehouse/*" ]
-                      }
-                  }
-              },
-              {
-                  "Effect": "Allow",
-                  "Action": [
-                      "s3:ListBucket",
-                      "s3:GetBucketLocation"
-                  ],
-                  "Resource": "arn:aws:s3:::prod.inventory.sagebase.org",
-                  "Condition": {
-                      "StringLike": {
-                        "s3:prefix": [ "inventory/proddata.sagebase.org/defaultInventory/*" ]
                       }
                   }
               }
