@@ -1104,8 +1104,8 @@ SsoBridgeParticipantManager:
   OrganizationBindings:
     TargetBinding:
       Account:
-        !Ref BridgeDevAccount
-        !Ref BridgeProdAccount
+        - !Ref BridgeDevAccount
+        - !Ref BridgeProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref bridgeParticipantManagerGroup
