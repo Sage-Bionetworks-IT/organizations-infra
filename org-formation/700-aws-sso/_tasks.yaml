@@ -121,6 +121,10 @@ Parameters:
     Type: String
     Default: '906769aa66-e7083100-27d4-49bd-8ed2-c588371a1f91'
 
+  bridgeParticipantManagerGroup:  #JC aws-bridge-participant-managers
+    Type: String
+    Default: '44085488-70f1-704b-c058-b6dde3aba1ef'
+
   scipoolDevAdminGroup:       #JC aws-scipooldev-admins
     Type: String
     Default: '906769aa66-5215fbe3-2331-4ea6-9cb3-ee25cdad4cc8'
@@ -1085,6 +1089,41 @@ SsoBridgeProdIosDeveloper:
             "Action": [ "s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:GetObjectAcl", "s3:DeleteObject" ],
             "Effect": "Allow",
             "Resource": "arn:aws:s3:::ios-apps.sagebridge.org/*"
+          }
+        ]
+      }
+
+SsoBridgeParticipantManager:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridge-participant-manager'
+  StackDescription: 'SSO: role used by participant managers in bridge accounts'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account:
+        - !Ref BridgeDevAccount
+        - !Ref BridgeProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeParticipantManagerGroup
+    permissionSetName: 'bridge-participant-manager'
+    managedPolicies:
+      - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
+      - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
+      - arn:aws:iam::aws:policy/AmazonSNSReadOnlyAccess
+    sessionDuration: 'PT8H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "SnsOptInOutAccess",
+            "Action": [ "sns:CheckIfPhoneNumberIsOptedOut", "sns:OptInPhoneNumber" ],
+            "Effect": "Allow",
+            "Resource": "*"
           }
         ]
       }
