@@ -1,5 +1,5 @@
 # Overview
-A project to install, configure and manage the strides AWS account.
+A project to install, configure and manage the org-sagebase-opendata AWS account.
 
 ## Purpose
 This project manages Sage AWS `org-sagebase-opendata` account with
