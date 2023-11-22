@@ -2,12 +2,9 @@
 A project to install, configure and manage the strides AWS account.
 
 ## Purpose
-The purpose of this project is to build a self service provisioning
-system using the
-[AWS service catalog](https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html).
-
-We are leveraging the [AWS service catalog reference architecure](https://github.com/Sage-Bionetworks/service-catalog-library)
-to build out the service catalog.
+This project manages Sage AWS `org-sagebase-opendata` account with
+infrastructure as code. We are leveraging the Sceptre to build out
+the cloud infrastructure for the AWS account.
 
 ## Instructions to create or update CF stacks
 
