@@ -574,7 +574,7 @@ SsoSynapseDWDevAthenaUser:
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref SynapseDevAccount
@@ -597,7 +597,7 @@ SsoSynapseDWProdAthenaUser:
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref SynapseProdAccount
@@ -1559,7 +1559,7 @@ SsoDntDevApplicationManager:
   StackDescription: 'SSO: Application Manager role used by DntDev application-manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref DnTDevAccount
@@ -1730,7 +1730,7 @@ SsoDCAProdApplicationManager:
   StackDescription: 'SSO: Application Manager role used by DCA application-manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref DCAProdAccount
@@ -1781,7 +1781,7 @@ SsoGenieProdApplicationManager:
   StackDescription: 'SSO: Application Manager role used by Genie application-manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref GenieProdAccount
@@ -1969,7 +1969,7 @@ SsoDccValidatorProdApplicationManager:
   StackDescription: 'SSO: Application Manager role used by DccValidator-Prod application-manager group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref DccvalidatorProdAccount
