@@ -572,6 +572,41 @@ GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
     Account: !Ref SynapseProdAccount
     Region: us-east-1
 
+GithubOidcSageBionetworksSynapseDevInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapsedev-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-synapseprod-web-monorepo-infra
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
+              "Resource": [ "arn:aws:s3:::staging-signin.synapse.org" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject" ],
+              "Resource": ["arn:aws:s3:::staging-signin.synapse.org/*"" ]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "SynapseWebClient"
+        branches: ["*"]
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseDevAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksSynapseR:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
