@@ -735,6 +735,8 @@ GithubOidcAgoraInfraDeploy:
     Repositories:
       - name: "agora2-infra"
         branches: ["main"]
+      - name: "Agora"
+        branches: ["develop", "prod", "staging"]
   DefaultOrganizationBinding:
     Account:
       - !Ref AgoraDevAccount
