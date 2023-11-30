@@ -522,45 +522,45 @@ SsoViewerPlus:
       }
 
 # Role for a user that manages an application deployed to AWS
-#SsoApplicationManager:
-#  Type: update-stacks
-#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-#  TemplatingContext: {}
-#  StackName: !Sub '${resourcePrefix}-${appName}-application-manager'
-#  StackDescription: 'Read-only role plus access to secrets manager'
-#  TerminationProtection: false
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    IncludeMasterAccount: true
-#  OrganizationBindings:
-#    TargetBinding:
-#      Account: '*'
-#  Parameters:
-#    instanceArn: !Ref instanceArn
-#    principalId: !Ref adminGroup # by default we admit admin's.  Below we 'inherit' this stack for specific user groups
-#    permissionSetName: 'application-manager'
-#    sessionDuration: 'PT12H'
-#    masterAccountId: !Ref MasterAccount
-#    managedPolicies:
-#      - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
-#      - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
-#      - arn:aws:iam::aws:policy/SecretsManagerReadWrite
-#      - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
-#    inlinePolicy: >-
-#      {
-#        "Version": "2012-10-17",
-#        "Statement": [
-#          {
-#            "Sid": "ExecuteEcsTasks",
-#            "Effect": "Allow",
-#            "Action": [
-#              "ecs:RunTask",
-#              "ecs:StartTask"
-#            ],
-#            "Resource": "*"
-#          }
-#        ]
-#      }
+SsoApplicationManager:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-application-manager'
+  StackDescription: 'Read-only role plus access to secrets manager'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref adminGroup # by default we admit admin's.  Below we 'inherit' this stack for specific user groups
+    permissionSetName: 'application-manager'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
+    managedPolicies:
+      - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
+      - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
+      - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+      - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ExecuteEcsTasks",
+            "Effect": "Allow",
+            "Action": [
+              "ecs:RunTask",
+              "ecs:StartTask"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
 SsoSynapseDWDevAthenaUser:
@@ -1550,23 +1550,23 @@ SsoDntDevViewer:
     principalId: !Ref dntDevViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
-#SsoDntDevApplicationManager:
-#  Type: update-stacks
-#  DependsOn: SsoApplicationManager
-#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-#  TemplatingContext: {}
-#  StackName: !Sub '${resourcePrefix}-${appName}-dntdev-application-manager'
-#  StackDescription: 'SSO: Application Manager role used by DntDev application-manager group'
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    IncludeMasterAccount: true
-#  OrganizationBindings:
-#    TargetBinding:
-#      Account: !Ref DnTDevAccount
-#  Parameters:
-#    instanceArn: !Ref instanceArn
-#    principalId: !Ref dntDevApplicationManagerGroup
-#    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
+SsoDntDevApplicationManager:
+  Type: update-stacks
+  DependsOn: SsoApplicationManager
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-dntdev-application-manager'
+  StackDescription: 'SSO: Application Manager role used by DntDev application-manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DnTDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dntDevApplicationManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
 
 SsoBuA2aDwAdmin:
   Type: update-stacks
@@ -1721,23 +1721,23 @@ SsoDCAProdViewerPlus:
     principalId: !Ref dcaProdViewersPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
 
-#SsoDCAProdApplicationManager:
-#  Type: update-stacks
-#  DependsOn: SsoApplicationManager
-#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-#  TemplatingContext: {}
-#  StackName: !Sub '${resourcePrefix}-${appName}-dca-prod-application-manager'
-#  StackDescription: 'SSO: Application Manager role used by DCA application-manager group'
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    IncludeMasterAccount: true
-#  OrganizationBindings:
-#    TargetBinding:
-#      Account: !Ref DCAProdAccount
-#  Parameters:
-#    instanceArn: !Ref instanceArn
-#    principalId: !Ref dcaProdApplicationManagerGroup
-#    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
+SsoDCAProdApplicationManager:
+  Type: update-stacks
+  DependsOn: SsoApplicationManager
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-dca-prod-application-manager'
+  StackDescription: 'SSO: Application Manager role used by DCA application-manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DCAProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dcaProdApplicationManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
 
 SsoGenieProdViewer:
   Type: update-stacks
@@ -1773,22 +1773,22 @@ SsoGenieProdViewerPlus:
     principalId: !Ref genieProdViewerPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
 
-#SsoGenieProdApplicationManager:
-#  Type: update-stacks
-#  DependsOn: SsoViewer
-#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-#  StackName: !Sub '${resourcePrefix}-${appName}-genie-prod-application-manager'
-#  StackDescription: 'SSO: Application Manager role used by Genie application-manager group'
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    IncludeMasterAccount: true
-#  OrganizationBindings:
-#    TargetBinding:
-#      Account: !Ref GenieProdAccount
-#  Parameters:
-#    instanceArn: !Ref instanceArn
-#    principalId: !Ref genieProdApplicationManagerGroup
-#    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
+SsoGenieProdApplicationManager:
+  Type: update-stacks
+  DependsOn: SsoViewer
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-genie-prod-application-manager'
+  StackDescription: 'SSO: Application Manager role used by Genie application-manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref GenieProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref genieProdApplicationManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
 
 SsoDpeProdAdmin:
   Type: update-stacks
@@ -1960,20 +1960,20 @@ SsoCnbDeveloper:
     principalId: !Ref cnbDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
-#SsoDccValidatorProdApplicationManager:
-#  Type: update-stacks
-#  DependsOn: SsoApplicationManager
-#  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-#  TemplatingContext: {}
-#  StackName: !Sub '${resourcePrefix}-${appName}-dccvalidator-prod-application-manager'
-#  StackDescription: 'SSO: Application Manager role used by DccValidator-Prod application-manager group'
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    IncludeMasterAccount: true
-#  OrganizationBindings:
-#    TargetBinding:
-#      Account: !Ref DccvalidatorProdAccount
-#  Parameters:
-#    instanceArn: !Ref instanceArn
-#    principalId: !Ref dccvalidatorProdApplicationManagerGroup
-#    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
+SsoDccValidatorProdApplicationManager:
+  Type: update-stacks
+  DependsOn: SsoApplicationManager
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-dccvalidator-prod-application-manager'
+  StackDescription: 'SSO: Application Manager role used by DccValidator-Prod application-manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DccvalidatorProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dccvalidatorProdApplicationManagerGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
