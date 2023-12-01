@@ -588,13 +588,13 @@ GithubOidcSageBionetworksSynapseDevInfra:
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
               "Action": [ "s3:GetBucketLocation", "s3:ListBucket" ],
-              "Resource": [ "arn:aws:s3:::staging-signin.synapse.org" ]
+              "Resource": [ "arn:aws:s3:::e2e-reports-bucket-bucket-1p1qz6p48t4uy" ]
           },
           {
               "Sid": "AllObjectActions",
               "Effect": "Allow",
               "Action": [ "s3:PutObject", "s3:GetObject" ],
-              "Resource": ["arn:aws:s3:::staging-signin.synapse.org/*"" ]
+              "Resource": ["arn:aws:s3:::e2e-reports-bucket-bucket-1p1qz6p48t4uy/*"" ]
           }
         ]
       }
