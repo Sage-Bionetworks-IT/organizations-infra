@@ -572,14 +572,14 @@ GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
     Account: !Ref SynapseProdAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksSynapseDevInfra:
+GithubOidcSageBionetworksSynapseDevE2EInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapsedev-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapsedev-e2e-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-synapsedev-infra
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-synapsedev-e2e-infra
     PolicyDocument: |
       {
         "Version": "2012-10-17",
