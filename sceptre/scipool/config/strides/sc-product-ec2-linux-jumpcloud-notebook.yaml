@@ -97,7 +97,11 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.2.11/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
       Name: 'v1.2.11'
-    - Description: 'Update instance types {{ range(1, 10000) | random }}'
+    - Description: 'Update instance types'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.2.12/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
       Name: 'v1.2.12'
+    - Description: 'Update instance types to *6a {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.2.13/ec2/sc-ec2-linux-jumpcloud-notebook.yaml'
+      Name: 'v1.2.13'
