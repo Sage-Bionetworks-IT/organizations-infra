@@ -1,0 +1,9 @@
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.7.8/IAM/snowflake-bucket-access.yaml
+stack_name: snowflake-access.yaml
+parameters:
+  BucketArn: arn:aws:s3:::dev.datawarehouse.sagebase.org
+  BucketPrefix: warehouse
+  SnowflakeAccountArn: arn:aws:iam::365909334157:user/m2nb0000-s
+  SnowflakeAccountExternalId: 0123456789
