@@ -594,7 +594,7 @@ GithubOidcSageBionetworksSynapseDevE2EInfra:
               "Sid": "AllObjectActions",
               "Effect": "Allow",
               "Action": [ "s3:PutObject", "s3:GetObject" ],
-              "Resource": ["arn:aws:s3:::e2e-reports-bucket-bucket-1p1qz6p48t4uy/*"" ]
+              "Resource": ["arn:aws:s3:::e2e-reports-bucket-bucket-1p1qz6p48t4uy/*" ]
           }
         ]
       }
