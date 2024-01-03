@@ -1,0 +1,7 @@
+template:
+  path: install-studies-bdh-infra.yaml
+stack_name: staging-inst-stud-bridgedigital-health
+parameters:
+  AcmCertificateArn: arn:aws:acm:us-east-1:797640923903:certificate/44190971-8a67-4d79-b81d-9a24dea83645
+  RedirectFctName: staging-inst-studies-bdh-redir-fct
+  SubDomainName: staging
