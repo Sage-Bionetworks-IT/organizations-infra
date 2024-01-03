@@ -195,7 +195,6 @@ Organization:
     Properties:
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
-        - !Ref RestrictUnsupportedRegionsSCP
       AccountName: org-sagebase-synapseprod
       AccountId: '325565585839'
       RootEmail: platform@sagebase.org
