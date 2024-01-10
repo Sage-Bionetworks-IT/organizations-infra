@@ -87,6 +87,13 @@ Resources:
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
+  AWSIAMLukeMoenningSvc:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: svc.luke.moenning
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
 
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
