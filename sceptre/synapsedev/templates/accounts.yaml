@@ -71,6 +71,16 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
+  AWSIAMLukeMoenningUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: luke.moenning@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
 # Attempt to setup a service user, the only use
 # is to provide a id/secret to run the dev synapse stack under
   AWSIAMLeonLiSvc:
