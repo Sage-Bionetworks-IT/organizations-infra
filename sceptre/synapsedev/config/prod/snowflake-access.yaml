@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.8.1/IAM/snowflake-bucket-access.yaml
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.8.2/IAM/snowflake-bucket-access.yaml
 stack_name: snowflake-access
 parameters:
   BucketArn: arn:aws:s3:::dev.datawarehouse.sagebase.org

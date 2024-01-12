@@ -73,17 +73,10 @@ Resources:
         PasswordResetRequired: true
 # Attempt to setup a service user, the only use
 # is to provide a id/secret to run the dev synapse stack under
-  AWSIAMLeonLiSvc:
+  AWSIAMLukeMoenningSvc:
     Type: 'AWS::IAM::User'
     Properties:
-      UserName: svc.leon.li
-      Groups:
-        - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMDeveloperUsersGroup
-  AWSIAMPeterHarveySvc:
-    Type: 'AWS::IAM::User'
-    Properties:
-      UserName: svc.peter.harvey
+      UserName: svc.luke.moenning
       Groups:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
