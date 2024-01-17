@@ -233,6 +233,10 @@ Parameters:
     Type: String
     Default: 'b4e86468-f091-70e2-0ea9-64cf3addcdf1'
 
+  recoverDigitalHealthAnalyticsGroup:      #JC aws-recover-digital-analytics
+    Type: String
+    Default: 'TBD'
+
   dcaProdViewersGroup:      #JC aws-dca-prod-viewers
     Type: String
     Default: '14187418-6081-7044-6e34-07f86b336cdd'
@@ -471,6 +475,31 @@ SsoViewer:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
+
+SsoS3Viewer:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
+  StackName: !Sub '${resourcePrefix}-${appName}-s3-viewer'
+  StackDescription: 'S3 Read-only role to allowing access to S3 objects'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref adminGroup
+    permissionSetName: 'S3Viewer'
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
@@ -1686,6 +1715,25 @@ SsoRecoverProdViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref recoverProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+# IT-3403: Allow digital analytics team to download from S3 buckets
+SsoRecoverDigitalHealthAnalytics:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-digital-health-analytics'
+  StackDescription: 'SSO: role used by the digital health analytics group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account:
+        - !Ref RecoverDevAccount
+        - !Ref RecoverProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverDigitalHealthAnalyticsGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-s3-viewer-permission-set-arn' ]
 
 SsoDCAProdViewer:
   Type: update-stacks
