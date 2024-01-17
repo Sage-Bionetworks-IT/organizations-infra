@@ -233,9 +233,9 @@ Parameters:
     Type: String
     Default: 'b4e86468-f091-70e2-0ea9-64cf3addcdf1'
 
-  recoverDigitalHealthAnalyticsGroup:      #JC aws-recover-digital-analytics
+  recoverDigitalHealthAnalyticsGroup:   #JC aws-recover-digital-health-analytics
     Type: String
-    Default: 'TBD'
+    Default: 'c45834f8-1021-70e2-66a2-15edb4d44c30'
 
   dcaProdViewersGroup:      #JC aws-dca-prod-viewers
     Type: String
