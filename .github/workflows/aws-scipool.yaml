@@ -58,5 +58,6 @@ jobs:
           mkdir -p templates/remote
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
+          sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker-notebook.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           ${{ inputs.sceptre-command }}
