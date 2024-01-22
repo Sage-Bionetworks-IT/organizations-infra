@@ -53,5 +53,4 @@ jobs:
       - name: Deploy with sceptre
         run: |
           cd ${{ inputs.working-dir }}
-          mkdir -p templates/remote
           ${{ inputs.sceptre-command }}

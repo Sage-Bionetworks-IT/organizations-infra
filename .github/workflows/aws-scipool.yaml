@@ -55,7 +55,6 @@ jobs:
         # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
         run: |
           cd ${{ inputs.working-dir }}
-          mkdir -p templates/remote
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
