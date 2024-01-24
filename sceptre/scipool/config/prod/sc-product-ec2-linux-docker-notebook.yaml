@@ -13,11 +13,7 @@ parameters:
 sceptre_user_data:
   # force cloudformation to update stack by setting a random number to the latest product's description
   ProvisioningArtifactParameters: |
-    - Description: 'Update instance types'
-      Info:
-        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.3.4/ec2/sc-ec2-linux-docker-notebook.yaml'
-      Name: 'v1.3.4'
-    - Description: 'Use Sage maintained Docker image {{ range(1, 10000) | random }}'
+    - Description: 'Use Sage maintained Docker image'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.3.5/ec2/sc-ec2-linux-docker-notebook.yaml'
       Name: 'v1.3.5'
