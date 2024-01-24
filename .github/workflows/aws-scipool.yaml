@@ -59,4 +59,10 @@ jobs:
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
           sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
+          sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-docker.yaml
+          sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
+          sceptre delete --yes bmgfki/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
+          sceptre delete --yes strides/sc-product-assoc-ec2-linux-docker.yaml
+          sceptre delete --yes strides/sc-product-assoc-ec2-linux-jumpcloud-notebook.yaml
+          sceptre delete --yes strides/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           ${{ inputs.sceptre-command }}
