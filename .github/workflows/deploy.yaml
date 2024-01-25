@@ -16,7 +16,6 @@ concurrency:
 
 jobs:
   org-formation:
-    needs: [pre-commit, jinja-lint, test-npm-deps]
     permissions:
       id-token: write
       contents: read
