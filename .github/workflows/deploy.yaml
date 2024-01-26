@@ -1,13 +1,13 @@
 name: deploy
 
 on:
-  push:
-    branches: ['master']
   workflow_run:
     workflows:
       - check
     types:
       - completed
+    branches:
+      - 'main'
 
 # Ensures that only one deploy task per branch/environment will run at a time.
 concurrency:
@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   org-formation:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       id-token: write
       contents: read
