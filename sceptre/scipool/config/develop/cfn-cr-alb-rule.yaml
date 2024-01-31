@@ -13,4 +13,5 @@ parameters:
   OidcTokenEndpoint: 'https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token'
   OidcUserInfoEndpoint: 'https://repo-prod.prod.sagebase.org/auth/v1/oauth2/userinfo'
   OidcClientId: '100055'
+  SessionCookieNamePrefix: AWSALBNotebookAuth
   KmsDecryptPolicyArn: !stack_output_external sc-kms-key::KmsDecryptPolicyArn
