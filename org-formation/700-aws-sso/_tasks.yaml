@@ -499,6 +499,7 @@ SsoS3Viewer:
     permissionSetName: 'S3Viewer'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
+      - 'arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
