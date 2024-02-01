@@ -15,7 +15,7 @@ AnomalyDetectorService:
 # Deploy a general-use microservice for interacting with MIPS in admincentral
 MipsMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-mips-api/1.1.1/lambda-mips-api.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-mips-api/1.2.0/lambda-mips-api.yaml'
   StackName: !Sub '${resourcePrefix}-mips-microservice'
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
