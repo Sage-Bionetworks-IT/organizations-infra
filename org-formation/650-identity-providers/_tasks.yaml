@@ -706,7 +706,9 @@ GithubOidcBridgeDigitalHealthOpenBridgeWeb:
                 "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl",
                 "arn:aws:s3:::staging-bridgedigital-health-static-websitebucket-16zqwmvoy16o",
                 "arn:aws:s3:::prod-bridgedigital-health-static-websitebucket-iadz6lysjo5v",
-                "arn:aws:s3:::prod-studies-bridgedigital-health-websitebucket-1rc2pmoctily2"
+                "arn:aws:s3:::prod-studies-bridgedigital-health-websitebucket-1rc2pmoctily2",
+                "arn:aws:s3:::staging-inv-arcdashboard-sagebionet-websitebucket-vm8ncc5v2r7h",
+                "arn:aws:s3:::prod-inv-arcdashboard-sagebionetwor-websitebucket-1jdhcaenu9tlz"
               ]
           },
           {
@@ -721,8 +723,9 @@ GithubOidcBridgeDigitalHealthOpenBridgeWeb:
                 "arn:aws:s3:::staging-studies-bridgedigital-healt-websitebucket-llv54doyeqrl/*",
                 "arn:aws:s3:::staging-bridgedigital-health-static-websitebucket-16zqwmvoy16o/*",
                 "arn:aws:s3:::prod-bridgedigital-health-static-websitebucket-iadz6lysjo5v/*",
-                "arn:aws:s3:::prod-studies-bridgedigital-health-websitebucket-1rc2pmoctily2/*"
-
+                "arn:aws:s3:::prod-studies-bridgedigital-health-websitebucket-1rc2pmoctily2/*",
+                "arn:aws:s3:::staging-inv-arcdashboard-sagebionet-websitebucket-vm8ncc5v2r7h/*",
+                "arn:aws:s3:::prod-inv-arcdashboard-sagebionetwor-websitebucket-1jdhcaenu9tlz/*"
               ]
           },
           {
@@ -737,7 +740,9 @@ GithubOidcBridgeDigitalHealthOpenBridgeWeb:
                 "arn:aws:cloudfront::797640923903:distribution/E3S5F61K1105VI",
                 "arn:aws:cloudfront::797640923903:distribution/E2ZGRN11WZ963H",
                 "arn:aws:cloudfront::797640923903:distribution/E1DXTVP92OX5WR",
-                "arn:aws:cloudfront::797640923903:distribution/E2EZ0TY3ZSTV6O"
+                "arn:aws:cloudfront::797640923903:distribution/E2EZ0TY3ZSTV6O",
+                "arn:aws:cloudfront::797640923903:distribution/E2U03A3USH7ASI",
+                "arn:aws:cloudfront::797640923903:distribution/E3VLOHRGISMQNR"
               ]
           }
         ]
