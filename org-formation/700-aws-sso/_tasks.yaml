@@ -574,7 +574,6 @@ SsoApplicationManager:
     managedPolicies:
       - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
       - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
-      - arn:aws:iam::aws:policy/SecretsManagerReadWrite
       - arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly
     inlinePolicy: >-
       {
