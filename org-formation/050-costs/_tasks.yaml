@@ -61,13 +61,14 @@ CostCategories:
 # use the payer account so that cost explorer aggregates member account data
 CostNotificationMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-email-totals/1.0.0/lambda-finops-email-totals.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-email-totals/1.1.0/lambda-finops-email-totals.yaml'
   StackName: !Sub '${resourcePrefix}-cost-notifications'
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
     Region: !Ref primaryRegion
   Parameters:
     AdminEmail: "it@sagebase.org"
+    CopyRecipients: "cloud-cost-audit@sagebase.org"
     # Uncomment the following lines to disable user reports
     #RestrictRecipients: "True"
     #ApprovedRecipients: "it@sagebase.org"
