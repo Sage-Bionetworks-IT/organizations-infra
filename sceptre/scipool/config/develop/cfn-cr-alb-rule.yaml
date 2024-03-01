@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/0.1.6/cfn-cr-alb-rule.yaml
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/0.1.7/cfn-cr-alb-rule.yaml
 stack_name: cfn-cr-alb-rule
 dependencies:
   - "develop/sc-kms-key.yaml"
@@ -13,4 +13,5 @@ parameters:
   OidcTokenEndpoint: 'https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token'
   OidcUserInfoEndpoint: 'https://repo-prod.prod.sagebase.org/auth/v1/oauth2/userinfo'
   OidcClientId: '100055'
+  SessionCookieNamePrefix: AWSALBNotebookAuth
   KmsDecryptPolicyArn: !stack_output_external sc-kms-key::KmsDecryptPolicyArn
