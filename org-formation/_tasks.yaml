@@ -26,11 +26,6 @@ Cloudtrail:
   DependsOn: [ Types ]
   Path: ./060-cloudtrail/_tasks.yaml
 
-GuarDuty:
-  Type: include
-  DependsOn: [ Types ]
-  Path: ./070-guard-duty/_tasks.yaml
-
 SecurityHub:
   Type: include
   DependsOn: [ Types ]
