@@ -10,65 +10,6 @@ Parameters:
     Description: The identifier from the account used to manage GuardDuty
     Default: !Ref SecurityCentralAccount
 
-GuardDuty:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/GuardDuty/guard-duty.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}'
-  StackDescription: GuardDuty - Base
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref accountId
-  OrganizationBindings:
-    LogArchiveBinding:
-      Account: !Ref LogCentralAccount
-    MemberBinding:
-      Account: '*'
-      IncludeMasterAccount: true
-      ExcludeAccount:
-        - !Ref accountId
-    AllBinding:
-      Account: '*'
-      IncludeMasterAccount: true
-  Parameters:
-    resourcePrefix: !Ref resourcePrefix
-    accountId: !Ref accountId
-
-# ==================================================================================================
-# one off associations for Guardduty in AWS accounts that are not in the Sage ORG
-
-# For org-sagebase-strides, the other half of this Guardduty association is in ../sceptre/strides
-GuardDutyConnectStrides:
-  Type: update-stacks
-  Template: ./GuardDutyExternalConnect.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-connect-strides'
-  StackDescription: Associate an external Guardduty member account
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account:
-      - !Ref accountId
-  Parameters:
-    MemberAccountId: "423819316185"           # org-sagebase-strides
-    MemberRootEmail: "aws.strides@sagebase.org"
-    MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
-
-# For org-sagebase-strides-ampad-workflows, the other half of this Guardduty association is in ../sceptre/strides-ampad-workflows
-GuardDutyConnectStridesAmpadWorkflows:
-  Type: update-stacks
-  Template: ./GuardDutyExternalConnect.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-connect-stridesampadworkflows'
-  StackDescription: Associate an external Guardduty member account
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account:
-      - !Ref accountId
-  Parameters:
-    MemberAccountId: "751556145034"           # strides-ampad-workflows
-    MemberRootEmail: "aws.strides-ampad-workflows@sagebase.org"
-    MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
-# ==================================================================================================
-
 # bucket that contains the trusted IP addresses that are excluded from GuardDuty findings
 GuardDutyTrustedIpsBucket:
   Type: update-stacks
@@ -90,19 +31,3 @@ GuardDutyTrustedIps:
   OrganizationBinding:
     Account: !Ref accountId
     Region: !Ref primaryRegion
-
-GuardDutyExtension:
-  Type: update-stacks
-  DependsOn:
-    - GuardDuty
-    - GuardDutyTrustedIps
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/GuardDuty/guard-duty-extension.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-extension'
-  StackDescription: GuardDuty - Extension (including IP Set)
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref accountId
-  Parameters:
-    resourcePrefix: !Ref resourcePrefix
-    detectorId: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
-    bucketName: !CopyValue [ !Sub '${resourcePrefix}-${appName}-trusted-ips-bucket-name' ]
