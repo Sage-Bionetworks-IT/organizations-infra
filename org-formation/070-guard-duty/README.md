@@ -3,7 +3,6 @@ The templates in this folder enable [GuardDuty](https://docs.aws.amazon.com/guar
 
 GuardDuty supports a management-member model, which this stack uses. The Management account is configured to be the SecurityAccount, all other accounts are member accounts. Some notable resources in this folder:
 
-| Resource | Description |
-| - | - |
-| Trusted IP | A bucket and file with an allow-list of IP addresses. These can be the home IPs of engineers working from home to reduce the number of false positives |
+| Resource  | Description |
+|-----------| ----------- |
 | SNS topic | An extension point to notify, filter or respond to GuardDuty findings |

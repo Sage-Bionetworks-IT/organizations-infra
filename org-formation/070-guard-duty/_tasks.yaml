@@ -56,42 +56,20 @@ GuardDutyConnectStridesAmpadWorkflows:
     MemberAccountId: "751556145034"           # strides-ampad-workflows
     MemberRootEmail: "aws.strides-ampad-workflows@sagebase.org"
     MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
+
+# For org-sagebase-opendata, the other half of this Guardduty association is in ../sceptre/aws-opendata
+GuardDutyConnectOpenData:
+  Type: update-stacks
+  Template: ./GuardDutyExternalConnect.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-connect-opendata'
+  StackDescription: Associate an external Guardduty member account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref accountId
+  Parameters:
+    MemberAccountId: "373143421983"           # org-sagebase-opendata
+    MemberRootEmail: "aws.opendata@sagebase.org"
+    MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
 # ==================================================================================================
-
-# bucket that contains the trusted IP addresses that are excluded from GuardDuty findings
-GuardDutyTrustedIpsBucket:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.2/templates/GuardDuty/trusted-ips-bucket.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-trusted-ips-bucket'
-  StackDescription: GuardDuty - Trusted IPs bucket
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref accountId
-  Parameters:
-    resourcePrefix: !Ref resourcePrefix
-    bucketName: !Sub '${resourcePrefix}-${appName}-trusted-ips'
-
-GuardDutyTrustedIps:
-  Type: copy-to-s3
-  DependsOn: GuardDutyTrustedIpsBucket
-  LocalPath: ./trusted-ips.txt
-  RemotePath: !Sub 's3://${resourcePrefix}-${appName}-trusted-ips/trusted_ips.txt'
-  OrganizationBinding:
-    Account: !Ref accountId
-    Region: !Ref primaryRegion
-
-GuardDutyExtension:
-  Type: update-stacks
-  DependsOn:
-    - GuardDuty
-    - GuardDutyTrustedIps
-  Template: ./guardduty-extension.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-extension'
-  StackDescription: GuardDuty - Extension (including IP Set)
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref accountId
-  Parameters:
-    resourcePrefix: !Ref resourcePrefix
-    detectorId: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
-    bucketName: !CopyValue [ !Sub '${resourcePrefix}-${appName}-trusted-ips-bucket-name' ]
