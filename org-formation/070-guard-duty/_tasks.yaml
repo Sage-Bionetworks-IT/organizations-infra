@@ -12,26 +12,15 @@ Parameters:
 
 GuardDuty:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/GuardDuty/guard-duty.yaml
+  Template: ./guardduty.yaml
   StackName: !Sub '${resourcePrefix}-${appName}'
-  StackDescription: GuardDuty - Base
+  StackDescription: GuardDuty
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
+    IncludeMasterAccount: false
     Account: !Ref accountId
-  OrganizationBindings:
-    LogArchiveBinding:
-      Account: !Ref LogCentralAccount
-    MemberBinding:
-      Account: '*'
-      IncludeMasterAccount: true
-      ExcludeAccount:
-        - !Ref accountId
-    AllBinding:
-      Account: '*'
-      IncludeMasterAccount: true
   Parameters:
     resourcePrefix: !Ref resourcePrefix
-    accountId: !Ref accountId
 
 # ==================================================================================================
 # one off associations for Guardduty in AWS accounts that are not in the Sage ORG
@@ -96,7 +85,7 @@ GuardDutyExtension:
   DependsOn:
     - GuardDuty
     - GuardDutyTrustedIps
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/GuardDuty/guard-duty-extension.yaml
+  Template: ./guardduty-extension.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-extension'
   StackDescription: GuardDuty - Extension (including IP Set)
   DefaultOrganizationBindingRegion: !Ref primaryRegion
