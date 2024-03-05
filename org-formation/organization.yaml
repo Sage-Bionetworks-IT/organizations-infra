@@ -13,10 +13,10 @@ Organization:
       DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
       ServiceControlPolicies:
         - !Ref RestrictIamLoginProfileSCP
-        - !Ref RestrictDisableGuarddutySCP
 # automation attempts to update these services when vending new aws accounts
 #        - !Ref RestrictDisableCloudtrailSCP
 #        - !Ref RestrictDisableCloudwatchSCP
+#        - !Ref RestrictDisableGuarddutySCP
 
   ScienceDevOU:
     Type: OC::ORG::OrganizationalUnit

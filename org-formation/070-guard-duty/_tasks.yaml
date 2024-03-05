@@ -1,0 +1,33 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'guardduty'
+
+  accountId:
+    Type: String
+    Description: The identifier from the account used to manage GuardDuty
+    Default: !Ref SecurityCentralAccount
+
+# bucket that contains the trusted IP addresses that are excluded from GuardDuty findings
+GuardDutyTrustedIpsBucket:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.2/templates/GuardDuty/trusted-ips-bucket.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-trusted-ips-bucket'
+  StackDescription: GuardDuty - Trusted IPs bucket
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  Parameters:
+    resourcePrefix: !Ref resourcePrefix
+    bucketName: !Sub '${resourcePrefix}-${appName}-trusted-ips'
+
+GuardDutyTrustedIps:
+  Type: copy-to-s3
+  DependsOn: GuardDutyTrustedIpsBucket
+  LocalPath: ./trusted-ips.txt
+  RemotePath: !Sub 's3://${resourcePrefix}-${appName}-trusted-ips/trusted_ips.txt'
+  OrganizationBinding:
+    Account: !Ref accountId
+    Region: !Ref primaryRegion
