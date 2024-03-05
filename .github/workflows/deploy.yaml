@@ -153,6 +153,12 @@ jobs:
     with:
       role-to-assume: "arn:aws:iam::325565585839:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/synapseprod"
+  sceptre-securitycentral:
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::140124849929:role/sagebase-github-oidc-sage-bionetworks-it"
+      working-dir: "sceptre/securitycentral"
   sceptre-bridgedev:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"

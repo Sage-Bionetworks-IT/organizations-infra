@@ -24,6 +24,8 @@ prefixed with numbers to enforce the order they are deployed in.
 
 - 060 [CloudTrail](./060-cloudtrail) \
   Configure CloudTrail for all accounts.
+- 070 [GuardDuty](./070-guard-duty) \
+  Configure GuardDuty for all accounts.
 - 075 [Security Hub](./075-security-hub) \
   Configure Security Hub for all accounts.
 - 077 [Macie](./077-macie) \

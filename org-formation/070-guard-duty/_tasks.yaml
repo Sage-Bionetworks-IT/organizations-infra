@@ -1,0 +1,75 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'guardduty'
+
+  accountId:
+    Type: String
+    Description: The identifier from the account used to manage GuardDuty
+    Default: !Ref SecurityCentralAccount
+
+GuardDuty:
+  Type: update-stacks
+  Template: ./guardduty.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  StackDescription: GuardDuty
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref accountId
+  Parameters:
+    resourcePrefix: !Ref resourcePrefix
+
+# ==================================================================================================
+# one off associations for Guardduty in AWS accounts that are not in the Sage ORG
+
+# For org-sagebase-strides, the other half of this Guardduty association is in ../sceptre/strides
+GuardDutyConnectStrides:
+  Type: update-stacks
+  Template: ./GuardDutyExternalConnect.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-connect-strides'
+  StackDescription: Associate an external Guardduty member account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref accountId
+  Parameters:
+    MemberAccountId: "423819316185"           # org-sagebase-strides
+    MemberRootEmail: "aws.strides@sagebase.org"
+    MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
+
+# For org-sagebase-strides-ampad-workflows, the other half of this Guardduty association is in ../sceptre/strides-ampad-workflows
+GuardDutyConnectStridesAmpadWorkflows:
+  Type: update-stacks
+  Template: ./GuardDutyExternalConnect.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-connect-stridesampadworkflows'
+  StackDescription: Associate an external Guardduty member account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref accountId
+  Parameters:
+    MemberAccountId: "751556145034"           # strides-ampad-workflows
+    MemberRootEmail: "aws.strides-ampad-workflows@sagebase.org"
+    MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
+
+# For org-sagebase-opendata, the other half of this Guardduty association is in ../sceptre/aws-opendata
+GuardDutyConnectOpenData:
+  Type: update-stacks
+  Template: ./GuardDutyExternalConnect.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-connect-opendata'
+  StackDescription: Associate an external Guardduty member account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref accountId
+  Parameters:
+    MemberAccountId: "373143421983"           # org-sagebase-opendata
+    MemberRootEmail: "aws.opendata@sagebase.org"
+    MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
+# ==================================================================================================

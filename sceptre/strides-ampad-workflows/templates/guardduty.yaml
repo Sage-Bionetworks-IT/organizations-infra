@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Associate a Guardduty member with a master account
+Parameters:
+  accountId:
+    Type: String
+    Description: The identifier from the account used to manage GuardDuty
+Resources:
+  Detector:
+    Type: AWS::GuardDuty::Detector
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E1012
+    Properties:
+      Enable: true
+      FindingPublishingFrequency: FIFTEEN_MINUTES
+  Master:
+    Type: AWS::GuardDuty::Master
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E1012
+    Properties:
+      DetectorId:
+        Ref: Detector
+      MasterId:
+        Ref: accountId
+Outputs:
+  DetectorId:
+    Value:
+      Ref: Detector
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-detector-id
