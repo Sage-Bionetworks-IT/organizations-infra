@@ -277,6 +277,10 @@ Parameters:
     Type: String
     Default: '0498c498-5041-704e-c4bb-c3eb14f2fdbb'
 
+  monitorCentralViewerPlusGroup:      #JC aws-monitorcentral-viewers-plus
+    Type: String
+    Default: 'TBD'
+
   scceDevAdminGroup:      #JC aws-sccedev-admins
     Type: String
     Default: 'b47864c8-1001-7096-1bce-5f09fbeb1b65'
@@ -1905,6 +1909,23 @@ SsoIpamViewerPlus:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref ipamViewerPlusGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
+
+SsoMonitorCentralViewerPlus:
+  Type: update-stacks
+  DependsOn: SsoViewerPlus
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-monitorcental-viewer-plus'
+  StackDescription: 'SSO: Viewer role used by monitorcentral viewer plus group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref MonitorCentralAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref monitorCentralViewerPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
 
 SsoScceDevAdmin:
