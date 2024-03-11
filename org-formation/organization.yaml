@@ -91,6 +91,7 @@ Organization:
         - !Ref IpamAccount
         - !Ref SysmanCentralAccount
         - !Ref IdentityCentralAccount
+        - !Ref MonitorCentralAccount
 
   PolicyStagingOU:
     Type: OC::ORG::OrganizationalUnit
@@ -504,6 +505,15 @@ Organization:
       AccountName: org-sagebase-ipam
       RootEmail: aws.ipam@sagebase.org
       Alias: org-sagebase-ipam
+      Tags:
+        <<: !Include ./_platform_org_tags.yaml
+
+  MonitorCentralAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-monitorcentral
+      RootEmail: aws.monitorcentral@sagebase.org
+      Alias: org-sagebase-monitorcentral
       Tags:
         <<: !Include ./_platform_org_tags.yaml
 
