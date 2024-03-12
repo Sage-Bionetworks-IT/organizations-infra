@@ -1914,7 +1914,8 @@ SsoIpamViewerPlus:
 SsoMonitorCentralViewerPlus:
   Type: update-stacks
   DependsOn: SsoViewerPlus
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
   StackName: !Sub '${resourcePrefix}-${appName}-monitorcental-viewer-plus'
   StackDescription: 'SSO: Viewer role used by monitorcentral viewer plus group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
