@@ -279,7 +279,7 @@ Parameters:
 
   monitorCentralViewerPlusGroup:      #JC aws-monitorcentral-viewers-plus
     Type: String
-    Default: 'TBD'
+    Default: 'a4887438-9071-7060-e244-6cfcc242d43b'
 
   scceDevAdminGroup:      #JC aws-sccedev-admins
     Type: String
