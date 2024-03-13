@@ -8,7 +8,7 @@ Parameters:
 # Give MonitorCentral access to the account list in Organizations
 CrossAccountListAccountRole:
   Type: update-stacks
-  Template: CloudWatch-CrossAccountListAccountsRole-AccountList.yaml
+  Template: ./CloudWatch-CrossAccountListAccountsRole-AccountList.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-CrossAccountListAccountsRole'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -19,21 +19,21 @@ CrossAccountListAccountRole:
 # Link cloudwatch in member accounts to MonitorCentral
 LinkManagementAccount:
   Type: update-stacks
-  Template: CloudWatch-CrossAccountSharingRole-AccountList.yaml
+  Template: ./Cloudwatch-Link-Management-Account.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-LinkManagementAccount'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: '*'
-    Exclude: !Ref MonitorCentralAccount
+    ExcludeAccount: !Ref MonitorCentralAccount
 
 # Allow member accounts to share cloudwatch data with MonitorCentral
 CrossAccountSharingRole:
   Type: update-stacks
-  Template: CloudWatch-CrossAccountSharingRole-AccountList.yaml
+  Template: ./CloudWatch-CrossAccountSharingRole-AccountList.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-CrossAccountSharingRole'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: '*'
-    Exclude: !Ref MonitorCentralAccount
+    ExcludeAccount: !Ref MonitorCentralAccount
   Parameters:
     MonitoringAccountIds: !Ref MonitorCentralAccount
