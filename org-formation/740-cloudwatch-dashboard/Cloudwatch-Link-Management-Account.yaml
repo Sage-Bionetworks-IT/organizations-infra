@@ -8,6 +8,9 @@ Parameters:
   MonitoringAccountId:
     Description: Allows one or more monitoring accounts to view your data. Enter AWS account ids, 12 numeric digits in comma-separated list
     Type: String
+  SinkIdentifier:
+    Description: ID of the attachment point in the cloudwatch monitoring account.
+    Type: String
 
 Resources:
   Link:
@@ -19,4 +22,4 @@ Resources:
         - "AWS::Logs::LogGroup"
         - "AWS::XRay::Trace"
         - "AWS::ApplicationInsights::Application"
-      SinkIdentifier: !Sub "arn:aws:oam:us-east-1:${MonitoringAccountId}:sink/6046cc13-135d-4e41-ae56-63327a7a7b8c"
+      SinkIdentifier: !Sub "arn:aws:oam:us-east-1:${MonitoringAccountId}:sink/${SinkIdentifier}"

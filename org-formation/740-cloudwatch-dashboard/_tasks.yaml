@@ -27,6 +27,7 @@ LinkManagementAccount:
     ExcludeAccount: !Ref MonitorCentralAccount
   Parameters:
     MonitoringAccountId: !Ref MonitorCentralAccount
+    SinkIdentifier: "6046cc13-135d-4e41-ae56-63327a7a7b8c"
 
 # Allow member accounts to share cloudwatch data with MonitorCentral
 CrossAccountSharingRole:
@@ -36,6 +37,8 @@ CrossAccountSharingRole:
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: '*'
-    ExcludeAccount: !Ref MonitorCentralAccount
+    ExcludeAccount:
+      - !Ref MonitorCentralAccount
+      - !Ref TransitAccount
   Parameters:
     MonitoringAccountIds: !Ref MonitorCentralAccount
