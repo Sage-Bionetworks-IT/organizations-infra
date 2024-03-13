@@ -19,4 +19,4 @@ Resources:
         - "AWS::Logs::LogGroup"
         - "AWS::XRay::Trace"
         - "AWS::ApplicationInsights::Application"
-      SinkIdentifier: !Sub "arn:aws:oam:us-east-1:${MonitoringAccountId}:sink/5ea88d72-76d8-419e-9c6d-07d4de64f972"
+      SinkIdentifier: !Sub "arn:aws:oam:us-east-1:${MonitoringAccountId}:sink/6046cc13-135d-4e41-ae56-63327a7a7b8c"
