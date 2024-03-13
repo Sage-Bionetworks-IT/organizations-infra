@@ -26,7 +26,7 @@ LinkManagementAccount:
     Account: '*'
     ExcludeAccount: !Ref MonitorCentralAccount
   Parameters:
-    MonitoringAccountIds: !Ref MonitorCentralAccount
+    MonitoringAccountId: !Ref MonitorCentralAccount
 
 # Allow member accounts to share cloudwatch data with MonitorCentral
 CrossAccountSharingRole:
@@ -38,4 +38,4 @@ CrossAccountSharingRole:
     Account: '*'
     ExcludeAccount: !Ref MonitorCentralAccount
   Parameters:
-    MonitoringAccountId: !Ref MonitorCentralAccount
+    MonitoringAccountIds: !Ref MonitorCentralAccount
