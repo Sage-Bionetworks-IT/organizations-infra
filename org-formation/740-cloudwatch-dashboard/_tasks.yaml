@@ -37,8 +37,6 @@ CrossAccountSharingRole:
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: '*'
-    ExcludeAccount:
-      - !Ref MonitorCentralAccount
-      - !Ref TransitAccount
+    ExcludeAccount: !Ref MonitorCentralAccount
   Parameters:
     MonitoringAccountIds: !Ref MonitorCentralAccount
