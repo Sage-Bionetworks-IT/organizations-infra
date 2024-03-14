@@ -19,7 +19,7 @@ CrossAccountListAccountRole:
 # Link cloudwatch in member accounts to MonitorCentral
 LinkManagementAccount:
   Type: update-stacks
-  Template: ./Cloudwatch-Link-Management-Account.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.8.6/templates/Cloudwatch/Link-Management-Account.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-LinkManagementAccount'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -32,7 +32,7 @@ LinkManagementAccount:
 # Allow member accounts to share cloudwatch data with MonitorCentral
 CrossAccountSharingRole:
   Type: update-stacks
-  Template: ./CloudWatch-CrossAccountSharingRole-AccountList.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.8.6/templates/Cloudwatch/CrossAccountSharingRole-AccountList.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-CrossAccountSharingRole'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
