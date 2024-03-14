@@ -5,7 +5,7 @@ stack_name: "sagebase-CloudWatcDashboard-CrossAccountSharingRole"
 stack_tags:
   OwnerEmail: "it@sagebase.org"
 dependencies:
-  - "prod/bootstrap.yaml"
+  - "prod/CloudWatch-CrossAccountSharingRole-AccountList.yaml"
 parameters:
   MonitoringAccountId: "767397888168"
   SinkIdentifier: "6046cc13-135d-4e41-ae56-63327a7a7b8c"
