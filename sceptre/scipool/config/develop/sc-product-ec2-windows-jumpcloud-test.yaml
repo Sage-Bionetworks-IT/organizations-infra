@@ -1,0 +1,18 @@
+template:
+  path: "sc-product-ec2-windows-jumpcloud.j2"
+stack_name: "sc-product-ec2-windows-jumpcloud-test"
+stack_tags:
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "develop/sc-portfolio-ec2.yaml"
+  - "develop/sc-ec2-actions.yaml"
+parameters:
+  ProductName: "EC2: Windows Test"
+  ReplaceProvisioningArtifacts: "true"
+sceptre_user_data:
+  # force cloudformation to update stack by setting a random number to the latest product's description
+  ProvisioningArtifactParameters: |
+    - Description: 'Test upgrade to Server 2022 {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/master/ec2/sc-ec2-windows-jumpcloud-test.yaml'
+      Name: 'Test'
