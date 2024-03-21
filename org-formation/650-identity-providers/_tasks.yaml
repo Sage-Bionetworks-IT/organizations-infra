@@ -420,6 +420,8 @@ GithubOidcPackerImageDeploy:
         branches: ["master"]
       - name: "imagecentral-dashboard"
         branches: ["master"]
+      - name: "packer-winserver-2022"
+        branches: ["master"]
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
     Region: us-east-1
