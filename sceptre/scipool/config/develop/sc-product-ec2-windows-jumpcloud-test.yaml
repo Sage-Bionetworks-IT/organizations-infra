@@ -15,4 +15,4 @@ sceptre_user_data:
     - Description: 'Test upgrade to Server 2022 {{ range(1, 10000) | random }}'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/master/ec2/sc-ec2-windows-jumpcloud-test.yaml'
-      Name: 'Test'
+      Name: 'v0.0.0'
