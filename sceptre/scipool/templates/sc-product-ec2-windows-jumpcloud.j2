@@ -53,7 +53,7 @@ Resources:
       Description: This product builds one Microsoft Windows EC2 instance with
         Jumpcloud integration.
       ProvisioningArtifactParameters:
-        {{ sceptre_user_data.ProvisioningArtifactParameters|indent(8) }}
+        {{ sceptre_user_data.ProvisioningArtifactParameters | indent(8) }}
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:

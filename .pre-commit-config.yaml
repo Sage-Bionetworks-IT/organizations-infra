@@ -34,3 +34,8 @@ repos:
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
+  - repo: https://github.com/aristanetworks/j2lint.git
+    rev: v1.1.0
+    hooks:
+    - id: j2lint
+      args: [--ignore, S3, V1, --]

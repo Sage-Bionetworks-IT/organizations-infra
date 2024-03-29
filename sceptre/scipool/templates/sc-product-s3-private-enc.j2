@@ -49,7 +49,7 @@ Resources:
       Description: This product builds an AWS S3 bucket encrypted with private
         access accessible from any source.
       ProvisioningArtifactParameters:
-        {{ sceptre_user_data.ProvisioningArtifactParameters|indent(8) }}
+        {{ sceptre_user_data.ProvisioningArtifactParameters | indent(8) }}
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:

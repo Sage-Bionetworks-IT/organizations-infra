@@ -52,7 +52,7 @@ Resources:
       Name: !Ref ProductName
       Description: "This product builds one Linux EC2 instance, either Amazon Linux or Ubuntu"
       ProvisioningArtifactParameters:
-        {{ sceptre_user_data.ProvisioningArtifactParameters|indent(8) }}
+        {{ sceptre_user_data.ProvisioningArtifactParameters | indent(8) }}
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:
