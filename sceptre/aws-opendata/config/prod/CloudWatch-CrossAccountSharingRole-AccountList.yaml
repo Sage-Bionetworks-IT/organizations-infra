@@ -1,0 +1,10 @@
+template:
+  type: "http"
+  url: "https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.8.6/templates/Cloudwatch/CrossAccountSharingRole-AccountList.yaml"
+stack_name: "sagebase-CloudWatcDashboard-CrossAccountSharingRole"
+stack_tags:
+  OwnerEmail: "it@sagebase.org"
+dependencies:
+  - "prod/Cloudwatch-Link-Management-Account.yaml"
+parameters:
+  MonitoringAccountIds: "767397888168"
