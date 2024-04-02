@@ -53,7 +53,7 @@ Resources:
       Description: This product builds one Linux EC2 instance using an Ubuntu AMI
         with workflows software installed. Maintained by Sage Bionetworks.
       ProvisioningArtifactParameters:
-        {{ sceptre_user_data.ProvisioningArtifactParameters|indent(8) }}
+        {{ sceptre_user_data.ProvisioningArtifactParameters | indent(8) }}
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:
