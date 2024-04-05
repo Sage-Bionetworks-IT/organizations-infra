@@ -1,5 +1,10 @@
 Description: Setup AWS config and rules
 AWSTemplateFormatVersion: 2010-09-09
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W2001
 Parameters:
   OperatorEmail:
     Type: String
@@ -115,23 +120,6 @@ Resources:
       LogGroupName: !Sub '/aws/config/${AWS::StackName}.log'
       RetentionInDays: !Ref RetentionInDays
 
-  ####### Cloudtrail Rules #######
-
-  # https://docs.aws.amazon.com/config/latest/developerguide/cloudtrail-enabled.html
-  CloudtrailEnabledAwsConfigRule:
-    Type: 'AWS::Config::ConfigRule'
-    DependsOn: ConfigConfigurationRecorder
-    Properties:
-      Description: Checks whether AWS CloudTrail is enabled.
-      InputParameters:
-        s3BucketName: !Ref LocalCloudtrailBucket
-        snsTopicArn: !Ref SNSConfigTopic
-        cloudWatchLogsLogGroupArn: !GetAtt LogsConfigLogGroup.Arn
-      Scope: {}
-      Source:
-        Owner: AWS
-        SourceIdentifier: CLOUD_TRAIL_ENABLED
-      MaximumExecutionFrequency: TwentyFour_Hours
 Outputs:
   S3ConfigBucket:
     Value: !Ref S3ConfigBucket

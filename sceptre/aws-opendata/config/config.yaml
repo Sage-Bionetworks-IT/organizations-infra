@@ -1,6 +1,5 @@
-project_code: sage-bionetworks
-# profile: {{ var.profile | default("default") }}
+project_code: "sage-bionetworks"
 region: {{ var.region | default("us-east-1") }}
-template_bucket_name: bootstrap-awss3cloudformationbucket-4kli9fevbzjn
 template_key_prefix: {{ environment_variable.GITHUB_REF | default("testing") }}
+template_bucket_name: "bootstrap-awss3cloudformationbucket-p8s8m70dolhm"
 admincentral_cf_bucket: "bootstrap-awss3cloudformationbucket-19qromfd235z9"

@@ -42,6 +42,7 @@ Resources:
       MaxSessionDuration: 28800
       RoleName: !GetAtt AdminSamlProvider.Name
       ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
         - arn:aws:iam::aws:policy/AdministratorAccess
         - arn:aws:iam::aws:policy/job-function/Billing
       AssumeRolePolicyDocument:
@@ -68,6 +69,7 @@ Resources:
       MaxSessionDuration: 28800
       RoleName: !GetAtt AuditorSamlProvider.Name
       ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
         - arn:aws:iam::aws:policy/SecurityAudit
         - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
         - !Ref AWSIAMCostExplorerAccessPolicy
@@ -95,6 +97,7 @@ Resources:
       MaxSessionDuration: 28800
       RoleName: !GetAtt TowerViewerSamlProvider.Name
       ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
         - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
         - !Ref AWSIAMCostExplorerAccessPolicy
       AssumeRolePolicyDocument:

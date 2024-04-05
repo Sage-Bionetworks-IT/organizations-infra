@@ -24,13 +24,24 @@ Refer to [Org-Formation Overview](./org-formation/README.md) for a summary of wh
 
 ### sceptre
 
+
+#### Install your machine and then and then run:
+
 * create a python 3.x [virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
-* run `pip install sceptre sceptre-ssm-resolver sceptre-date-resolver git+git://github.com/Sceptre/sceptre-file-resolver.git`
+* run `pip install sceptre sceptre-ssm-resolver sceptre-date-resolver sceptre-file-resolver`
 * cd sceptre/_folder_  (i.e. sceptre/sandbox)
 * uncomment `# profile: {{ var.profile | default("default") }}` in config/configs.yaml
 * run `sceptre --var "profile=member-profile" --var "region=us-east-1" launch prod/my-template.yaml`
 
 __Note__: member-profile is a profile that can assume the member account's `OrganizationAccountAccessRole` role
+
+#### Run in a docker container:
+
+```
+docker run --rm --name sceptre -v /path/to/src/organizations-infra/sceptre/scipool:/project \
+-v $HOME/.aws:/root/.aws/:ro sceptreorg/sceptre \
+--var "region=us-east-1" launch -y prod/my-template.yaml
+```
 
 ### Automation
 We have setup [Github actions](https://github.com/Sage-Bionetworks-IT/organizations-infra/actions) to automate

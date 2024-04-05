@@ -1,0 +1,136 @@
+# This bucket template is mostly copied from
+# https://assets.opendata.aws/aws-onboarding-handbook-for-data-providers-en-US.pdf
+# with slight modifications to support Synapse based storage location
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  This template creates the AWS infrastructure to publish a public
+  data set on S3. It creates a publicly-accessible S3 bucket for
+  the dataset, enables CloudWatch Metrics for the dataset bucket,
+  and creates a public SQS and Lambda subscribable SNS Topic.
+
+Parameters:
+  DataSetName:
+    AllowedPattern: "[a-z0-9\\.\\-]*"
+    ConstraintDescription: >-
+      may only contain lowercase letters, numbers, and ., or - characters
+    Description: >-
+      The name of the dataset's S3 bucket. This will be used to create the dataset S3 bucket.
+    MaxLength: '250'
+    MinLength: '1'
+    Type: String
+
+Resources:
+  SNSTopic:
+    Properties:
+      TopicName: !Join [ "", [ !Join [ "", !Split [ ".", !Ref DataSetName ] ], "-object_created" ] ]
+    Type: AWS::SNS::Topic
+  SNSTopicPolicy:
+    Properties:
+      Topics:
+        - !Ref SNSTopic
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Sid: allowS3BucketToPublish
+          Effect: Allow
+          Action:
+            - sns:Publish
+          Resource: !Ref SNSTopic
+          Principal:
+            Service: s3.amazonaws.com
+          Condition:
+            ArnLike:
+              aws:SourceArn: !Sub arn:aws:s3:::${DataSetName}
+        - Sid: allowOnlySQSandLambdaSubscription
+          Effect: Allow
+          Action:
+            - sns:Subscribe
+            - sns:Receive
+          Resource: !Ref SNSTopic
+          Principal:
+            AWS: "*"
+          Condition:
+            StringEquals:
+              SNS:Protocol:
+                - sqs
+                - lambda
+    Type: AWS::SNS::TopicPolicy
+  DataSetBucket:
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Delete
+    DependsOn:
+      - SNSTopicPolicy
+    Properties:
+      BucketName: !Ref DataSetName
+      MetricsConfigurations:
+        - Id: EntireBucket
+      LifecycleConfiguration:
+        Rules:
+        - Id: IntelligentTieringRule
+          Status: Enabled
+          Transitions:
+            - TransitionInDays: '0'
+              StorageClass: INTELLIGENT_TIERING
+        - Id: AbortIncompleteMultipartUploadRule
+          Status: Enabled
+          AbortIncompleteMultipartUpload:
+            DaysAfterInitiation: 7
+      NotificationConfiguration:
+        TopicConfigurations:
+        - Event: "s3:ObjectCreated:*"
+          Topic: !Ref SNSTopic
+      PublicAccessBlockConfiguration:
+          BlockPublicPolicy: false
+          RestrictPublicBuckets: false
+      CorsConfiguration:
+        CorsRules:
+        - AllowedHeaders:
+            - "*"
+          AllowedMethods:
+            - HEAD
+            - GET
+            - PUT
+            - POST
+          AllowedOrigins:
+            - "*"
+          ExposedHeaders:
+            - ETag
+            - x-amz-meta-custom-header
+          MaxAge: 3000
+    Type: AWS::S3::Bucket
+  DataSetBucketPolicy:
+    Properties:
+      Bucket: !Ref DataSetBucket
+      PolicyDocument:
+        Statement:
+          - Sid: SynapseBucketAccess
+            Action:
+              - s3:List*
+              - s3:Get*
+            Effect: Allow
+            Principal: "*"
+            Condition:
+              StringEquals:
+                "aws:PrincipalAccount": "325565585839"
+            Resource:
+              - !Sub arn:aws:s3:::${DataSetBucket}
+          - Sid: SynapseObjectAccess
+            Action:
+              - s3:*Object*
+              - s3:*MultipartUpload*
+            Effect: Allow
+            Principal: "*"
+            Condition:
+              StringEquals:
+                "aws:PrincipalAccount": "325565585839"
+            Resource:
+              - !Sub arn:aws:s3:::${DataSetBucket}/*
+    Type: AWS::S3::BucketPolicy
+
+Outputs:
+  DataBucket:
+    Description: "S3 data bucket name"
+    Value: !Sub ${DataSetBucket}
+  SNSTopic:
+    Description: "SQS and Lambda subscribable SNS Topic"
+    Value: !Ref SNSTopic

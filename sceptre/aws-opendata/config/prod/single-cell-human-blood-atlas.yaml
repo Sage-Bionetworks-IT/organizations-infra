@@ -1,0 +1,7 @@
+template:
+  path: "opendata-bucket.yaml"
+stack_name: "single-cell-human-blood-atlas"
+dependencies:
+  - "prod/bootstrap.yaml"
+parameters:
+  DataSetName: "single.cell.human.blood.atlas.opendata.sagebase.org"

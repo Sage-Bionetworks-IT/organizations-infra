@@ -121,6 +121,10 @@ Parameters:
     Type: String
     Default: '906769aa66-e7083100-27d4-49bd-8ed2-c588371a1f91'
 
+  bridgeParticipantManagerGroup:  #JC aws-bridge-participant-managers
+    Type: String
+    Default: '44085488-70f1-704b-c058-b6dde3aba1ef'
+
   scipoolDevAdminGroup:       #JC aws-scipooldev-admins
     Type: String
     Default: '906769aa66-5215fbe3-2331-4ea6-9cb3-ee25cdad4cc8'
@@ -229,6 +233,10 @@ Parameters:
     Type: String
     Default: 'b4e86468-f091-70e2-0ea9-64cf3addcdf1'
 
+  recoverDigitalHealthAnalyticsGroup:   #JC aws-recover-digital-health-analytics
+    Type: String
+    Default: 'c45834f8-1021-70e2-66a2-15edb4d44c30'
+
   dcaProdViewersGroup:      #JC aws-dca-prod-viewers
     Type: String
     Default: '14187418-6081-7044-6e34-07f86b336cdd'
@@ -268,6 +276,10 @@ Parameters:
   ipamViewerPlusGroup:      #JC aws-ipam-viewers-plus
     Type: String
     Default: '0498c498-5041-704e-c4bb-c3eb14f2fdbb'
+
+  monitorCentralViewerPlusGroup:      #JC aws-monitorcentral-viewers-plus
+    Type: String
+    Default: 'a4887438-9071-7060-e244-6cfcc242d43b'
 
   scceDevAdminGroup:      #JC aws-sccedev-admins
     Type: String
@@ -467,6 +479,32 @@ SsoViewer:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+    sessionDuration: 'PT12H'
+    masterAccountId: !Ref MasterAccount
+
+SsoS3Viewer:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
+  StackName: !Sub '${resourcePrefix}-${appName}-s3-viewer'
+  StackDescription: 'S3 Read-only role to allowing access to S3 objects'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: '*'
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref adminGroup
+    permissionSetName: 'S3Viewer'
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
+      - 'arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
@@ -1089,6 +1127,41 @@ SsoBridgeProdIosDeveloper:
         ]
       }
 
+SsoBridgeParticipantManager:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-bridge-participant-manager'
+  StackDescription: 'SSO: role used by participant managers in bridge accounts'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account:
+        - !Ref BridgeDevAccount
+        - !Ref BridgeProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bridgeParticipantManagerGroup
+    permissionSetName: 'bridge-participant-manager'
+    managedPolicies:
+      - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
+      - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
+      - arn:aws:iam::aws:policy/AmazonSNSReadOnlyAccess
+    sessionDuration: 'PT8H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "SnsOptInOutAccess",
+            "Action": [ "sns:CheckIfPhoneNumberIsOptedOut", "sns:OptInPhoneNumber" ],
+            "Effect": "Allow",
+            "Resource": "*"
+          }
+        ]
+      }
+
 SsoScipoolDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -1648,6 +1721,25 @@ SsoRecoverProdViewer:
     principalId: !Ref recoverProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
+# IT-3403: Allow digital analytics team to download from S3 buckets
+SsoRecoverDigitalHealthAnalytics:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-recover-digital-health-analytics'
+  StackDescription: 'SSO: role used by the digital health analytics group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account:
+        - !Ref RecoverDevAccount
+        - !Ref RecoverProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref recoverDigitalHealthAnalyticsGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-s3-viewer-permission-set-arn' ]
+
 SsoDCAProdViewer:
   Type: update-stacks
   DependsOn: SsoViewer
@@ -1817,6 +1909,24 @@ SsoIpamViewerPlus:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref ipamViewerPlusGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
+
+SsoMonitorCentralViewerPlus:
+  Type: update-stacks
+  DependsOn: SsoViewerPlus
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-monitorcental-viewer-plus'
+  StackDescription: 'SSO: Viewer role used by monitorcentral viewer plus group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref MonitorCentralAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref monitorCentralViewerPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-plus-permission-set-arn' ]
 
 SsoScceDevAdmin:

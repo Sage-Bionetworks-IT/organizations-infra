@@ -1,0 +1,42 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'CloudWatcDashboard'
+
+# Give MonitorCentral access to the account list in Organizations
+CrossAccountListAccountRole:
+  Type: update-stacks
+  Template: ./CloudWatch-CrossAccountListAccountsRole-AccountList.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-CrossAccountListAccountsRole'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+  Parameters:
+    MonitoringAccountIds: !Ref MonitorCentralAccount
+
+# Link cloudwatch in member accounts to MonitorCentral
+LinkManagementAccount:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.8.6/templates/Cloudwatch/Link-Management-Account.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-LinkManagementAccount'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: '*'
+    ExcludeAccount: !Ref MonitorCentralAccount
+  Parameters:
+    MonitoringAccountId: !Ref MonitorCentralAccount
+    SinkIdentifier: "6046cc13-135d-4e41-ae56-63327a7a7b8c"
+
+# Allow member accounts to share cloudwatch data with MonitorCentral
+CrossAccountSharingRole:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.8.6/templates/Cloudwatch/CrossAccountSharingRole-AccountList.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-CrossAccountSharingRole'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: '*'
+    ExcludeAccount: !Ref MonitorCentralAccount
+  Parameters:
+    MonitoringAccountIds: !Ref MonitorCentralAccount

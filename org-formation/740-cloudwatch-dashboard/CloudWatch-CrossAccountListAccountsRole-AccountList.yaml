@@ -1,0 +1,42 @@
+# This template is downloaded from the AWS Console (from organizations account)
+# Cloudwatch -> Settings -> Share your Organization account list
+# It should be deployed to the AWS Organizations account
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Enables monitoring accounts to list the accounts information in an AWS Organization
+
+Parameters:
+  MonitoringAccountIds:
+    Description: Allows one or more monitoring accounts to view AWS Organization account list. Enter AWS account ids, 12 numeric digits in comma-separated list
+    Type: CommaDelimitedList
+
+Resources:
+  CWCrossAccountListAccountsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: CloudWatch-CrossAccountSharing-ListAccountsRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            AWS: !Split
+            - ','
+            - !Sub
+              - 'arn:aws:iam::${inner}:root'
+              - inner: !Join
+                - ':root,arn:aws:iam::'
+                - Ref: MonitoringAccountIds
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: CloudWatch-CrossAccountSharing-ListAccounts-Policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - organizations:ListAccounts
+            - organizations:ListAccountsForParent
+            Resource: '*'
+            Effect: Allow

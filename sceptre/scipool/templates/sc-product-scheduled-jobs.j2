@@ -48,7 +48,7 @@ Resources:
       Name: !Ref ProductName
       Description: "This product provisions AWS batch to execute scheduled jobs"
       ProvisioningArtifactParameters:
-        {{ sceptre_user_data.ProvisioningArtifactParameters|indent(8) }}
+        {{ sceptre_user_data.ProvisioningArtifactParameters | indent(8) }}
       'Fn::Transform':
         Name: 'AWS::Include'
         Parameters:
