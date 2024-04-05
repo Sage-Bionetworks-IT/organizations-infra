@@ -40,3 +40,23 @@ CrossAccountSharingRole:
     ExcludeAccount: !Ref MonitorCentralAccount
   Parameters:
     MonitoringAccountIds: !Ref MonitorCentralAccount
+
+
+CrossAccountDashboards:
+  Type: update-stacks
+  Template: ./cw-dashboards.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-CrossAccountDashboards'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref MonitorCentralAccount
+  TemplatingContext:
+    Dashboards:
+      - Name: "agora-develop"
+        ElasticBeanstalkEnvName: "agora-develop"
+        AccountId: "607346494281"
+      - Name: "agora-staging"
+        ElasticBeanstalkEnvName: "agora-staging"
+        AccountId: "681175625864"
+      - Name: "agora-prod"
+        ElasticBeanstalkEnvName: "agora-prod"
+        AccountId: "681175625864"
