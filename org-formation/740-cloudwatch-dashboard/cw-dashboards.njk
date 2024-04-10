@@ -1,0 +1,136 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Cross Account Cloudwatch Dashboards
+Resources:
+{% for Dashboard in Dashboards %}
+  Dashboard{{ Dashboard.Name | replace('-','') | replace('_','') }}:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: {{ Dashboard.Name }}
+      DashboardBody: >
+        {
+          "widgets": [
+            {
+              "type": "metric",
+              "width": 20,
+              "height": 6,
+              "properties": {
+                "metrics": [
+                  [
+                    "AWS/ElasticBeanstalk",
+                    "ApplicationRequests2xx",
+                    "EnvironmentName",
+                    "{{ Dashboard.ElasticBeanstalkEnvName }}",
+                    {
+                      "accountId": "{{ Dashboard.AccountId }}"
+                    }
+                  ]
+                ],
+                "legend": {
+                  "position": "bottom"
+                },
+                "region": "us-east-1",
+                "liveData": false,
+                "title": "EnvironmentHealth: Average",
+                "view": "timeSeries",
+                "stacked": false
+              }
+            },
+            {
+              "type": "metric",
+              "properties": {
+                "metrics": [
+                  [
+                    "AWS/ElasticBeanstalk",
+                    "ApplicationRequests2xx",
+                    "EnvironmentName",
+                    "{{ Dashboard.ElasticBeanstalkEnvName }}",
+                    {
+                      "accountId": "{{ Dashboard.AccountId }}"
+                    }
+                  ]
+                ],
+                "legend": {
+                  "position": "bottom"
+                },
+                "region": "us-east-1",
+                "liveData": false,
+                "title": "ApplicationRequests2xx: Average",
+                "view": "timeSeries",
+                "stacked": false
+              }
+            },
+            {
+              "type": "metric",
+              "properties": {
+                "metrics": [
+                  [
+                    "AWS/ElasticBeanstalk",
+                    "ApplicationRequests3xx",
+                    "EnvironmentName",
+                    "{{ Dashboard.ElasticBeanstalkEnvName }}",
+                    {
+                      "accountId": "{{ Dashboard.AccountId }}"
+                    }
+                  ]
+                ],
+                "legend": {
+                  "position": "bottom"
+                },
+                "region": "us-east-1",
+                "liveData": false,
+                "title": "ApplicationRequests3xx: Average",
+                "view": "timeSeries",
+                "stacked": false
+              }
+            },
+            {
+              "type": "metric",
+              "properties": {
+                "metrics": [
+                  [
+                    "AWS/ElasticBeanstalk",
+                    "ApplicationRequests4xx",
+                    "EnvironmentName",
+                    "{{ Dashboard.ElasticBeanstalkEnvName }}",
+                    {
+                      "accountId": "{{ Dashboard.AccountId }}"
+                    }
+                  ]
+                ],
+                "legend": {
+                  "position": "bottom"
+                },
+                "region": "us-east-1",
+                "liveData": false,
+                "title": "ApplicationRequests4xx: Average",
+                "view": "timeSeries",
+                "stacked": false
+              }
+            },
+            {
+              "type": "metric",
+              "properties": {
+                "metrics": [
+                  [
+                    "AWS/ElasticBeanstalk",
+                    "ApplicationRequests5xx",
+                    "EnvironmentName",
+                    "{{ Dashboard.ElasticBeanstalkEnvName }}",
+                    {
+                      "accountId": "{{ Dashboard.AccountId }}"
+                    }
+                  ]
+                ],
+                "legend": {
+                  "position": "bottom"
+                },
+                "region": "us-east-1",
+                "liveData": false,
+                "title": "ApplicationRequests5xx: Average",
+                "view": "timeSeries",
+                "stacked": false
+              }
+            }
+          ]
+        }
+{% endfor %}
