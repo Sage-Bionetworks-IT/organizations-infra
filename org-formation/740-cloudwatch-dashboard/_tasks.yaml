@@ -60,3 +60,19 @@ CrossAccountDashboards:
       - Name: "agora-prod"
         ElasticBeanstalkEnvName: "agora-prod"
         AccountId: "681175625864"
+
+IAtlasCwDashboards:
+  Type: update-stacks
+  Template: ./iatlas-cw-dashboards.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-iatlas'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref MonitorCentralAccount
+  TemplatingContext:
+    Dashboards:
+      - Name: "iatlas-staging"
+        ClusterName: "iatlas-staging-EcsCluster"
+        AccountId: "386990716034"
+      - Name: "iatlas-prod"
+        ClusterName: "iatlas-prod-EcsCluster"
+        AccountId: "386990716034"
