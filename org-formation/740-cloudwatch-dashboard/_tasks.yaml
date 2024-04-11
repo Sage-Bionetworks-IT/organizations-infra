@@ -42,10 +42,10 @@ CrossAccountSharingRole:
     MonitoringAccountIds: !Ref MonitorCentralAccount
 
 
-CrossAccountDashboards:
+AgoraCwDashboards:
   Type: update-stacks
-  Template: ./cw-dashboards.njk
-  StackName: !Sub '${resourcePrefix}-${appName}-CrossAccountDashboards'
+  Template: ./agora-cw-dashboards.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-agora'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref MonitorCentralAccount
@@ -60,6 +60,22 @@ CrossAccountDashboards:
       - Name: "agora-prod"
         ElasticBeanstalkEnvName: "agora-prod"
         AccountId: "681175625864"
+
+NextflowCwDashboards:
+  Type: update-stacks
+  Template: ./nextflow-cw-dashboards.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-nextflow'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref MonitorCentralAccount
+  TemplatingContext:
+    Dashboards:
+      - Name: "nextflow-dev"
+        ClusterName: "nf-tower"
+        AccountId: "035458030717"
+      - Name: "nextflow-prod"
+        ClusterName: "nf-tower"
+        AccountId: "728882028485"
 
 IAtlasCwDashboards:
   Type: update-stacks
