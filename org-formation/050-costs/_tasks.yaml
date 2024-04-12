@@ -61,7 +61,7 @@ CostCategories:
 # use the payer account so that cost explorer aggregates member account data
 CostNotificationMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-email-totals/1.1.2/lambda-finops-email-totals.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-email-totals/1.1.3/lambda-finops-email-totals.yaml'
   StackName: !Sub '${resourcePrefix}-cost-notifications'
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
