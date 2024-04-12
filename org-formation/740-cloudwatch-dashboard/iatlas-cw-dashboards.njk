@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Cross Account Cloudwatch Dashboards
+Resources:
+{% for Dashboard in Dashboards %}
+  Dashboard{{ Dashboard.Name | replace('-','') | replace('_','') }}:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: {{ Dashboard.Name }}
+      DashboardBody: >
+        {
+          "widgets": [
+            {
+              "type": "metric",
+              "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "CPU Utilization",
+                "metrics": [
+                    [ "AWS/ECS", "CPUUtilization", "ClusterName", "{{ Dashboard.ClusterName }}", { "accountId": "{{ Dashboard.AccountId }}" } ]
+                ]
+              }
+            },
+            {
+              "type": "metric",
+              "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Memory Utilization",
+                "metrics": [
+                    [ "AWS/ECS", "MemoryUtilization", "ClusterName", "{{ Dashboard.ClusterName }}", { "accountId": "{{ Dashboard.AccountId }}" } ]
+                ]
+              }
+            },
+            {
+              "type": "metric",
+              "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "CPU Reservation",
+                "metrics": [
+                    [ "AWS/ECS", "CPUReservation", "ClusterName", "{{ Dashboard.ClusterName }}", { "accountId": "{{ Dashboard.AccountId }}" } ]
+                ]
+              }
+            },
+            {
+              "type": "metric",
+              "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Memory Reservation",
+                "metrics": [
+                    [ "AWS/ECS", "MemoryReservation", "ClusterName", "{{ Dashboard.ClusterName }}", { "accountId": "{{ Dashboard.AccountId }}" } ]
+                ]
+              }
+            }
+          ]
+        }
+{% endfor %}
