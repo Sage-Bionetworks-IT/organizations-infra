@@ -49,10 +49,6 @@ Parameters:
     Type: String
     Default: '906769aa66-89cf459f-e670-49c1-9771-f71f5fa1f9b0'
 
-  nlpSandboxAdminGroup:      #JC aws-nlp-sandbox-admins
-    Type: String
-    Default: '906769aa66-73c138f0-c712-4824-a807-7975b6f654fa'
-
   workflowNextflowDevAdminGroup:     #JC aws-workflow-nextflow-dev-admin
     Type: String
     Default: '906769aa66-023cdfaa-15f0-43d9-b823-b74358ceffd7'
@@ -762,23 +758,6 @@ SsoMobileHealthDataEngineeringProdViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref mobileHealthDataEngineeringProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
-
-SsoNlpSandboxAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-nlp-sandbox-admin'
-  StackDescription: 'SSO: Administrator role used by NLP Sandbox Admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref NlpSandboxAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref nlpSandboxAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoWorkflowNextflowDevAdmin:
   Type: update-stacks
