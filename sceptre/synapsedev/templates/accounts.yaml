@@ -81,6 +81,14 @@ Resources:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
 
+  AWSIAMJinJunOhSvc:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: svc.jinjun.oh
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
