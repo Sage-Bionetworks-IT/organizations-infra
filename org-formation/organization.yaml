@@ -27,7 +27,6 @@ Organization:
       Accounts:
         - !Ref MobileHealthDataEngineeringDevAccount
         - !Ref HtanDevAccount
-        - !Ref NlpSandboxAccount
         - !Ref WorkflowsNextflowDevAccount
         - !Ref AgoraDevAccount
         - !Ref DnTDevAccount
@@ -314,20 +313,6 @@ Organization:
       Alias: org-sagebase-scicomp
       Tags:
         <<: !Include ./_default_org_tags.yaml
-
-  NlpSandboxAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: NlpSandboxAccount
-      AccountId: '841415736403'
-      RootEmail: aws-nlpsandbox@sagebase.org
-      Alias: org-sagebase-nlpsandbox
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        AccountOwner: thomas.yu@sagebase.org
-        budget-alarm-threshold: 20000
-        CostCenter: CD2H-CU / 11330
-        budget-alarm-threshold-email-recipient: aws-nlpsandbox@sagebase.org
 
   # INCLUDE is the grant where we collaborate with CHOP
   IncludeChopProdAccount:
