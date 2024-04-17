@@ -1,0 +1,6 @@
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-ec2-terminator/0.0.1/lambda-ec2-terminator.yaml
+stack_name: "ec2-terminator"
+parameters:
+  Ec2Action: "TERMINATE"
