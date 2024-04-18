@@ -29,6 +29,16 @@ EbsVolumeCleanup:
     Account: '*'
     Region: !Ref primaryRegion
 
+Ec2InstanceTerminator:
+  Type: update-stacks
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-ec2-terminator/0.0.1/lambda-ec2-terminator.yaml'
+  Parameters:
+    Ec2Action: "TERMINATE"
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref ImageCentralAccount
+    Region: !Ref primaryRegion
+
 ItKmsKey:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.4/templates/KMS/kms-key.yaml
