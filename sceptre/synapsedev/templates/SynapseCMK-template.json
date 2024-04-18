@@ -218,6 +218,13 @@
                                         "wafv2:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "appconfig:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }
