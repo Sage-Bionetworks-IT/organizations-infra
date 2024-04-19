@@ -396,7 +396,7 @@ Organization:
       Alias: org-sagebase-iatlas-prod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        AccountOwner: brian.oconnor@sagebase.org
+        AccountOwner: susheel.varma@sagebase.org
         CostCenter: iAtlas 3 / 314900  # TODO: Update code in June/July 2022 when iAtlas 4 starts.
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-iatlas-prod@sagebase.org
@@ -412,7 +412,7 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
         CostCenter: HTAN-DFCI / 120100
-        AccountOwner: brian.oconnor@sagebase.org
+        AccountOwner: adam.taylor@sagebase.org
         budget-alarm-threshold: 2500
         budget-alarm-threshold-email-recipient: aws-htan-dev@sagebase.org
 
