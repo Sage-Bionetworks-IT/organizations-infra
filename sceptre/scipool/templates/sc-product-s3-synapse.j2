@@ -75,7 +75,7 @@ Resources:
     DependsOn: Associates3
     Properties:
       PortfolioId: !ImportValue
-        'Fn::Sub': '${AWS::Region}-sc-portfolio-s3-basic-SCEC2portfolioId'
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-s3-basic-SCS3portfolioId'
       ProductId: !Ref 'scs3product'
       TagUpdateOnProvisionedProduct: "ALLOWED"
   UpdateProductVersions:
