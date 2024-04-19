@@ -89,6 +89,14 @@ Resources:
       ProductId: !Ref 'ScEc2LinuxNotebookProduct'
       RoleArn: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+  ConstraintTagUpdate:
+    Type: AWS::ServiceCatalog::ResourceUpdateConstraint
+    DependsOn: AssociatesExternalPortfolio
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-external-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxNotebookProduct'
+      TagUpdateOnProvisionedProduct: "ALLOWED"
   UpdateProductVersions:
     Type: Custom::ProductProvider
     Properties:
