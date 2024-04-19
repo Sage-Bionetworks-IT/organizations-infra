@@ -70,6 +70,14 @@ Resources:
       ProductId: !Ref 'scs3product'
       RoleArn: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-s3-launchrole-LaunchRoleArn'
+  ConstraintTagUpdate:
+    Type: AWS::ServiceCatalog::ResourceUpdateConstraint
+    DependsOn: Associates3
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-s3-basic-SCEC2portfolioId'
+      ProductId: !Ref 'scs3product'
+      TagUpdateOnProvisionedProduct: "ALLOWED"
   UpdateProductVersions:
     Type: Custom::ProductProvider
     Properties:

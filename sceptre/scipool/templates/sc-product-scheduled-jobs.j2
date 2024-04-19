@@ -70,6 +70,14 @@ Resources:
       ProductId: !Ref 'ScheduledJobsProduct'
       RoleArn: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-scheduled-jobs-launchrole-LaunchRoleArn'
+  ConstraintTagUpdate:
+    Type: AWS::ServiceCatalog::ResourceUpdateConstraint
+    DependsOn: AssociatePortfolio
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-scheduled-jobs-SCScheduledJobsPortfolioId'
+      ProductId: !Ref 'ScheduledJobsProduct'
+      TagUpdateOnProvisionedProduct: "ALLOWED"
   UpdateProductVersions:
     Type: Custom::ProductProvider
     Properties:

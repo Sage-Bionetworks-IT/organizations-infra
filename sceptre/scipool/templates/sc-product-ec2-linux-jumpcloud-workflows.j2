@@ -76,6 +76,13 @@ Resources:
       ProductId: !Ref 'ScEc2LinuxJumpcloudWorkflowsProduct'
       RoleArn: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+  ConstraintTagUpdate:
+    Type: AWS::ServiceCatalog::ResourceUpdateConstraint
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-external-SCEC2portfolioId'
+      ProductId: !Ref 'ScEc2LinuxJumpcloudWorkflowsProduct'
+      TagUpdateOnProvisionedProduct: "ALLOWED"
   UpdateProductVersions:
     Type: Custom::ProductProvider
     Properties:

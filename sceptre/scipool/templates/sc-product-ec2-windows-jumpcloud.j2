@@ -75,6 +75,14 @@ Resources:
       ProductId: !Ref 'scec2windowsproduct'
       RoleArn: !ImportValue
         'Fn::Sub': '${AWS::Region}-sc-ec2vpc-launchrole-LaunchRoleArn'
+  ConstraintTagUpdate:
+    Type: AWS::ServiceCatalog::ResourceUpdateConstraint
+    DependsOn: Associateec2windows
+    Properties:
+      PortfolioId: !ImportValue
+        'Fn::Sub': '${AWS::Region}-sc-portfolio-ec2-SCEC2portfolioId'
+      ProductId: !Ref 'scec2windowsproduct'
+      TagUpdateOnProvisionedProduct: "ALLOWED"
   UpdateProductVersions:
     Type: Custom::ProductProvider
     Properties:
