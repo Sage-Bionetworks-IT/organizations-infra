@@ -12,9 +12,12 @@ Parameters:
   KmsKeyAdminPrincipalArns:
     Type: CommaDelimitedList
     Description: List of user/role/account ARNs that can administer the key
+  IsOrganizationTrail:
+    Type: String
+    Description: Specifies whether the trail is applied to all accounts in an organization in AWS Organizations
+    Default: false
 Resources:
   KmsKey:
-    OrganizationBinding: !Ref MasterBinding
     Type: "AWS::KMS::Key"
     Properties:
       Description: !Sub '${AWS::StackName} created key'
@@ -86,7 +89,6 @@ Resources:
               kms:EncryptionContext:aws:cloudtrail:arn: !Sub 'arn:aws:cloudtrail:*:${AWS::AccountId}:trail/*'
 
   CloudTrailBucket:
-    OrganizationBinding: !Ref MasterBinding
     Type: AWS::S3::Bucket
     Metadata:
       cfn-lint:
@@ -122,7 +124,6 @@ Resources:
               StorageClass: DEEP_ARCHIVE
 
   CloudTrailBucketPolicy:
-    OrganizationBinding: !Ref MasterBinding
     Type: AWS::S3::BucketPolicy
     Metadata:
       cfn-lint:
@@ -152,7 +153,6 @@ Resources:
               s3:x-amz-acl: bucket-owner-full-control
 
   CloudTrail:
-    OrganizationBinding: !Ref MasterBinding
     Type: AWS::CloudTrail::Trail
     Properties:
       S3BucketName: !Ref CloudTrailBucket
@@ -163,19 +163,7 @@ Resources:
       CloudWatchLogsLogGroupArn: !Ref CloudWatchLogsLogGroupArn
       CloudWatchLogsRoleArn: !Ref CloudWatchLogsRoleArn
       KMSKeyId: !Ref KmsKey
-
-  MemberCloudTrail:
-    OrganizationBinding: !Ref MemberBinding
-    Type: AWS::CloudTrail::Trail
-    DependsOn: CloudTrailBucketPolicy
-    Properties:
-      S3BucketName: !Ref CloudTrailBucket
-      IsLogging: true
-      IncludeGlobalServiceEvents: true
-      IsMultiRegionTrail: true
-      EnableLogFileValidation: true
-      CloudWatchLogsLogGroupArn: !Ref CloudWatchLogsLogGroupArn
-      CloudWatchLogsRoleArn: !Ref CloudWatchLogsRoleArn
+      IsOrganizationTrail: !Ref IsOrganizationTrail
 
 Outputs:
   CloudTrailBucketName:
@@ -188,9 +176,5 @@ Outputs:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-CloudTrailBucketArn'
   CloudTrailArn:
     Value: !GetAtt CloudTrail.Arn
-    Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-CloudTrailArn'
-  MemberCloudTrailArn:
-    Value: !GetAtt MemberCloudTrail.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-CloudTrailArn'
