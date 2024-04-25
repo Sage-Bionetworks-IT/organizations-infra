@@ -21,11 +21,6 @@ Costs:
   DependsOn: [ Types ]
   Path: ./050-costs/_tasks.yaml
 
-Cloudtrail:
-  Type: include
-  DependsOn: [ Types ]
-  Path: ./060-cloudtrail/_tasks.yaml
-
 GuarDuty:
   Type: include
   DependsOn: [ Types ]
