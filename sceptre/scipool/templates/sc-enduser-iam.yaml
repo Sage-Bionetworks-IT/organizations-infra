@@ -62,8 +62,7 @@ Resources:
             Resource: "*"
           - Effect: Allow
             Action:
-              - "ec2:*Tags"
-              - "s3:*Tags"
+              - "*:*Tags"
               - "*:TagResource"
               - "*:UntagResource"
             Resource: "*"
