@@ -1,0 +1,196 @@
+Description: "ServiceCatalog End User policy and group (fdp-1p4dlgcp7)"
+Parameters:
+  SynapseLoginInstanceRoleArn:
+    Type: String
+    Description: The Synapse login app's IAM instance role ARN
+Resources:
+  SCDevEnduserRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ServiceCatalogDevEndusers
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
+        - !Ref SCDevEnduserExpandedPolicy
+        - !Ref ScDevCloudformationPolicy
+        - !Ref SCDevEnduserRemoteAccessPolicy
+        - !Ref DevBatchReadOnlyPolicy
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Ref SynapseLoginInstanceRoleArn
+            Action:
+              - 'sts:AssumeRole'
+              - 'sts:TagSession'
+  SCExternalDevEnduserRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ServiceCatalogExternalDevEndusers
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
+        - !Ref SCDevEnduserExpandedPolicy
+        - !Ref ScDevCloudformationPolicy
+        - !Ref SCDevEnduserRemoteAccessPolicy
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Ref SynapseLoginInstanceRoleArn
+            Action:
+              - 'sts:AssumeRole'
+              - 'sts:TagSession'
+  SCDevEnduserExpandedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Expand permissions SC users.
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - organizations:DescribeOrganization
+              - servicecatalog:DescribeProvisionedProduct
+              - cloudwatch:GetMetricData  # access to EC2 monitoring info
+              - ec2:DescribeImages  # service catalog status info
+              - lambda:ListTags  # service catalog tag updates
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - "ec2:*Tags"
+              - "s3:*Tags"
+              - "lambda:*Tags"  # RestrictBucketDownloadRegionFunction
+              - "iam:TagRole"  # RestrictBucketDownloadRegionRole
+              - "iam:UntagRole"  # RestrictBucketDownloadRegionRole
+              - "batch:TagResource"
+              - "batch:UntagResource"
+              - "cloudformation:TagResource"
+              - "cloudformation:UntagResource"
+              - "cloudwatch:TagResource"
+              - "cloudwatch:UntagResource"
+              - "kms:TagResource"
+              - "kms:UntagResource"
+              - "secretsmanager:TagResource"
+              - "secretsmanager:UntagResource"
+            Resource: "*"
+            Condition:
+              StringEquals:
+                # The 'aws:ResourceTag/foo' key lets us compare against the value of the 'foo' tag on
+                # the target resource. Here we are checking the value of the 'provisioningPrincipalArn'
+                # service tag against the 'PrincipalArn' from the request.
+                # https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html#access_tags_control-resources
+                # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-resourcetag
+                # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalarn
+                "aws:ResourceTag/aws:servicecatalog:provisioningPrincipalArn": "${aws.PrincipalArn}"
+  DevBatchReadOnlyPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Read only access to AWS batch
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - "batch:Describe*"
+              - "batch:List*"
+            Resource: "*"
+  SCDevEnduserRemoteAccessPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allow calling StartSession on tagged instances
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - ssm:StartSession
+            Resource:
+              - "arn:aws:ssm:*:*:document/SSM-SessionManagerRunShell"
+              - "arn:aws:ssm:*:*:document/AWS-StartPortForwardingSession"
+              - "arn:aws:ssm:*:*:document/AWS-StartSSHSession"
+              - "arn:aws:ssm:*:*:document/AWS-StartInteractiveCommand"
+              - "arn:aws:ssm:*:*:document/AWS-StartNonInteractiveCommand"
+          - Effect: Allow
+            Action:
+              - ssm:StartSession
+            Resource:
+              - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*"
+            Condition:
+              StringLike:
+                "ssm:ResourceTag/Protected/AccessApprovedCaller": "${aws:userid}"
+          - Effect: Allow
+            Action:
+              - ssm:DescribeSessions
+              - ssm:GetConnectionStatus
+              - ssm:DescribeDocument
+              - ssm:DescribeDocumentParameters
+              - ssm:ListDocuments
+              - ssm:DescribeInstanceProperties
+              - ssm:DescribeInstanceInformation
+              - ssm:ListTagsForResource
+              - ec2:DescribeInstances
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - ssm:TerminateSession
+            Resource: "*"
+            Condition:
+              StringLike:
+                "ssm:ResourceTag/aws::ssmmessages:session-id": "${aws:userid}"
+  ScDevCloudformationPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Deny
+            Sid: DenyCfnTemplateSummary
+            Action:
+              # Deny this action to hide secrets
+              - cloudformation:GetTemplateSummary
+            Resource: "*"
+          - Effect: Allow
+            Sid: AllowCfnChangeSets
+            Action:
+              - "cloudformation:*ChangeSet*"
+            Resource: "*"
+Outputs:
+  EndUserRoleId:
+    Value: !GetAtt SCDevEnduserRole.RoleId
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogDevEndusers-RoleId'
+  EndUserRoleArn:
+    Value: !GetAtt SCDevEnduserRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogDevEndusers-RoleArn'
+  EndUserRoleName:
+    Value: !Ref SCDevEnduserRole
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogDevEndusers-RoleName'
+  EndUserExpandPolicy:
+    Value: !Ref SCDevEnduserExpandedPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SCDevEnduserExpandedPolicy'
+  EndUserRemoteAccessPolicy:
+    Value: !Ref SCDevEnduserRemoteAccessPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SCDevEnduserRemoteAccessPolicy'
+  ExternalEndUserRoleId:
+    Value: !GetAtt SCExternalDevEnduserRole.RoleId
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogExternalDevEndusers-RoleId'
+  ExternalEndUserRoleArn:
+    Value: !GetAtt SCExternalDevEnduserRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogExternalDevEndusers-RoleArn'
+  ExternalEndUserRoleName:
+    Value: !Ref SCExternalDevEnduserRole
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogExternalDevEndusers-RoleName'
