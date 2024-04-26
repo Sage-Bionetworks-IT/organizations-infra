@@ -75,7 +75,11 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.3.7/ec2/sc-ec2-windows-jumpcloud.yaml'
       Name: 'v1.3.7'
-    - Description: 'Update set_env_vars to use IMDSv2 {{ range(1, 10000) | random }}'
+    - Description: 'Update set_env_vars to use IMDSv2'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.3.9/ec2/sc-ec2-windows-jumpcloud.yaml'
       Name: 'v1.3.9'
+    - Description: 'Upgrade OS to Windows Server 2022 {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.4.1/ec2/sc-ec2-windows-jumpcloud.yaml'
+      Name: 'v1.4.1'
