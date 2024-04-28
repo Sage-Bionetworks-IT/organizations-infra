@@ -203,6 +203,13 @@
                                         "athena:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "appconfig:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }
