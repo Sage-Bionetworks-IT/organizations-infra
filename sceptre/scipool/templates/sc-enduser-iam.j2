@@ -1,20 +1,31 @@
+{% if sceptre_user_data.IncludeTestPolicy is defined %}
+  {% if sceptre_user_data.IncludeTestPolicy in ('true', 'True', 'TRUE') %}
+    {% set test = true %}
+  {% endif %}
+{% else %}
+  {% set test = false %}
+{% endif %}
+
 Description: "ServiceCatalog End User policy and group (fdp-1p4dlgcp7)"
 Parameters:
   SynapseLoginInstanceRoleArn:
     Type: String
     Description: The Synapse login app's IAM instance role ARN
 Resources:
-  SCDevEnduserRole:
+  SCEnduserRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ServiceCatalogDevEndusers
+      RoleName: ServiceCatalogEndusers
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
         - arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess
-        - !Ref SCDevEnduserExpandedPolicy
-        - !Ref ScDevCloudformationPolicy
-        - !Ref SCDevEnduserRemoteAccessPolicy
-        - !Ref DevBatchReadOnlyPolicy
+        - !Ref SCEnduserExpandedPolicy
+        - !Ref ScCloudformationPolicy
+        - !Ref SCEnduserRemoteAccessPolicy
+        - !Ref BatchReadOnlyPolicy
+{% if test %}
+        - !Ref ScTestPolicy
+{% endif %}
       Path: /
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -25,15 +36,15 @@ Resources:
             Action:
               - 'sts:AssumeRole'
               - 'sts:TagSession'
-  SCExternalDevEnduserRole:
+  SCExternalEnduserRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ServiceCatalogExternalDevEndusers
+      RoleName: ServiceCatalogExternalEndusers
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
-        - !Ref SCDevEnduserExpandedPolicy
-        - !Ref ScDevCloudformationPolicy
-        - !Ref SCDevEnduserRemoteAccessPolicy
+        - !Ref SCEnduserExpandedPolicy
+        - !Ref ScCloudformationPolicy
+        - !Ref SCEnduserRemoteAccessPolicy
       Path: /
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -44,7 +55,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
               - 'sts:TagSession'
-  SCDevEnduserExpandedPolicy:
+  SCEnduserExpandedPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: Expand permissions SC users.
@@ -57,6 +68,18 @@ Resources:
               - organizations:DescribeOrganization
               - servicecatalog:DescribeProvisionedProduct
               - cloudwatch:GetMetricData  # access to EC2 monitoring info
+            Resource: "*"
+{% if test %}
+  ScTestPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Expand permissions SC users.
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
               - ec2:DescribeImages  # service catalog status info
               - lambda:ListTags  # service catalog tag updates
             Resource: "*"
@@ -87,7 +110,8 @@ Resources:
                 # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-resourcetag
                 # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalarn
                 "aws:ResourceTag/aws:servicecatalog:provisioningPrincipalArn": "${aws.PrincipalArn}"
-  DevBatchReadOnlyPolicy:
+{% endif %}
+  BatchReadOnlyPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: Read only access to AWS batch
@@ -100,7 +124,7 @@ Resources:
               - "batch:Describe*"
               - "batch:List*"
             Resource: "*"
-  SCDevEnduserRemoteAccessPolicy:
+  SCEnduserRemoteAccessPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: Allow calling StartSession on tagged instances
@@ -144,7 +168,7 @@ Resources:
             Condition:
               StringLike:
                 "ssm:ResourceTag/aws::ssmmessages:session-id": "${aws:userid}"
-  ScDevCloudformationPolicy:
+  ScCloudformationPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Properties:
       PolicyDocument:
@@ -163,34 +187,34 @@ Resources:
             Resource: "*"
 Outputs:
   EndUserRoleId:
-    Value: !GetAtt SCDevEnduserRole.RoleId
+    Value: !GetAtt SCEnduserRole.RoleId
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogDevEndusers-RoleId'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogEndusers-RoleId'
   EndUserRoleArn:
-    Value: !GetAtt SCDevEnduserRole.Arn
+    Value: !GetAtt SCEnduserRole.Arn
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogDevEndusers-RoleArn'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogEndusers-RoleArn'
   EndUserRoleName:
-    Value: !Ref SCDevEnduserRole
+    Value: !Ref SCEnduserRole
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogDevEndusers-RoleName'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogEndusers-RoleName'
   EndUserExpandPolicy:
-    Value: !Ref SCDevEnduserExpandedPolicy
+    Value: !Ref SCEnduserExpandedPolicy
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-SCDevEnduserExpandedPolicy'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SCEnduserExpandedPolicy'
   EndUserRemoteAccessPolicy:
-    Value: !Ref SCDevEnduserRemoteAccessPolicy
+    Value: !Ref SCEnduserRemoteAccessPolicy
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-SCDevEnduserRemoteAccessPolicy'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-SCEnduserRemoteAccessPolicy'
   ExternalEndUserRoleId:
-    Value: !GetAtt SCExternalDevEnduserRole.RoleId
+    Value: !GetAtt SCExternalEnduserRole.RoleId
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogExternalDevEndusers-RoleId'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogExternalEndusers-RoleId'
   ExternalEndUserRoleArn:
-    Value: !GetAtt SCExternalDevEnduserRole.Arn
+    Value: !GetAtt SCExternalEnduserRole.Arn
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogExternalDevEndusers-RoleArn'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogExternalEndusers-RoleArn'
   ExternalEndUserRoleName:
-    Value: !Ref SCExternalDevEnduserRole
+    Value: !Ref SCExternalEnduserRole
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogExternalDevEndusers-RoleName'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-ServiceCatalogExternalEndusers-RoleName'
