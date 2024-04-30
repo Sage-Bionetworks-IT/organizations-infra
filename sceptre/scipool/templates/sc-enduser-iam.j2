@@ -1,10 +1,3 @@
-{% set test = false %}
-{% if sceptre_user_data.IncludeTestPolicy is defined %}
-  {% if sceptre_user_data.IncludeTestPolicy in ('true', 'True', 'TRUE') %}
-    {% set test = true %}
-  {% endif %}
-{% endif %}
-
 Description: "ServiceCatalog End User policy and group (fdp-1p4dlgcp7)"
 Parameters:
   SynapseLoginInstanceRoleArn:
@@ -22,8 +15,10 @@ Resources:
         - !Ref ScCloudformationPolicy
         - !Ref SCEnduserRemoteAccessPolicy
         - !Ref BatchReadOnlyPolicy
-{% if test %}
+{% if sceptre_user_data.IncludeTestPolicy is defined %}
+  {% if sceptre_user_data.IncludeTestPolicy == true %}
         - !Ref ScTestPolicy
+  {% endif %}
 {% endif %}
       Path: /
       AssumeRolePolicyDocument:
@@ -68,7 +63,8 @@ Resources:
               - servicecatalog:DescribeProvisionedProduct
               - cloudwatch:GetMetricData  # access to EC2 monitoring info
             Resource: "*"
-{% if test %}
+{% if sceptre_user_data.IncludeTestPolicy is defined %}
+  {% if sceptre_user_data.IncludeTestPolicy == true %}
   ScTestPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
@@ -79,8 +75,7 @@ Resources:
         Statement:
           - Effect: Allow
             Action:
-              - ec2:DescribeImages  # service catalog status info
-              - lambda:ListTags  # service catalog tag updates
+              - ec2:DescribeImages  # dashboard status info
             Resource: "*"
           - Effect: Allow
             Action:
@@ -109,6 +104,7 @@ Resources:
                 # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-resourcetag
                 # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalarn
                 "aws:ResourceTag/aws:servicecatalog:provisioningPrincipalArn": "${aws.PrincipalArn}"
+  {% endif %}
 {% endif %}
   BatchReadOnlyPolicy:
     Type: AWS::IAM::ManagedPolicy
