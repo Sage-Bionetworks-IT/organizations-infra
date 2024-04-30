@@ -1,9 +1,8 @@
+{% set test = false %}
 {% if sceptre_user_data.IncludeTestPolicy is defined %}
   {% if sceptre_user_data.IncludeTestPolicy in ('true', 'True', 'TRUE') %}
     {% set test = true %}
   {% endif %}
-{% else %}
-  {% set test = false %}
 {% endif %}
 
 Description: "ServiceCatalog End User policy and group (fdp-1p4dlgcp7)"
