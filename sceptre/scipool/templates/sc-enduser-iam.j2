@@ -1,3 +1,10 @@
+{% set test = false %}
+{% if sceptre_user_data.IncludeTestPolicy is defined %}
+  {% if sceptre_user_data.IncludeTestPolicy in ('true', 'True', 'TRUE') %}
+    {% set test = true %}
+  {% endif %}
+{% endif %}
+
 Description: "ServiceCatalog End User policy and group (fdp-1p4dlgcp7)"
 Parameters:
   SynapseLoginInstanceRoleArn:
@@ -15,6 +22,9 @@ Resources:
         - !Ref ScCloudformationPolicy
         - !Ref SCEnduserRemoteAccessPolicy
         - !Ref BatchReadOnlyPolicy
+{% if test %}
+        - !Ref ScTestPolicy
+{% endif %}
       Path: /
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -58,6 +68,48 @@ Resources:
               - servicecatalog:DescribeProvisionedProduct
               - cloudwatch:GetMetricData  # access to EC2 monitoring info
             Resource: "*"
+{% if test %}
+  ScTestPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Policy Statement testing
+      Path: "/"
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - ec2:DescribeImages  # service catalog status info
+              - lambda:ListTags  # service catalog tag updates
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - "ec2:*Tags"
+              - "s3:*Tags"
+              - "lambda:*Tags"  # RestrictBucketDownloadRegionFunction
+              - "iam:TagRole"  # RestrictBucketDownloadRegionRole
+              - "iam:UntagRole"  # RestrictBucketDownloadRegionRole
+              - "batch:TagResource"
+              - "batch:UntagResource"
+              - "cloudformation:TagResource"
+              - "cloudformation:UntagResource"
+              - "cloudwatch:TagResource"
+              - "cloudwatch:UntagResource"
+              - "kms:TagResource"
+              - "kms:UntagResource"
+              - "secretsmanager:TagResource"
+              - "secretsmanager:UntagResource"
+            Resource: "*"
+            Condition:
+              StringEquals:
+                # The 'aws:ResourceTag/foo' key lets us compare against the value of the 'foo' tag on
+                # the target resource. Here we are checking the value of the 'provisioningPrincipalArn'
+                # service tag against the 'PrincipalArn' from the request.
+                # https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html#access_tags_control-resources
+                # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-resourcetag
+                # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalarn
+                "aws:ResourceTag/aws:servicecatalog:provisioningPrincipalArn": "${aws.PrincipalArn}"
+{% endif %}
   BatchReadOnlyPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:

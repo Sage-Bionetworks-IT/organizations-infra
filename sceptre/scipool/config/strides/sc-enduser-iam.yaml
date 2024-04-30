@@ -1,5 +1,5 @@
 template:
-  path: "sc-enduser-iam.yaml"
+  path: "sc-enduser-iam.j2"
 stack_name: "sc-enduser-iam"
 parameters:
   # InstanceRoleArn from https://github.com/Sage-Bionetworks/synapse-login-aws-infra/blob/develop/templates/app.yaml
