@@ -71,6 +71,9 @@ execute the validations by running `pre-commit run --all-files`.
 Please install pre-commit, once installed the file validations will
 automatically run on every commit.
 
+To debug jinja template processing in sceptre, go the the corresponding
+`sceptre/*` directory and run e.g. `sceptre generate develop`.
+
 ## Issues
 * https://sagebionetworks.jira.com/projects/IT
 
