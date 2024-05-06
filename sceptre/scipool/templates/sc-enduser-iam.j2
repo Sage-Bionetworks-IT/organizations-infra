@@ -73,27 +73,13 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
-          - Effect: Allow
+          - Sid: TestPrincipalArnCondition
+            Effect: Allow
             Action:
-              - ec2:DescribeImages  # dashboard status info
-            Resource: "*"
-          - Effect: Allow
-            Action:
-              - "ec2:*Tags"
-              - "s3:*Tags"
-              - "lambda:*Tags"  # RestrictBucketDownloadRegionFunction
-              - "iam:TagRole"  # RestrictBucketDownloadRegionRole
-              - "iam:UntagRole"  # RestrictBucketDownloadRegionRole
-              - "batch:TagResource"
-              - "batch:UntagResource"
-              - "cloudformation:TagResource"
-              - "cloudformation:UntagResource"
-              - "cloudwatch:TagResource"
-              - "cloudwatch:UntagResource"
-              - "kms:TagResource"
-              - "kms:UntagResource"
-              - "secretsmanager:TagResource"
-              - "secretsmanager:UntagResource"
+              - "batch:*"
+              - "ec2:*"
+              - "lambda:*"
+              - "s3:*"
             Resource: "*"
             Condition:
               StringEquals:

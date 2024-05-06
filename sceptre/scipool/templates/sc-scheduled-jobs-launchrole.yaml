@@ -52,6 +52,9 @@ Resources:
                   - "iam:AttachRolePolicy"
                   - "iam:DeletePolicy"
                   - "iam:TagRole"
+                  - "iam:UntagRole"
+                  - "batch:TagResource"
+                  - "batch:UntagResource"
                   - "events:*"
                 Resource: '*'
 Outputs:
