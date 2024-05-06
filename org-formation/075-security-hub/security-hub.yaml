@@ -3,6 +3,10 @@ Description: "Setup AWS Security Hub"
 Resources:
   SecurityHub:
     Type: "AWS::SecurityHub::Hub"
+  SecurityHubStandard:
+    Type: "AWS::SecurityHub::Standard"
+    Properties:
+      StandardsArn: arn:aws:securityhub:us-east-1::standards/cis-aws-foundations-benchmark/v/1.4.0
 Outputs:
   SecurityHubArn:
     Description: "The security hub ARN"
