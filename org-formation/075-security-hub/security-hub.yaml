@@ -6,11 +6,13 @@ Resources:
   SecurityHubStandardFoundationalBestPractices:
     Type: "AWS::SecurityHub::Standard"
     Properties:
-      StandardsArn: arn:${AWS::Partition}:securityhub:${AWS::Region}::standards/aws-foundational-security-best-practices/v/1.0.0
+      StandardsArn:
+        Fn::Sub: arn:${AWS::Partition}:securityhub:${AWS::Region}::standards/aws-foundational-security-best-practices/v/1.0.0
   SecurityHubStandardCISFoundationsBenchmark:
     Type: "AWS::SecurityHub::Standard"
     Properties:
-      StandardsArn: arn:${AWS::Partition}:securityhub:${AWS::Region}::standards/cis-aws-foundations-benchmark/v/1.4.0
+      StandardsArn:
+        Fn::Sub: arn:${AWS::Partition}:securityhub:${AWS::Region}::standards/cis-aws-foundations-benchmark/v/1.4.0
 Outputs:
   SecurityHubArn:
     Description: "The security hub ARN"
