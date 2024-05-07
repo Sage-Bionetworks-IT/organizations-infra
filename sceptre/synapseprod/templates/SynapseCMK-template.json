@@ -210,6 +210,13 @@
                                         "appconfig:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "ssm:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }
