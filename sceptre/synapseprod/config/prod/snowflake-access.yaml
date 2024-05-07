@@ -1,6 +1,13 @@
 template:
-  path: snowflake-access.yaml
-stack_name: snowflake-accesss
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.8.9/IAM/snowflake-bucket-access.j2
+stack_name: snowflake-access
 parameters:
-  SnowflakeAccountArn: "arn:aws:iam::365909334157:user/m2nb0000-s"
+  SnowflakeAccountArn: arn:aws:iam::365909334157:user/m2nb0000-s
   SnowflakeAccountExternalId: !ssm /infra/SnowflakeAccountExternalId
+sceptre_user_data:
+  Buckets:
+    - Arn: "arn:aws:s3:::prod.datawarehouse.sagebase.org"
+      Prefix: "warehouse"
+    - Arn: "arn:aws:s3:::prod.filehandles.sagebase.org"
+      Prefix: "fileHandleAssociations/records"

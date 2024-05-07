@@ -43,6 +43,7 @@ Resources:
                   - "iam:DetachRolePolicy"
                   - "iam:AttachRolePolicy"
                   - "iam:TagRole"
+                  - "iam:UntagRole"
                   - "cloudformation:DescribeStackResource"
                   - "cloudformation:DescribeStackResources"
                   - "cloudformation:GetTemplate"
