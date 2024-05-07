@@ -3,8 +3,6 @@ template:
 stack_name: "aws-config"
 stack_tags:
   OwnerEmail: "it@sagebase.org"
-dependencies:
-  - "prod/cloudtrail.yaml"
 parameters:
   OperatorEmail: "aws.strides-ampad-workflows@sagebase.org"
   LogCentralBucket: "sagebase-config-231505186444"  # bucket in org-sagebase-logcentral account
