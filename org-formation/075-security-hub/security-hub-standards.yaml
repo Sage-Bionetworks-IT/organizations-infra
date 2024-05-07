@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Select AWS Security Hub Standards"
+Resources:
+  SecurityHubStandardFoundationalBestPractices:
+    Type: "AWS::SecurityHub::Standard"
+    Properties:
+      StandardsArn:
+        Fn::Sub: arn:${AWS::Partition}:securityhub:${AWS::Region}::standards/aws-foundational-security-best-practices/v/1.0.0
+  SecurityHubStandardCISFoundationsBenchmark:
+    Type: "AWS::SecurityHub::Standard"
+    Properties:
+      StandardsArn:
+        Fn::Sub: arn:${AWS::Partition}:securityhub:${AWS::Region}::standards/cis-aws-foundations-benchmark/v/1.4.0

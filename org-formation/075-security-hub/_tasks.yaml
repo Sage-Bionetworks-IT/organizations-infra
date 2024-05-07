@@ -33,6 +33,16 @@ SecurityHubNotifications:
       - Protocol: "email"
         Endpoints: ["it-alert-inbox@sagebase.org"]
 
+SecurityHubStandardsInfra:
+  DependsOn: [ SecurityHub ]
+  Type: update-stacks
+  Template: security-hub-standards.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-sechub-standards-infra'
+  StackDescription: SecurityHub standards selection
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SecurityCentralAccount
+
 SecurityHubSuppressionInfra:
   DependsOn: [ SecurityHub ]
   Type: update-stacks
