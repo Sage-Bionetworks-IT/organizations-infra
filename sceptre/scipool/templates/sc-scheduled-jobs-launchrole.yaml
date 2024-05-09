@@ -55,6 +55,7 @@ Resources:
                   - "iam:UntagRole"
                   - "batch:TagResource"
                   - "batch:UntagResource"
+                  - "batch:Update*"
                   - "events:*"
                 Resource: '*'
 Outputs:

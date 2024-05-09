@@ -73,6 +73,7 @@ Resources:
             Action:
               - kms:CreateKey
               - kms:TagResource
+              - kms:UntagResource
               # kms:DeleteKey is enabled on the policy for the individual key
             Resource: "*" # key name is auto-generated
             # See: https://docs.aws.amazon.com/kms/latest/developerguide/control-access-overview.html
