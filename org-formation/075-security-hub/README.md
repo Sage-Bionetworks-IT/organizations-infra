@@ -4,7 +4,7 @@ The templates in this folder enable
 in each account.  Portions of SecurityHub was setup and configured in the AWS console
 because cloudformation does not support setting up in an organization configuration.
 Cloudformation only supports setting up in an invitation/authorization configuration
-which is not the preferred setup.  Detailed info can be found at
+which is not the preferred approach.  Detailed info can be found at
 https://sagebionetworks.jira.com/wiki/spaces/IT/pages/3352756226/SecurityHub+Set-Up
 
 Amazon Security Hub provides a comprehensive view of your security state in AWS
