@@ -387,6 +387,7 @@ SsoDeveloper:
       - 'arn:aws:iam::aws:policy/PowerUserAccess'
       - 'arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+      - 'arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy'
     sessionDuration: 'PT12H'
     inlinePolicy: >-
       {
