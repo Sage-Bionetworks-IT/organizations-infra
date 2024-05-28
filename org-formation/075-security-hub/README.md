@@ -1,7 +1,7 @@
 ### Purpose of these templates
 The templates in this folder enable
 [Security Hub](https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html)
-in each account.  Portions of SecurityHub was setup and configured in the AWS console
+in each account.  Portions of SecurityHub were setup and configured in the AWS console
 because cloudformation does not support setting up in an organization configuration.
 Cloudformation only supports setting up in an invitation/authorization configuration
 which is not the preferred approach.  Detailed info can be found at
