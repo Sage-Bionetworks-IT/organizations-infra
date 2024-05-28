@@ -602,7 +602,7 @@ Organization:
       Alias: org-sagebase-scce-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        AccountOwner: thomas.yu@sagebase.org
+        AccountOwner: robert.allaway@sagebase.org
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-scce-dev@sagebase.org
