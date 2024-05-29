@@ -301,6 +301,10 @@ Parameters:
     Type: String
     Default: '04a83488-1041-70d0-e200-31472f87c82a'
 
+  itsandboxDeveloperGroup:      #JC aws-itsandbox-developers
+    Type: String
+    Default: ''
+
   dccvalidatorProdApplicationManagerGroup:      # JC aws-dccvalidator-prod-application-managers
     Type: String
     Default: '6498b478-20e1-7031-9648-00c20c410359'
@@ -2028,3 +2032,20 @@ SsoDccValidatorProdApplicationManager:
     instanceArn: !Ref instanceArn
     principalId: !Ref dccvalidatorProdApplicationManagerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
+
+SsoItsandboxDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-itsandbox-developer'
+  StackDescription: 'SSO role used by itsandbox developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref ITSandboxAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref itsandboxDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
