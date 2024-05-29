@@ -303,7 +303,7 @@ Parameters:
 
   itsandboxDeveloperGroup:      #JC aws-itsandbox-developers
     Type: String
-    Default: ''
+    Default: 'c4e88408-70b1-70ce-83be-76f4f694b6a6'
 
   dccvalidatorProdApplicationManagerGroup:      # JC aws-dccvalidator-prod-application-managers
     Type: String
