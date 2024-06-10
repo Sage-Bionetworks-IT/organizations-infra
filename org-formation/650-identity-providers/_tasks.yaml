@@ -816,3 +816,56 @@ GithubOidcAgoraEBDeploy:
       - !Ref AgoraDevAccount
       - !Ref AgoraProdAccount
     Region: us-east-1
+
+GithubOidcSageBionetworksAgoraDevECR:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-agoradev-ecr
+  Parameters:
+    ProviderArn: !CopyValue [!Sub "${resourcePrefix}-${appName}-ProviderArn"]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-agoradev-ecr
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "GetAuthorizationToken",
+            "Effect": "Allow",
+            "Action": [
+              "ecr:GetAuthorizationToken"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "ListImagesInRepository",
+            "Effect": "Allow",
+            "Action": [
+              "ecr:ListImages"
+            ],
+            "Resource": "arn:aws:ecr:us-east-1:607346494281:repository/agora/data"
+          },
+          {
+            "Sid": "AllowPushPull",
+            "Effect": "Allow",
+            "Action": [
+              "ecr:BatchGetImage",
+              "ecr:BatchCheckLayerAvailability",
+              "ecr:CompleteLayerUpload",
+              "ecr:GetDownloadUrlForLayer",
+              "ecr:InitiateLayerUpload",
+              "ecr:PutImage",
+              "ecr:UploadLayerPart"
+            ],
+            "Resource": "arn:aws:ecr:us-east-1:607346494281:repository/agora/data"
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "Agora"
+        branches: ["*"]
+  DefaultOrganizationBinding:
+    Account: !Ref AgoraDevAccount
+    Region: us-east-1
