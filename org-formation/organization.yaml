@@ -138,6 +138,7 @@ Organization:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref BuA2aDwAccount
+        - !Ref BWmErzkAccount
 
   #------- Accounts -----------
   MasterAccount:
@@ -645,3 +646,15 @@ Organization:
         AccountOwner: elias.chaibub.neto@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws.BuA2aDw@sagebase.org
+
+  BWmErzkAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-BWmErzk
+      RootEmail: aws.BWmErzk@sagebase.org
+      Alias: org-sagebase-BWmErzk
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: susheel.varma@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws.BWmErzk@sagebase.org
