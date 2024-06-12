@@ -655,6 +655,6 @@ Organization:
       Alias: org-sagebase-BWmErzk
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        AccountOwner: susheel.varma@sagebase.org@sagebase.org
+        AccountOwner: susheel.varma@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws.BWmErzk@sagebase.org
