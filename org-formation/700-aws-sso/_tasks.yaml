@@ -322,6 +322,10 @@ Parameters:
     Type: String
     Default: '14b8f4c8-60e1-70ef-e296-06e88f14d720'
 
+  BWmErzkAdminGroup:             #JC aws-BWmErzk-admins
+    Type: String
+    Default: '143894c8-1031-70c4-b98a-9d2a9aec59bd'
+
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
@@ -1601,6 +1605,23 @@ SsoBuA2aDwAdmin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref BuA2aDwAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoBWmErzkAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-BWmErzk-admin'
+  StackDescription: 'SSO: admin role used by BWmErzk admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref  BWmErzkAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref BWmErzkAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoRecoverDevAdmin:
