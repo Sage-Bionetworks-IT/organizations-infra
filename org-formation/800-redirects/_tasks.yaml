@@ -101,7 +101,7 @@ DcaTestingAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-dca-testing-cname'
-  StackDescription: Setup a CNAME for data_curator-infra prod ALB
+  StackDescription: Setup a CNAME for data_curator-infra testing ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
@@ -118,7 +118,7 @@ DcaProdAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-dca-prod-cname'
-  StackDescription: Setup a CNAME for data_curator-infra testing ALB
+  StackDescription: Setup a CNAME for data_curator-infra prod ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
