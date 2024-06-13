@@ -112,7 +112,6 @@ DcaTestingAppDnsForward:
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
     # the value of the CNAME record
     TargetHostName: !CopyValue ['dca-prod-DockerFargateStack-LoadBalancerDNS', !Ref DCAProdAccount]
-    
 # forward dca.app.sagebionetworks.org to data_curator-infra ALB
 # https://github.com/Sage-Bionetworks/data_curator-infra
 DcaProdAppDnsForward:
