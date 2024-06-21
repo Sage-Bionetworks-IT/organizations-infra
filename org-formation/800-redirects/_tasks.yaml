@@ -97,6 +97,23 @@ DcaStagingAppDnsForward:
 
 # forward dca.app.sagebionetworks.org to data_curator-infra ALB
 # https://github.com/Sage-Bionetworks/data_curator-infra
+DcaTestingAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-dca-testing-cname'
+  StackDescription: Setup a CNAME for data_curator-infra testing ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dca-testing.app.sagebionetworks.org"
+    # ID of the app.sagebionetworks.org zone (in sageit account)
+    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['dca-testing-DockerFargateStack-LoadBalancerDNS', !Ref DCAProdAccount]
+# forward dca.app.sagebionetworks.org to data_curator-infra ALB
+# https://github.com/Sage-Bionetworks/data_curator-infra
 DcaProdAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
