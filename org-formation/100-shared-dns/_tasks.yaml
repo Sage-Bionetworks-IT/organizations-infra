@@ -71,8 +71,6 @@ SagebioAppZoneAcmCertificate:
       - !Ref DnTDevAccount
       - !Ref DCAProdAccount
       - !Ref GenieProdAccount
-      - !Ref DccvalidatorDevAccount
-      - !Ref DccvalidatorProdAccount
   Parameters:
     DnsDomainName: "app.sagebionetworks.org"
 
