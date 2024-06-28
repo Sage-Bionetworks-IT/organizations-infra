@@ -33,6 +33,7 @@ Organization:
         - !Ref RecoverDevAccount
         - !Ref ScceDevAccount
         - !Ref CnbDevAccount
+        - !Ref DccvalidatorDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -52,6 +53,7 @@ Organization:
         - !Ref GenieProdAccount
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
+        - !Ref DccvalidatorProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -605,6 +607,32 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-scce-dev@sagebase.org
+
+  DccvalidatorDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-dccvalidator-dev
+      RootEmail: aws-dccvalidator-dev@sagebase.org
+      Alias: org-sagebase-dccvalidator-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: anna.greenwood@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-dccvalidator-dev@sagebase.org
+
+  DccvalidatorProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-dccvalidator-prod
+      RootEmail: aws-dccvalidator-prod@sagebase.org
+      Alias: org-sagebase-dccvalidator-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: anna.greenwood@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-dccvalidator-prod@sagebase.org
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
