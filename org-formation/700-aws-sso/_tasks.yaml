@@ -305,10 +305,6 @@ Parameters:
     Type: String
     Default: 'c4e88408-70b1-70ce-83be-76f4f694b6a6'
 
-  dccvalidatorProdApplicationManagerGroup:      # JC aws-dccvalidator-prod-application-managers
-    Type: String
-    Default: '6498b478-20e1-7031-9648-00c20c410359'
-
   financeAuditorGroup:  # JC aws-finance-auditors
     Type: String
     Default: 'd438e4d8-90e1-7030-6998-cad12c0d3296'
@@ -2035,24 +2031,6 @@ SsoCnbDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref cnbDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
-SsoDccValidatorProdApplicationManager:
-  Type: update-stacks
-  DependsOn: SsoApplicationManager
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-  TemplatingContext: {}
-  StackName: !Sub '${resourcePrefix}-${appName}-dccvalidator-prod-application-manager'
-  StackDescription: 'SSO: Application Manager role used by DccValidator-Prod application-manager group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref DccvalidatorProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref dccvalidatorProdApplicationManagerGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
 
 SsoItsandboxDeveloper:
   Type: update-stacks
