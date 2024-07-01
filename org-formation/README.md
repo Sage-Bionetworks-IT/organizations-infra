@@ -33,6 +33,12 @@ prefixed with numbers to enforce the order they are deployed in.
 - 725 [vpc flow logs](./725-vpc-flow-logs) \
   Use AWS config to enable VPC flow logs
 
+* AWS Config service was manually setup and configured using the AWS console.
+because cloudformation does not support setting up in an organization configuration.
+Cloudformation only supports setting up in an invitation/authorization configuration
+which is not the preferred approach.  Detailed info can be found in issue
+https://sagebionetworks.jira.com/browse/IT-3619
+
 ### Shared Application Infrastructure
 
 - 100 [Shared DNS](./100-shared-dns) \

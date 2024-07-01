@@ -301,9 +301,9 @@ Parameters:
     Type: String
     Default: '04a83488-1041-70d0-e200-31472f87c82a'
 
-  dccvalidatorProdApplicationManagerGroup:      # JC aws-dccvalidator-prod-application-managers
+  itsandboxDeveloperGroup:      #JC aws-itsandbox-developers
     Type: String
-    Default: '6498b478-20e1-7031-9648-00c20c410359'
+    Default: 'c4e88408-70b1-70ce-83be-76f4f694b6a6'
 
   financeAuditorGroup:  # JC aws-finance-auditors
     Type: String
@@ -317,6 +317,10 @@ Parameters:
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
     Default: '14b8f4c8-60e1-70ef-e296-06e88f14d720'
+
+  BWmErzkAdminGroup:             #JC aws-BWmErzk-admins
+    Type: String
+    Default: '143894c8-1031-70c4-b98a-9d2a9aec59bd'
 
 #----------------------------------------------------------------------------------------------
 
@@ -388,6 +392,7 @@ SsoDeveloper:
       - 'arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
       - 'arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy'
+      - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
     sessionDuration: 'PT12H'
     inlinePolicy: >-
       {
@@ -1599,6 +1604,23 @@ SsoBuA2aDwAdmin:
     principalId: !Ref BuA2aDwAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
+SsoBWmErzkAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-BWmErzk-admin'
+  StackDescription: 'SSO: admin role used by BWmErzk admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref  BWmErzkAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref BWmErzkAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
 SsoRecoverDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -2011,20 +2033,19 @@ SsoCnbDeveloper:
     principalId: !Ref cnbDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
-SsoDccValidatorProdApplicationManager:
+SsoItsandboxDeveloper:
   Type: update-stacks
-  DependsOn: SsoApplicationManager
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
-  TemplatingContext: {}
-  StackName: !Sub '${resourcePrefix}-${appName}-dccvalidator-prod-application-manager'
-  StackDescription: 'SSO: Application Manager role used by DccValidator-Prod application-manager group'
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-itsandbox-developer'
+  StackDescription: 'SSO role used by itsandbox developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref DccvalidatorProdAccount
+      Account: !Ref ITSandboxAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref dccvalidatorProdApplicationManagerGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
+    principalId: !Ref itsandboxDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
