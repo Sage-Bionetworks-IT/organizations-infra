@@ -53,6 +53,16 @@ Organization:
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
 
+  PlatformOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: Platform
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
+      OrganizationalUnits:
+        - !Ref SynapseOU
+        - !Ref BridgeOU
+
   # INCLUDE is the grant where we collaborate with CHOP
   IncludeChopProdAccount:
     Type: OC::ORG::Account
@@ -66,16 +76,6 @@ Organization:
         budget-alarm-threshold: 20000
         CostCenter: "INCLUDE - CHOP / 122000"
         budget-alarm-threshold-email-recipient: aws-include-prod@sagebase.org
-
-  PlatformOU:
-    Type: OC::ORG::OrganizationalUnit
-    Properties:
-      OrganizationalUnitName: Platform
-      ServiceControlPolicies:
-        - !Ref RestrictDnsRegistrationSCP
-      OrganizationalUnits:
-        - !Ref SynapseOU
-        - !Ref BridgeOU
 
   ItDevOU:
     Type: OC::ORG::OrganizationalUnit
