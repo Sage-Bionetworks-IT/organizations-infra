@@ -63,6 +63,15 @@ Organization:
         - !Ref SynapseOU
         - !Ref BridgeOU
 
+  ItDevOU:
+    Type: OC::ORG::OrganizationalUnit
+    Properties:
+      OrganizationalUnitName: ItDev
+      ServiceControlPolicies:
+        - !Ref RestrictDnsRegistrationSCP
+      Accounts:
+        - !Ref SceptreDevAccount
+
   # INCLUDE is the grant where we collaborate with CHOP
   IncludeChopProdAccount:
     Type: OC::ORG::Account
@@ -76,15 +85,6 @@ Organization:
         budget-alarm-threshold: 20000
         CostCenter: "INCLUDE - CHOP / 122000"
         budget-alarm-threshold-email-recipient: aws-include-prod@sagebase.org
-
-  ItDevOU:
-    Type: OC::ORG::OrganizationalUnit
-    Properties:
-      OrganizationalUnitName: ItDev
-      ServiceControlPolicies:
-        - !Ref RestrictDnsRegistrationSCP
-      Accounts:
-        - !Ref SceptreDevAccount
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
