@@ -47,10 +47,25 @@ Organization:
         - !Ref MobileHealthDataEngineeringProdAccount
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
+        - !Ref IncludeChopProdAccount
         - !Ref RecoverProdAccount
         - !Ref GenieProdAccount
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
+
+  # INCLUDE is the grant where we collaborate with CHOP
+  IncludeChopProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-include-chop-prod
+      RootEmail: aws-include-prod@sagebase.org
+      Alias: org-sagebase-include-chop-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: thomas.yu@sagebase.org
+        budget-alarm-threshold: 20000
+        CostCenter: "INCLUDE - CHOP / 122000"
+        budget-alarm-threshold-email-recipient: aws-include-prod@sagebase.org
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
