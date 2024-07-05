@@ -73,3 +73,23 @@ GuardDutyConnectOpenData:
     MemberRootEmail: "aws.opendata@sagebase.org"
     MasterDectector: !CopyValue [ !Sub '${resourcePrefix}-${appName}-detector-id' ]
 # ==================================================================================================
+
+
+
+# ==================================================================================================
+# S3 Malware protection
+
+GuarddutyS3MalwareProtection:
+  Type: update-stacks
+  Template: ./guardduty-s3-malware-protection.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-s3-malware-protection'
+  StackDescription: Setup AWS Guardduty S3 Malware Protection
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref SynapseProdAccount
+  Parameters:
+    BucketName: "TBD"
+
+# ==================================================================================================
