@@ -88,7 +88,7 @@ GuarddutyS3MalwareProtection:
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account:
-      - !Ref SynapseProdAccount
+      - !Ref SynapseDevAccount
   Parameters:
     BucketName: "TBD"
 
