@@ -151,7 +151,7 @@ SynapseProdRedashServiceUser:
 FPTMinimumAccess:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
-  StackName: strides-ftp-minimum-access
+  StackName: strides-fpt-minimum-access
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
     Region: us-east-1
