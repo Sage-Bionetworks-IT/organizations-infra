@@ -169,13 +169,13 @@ FPTMinimumAccess:
         "Version": "2012-10-17",
         "Statement": [
           {
-            "Sid": "FullAccessToCostAndUsageReports"
+            "Sid": "FullAccessToCostAndUsageReports",
             "Effect": "Allow",
             "Action": "cur:*",
             "Resource": "*"
           },
           {
-            "Sid": "FullAccessToCostExplorer"
+            "Sid": "FullAccessToCostExplorer",
             "Effect": "Allow",
             "Action": "ce:*",
             "Resource": "*"
