@@ -175,7 +175,8 @@ FPTMinimumAccess:
             "Resource": "*"
           },
           {
-            "Effect": "FullAccessToCostExplorer",
+            "Sid": "FullAccessToCostExplorer"
+            "Effect": "Allow",
             "Action": "ce:*",
             "Resource": "*"
           }
