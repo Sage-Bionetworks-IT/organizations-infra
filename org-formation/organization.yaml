@@ -142,10 +142,10 @@ Organization:
   MasterAccount:
     Type: OC::ORG::MasterAccount
     Properties:
-      AccountName: organizations
+      AccountName: 'NIH-Awd.SageBase.NCI.STRIDES.Master'
       AccountId: '531805629419'
       RootEmail: aws.organizations@sagebase.org
-      Alias: org-sagebase-organizations
+      Alias: 'NIH-Awd.SageBase.NCI.STRIDES.Master'
       Tags:
         <<: !Include ./_platform_org_tags.yaml
 
