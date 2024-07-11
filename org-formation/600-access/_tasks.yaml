@@ -146,6 +146,44 @@ SynapseProdRedashServiceUser:
       - !Ref SynapseProdAccount
     Region: us-east-1
 
+
+# Setup Four Points access IT-3758
+FPTMinimumAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  StackName: strides-fpt-minimum-access
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+    Region: us-east-1
+  Parameters:
+    PrincipalArns:
+      - arn:aws:iam::610061289380:user/danabiller      # Dana Bean
+      - arn:aws:iam::610061289380:user/michellebiller  # Michelle Kosiorek
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/ReadOnlyAccess
+      - arn:aws:iam::aws:policy/job-function/Billing
+      - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSSupportAccess
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "FullAccessToCostAndUsageReports"
+            "Effect": "Allow",
+            "Action": "cur:*",
+            "Resource": "*"
+          },
+          {
+            "Effect": "FullAccessToCostExplorer",
+            "Action": "ce:*",
+            "Resource": "*"
+          }
+        ]
+      }
+
+
+#---------- Policies -------------
 CostExplorerAccessPolicy:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
