@@ -188,6 +188,12 @@ VpnAuthRoutes:
         AccessGroups:
           - "aws-admins"
           - "staff"
+      # org-sagebase-dpe-prod
+      dpe-sandbox-vpc:
+        CIDR: "10.51.0.0/16"
+        AccessGroups:
+          - "aws-admins"
+          - "staff"
 
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]
