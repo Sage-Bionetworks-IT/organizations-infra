@@ -118,6 +118,9 @@ TransitGatewayRoutes:
       # org-sagebase-dpe-prod
       orca-vpc:
         CIDR: "10.255.24.0/24"
+      # org-sagebase-dpe-prod
+      dpe-sandbox-vpc:
+        CIDR: "10.51.0.0/16"
 
   Parameters:
     VpcSubnetIDs:
@@ -147,6 +150,7 @@ Mappings:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
       '420786776710': 'bridge-aux'   # org-sagebase-bridgedev
       '325565585839': 'synapse-ops-vpc-v2' # org-sagebase-synapseprod
+      '766808016710': 'dpe-sandbox-vpc' # org-sagebase-dpe-prod
   TgwSpokesSynapseDev:
     VpcName:
       '449435941126': 'synapse-dev-vpc-2'      # org-sagebase-synapsedev
@@ -197,6 +201,7 @@ TransitGatewaySpokeB:
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref SynapseProdAccount
+      - !Ref DpeProdAccount
     IncludeMasterAccount: false
   Parameters:
     # This assumes that all VPCs contain the same exports
