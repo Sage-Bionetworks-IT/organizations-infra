@@ -33,6 +33,7 @@ Organization:
         - !Ref RecoverDevAccount
         - !Ref ScceDevAccount
         - !Ref CnbDevAccount
+        - !Ref DpeDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -577,6 +578,19 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-dpe-prod@sagebase.org
+
+  DpeDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-dpe-dev
+      RootEmail: aws-dpe-dev@sagebase.org
+      Alias: org-sagebase-dpe-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: thomas.yu@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 10000
+        budget-alarm-threshold-email-recipient: aws-dpe-dev@sagebase.org
 
   ScceDevAccount:
     Type: OC::ORG::Account

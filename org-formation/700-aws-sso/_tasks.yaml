@@ -261,6 +261,19 @@ Parameters:
     Type: String
     Default: '64284488-1061-70c9-eacb-f465d1988789'
 
+  # TODO: IT-3796
+  # dpeDevAdminGroup:      #JC aws-dpe-dev-admins
+  #   Type: String
+  #   Default: ''
+
+  # dpeDevDeveloperGroup:      #JC aws-dpe-dev-developers
+  #   Type: String
+  #   Default: ''
+
+  # dpeDevViewerGroup:      #JC aws-dpe-dev-viewers
+  #   Type: String
+  #   Default: ''
+
   ipamViewerPlusGroup:      #JC aws-ipam-viewers-plus
     Type: String
     Default: '0498c498-5041-704e-c4bb-c3eb14f2fdbb'
@@ -1852,6 +1865,58 @@ SsoDpeProdViewer:
     instanceArn: !Ref instanceArn
     principalId: !Ref dpeProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
+
+# TODO: IT-3796
+# SsoDpeDevAdmin:
+#   Type: update-stacks
+#   DependsOn: SsoAdministrator
+#   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+#   StackName: !Sub '${resourcePrefix}-${appName}-dpe-dev-admin'
+#   StackDescription: 'SSO: Administrator role used by DPE admin group'
+#   DefaultOrganizationBindingRegion: !Ref primaryRegion
+#   DefaultOrganizationBinding:
+#     IncludeMasterAccount: true
+#   OrganizationBindings:
+#     TargetBinding:
+#       Account: !Ref DpeDevAccount
+#   Parameters:
+#     instanceArn: !Ref instanceArn
+#     principalId: !Ref dpeDevAdminGroup
+#     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+# SsoDpeDevDeveloper:
+#   Type: update-stacks
+#   DependsOn: SsoDeveloper
+#   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+#   StackName: !Sub '${resourcePrefix}-${appName}-dpe-dev-developer'
+#   StackDescription: 'SSO: Developer role used by DPE developer group'
+#   DefaultOrganizationBindingRegion: !Ref primaryRegion
+#   DefaultOrganizationBinding:
+#     IncludeMasterAccount: true
+#   OrganizationBindings:
+#     TargetBinding:
+#       Account: !Ref DpeDevAccount
+#   Parameters:
+#     instanceArn: !Ref instanceArn
+#     principalId: !Ref dpeDevDeveloperGroup
+#     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+# SsoDpeDevViewer:
+#   Type: update-stacks
+#   DependsOn: SsoViewer
+#   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+#   StackName: !Sub '${resourcePrefix}-${appName}-dpe-dev-viewer'
+#   StackDescription: 'SSO: Viewer role used by DPE viewer group'
+#   DefaultOrganizationBindingRegion: !Ref primaryRegion
+#   DefaultOrganizationBinding:
+#     IncludeMasterAccount: true
+#   OrganizationBindings:
+#     TargetBinding:
+#       Account: !Ref DpeDevAccount
+#   Parameters:
+#     instanceArn: !Ref instanceArn
+#     principalId: !Ref dpeDevViewerGroup
+#     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
 SsoIpamViewerPlus:
   Type: update-stacks
