@@ -183,6 +183,20 @@ FPTMinimumAccess:
         ]
       }
 
+# Setup StackArmor read-only access IT-3780
+StackArmorReadOnlyAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  StackName: stack-armor-read-only-access
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+    Region: us-east-1
+  Parameters:
+    PrincipalArns:
+      - arn:aws:iam::726064622671:root # StackArmor AWS account ID
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+      - arn:aws:iam::aws:policy/AmazonVPCReadOnlyAccess
 
 #---------- Policies -------------
 CostExplorerAccessPolicy:
