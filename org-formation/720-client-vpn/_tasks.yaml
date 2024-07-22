@@ -188,7 +188,7 @@ VpnAuthRoutes:
         AccessGroups:
           - "aws-admins"
           - "staff"
-      # org-sagebase-dpe-prod
+      # org-sagebase-dnt-dev
       dpe-sandbox-vpc:
         CIDR: "10.51.0.0/16"
         AccessGroups:
