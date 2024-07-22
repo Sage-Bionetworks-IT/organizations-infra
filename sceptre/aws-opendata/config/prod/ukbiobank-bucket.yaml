@@ -1,5 +1,5 @@
 template:
-  path: "opendata-bucket.yaml"
+  path: "opendata-bucket.j2"
 stack_name: "ukbiobank-bucket"
 dependencies:
   - "prod/bootstrap.yaml"

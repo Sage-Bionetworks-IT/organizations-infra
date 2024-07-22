@@ -1,7 +1,16 @@
 # This bucket template is mostly copied from
 # https://assets.opendata.aws/aws-onboarding-handbook-for-data-providers-en-US.pdf
 # with slight modifications to support Synapse based storage location
+#
+# This template supports the automated creation of Synapse owner.txt file.
+# Example config:
+#
+#   sceptre_user_data:
+#     SynapseIDs:
+#       - "3489135" # Synapse team ID
+
 AWSTemplateFormatVersion: '2010-09-09'
+Transform: S3Objects
 Description: >-
   This template creates the AWS infrastructure to publish a public
   data set on S3. It creates a publicly-accessible S3 bucket for
@@ -126,6 +135,27 @@ Resources:
             Resource:
               - !Sub arn:aws:s3:::${DataSetBucket}/*
     Type: AWS::S3::BucketPolicy
+
+  # Add owner file to the synapse bucket, requires the cloudformation S3 objects macro
+  # https://github.com/Sage-Bionetworks/aws-infra/tree/master/lambdas/cfn-s3objects-macro
+  {% if sceptre_user_data.SynapseIDs is defined %}
+  SynapseOwnerFile:
+    Type: AWS::S3::Object
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3001
+    Properties:
+      Target:
+        Bucket: !Ref Bucket
+        Key: owner.txt
+        ContentType: text
+      Body: >-
+  {%     for SynapseID in sceptre_user_data.SynapseIDs %}
+          {{ SynapseID }}
+  {%     endfor %}
+  {% endif %}
 
 Outputs:
   DataBucket:
