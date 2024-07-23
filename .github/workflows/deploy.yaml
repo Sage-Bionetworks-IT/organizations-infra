@@ -28,7 +28,7 @@ jobs:
         with:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::531805629419:role/sagebase-github-oidc-sage-bionetworks-it
-          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
+          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-(${{ github.run_id }} % 1000000000)
           role-duration-seconds: 1200
       - name: Use Node.js
         uses: actions/setup-node@v3
