@@ -64,42 +64,51 @@ jobs:
         run: npm run print-tasks-failfast
       - name: Deploy with ofn
         run: npm run ci-perform-tasks-parallel
+    # Map a step output to a job output
+    outputs:
+      role-session-name: ${{ steps.role-session-name.outputs.substring }}
 
   sceptre-organizations:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::531805629419:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/organizations"
   sceptre-admincentral:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::745159704268:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/admincentral"
   sceptre-itsandbox:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::804034162148:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/itsandbox"
   sceptre-scicomp:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::055273631518:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/scicomp"
   sceptre-strides:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/strides"
   sceptre-strides-ampad-workflows:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::751556145034:role/github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/strides-ampad-workflows"
   sceptre-scipooldev:
     needs: [org-formation]
@@ -107,18 +116,21 @@ jobs:
     with:
       role-to-assume: "arn:aws:iam::465877038949:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/scipool"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       sceptre-command: "sceptre launch develop --prune --yes"
   sceptre-scipoolprod:
     needs: [org-formation]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
       role-to-assume: "arn:aws:iam::237179673806:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/scipool"
   sceptre-stridespool:
     needs: [org-formation, sceptre-strides]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
       role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/scipool"
       sceptre-command: "sceptre launch strides --prune --yes"
   sceptre-bmgfki:
@@ -126,6 +138,7 @@ jobs:
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
       role-to-assume: "arn:aws:iam::464102568320:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/scipool"
       sceptre-command: "sceptre launch bmgfki --prune --yes"
   sceptre-sageit-staging:
@@ -133,6 +146,7 @@ jobs:
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/sageit"
       sceptre-command: "sceptre launch staging --prune --yes"
   sceptre-sageit-prod:
@@ -140,30 +154,35 @@ jobs:
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/sageit"
   sceptre-logcentral:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::231505186444:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/logcentral"
   sceptre-synapsedev:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::449435941126:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/synapsedev"
   sceptre-synapseprod:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::325565585839:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/synapseprod"
   sceptre-bridgedev:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::420786776710:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/bridge"
       sceptre-command: "sceptre launch develop --prune --yes"
   sceptre-bridgeprod:
@@ -171,16 +190,19 @@ jobs:
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::649232250620:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/bridge"
   sceptre-imagecentral:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::867686887310:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/imagecentral"
   sceptre-aws-opendata:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
     with:
       role-to-assume: "arn:aws:iam::373143421983:role/github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/aws-opendata"
