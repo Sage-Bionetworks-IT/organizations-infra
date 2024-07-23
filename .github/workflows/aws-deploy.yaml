@@ -10,6 +10,9 @@ on:
       role-to-assume:
         required: true
         type: string
+      role-session-name:
+        required: true
+        type: string
       role-duration-seconds:
         type: number
         default: 1200
@@ -48,7 +51,7 @@ jobs:
         with:
           aws-region: ${{ inputs.aws-region }}
           role-to-assume: ${{ inputs.role-to-assume }}
-          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
+          role-session-name: ${{ inputs.role-session-name }}
           role-duration-seconds: ${{ inputs.role-duration-seconds }}
       - name: Deploy with sceptre
         run: |
