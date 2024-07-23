@@ -22,13 +22,19 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
+      - name: Get role session name
+        uses: bhowell2/github-substring-action@1.0.2
+        id: role-session-name
+        with:
+          value: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
+          length_from_end: 64
       - uses: actions/checkout@v3
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::531805629419:role/sagebase-github-oidc-sage-bionetworks-it
-          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-(${{ github.run_id }} % 1000000000)
+          role-session-name: ${{ steps.role-session-name.outputs.substring }}
           role-duration-seconds: 1200
       - name: Use Node.js
         uses: actions/setup-node@v3
