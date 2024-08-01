@@ -232,6 +232,13 @@
                                         "ssm:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "apigateway:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }
