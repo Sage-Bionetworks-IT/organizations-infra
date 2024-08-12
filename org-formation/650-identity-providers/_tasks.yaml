@@ -803,7 +803,7 @@ GithubOidcOpenChallengesDeploy:
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
-      - name: "OpenChallenges"
+      - name: "openchallenges"
         branches: ["dev", "prod"]
   DefaultOrganizationBinding:
     Account:
