@@ -390,6 +390,11 @@ SsoDeveloper:
           "Version": "2012-10-17",
           "Statement": [
               {
+                  "Effect": "Allow",
+                  "Resource": "arn:aws:iam::*:role/eks-developer-viewer-role-*",
+                  "Action": "sts:AssumeRole"
+              },
+              {
                   "Effect": "Deny",
                   "Action": "sts:AssumeRole",
                   "Resource": "*"
