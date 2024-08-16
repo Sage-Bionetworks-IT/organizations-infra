@@ -239,6 +239,13 @@
                                         "apigateway:*"
                                     ],
                                     "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "bedrock:*"
+                                    ],
+                                    "Resource": "*"
                                 }
                             ]
                         }
