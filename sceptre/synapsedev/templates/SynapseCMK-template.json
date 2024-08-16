@@ -253,13 +253,13 @@
                                         "aws-marketplace:Subscribe",
                                         "aws-marketplace:ViewSubscriptions"
                                     ],
-									"Resource": "*",
-									"Condition": {
-										"ForAnyValue:StringEquals": {
-											"aws-marketplace:ProductId": [
-												"prod-6dw3qvchef7zy",
-												"prod-m5ilt4siql27k"
-											]
+                                    "Resource": "*",
+                                    "Condition": {
+                                        "ForAnyValue:StringEquals": {
+                                            "aws-marketplace:ProductId": [
+                                                "prod-6dw3qvchef7zy",
+										        "prod-m5ilt4siql27k"
+										    ]
 										}
 									} 
 								}
