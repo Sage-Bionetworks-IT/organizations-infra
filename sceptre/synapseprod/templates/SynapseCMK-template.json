@@ -236,11 +236,11 @@
                                         "ForAnyValue:StringEquals": {
                                             "aws-marketplace:ProductId": [
                                                 "prod-6dw3qvchef7zy",
-										        "prod-m5ilt4siql27k"
-										    ]
-										}
-									} 
-								}
+                                                "prod-m5ilt4siql27k"
+                                            ]
+                                        }
+                                    } 
+                                }
                             ]
                         }
                     }
