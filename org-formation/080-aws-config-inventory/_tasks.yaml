@@ -1,0 +1,22 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'config'
+
+# Enable AWS Config in all member accounts.  AWS config in the logcentral account is configured to aggregate
+# all Findings and Config history from member accounts and store them in a centralized s3 bucket in logcentral
+ConfigBase:
+  Type: update-stacks
+  Template: config.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-base'
+  StackDescription: AWS Config - Base
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    ExcludeAccount: !Ref LogCentralAccount
+    Account: '*'
+  Parameters:
+    resourcePrefix: !Ref resourcePrefix
+    bucketName: !Sub '${resourcePrefix}-${appName}-${CurrentAccount.AccountId}'
