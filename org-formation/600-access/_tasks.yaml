@@ -180,6 +180,59 @@ FPTMinimumAccess:
             "Effect": "Allow",
             "Action": "ce:*",
             "Resource": "*"
+          },
+          {
+            "Sid": "CreateCurExportsInDataExports",
+            "Effect": "Allow",
+            "Action": ["bcm-data-exports:*"],
+            "Resource": [
+                  "Fn::Sub": "arn:aws:bcm-data-exports:${AWS::Region}:${AWS::AccountId}:export/*",
+                  "Fn::Sub": "arn:aws:bcm-data-exports:${AWS::Region}:${AWS::AccountId}:table/COST_AND_USAGE_REPORT"
+                  ]
+          },
+          {
+            "Sid": "CurDataAccess",
+            "Effect": "Allow",
+            "Action": ["cur:PutReportDefinition"],
+            "Resource": "*"
+          },
+          {
+            "Sid": "AllowListingOfBucket",
+            "Principal": {
+                "AWS": ["arn:aws:iam::610061289380:root"]
+            },
+            "Effect": "Allow",
+            "Action": ["s3:ListBucket"],
+            "Resource": ["arn:aws:s3:::cost-and-usage-reports.sagebase.org"],
+            "Condition": {
+                "StringEquals": {
+                    "s3:prefix": ["", "4points/"],
+                    "s3:delimiter": ["/"]
+                }
+            }
+          },
+          {
+            "Sid": "AllowListingOfFolder",
+            "Principal": {
+                "AWS": ["arn:aws:iam::610061289380:root"]
+            },
+            "Action": ["s3:ListBucket"],
+            "Effect": "Allow",
+            "Resource": ["arn:aws:s3:::cost-and-usage-reports.sagebase.org"],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": ["4points/*"]
+                }
+            }
+          },
+          {
+            "Sid": "AllowAllS3ActionsInFolder",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": ["arn:aws:iam::610061289380:root"]
+            },
+            "Action": ["s3:*"],
+            "Resource": ["arn:aws:s3:::cost-and-usage-reports.sagebase.org/4points/*"]
           }
         ]
       }
