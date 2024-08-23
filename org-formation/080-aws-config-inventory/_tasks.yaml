@@ -18,5 +18,4 @@ ConfigBase:
     ExcludeAccount: !Ref LogCentralAccount
     Account: '*'
   Parameters:
-    resourcePrefix: !Ref resourcePrefix
     bucketName: !Sub '${resourcePrefix}-${appName}-${CurrentAccount.AccountId}'
