@@ -36,6 +36,11 @@ Macie:
   DependsOn: [ Types ]
   Path: ./077-macie/_tasks.yaml
 
+AwsConfigInventory:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./080-aws-config-inventory/_tasks.yaml
+
 AwsSystemsManager:
   Type: include
   DependsOn: [ Types ]
