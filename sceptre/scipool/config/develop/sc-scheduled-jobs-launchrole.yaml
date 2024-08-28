@@ -1,4 +1,5 @@
-template_path: "sc-scheduled-jobs-launchrole.yaml"
+template:
+  path: "sc-scheduled-jobs-launchrole.yaml"
 stack_name: "sc-scheduled-jobs-launchrole"
 dependencies:
   - "develop/essentials.yaml"
