@@ -1,0 +1,8 @@
+# A bucket for 4points for storing cost and usage reports
+template:
+  path: "s3-cur-bucket.j2"
+stack_name: "fourpoints"
+parameters:
+  AllowWriteBucket: 'true'
+  GrantAccess:
+    - 'arn:aws:iam::610061289380:root'   # 4points has access
