@@ -149,7 +149,7 @@ Mappings:
       '055273631518': 'snowflakevpc'   # org-sagebase-scicomp
       '420786776710': 'bridge-aux'   # org-sagebase-bridgedev
       '325565585839': 'synapse-ops-vpc-v2' # org-sagebase-synapseprod
-      '449435941126': 'sagevpc' # org-sagebase-synapsedev
+      '449435941126': 'vpc' # org-sagebase-synapsedev
   TgwSpokesSynapseDev:
     VpcName:
       '449435941126': 'synapse-dev-vpc-2'      # org-sagebase-synapsedev
