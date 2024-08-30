@@ -131,8 +131,8 @@ Resources:
             Condition:
                 StringLike:
                   aws:SourceArn:
-                    - aws:SourceArn: !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
-                    - aws:SourceArn: !Sub 'arn:aws:bcm-data-exports:${AWS::Region}:${AWS::AccountId}:export/*'
+                    - !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
+                    - !Sub 'arn:aws:bcm-data-exports:${AWS::Region}:${AWS::AccountId}:export/*'
                   aws:SourceAccount: !Sub '${AWS::AccountId}'
           - Sid: BucketAccess
             # gives grantees access to the bucket
