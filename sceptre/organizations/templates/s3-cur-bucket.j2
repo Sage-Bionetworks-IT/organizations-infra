@@ -89,7 +89,7 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-          - Sid: BillingServiceAccess
+          - Sid: BillingServiceBucketReadAccess
             Effect: Allow
             Principal:
               Service:
@@ -97,14 +97,30 @@ Resources:
             Action:
               - "s3:GetBucketAcl"
               - "s3:GetBucketPolicy"
-              - "s3:PutObject"
             Resource:
                 - !GetAtt Bucket.Arn
+            Condition:
+                StringEquals:
+                  aws:SourceArn: !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
+                  aws:SourceAccount: !Sub '${AWS::AccountId}'
+          - Sid: BillingServiceBucketWriteAccess
+            Effect: Allow
+            Principal:
+              Service:
+                - billingreports.amazonaws.com
+            Action:
+              - "s3:PutObject"
+            Resource:
                 - !Sub "${Bucket.Arn}/*"
+            Condition:
+                StringEquals:
+                  aws:SourceArn: !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
+                  aws:SourceAccount: !Sub '${AWS::AccountId}'
           - Sid: BcmDataExportServiceAccess
             Effect: Allow
             Principal:
               Service:
+                - billingreports.amazonaws.com
                 - bcm-data-exports.amazonaws.com
             Action:
               - "s3:GetBucketPolicy"
@@ -112,6 +128,12 @@ Resources:
             Resource:
                 - !GetAtt Bucket.Arn
                 - !Sub "${Bucket.Arn}/*"
+            Condition:
+                StringLike:
+                  aws:SourceArn:
+                    - aws:SourceArn: !Sub 'arn:aws:cur:${AWS::Region}:${AWS::AccountId}:definition/*'
+                    - aws:SourceArn: !Sub 'arn:aws:bcm-data-exports:${AWS::Region}:${AWS::AccountId}:export/*'
+                  aws:SourceAccount: !Sub '${AWS::AccountId}'
           - Sid: BucketAccess
             # gives grantees access to the bucket
             Effect: Allow
