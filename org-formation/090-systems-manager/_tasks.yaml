@@ -60,3 +60,17 @@ PatchMembers:
     IncludeMasterAccount: true
   Parameters:
     ManagementAccountNumber: !Ref accountId
+
+StackArmorNessusScanner:
+  Type: update-stacks
+  Template: ScheduledMaintenance.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-stackarmor-nessus-scsnner'
+  StackDescription: Install Nessus scanner on instances in account
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Accounts:
+        - !Ref SynapseProdAccount
+    IncludeMasterAccount: false
+  Parameters:
+    ScriptURL: https://raw.githubusercontent.com/Sage-Bionetworks/infra-utils/v1.0.10/stack-armor/install-nessus-agent.sh
+    ScriptParameters: /stack-armor/install-nessus-key:STACK_ARMOR_KEY

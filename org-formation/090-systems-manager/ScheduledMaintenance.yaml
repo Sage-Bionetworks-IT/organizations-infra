@@ -1,0 +1,131 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  AWS CloudFormation template that will create an SSM Maintenance
+  Window Task, with associated Maintenance Window, SSM Document,
+  Target and Role to run a given script on the EC2s in the specified account.
+Parameters:
+  Schedule:
+    Type: 'String'
+    Description: 'Schedule to run script'
+    Default: "rate(24 hours)"
+  ScriptURL:
+    Type: 'String'
+    Description: 'URL for the script to run'
+  ScriptParameters:
+    Type: 'String'
+    Description: >-
+      space delimited list of key:value, where key is an SSM Parameter Store 
+      key and value is the shell envvar name to assign
+Resources:
+  # Create IAM Role for SSM
+  SSMExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: "ssm.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: "SSMExecutionPolicy"
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "ec2:DescribeInstances"
+                  - "ssm:SendCommand"
+                Resource: "*"
+        - PolicyName: "SSMParameterPolicy"
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "ssm:GetParameters"
+                Resource:
+                - !Join [ '', ['arn:', !Ref 'AWS::Partition', ':ssm:', !Ref 'AWS::Region', ':', !Ref 'AWS::AccountId', '*'] ]
+  SSMDocument:
+    Type: "AWS::SSM::Document"
+    Properties:
+      DocumentType: "Command"
+      Content:
+        schemaVersion: "2.2"
+        description: "Run a script on EC2 instances"
+        parameters:
+          script_url:
+            type: String
+            description: "The URL of the script to run"
+          region:
+            type: String
+            description:  The AWS region
+          ssm_parameter_name_to_envvar_map:
+            type: String
+            description: >-
+              space delimited list of key:value, where key is an SSM Parameter Store 
+              key and value is the shell envvar name to assign
+          mainSteps:
+          - action: "aws:runShellScript"
+            name: "runShellScript"
+            inputs:
+              runCommand: |
+                SSM_TO_ENV_MAP=( {{ ssm_parameter_name_to_envvar_map }} )
+                for KV in "${SSM_TO_ENV_MAP[@]}" ; do        
+                	"${KV##*:}"=$(aws --region {{ region }} ssm get-parameters --names "${KV%%:*}" --with-decryption --query Parameters[0].Value --output text)
+                done                
+                SCRIPT_PATH=/tmp/script.sh
+                wget -O $SCRIPT_PATH {{ script_url }}
+                chmod +x $SCRIPT_PATH
+                $SCRIPT_PATH
+
+  # Create Maintenance Window
+  MaintenanceWindow:
+    Type: "AWS::SSM::MaintenanceWindow"
+    Properties:
+      Name: "DailyMaintenanceWindow"
+      Schedule: !Ref Schedule
+      Duration: 1 # Duration of the maintenance window in hours
+      Cutoff: 0
+      AllowUnassociatedTargets: False
+
+  # Create Maintenance Window Target
+  MaintenanceWindowTarget:
+    Type: "AWS::SSM::MaintenanceWindowTarget"
+    Properties:
+      WindowId: !Ref MaintenanceWindow
+      ResourceType: "INSTANCE"
+      Targets:
+        - Key: "tag:ssm-group"
+          Values:
+            - "foo"
+# TODO run on all instances
+#        - Key: "InstanceIds"
+#          Values:
+#            - "*"
+      Name: "SSMGroupTarget"
+
+  # Create Maintenance Window Task
+  MaintenanceWindowTask:
+    Type: "AWS::SSM::MaintenanceWindowTask"
+    Properties:
+      WindowId: !Ref MaintenanceWindow
+      Targets:
+        - Key: "WindowTargetIds"
+          Values:
+            - !Ref MaintenanceWindowTarget
+      TaskArn: !Ref SSMDocument
+      TaskType: "RUN_COMMAND"
+      TaskInvocationParameters:
+        MaintenanceWindowRunCommandParameters:
+          Comment: "Running SSM document on instances"
+          TimeoutSeconds: 600
+          ServiceRoleArn: !GetAtt SSMExecutionRole.Arn
+          Parameters:
+            script_url: !Ref ScriptURL
+            region: !Ref AWS::Region
+            ssm_parameter_name_to_envvar_map: !Ref ScriptParameters
+      Priority: 1
+      MaxConcurrency: "1"
+      MaxErrors: "1"
