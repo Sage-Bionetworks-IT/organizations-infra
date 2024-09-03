@@ -14,8 +14,8 @@ Parameters:
   ScriptParameters:
     Type: 'String'
     Description: >-
-      space delimited list of key:value, where key is an SSM Parameter Store 
-      key and value is the shell envvar name to assign
+      space delimited list of key:value, where key is an SSM Parameter Store
+      key and value is the shell envvar name to assign.
 Resources:
   # Create IAM Role for SSM
   SSMExecutionRole:
@@ -55,30 +55,30 @@ Resources:
         schemaVersion: "2.2"
         description: "Run a script on EC2 instances"
         parameters:
-          script_url:
+          ScriptUrl:
             type: String
             description: "The URL of the script to run"
-          region:
+          Region:
             type: String
-            description:  The AWS region
-          ssm_parameter_name_to_envvar_map:
+            description: The AWS region
+          SsmParameterNameToEnvvarMap:
             type: String
             description: >-
-              space delimited list of key:value, where key is an SSM Parameter Store 
-              key and value is the shell envvar name to assign
-          mainSteps:
-          - action: "aws:runShellScript"
-            name: "runShellScript"
-            inputs:
-              runCommand: |
-                SSM_TO_ENV_MAP=( {{ ssm_parameter_name_to_envvar_map }} )
-                for KV in "${SSM_TO_ENV_MAP[@]}" ; do        
-                	"${KV##*:}"=$(aws --region {{ region }} ssm get-parameters --names "${KV%%:*}" --with-decryption --query Parameters[0].Value --output text)
-                done                
-                SCRIPT_PATH=/tmp/script.sh
-                wget -O $SCRIPT_PATH {{ script_url }}
-                chmod +x $SCRIPT_PATH
-                $SCRIPT_PATH
+              space delimited list of key:value, where key is an SSM Parameter Store
+              key and value is the shell envvar name to assign.
+        mainSteps:
+        - action: "aws:runShellScript"
+          name: "runShellScript"
+          inputs:
+            runCommand:
+            - SCRIPT_PATH=/tmp/script.sh
+            - SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )
+            - for KV in ${SSM_TO_ENV_MAP[@]} ; do
+            -   ${KV##*:}=$(aws --region {{ Region }} ssm get-parameters --names ${KV%%:*} --with-decryption --query Parameters[0].Value --output text)
+            - done
+            - wget -O $SCRIPT_PATH {{ ScriptUrl }}
+            - chmod +x $SCRIPT_PATH
+            - $SCRIPT_PATH
 
   # Create Maintenance Window
   MaintenanceWindow:
@@ -123,9 +123,9 @@ Resources:
           TimeoutSeconds: 600
           ServiceRoleArn: !GetAtt SSMExecutionRole.Arn
           Parameters:
-            script_url: !Ref ScriptURL
-            region: !Ref AWS::Region
-            ssm_parameter_name_to_envvar_map: !Ref ScriptParameters
+            ScriptUrl: [!Ref ScriptURL]
+            Region: [!Ref AWS::Region]
+            SsmParameterNameToEnvvarMap: [!Ref ScriptParameters]
       Priority: 1
       MaxConcurrency: "1"
       MaxErrors: "1"
