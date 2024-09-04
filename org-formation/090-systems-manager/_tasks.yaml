@@ -69,7 +69,7 @@ StackArmorNessusScanner:
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Accounts:
-        - !Ref SynapseProdAccount
+      - !Ref SynapseProdAccount
     IncludeMasterAccount: false
   Parameters:
     ScriptURL: https://raw.githubusercontent.com/Sage-Bionetworks/infra-utils/v1.0.10/stack-armor/install-nessus-agent.sh

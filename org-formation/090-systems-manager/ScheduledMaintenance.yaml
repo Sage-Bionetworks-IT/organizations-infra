@@ -71,14 +71,14 @@ Resources:
           name: "runShellScript"
           inputs:
             runCommand:
-            - SCRIPT_PATH=/tmp/script.sh
             - SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )
             - for KV in ${SSM_TO_ENV_MAP[@]} ; do
-            -   ${KV##*:}=$(aws --region {{ Region }} ssm get-parameters --names ${KV%%:*} --with-decryption --query Parameters[0].Value --output text)
+            -   export ${KV##*:}=$(aws --region {{ Region }} ssm get-parameters --names ${KV%%:*} --with-decryption --query Parameters[0].Value --output text)
             - done
+            - SCRIPT_PATH=/tmp/script.sh
             - wget -O $SCRIPT_PATH {{ ScriptUrl }}
             - chmod +x $SCRIPT_PATH
-            - $SCRIPT_PATH
+            - sudo $SCRIPT_PATH
 
   # Create Maintenance Window
   MaintenanceWindow:
@@ -97,13 +97,9 @@ Resources:
       WindowId: !Ref MaintenanceWindow
       ResourceType: "INSTANCE"
       Targets:
-        - Key: "tag:ssm-group"
+        - Key: "InstanceIds"
           Values:
-            - "foo"
-# TODO run on all instances
-#        - Key: "InstanceIds"
-#          Values:
-#            - "*"
+            - "*"
       Name: "SSMGroupTarget"
 
   # Create Maintenance Window Task
