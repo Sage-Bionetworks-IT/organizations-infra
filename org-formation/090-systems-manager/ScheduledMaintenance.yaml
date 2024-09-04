@@ -15,7 +15,7 @@ Parameters:
     Type: 'String'
     Description: >-
       space delimited list of key:value, where key is an SSM Parameter Store
-      key and value is the shell envvar name to assign.
+      key and value is the shell envvar name to assign, e.g., /foo/bar:ENVVAR1 /bar/baz:ENVVAR2
 Resources:
   # Create IAM Role for SSM
   SSMExecutionRole:
@@ -65,7 +65,7 @@ Resources:
             type: String
             description: >-
               space delimited list of key:value, where key is an SSM Parameter Store
-              key and value is the shell envvar name to assign.
+              key and value is the shell envvar name to assign, e.g., /foo/bar:ENVVAR1 /bar/baz:ENVVAR2
         mainSteps:
         - action: "aws:runShellScript"
           name: "runShellScript"

@@ -64,7 +64,7 @@ PatchMembers:
 StackArmorNessusScanner:
   Type: update-stacks
   Template: ScheduledMaintenance.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-stackarmor-nessus-scsnner'
+  StackName: !Sub '${resourcePrefix}-${appName}-stackarmor-nessus-scanner'
   StackDescription: Install Nessus scanner on instances in account
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
