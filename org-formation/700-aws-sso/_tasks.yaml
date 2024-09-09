@@ -145,6 +145,10 @@ Parameters:
     Type: String
     Default: '906769aa66-8f870ac5-9280-4c19-b477-461592fe92a6'
 
+  htanDevDeveloperGroup:        #JC aws-htan-dev-developers
+    Type: String
+    Default: 'f4d84498-c0e1-70e7-215b-49089082ecaa'
+
   bmgfkiAdminGroup:      #JC aws-bmgfki-admins
     Type: String
     Default: '906769aa66-dfc5248b-3d5d-44ce-81ae-6759ee284e59'
@@ -1295,6 +1299,24 @@ SsoHtanDevAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref htanDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoHtanDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-htandev-developer'
+  StackDescription: 'SSO: developer role used by htandev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref HtanDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref htanDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
 
 SsoBmgfkiAdmin:
   Type: update-stacks
