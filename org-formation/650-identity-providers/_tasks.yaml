@@ -501,40 +501,18 @@ GithubOidcSageBionetworksWebMonorepoInfra:
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
               "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
-              "Resource": [ "arn:aws:s3:::*.accounts.sagebionetworks.org",
-                            "arn:aws:s3:::*.accounts.synapse.org",
-                            "arn:aws:s3:::*-adknowledgeportalsynapse-org-websitebucket-*",
-                            "arn:aws:s3:::*-arkportal-synapse-org-websitebucket-*",
-                            "arn:aws:s3:::*.bsmn.synapse.org",
-                            "arn:aws:s3:::*.cancercomplexity.synapse.org",
-                            "arn:aws:s3:::*-challenges-synapse-org-websitebucket-*",
-                            "arn:aws:s3:::*.covidrecoverycorpsresearcher.synapse.org",
-                            "arn:aws:s3:::*.dhealth.synapse.org",
-                            "arn:aws:s3:::*-eliteportal-synapse-org-websitebucket-*",
-                            "arn:aws:s3:::*-genie-synapse-org-websitebucket-*",
-                            "arn:aws:s3:::*.nf.synapse.org",
-                            "arn:aws:s3:::*.psychencode.synapse.org",
-                            "arn:aws:s3:::*stopadportal.synapse.org"
+              "Resource": [ "arn:aws:s3:::*.sagebionetworks.org",
+                            "arn:aws:s3:::*.synapse.org",
+                            "arn:aws:s3:::*-websitebucket-*"
                           ]
           },
           {
               "Sid": "AllObjectActions",
               "Effect": "Allow",
               "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
-              "Resource": [ "arn:aws:s3:::*.accounts.sagebionetworks.org/*",
-                            "arn:aws:s3:::*.accounts.synapse.org/*",
-                            "arn:aws:s3:::*-adknowledgeportalsynapse-org-websitebucket-*/*",
-                            "arn:aws:s3:::*-arkportal-synapse-org-websitebucket-*/*",
-                            "arn:aws:s3:::*.bsmn.synapse.org/*",
-                            "arn:aws:s3:::*.cancercomplexity.synapse.org/*",
-                            "arn:aws:s3:::*-challenges-synapse-org-websitebucket-*/*",
-                            "arn:aws:s3:::*.covidrecoverycorpsresearcher.synapse.org/*",
-                            "arn:aws:s3:::*.dhealth.synapse.org/*",
-                            "arn:aws:s3:::*-eliteportal-synapse-org-websitebucket-*/*",
-                            "arn:aws:s3:::*-genie-synapse-org-websitebucket-*/*",
-                            "arn:aws:s3:::*.nf.synapse.org/*",
-                            "arn:aws:s3:::*.psychencode.synapse.org/*",
-                            "arn:aws:s3:::*stopadportal.synapse.org/*"
+              "Resource": [ "arn:aws:s3:::*.sagebionetworks.org/*",
+                            "arn:aws:s3:::*.synapse.org/*",
+                            "arn:aws:s3:::*-websitebucket-*/*"
                           ]
           },
           {
