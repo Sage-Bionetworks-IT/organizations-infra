@@ -533,6 +533,7 @@ SynapseMonorepoBucketAccessPolicy:
                             "arn:aws:s3:::staging.stopadportal.synapse.org"
                           ]
           }
+        ]
       }
     PolicyName: SynapseMonorepoBucketAccessPolicy
 
@@ -584,6 +585,7 @@ SynapseMonorepoFileAccessPolicy:
                             "arn:aws:s3:::staging.stopadportal.synapse.org/*"
                           ]
           }
+        ]
       }
     PolicyName: SynapseMonorepoFileAccessPolicy
 
@@ -631,6 +633,7 @@ SynapseMonorepoCloudfrontAccessPolicy:
                             "arn:aws:cloudfront::797640923903:distribution/E27UC0961FPD8C"
                           ]
           }
+        ]
       }
     PolicyName: SynapseMonorepoCloudfrontAccessPolicy
 
