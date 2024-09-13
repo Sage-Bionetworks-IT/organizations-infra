@@ -846,7 +846,7 @@ SynapseMonorepoBucketAccessPolicy:
     Account: !Ref SageITAccount
     Region: !Ref primaryRegion
   Parameters:
-    PolicyDocument: |
+    PolicyDocument: >-
       {
         "Version": "2012-10-17",
         "Statement": [
@@ -898,7 +898,7 @@ SynapseMonorepoFileAccessPolicy:
     Account: !Ref SageITAccount
     Region: !Ref primaryRegion
   Parameters:
-    PolicyDocument: |
+    PolicyDocument: >-
       {
         "Version": "2012-10-17",
         "Statement": [
@@ -950,7 +950,7 @@ SynapseMonorepoCloudfrontAccessPolicy:
     Account: !Ref SageITAccount
     Region: !Ref primaryRegion
   Parameters:
-    PolicyDocument: |
+    PolicyDocument: >-
       {
         "Version": "2012-10-17",
         "Statement": [
