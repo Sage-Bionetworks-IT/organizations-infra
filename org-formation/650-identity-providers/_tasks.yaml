@@ -800,6 +800,8 @@ GithubOidcOpenChallengesDeploy:
       - !Ref ITSandboxAccount
     Region: us-east-1
 
+# Permissions to push an image to private registry
+# See: https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push-iam.html
 GithubOidcNbConvertDeploy:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
