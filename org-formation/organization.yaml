@@ -601,6 +601,7 @@ Organization:
       Tags:
         <<: !Include ./_default_org_tags.yaml
         AccountOwner: thomas.schaffter@sagebase.org
+        CostCenter: ITCR / 10160004
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-openchallenges-dev@sagebase.org
 
