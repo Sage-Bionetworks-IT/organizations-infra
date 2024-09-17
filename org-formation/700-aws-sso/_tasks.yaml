@@ -311,7 +311,7 @@ Parameters:
 
   OpenchallengesProdAdminGroup:     # JC aws-openchallenges-prod-admins
     Type: String
-    Default: 'TBD'
+    Default: 'c418a4d8-c021-70b6-6580-1e115806deb6'
 
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
