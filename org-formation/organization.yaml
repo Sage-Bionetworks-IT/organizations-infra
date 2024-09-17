@@ -33,6 +33,7 @@ Organization:
         - !Ref RecoverDevAccount
         - !Ref ScceDevAccount
         - !Ref CnbDevAccount
+        - !Ref OpenChallengesDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -590,6 +591,18 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-scce-dev@sagebase.org
+
+  OpenChallengesDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-openchallenges-dev
+      RootEmail: aws-openchallenges-dev@sagebase.org
+      Alias: org-sagebase-openchallenges-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: thomas.schaffter@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-openchallenges-dev@sagebase.org
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
