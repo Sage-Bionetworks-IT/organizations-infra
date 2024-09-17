@@ -493,42 +493,10 @@ GithubOidcSageBionetworksWebMonorepoInfra:
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
-    PolicyDocument: |
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-              "Sid": "ListObjectsInBucket",
-              "Effect": "Allow",
-              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
-              "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org",
-                            "arn:aws:s3:::staging.accounts.sagebionetworks.org",
-                            "arn:aws:s3:::prod.accounts.synapse.org",
-                            "arn:aws:s3:::staging.accounts.synapse.org"
-                          ]
-          },
-          {
-              "Sid": "AllObjectActions",
-              "Effect": "Allow",
-              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
-              "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org/*",
-                            "arn:aws:s3:::staging.accounts.sagebionetworks.org/*",
-                            "arn:aws:s3:::prod.accounts.synapse.org/*",
-                            "arn:aws:s3:::staging.accounts.synapse.org/*"
-                          ]
-          },
-          {
-              "Sid": "CloudfrontActions",
-              "Effect": "Allow",
-              "Action": [ "cloudfront:CreateInvalidation" ],
-              "Resource": [ "arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI",
-                            "arn:aws:cloudfront::797640923903:distribution/EY52HOUGKDP1F",
-                            "arn:aws:cloudfront::797640923903:distribution/E7COI4Z95FFZQ",
-                            "arn:aws:cloudfront::797640923903:distribution/E1QXK5X5JV0YKJ"
-                          ]
-          }
-        ]
-      }
+  ManagedPolicyArns:
+    - "arn:aws:iam::797640923903:policy/SynapseMonorepoBucketAccessPolicy"
+    - "arn:aws:iam::797640923903:policy/SynapseMonorepoCloudfrontAccessPolicy"
+    - "arn:aws:iam::797640923903:policy/SynapseMonorepoFileAccessPolicy"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
