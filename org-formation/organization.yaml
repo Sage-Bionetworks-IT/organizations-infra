@@ -51,6 +51,7 @@ Organization:
         - !Ref GenieProdAccount
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
+        - !ref OpenChallengesProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -590,6 +591,19 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-scce-dev@sagebase.org
+
+  OpenChallengesProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-openchallenges-prod
+      RootEmail: aws-openchallenges-prod@sagebase.org
+      Alias: org-sagebase-openchallenges-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: thomas.schaffter@sagebase.org
+        CostCenter: ITCR / 101600
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-openchallenges-prod@sagebase.org
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
