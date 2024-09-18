@@ -493,10 +493,10 @@ GithubOidcSageBionetworksWebMonorepoInfra:
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
-  ManagedPolicyArns:
-    - "arn:aws:iam::797640923903:policy/SynapseMonorepoBucketAccessPolicy"
-    - "arn:aws:iam::797640923903:policy/SynapseMonorepoCloudfrontAccessPolicy"
-    - "arn:aws:iam::797640923903:policy/SynapseMonorepoFileAccessPolicy"
+    ManagedPolicyArns:
+      - "arn:aws:iam::797640923903:policy/SynapseMonorepoBucketAccessPolicy"
+      - "arn:aws:iam::797640923903:policy/SynapseMonorepoCloudfrontAccessPolicy"
+      - "arn:aws:iam::797640923903:policy/SynapseMonorepoFileAccessPolicy"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
