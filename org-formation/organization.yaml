@@ -52,7 +52,7 @@ Organization:
         - !Ref GenieProdAccount
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
-        - !ref OpenChallengesProdAccount
+        - !Ref OpenChallengesProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
