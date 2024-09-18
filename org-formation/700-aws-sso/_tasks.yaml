@@ -309,6 +309,10 @@ Parameters:
     Type: String
     Default: '2448e4e8-50b1-70e5-def0-07e0f4fcd60e'
 
+  OpenchallengesDevAdminGroup:     # JC aws-openchallenges-dev-admins
+    Type: String
+    Default: 'e4388458-2011-7096-3f98-3a6eeb10e458'
+
   OpenchallengesProdAdminGroup:     # JC aws-openchallenges-prod-admins
     Type: String
     Default: 'c418a4d8-c021-70b6-6580-1e115806deb6'
@@ -2032,6 +2036,23 @@ SsoItsandboxDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref itsandboxDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoOpenchallengesDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-dev-admin'
+  StackDescription: 'SSO: admin role used by OpenChallenges dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref OpenChallengesDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref OpenchallengesDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoOpenchallengesProdAdmin:
   Type: update-stacks
