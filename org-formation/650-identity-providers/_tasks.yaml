@@ -800,8 +800,6 @@ GithubOidcOpenChallengesDeploy:
       - !Ref ITSandboxAccount
     Region: us-east-1
 
-# Permissions to push an image to private registry
-# See: https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push-iam.html
 GithubOidcNbConvertDeploy:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
@@ -812,9 +810,8 @@ GithubOidcNbConvertDeploy:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-nbconvert-deploy
     MaxSessionDuration: 7200
     ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
-      - "arn:aws:iam::aws:policy/AmazonLambdaFullAccess"
-      - "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
