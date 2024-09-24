@@ -18,7 +18,7 @@ Parameters:
       key and value is the shell envvar name to assign, e.g., /foo/bar:ENVVAR1 /bar/baz:ENVVAR2
   TargetAccountId:
     Type: 'String'
-    Description: The target account in which to run the Maintenance Task    
+    Description: The target account in which to run the Maintenance Task
 Resources:
   SSMDocument:
     Type: "AWS::SSM::Document"
