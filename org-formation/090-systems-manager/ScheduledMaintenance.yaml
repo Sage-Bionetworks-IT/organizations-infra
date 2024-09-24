@@ -16,41 +16,15 @@ Parameters:
     Description: >-
       space delimited list of key:value, where key is an SSM Parameter Store
       key and value is the shell envvar name to assign, e.g., /foo/bar:ENVVAR1 /bar/baz:ENVVAR2
+  TargetAccountId:
+    Type: 'String'
+    Description: The target account in which to run the Maintenance Task    
 Resources:
-  # Create IAM Role for SSM
-  SSMExecutionRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: "ssm.amazonaws.com"
-            Action: "sts:AssumeRole"
-      Policies:
-        - PolicyName: "SSMExecutionPolicy"
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "ec2:DescribeInstances"
-                  - "ssm:SendCommand"
-                Resource: "*"
-        - PolicyName: "SSMParameterPolicy"
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "ssm:GetParameters"
-                Resource:
-                - !Join [ '', ['arn:', !Ref 'AWS::Partition', ':ssm:', !Ref 'AWS::Region', ':', !Ref 'AWS::AccountId', '*'] ]
   SSMDocument:
     Type: "AWS::SSM::Document"
     Properties:
       DocumentType: "Command"
+      Name: "run-parameterized-script"
       Content:
         schemaVersion: "2.2"
         description: "Run a script on EC2 instances"
@@ -71,6 +45,7 @@ Resources:
           name: "runShellScript"
           inputs:
             runCommand:
+            - sudo su root
             - SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )
             - for KV in ${SSM_TO_ENV_MAP[@]} ; do
             -   export ${KV##*:}=$(aws --region {{ Region }} ssm get-parameters --names ${KV%%:*} --with-decryption --query Parameters[0].Value --output text)
@@ -78,7 +53,7 @@ Resources:
             - SCRIPT_PATH=/tmp/script.sh
             - wget -O $SCRIPT_PATH {{ ScriptUrl }}
             - chmod +x $SCRIPT_PATH
-            - sudo $SCRIPT_PATH
+            - $SCRIPT_PATH
 
   # Create Maintenance Window
   MaintenanceWindow:
@@ -97,9 +72,9 @@ Resources:
       WindowId: !Ref MaintenanceWindow
       ResourceType: "INSTANCE"
       Targets:
-        - Key: "InstanceIds"
+        - Key: "tag:scheduled-maintenance"
           Values:
-            - "*"
+            - "stack-armor"
       Name: "SSMGroupTarget"
 
   # Create Maintenance Window Task
@@ -117,7 +92,8 @@ Resources:
         MaintenanceWindowRunCommandParameters:
           Comment: "Running SSM document on instances"
           TimeoutSeconds: 600
-          ServiceRoleArn: !GetAtt SSMExecutionRole.Arn
+          ServiceRoleArn:
+            !Join [ '', ['arn:', !Ref 'AWS::Partition', ':iam::', !Ref 'TargetAccountId', ':role/AWS-SystemsManager-ScheduledMaintenanceExecutionRole'] ]
           Parameters:
             ScriptUrl: [!Ref ScriptURL]
             Region: [!Ref AWS::Region]
