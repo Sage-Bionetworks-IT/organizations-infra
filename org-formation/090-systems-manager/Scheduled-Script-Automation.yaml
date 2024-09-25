@@ -205,7 +205,6 @@ Resources:
                 - ","
                 - - Fn::EnumTargetAccounts ScriptExecutionMemberBinding ${account}
             TargetRegionIds: !Ref TargetRegionIds
-            ResourceGroupName: !Ref ResourceGroupName
             TargetLocationMaxConcurrency: !Ref TargetLocationMaxConcurrency
             TargetLocationMaxErrors: !Ref TargetLocationMaxErrors
             ExecutionRoleName: !Ref ExecutionRoleName
@@ -280,7 +279,7 @@ Resources:
             Targets:
             - Key: 'tag:{{ TargetTagName }}'
               Values:
-                - {{ TargetTagValue }}
+                - '{{ TargetTagValue }}'
             Parameters:
               ScriptUrl: '{{ ScriptUrl }}'
               SsmParameterNameToEnvvarMap: '{{ SsmParameterNameToEnvvarMap }}'
