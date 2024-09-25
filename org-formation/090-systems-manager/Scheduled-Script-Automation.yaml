@@ -217,7 +217,7 @@ Resources:
       FunctionName: MultiAccountScriptExecution
       Handler: index.handler
       Role: !GetAtt AWSLambdaSSMMultiAccountScriptExecutionRole.Arn
-      Runtime: python3.7
+      Runtime: python3.12
   AutomationAdministrationServiceRole:
     Type: AWS::IAM::Role
     Condition: CreateAutomationAdministrationRoleCondition
