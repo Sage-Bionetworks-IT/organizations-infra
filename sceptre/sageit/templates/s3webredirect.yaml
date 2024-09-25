@@ -23,8 +23,15 @@ Parameters:
 Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks: [W3045]
     Properties:
       AccessControl: PublicRead
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
       BucketName: !Ref RedirectFrom
       WebsiteConfiguration:
         IndexDocument: index.html

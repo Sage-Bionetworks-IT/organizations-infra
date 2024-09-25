@@ -4,9 +4,16 @@ Resources:
   # Bucket for lambda artifacts
   AWSS3LambdaArtifactsBucket:
     Type: AWS::S3::Bucket
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks: [ "W3045" ]
     DeletionPolicy: Delete
     Properties:
       AccessControl: PublicRead
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
   AWSIAMS3LambdaArtifactsBucketPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:

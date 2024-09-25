@@ -12,8 +12,15 @@ Resources:
   # Bucket for cloudformation snippets
   CloudformationSnippetsBucket:
     Type: "AWS::S3::Bucket"
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks: [ "W3045" ]
     Properties:
       AccessControl: PublicRead
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
       Tags:
         - Key: "OwnerEmail"
           Value: !Ref OwnerEmail
@@ -26,6 +33,7 @@ Resources:
         config:
           ignore_checks:
             - E3001
+            - E3006
     Properties:
       Target:
         Bucket: !Ref CloudformationSnippetsBucket
@@ -44,6 +52,7 @@ Resources:
         config:
           ignore_checks:
             - E3001
+            - E3006
     Properties:
       Target:
         Bucket: !Ref CloudformationSnippetsBucket

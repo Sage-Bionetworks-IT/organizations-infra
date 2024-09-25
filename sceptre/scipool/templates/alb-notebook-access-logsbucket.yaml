@@ -12,10 +12,17 @@ Resources:
 
   ALBAccessLogsBucket:
     Type: AWS::S3::Bucket
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks: [ "W3045" ]
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
       AccessControl: Private
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
