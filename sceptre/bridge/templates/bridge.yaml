@@ -255,7 +255,6 @@ Resources:
     Type: AWS::S3::Bucket
     Condition: CreateProdResources
     Properties:
-      AccessControl: PublicRead
       OwnershipControls:
         Rules:
           - ObjectOwnership: BucketOwnerEnforced

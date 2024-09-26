@@ -40,7 +40,6 @@ Resources:
           ignore_checks: [ "W3045" ]
     DeletionPolicy: Delete
     Properties:
-      AccessControl: PublicRead
       OwnershipControls:
         Rules:
           - ObjectOwnership: BucketOwnerEnforced

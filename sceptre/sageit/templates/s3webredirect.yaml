@@ -28,7 +28,6 @@ Resources:
         config:
           ignore_checks: [W3045]
     Properties:
-      AccessControl: PublicRead
       OwnershipControls:
         Rules:
           - ObjectOwnership: BucketOwnerEnforced
