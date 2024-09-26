@@ -812,10 +812,10 @@ GithubOidcNbConvertDeploy:
     MaxSessionDuration: 7200
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
-      - "arn:aws:iam::aws:policy/AmazonLambdaFullAccess"
+      - "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
       - "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
       - "arn:aws:iam::aws:policy/IAMFullAccess"
-      - "arn:aws:iam::aws:policy/CloudFormationFullAccess"
+      - "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
