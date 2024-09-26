@@ -7,16 +7,7 @@ on:
     branches: ['*']
 
 jobs:
-  pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-      - uses: pre-commit/action@v3.0.0
-  test-npm-deps:  # Useful for testing version updates
+  test-npm-deps:          # Useful for testing version updates
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

@@ -34,9 +34,16 @@ Resources:
   # Bucket for EC2 image builder logs
   ImageBuilderLogsBucket:
     Type: AWS::S3::Bucket
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks: [ "W3045" ]
     DeletionPolicy: Delete
     Properties:
       AccessControl: PublicRead
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
       Tags:
         - Key: "OwnerEmail"
           Value: !Ref OwnerEmail

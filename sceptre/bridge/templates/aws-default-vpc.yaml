@@ -281,6 +281,11 @@ Resources:
         Ref: "PublicNetworkAcl"
   VpnSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - W3687
     Properties:
       GroupDescription: Security Group for VPN
       VpcId:

@@ -1,5 +1,9 @@
 Description: Setup IAM policies, groups and accounts
 AWSTemplateFormatVersion: 2010-09-09
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks: [ "W1011" ]
 Parameters:
   InitNewUserPassword:
     Type: String

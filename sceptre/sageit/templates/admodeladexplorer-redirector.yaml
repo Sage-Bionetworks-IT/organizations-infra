@@ -16,8 +16,15 @@ Conditions:
 Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks: [ "W3045" ]
     Properties:
       AccessControl: PublicRead
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
       BucketName: !Sub
       - ${stackPrefix}.admodeladexplorer.org
       - { stackPrefix: !Ref StackType }

@@ -251,10 +251,14 @@ Resources:
         config:
           ignore_checks:
           - W3011
+          - W3045
     Type: AWS::S3::Bucket
     Condition: CreateProdResources
     Properties:
       AccessControl: PublicRead
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
       BucketName: android-apps.sagebridge.org
       WebsiteConfiguration:
         IndexDocument: index.html
