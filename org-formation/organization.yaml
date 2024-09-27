@@ -117,6 +117,7 @@ Organization:
         - !Ref SynapseDevAccount
         - !Ref SynapseDWAccount
         - !Ref SynapseProdAccount
+        - !Ref SynapseLlmDevAccount
 
   BridgeOU:
     Type: OC::ORG::OrganizationalUnit
@@ -619,6 +620,7 @@ Organization:
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-openchallenges-prod@sagebase.org
 
+# Synapse Large Language Model dev account: hosts development Bedrock-related resources
   SynapseLlmDevAccount:
     Type: OC::ORG::Account
     Properties:
