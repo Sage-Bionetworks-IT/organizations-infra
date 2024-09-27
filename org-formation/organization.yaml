@@ -619,6 +619,19 @@ Organization:
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-openchallenges-prod@sagebase.org
 
+  SynapseLlmDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-synapsellm-dev
+      RootEmail: aws-synapsellm-dev@sagebase.org
+      Alias: org-sagebase-synapsellm-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-synapsellm-dev@sagebase.org
+
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
     Type: OC::ORG::Account
