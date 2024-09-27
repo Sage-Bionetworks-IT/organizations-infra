@@ -40,9 +40,11 @@ Resources:
           ignore_checks: [ "W3045" ]
     DeletionPolicy: Delete
     Properties:
-      OwnershipControls:
-        Rules:
-          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       Tags:
         - Key: "OwnerEmail"
           Value: !Ref OwnerEmail

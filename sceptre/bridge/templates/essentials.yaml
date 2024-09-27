@@ -10,23 +10,22 @@ Resources:
           ignore_checks: [ "W3045" ]
     DeletionPolicy: Delete
     Properties:
-      OwnershipControls:
-        Rules:
-          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
   AWSIAMS3LambdaArtifactsBucketPolicy:
-    Type: "AWS::S3::BucketPolicy"
+    Type: 'AWS::S3::BucketPolicy'
     Properties:
       Bucket: !Ref AWSS3LambdaArtifactsBucket
       PolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          -
-            Sid: "AllowPublicRead"
-            Effect: "Allow"
-            Principal:
-              AWS: "*"
-            Action: "s3:GetObject"
-            Resource: !Sub "arn:aws:s3:::${AWSS3LambdaArtifactsBucket}/*"
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${AWSS3LambdaArtifactsBucket.Arn}/*'
   # KMS Keys
   AWSKmsInfraKey:
     Type: "AWS::KMS::Key"
