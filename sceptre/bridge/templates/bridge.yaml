@@ -266,12 +266,8 @@ Resources:
         ErrorDocument: error.html
     DeletionPolicy: Retain
   AndroidAppBucketPolicy:
-    Metadata:
-      cfn-lint:
-        config:
-          ignore_checks:
-          - W1001
     Type: 'AWS::S3::BucketPolicy'
+    Condition: CreateProdResources
     Properties:
       Bucket: !Ref AWSS3AndroidAppBucket
       PolicyDocument:
