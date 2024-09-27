@@ -17,12 +17,25 @@ Resources:
         config:
           ignore_checks: [ "W3045" ]
     Properties:
-      OwnershipControls:
-        Rules:
-          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       Tags:
         - Key: "OwnerEmail"
           Value: !Ref OwnerEmail
+  BucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref CloudformationSnippetsBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${CloudformationSnippetsBucket.Arn}/*'
   # requires the cloudformation S3 objects macro
   # https://github.com/Sage-Bionetworks-IT/cfn-s3objects-macro
   ServiceCatalogSupportSnippet:

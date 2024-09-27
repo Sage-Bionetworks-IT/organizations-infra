@@ -28,9 +28,11 @@ Resources:
         config:
           ignore_checks: [W3045]
     Properties:
-      OwnershipControls:
-        Rules:
-          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       BucketName: !Ref RedirectFrom
       WebsiteConfiguration:
         IndexDocument: index.html
@@ -42,7 +44,17 @@ Resources:
               HttpRedirectCode: "307"
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
-
+  WebsiteBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${WebsiteBucket.Arn}/*'
   Cloudfront:
     Type: AWS::CloudFront::Distribution
     Properties:

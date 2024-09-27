@@ -21,9 +21,11 @@ Resources:
         config:
           ignore_checks: [ "W3045" ]
     Properties:
-      OwnershipControls:
-        Rules:
-          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       BucketName: !Sub
       - ${stackPrefix}.admodeladexplorer.org
       - { stackPrefix: !Ref StackType }
