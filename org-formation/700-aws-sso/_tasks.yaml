@@ -966,6 +966,23 @@ SsoSynapseProdViewer:
     principalId: !Ref synapseProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
+SsoSynapseLlmDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellm-dev-admin'
+  StackDescription: 'SSO: admin role used by SynapseLlm dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref SynapseLlmDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
 SsoImageCentralAmiLibrarian:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
@@ -2074,21 +2091,4 @@ SsoOpenchallengesProdAdmin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref OpenchallengesProdAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
-SsoSynapseLlmDevAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-synapsellm-dev-admin'
-  StackDescription: 'SSO: admin role used by SynapseLlm dev admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SynapseLlmDevAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref SynapseLlmDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
