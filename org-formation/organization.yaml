@@ -634,6 +634,20 @@ Organization:
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-synapsellm-dev@sagebase.org
 
+# Synapse Large Language Model prod account: hosts development Bedrock-related resources
+  SynapseLlmProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-synapsellm-prod
+      RootEmail: aws-synapsellm-prod@sagebase.org
+      Alias: org-sagebase-synapsellm-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-synapsellm-prod@sagebase.org
+
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
     Type: OC::ORG::Account
