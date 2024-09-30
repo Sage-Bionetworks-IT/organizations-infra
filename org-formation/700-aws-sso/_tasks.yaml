@@ -1009,23 +1009,6 @@ SsoSynapseLlmProdAdmin:
     principalId: !Ref SynapseLlmProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-SsoSynapseLlmProdDeveloper:
-  Type: update-stacks
-  DependsOn: ### change SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
-  StackName: !Sub '${resourcePrefix}-${appName}-synapsellm-prod-developer'
-  StackDescription: 'SSO: developer role used by SynapseLlm prod developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SynapseLlmProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref SynapseLlmProdDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
 SsoImageCentralAmiLibrarian:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
