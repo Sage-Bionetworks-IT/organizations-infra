@@ -407,8 +407,6 @@ GithubOidcPackerImageDeploy:
         branches: ["master"]
       - name: "packer-base-ubuntu-jammy"
         branches: ["master"]
-      - name: "packer-rstudio"
-        branches: ["master"]
       - name: "packer-amazonlinux-docker"
         branches: ["master"]
       - name: "imagecentral-dashboard"
