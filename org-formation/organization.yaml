@@ -118,6 +118,7 @@ Organization:
         - !Ref SynapseDWAccount
         - !Ref SynapseProdAccount
         - !Ref SynapseLlmDevAccount
+        - !Ref SynapseLlmProdAccount
 
   BridgeOU:
     Type: OC::ORG::OrganizationalUnit
