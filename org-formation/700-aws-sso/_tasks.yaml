@@ -322,7 +322,7 @@ Parameters:
     Type: String
     Default: 'a48864b8-20b1-7071-67b6-b83ea85d1fd0'
 
-  SynapseLLmProdDeveloperGroup:     # JC aws-synapsellm-prod-developers
+  SynapseLlmProdDeveloperGroup:     # JC aws-synapsellm-prod-developers
     Type: String
     Default: 'd478d408-10e1-7071-2273-606c45bb8653'
 
@@ -611,10 +611,10 @@ SsoApplicationManager:
       }
 
 # Role for a user that can access BedRock in the Synapse LLM prod account
-SSoLLmDeveloper:
+SSoSynapseLlmDeveloper:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
-  StackName: !Sub '${resourcePrefix}-${appName}-llmdeveloper'
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellmdeveloper'
   StackDescription: 'Role used by LLM Developer group within Synapse LLM prod account'
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -625,12 +625,23 @@ SSoLLmDeveloper:
       Account: !Ref SynapseLlmProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref SynapseLLmProdDeveloperGroup
+    principalId: !Ref SynapseLlmProdDeveloperGroup
     permissionSetName: 'llm-developer'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
       - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
     sessionDuration: 'PT12H'
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Effect": "Deny",
+                  "Action": "sts:AssumeRole",
+                  "Resource": "*"
+              }
+          ]
+      }
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
 SsoSynapseDWDevAthenaUser:
@@ -1011,7 +1022,7 @@ SsoSynapseLlmProdAdmin:
 
 SsoSynapseLlmProdDeveloper:
   Type: update-stacks
-  DependsOn: SsoLlmDeveloper
+  DependsOn: SsoSynapseLlmDeveloper
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
   StackName: !Sub '${resourcePrefix}-${appName}-synapsellm-prod-llmdeveloper'
   StackDescription: 'SSO: llm developer role used by SynapseLlm prod developer group'
@@ -1024,7 +1035,7 @@ SsoSynapseLlmProdDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref SynapseLlmProdDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-llmdeveloper-permission-set-arn' ]
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapsellmdeveloper-permission-set-arn' ]
 
 SsoImageCentralAmiLibrarian:
   Type: update-stacks
