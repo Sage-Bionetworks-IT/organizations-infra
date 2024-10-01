@@ -629,6 +629,7 @@ SSoLLmDeveloper:
     permissionSetName: 'llm-developer'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
+      - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
     sessionDuration: 'PT12H'
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
@@ -991,7 +992,6 @@ SsoSynapseProdViewer:
     principalId: !Ref synapseProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
-
 SsoSynapseLlmProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -1000,7 +1000,7 @@ SsoSynapseLlmProdAdmin:
   StackDescription: 'SSO: admin role used by SynapseLlm prod admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
+    IncludeMasterAccount: false
   OrganizationBindings:
     TargetBinding:
       Account: !Ref SynapseLlmProdAccount
@@ -1008,6 +1008,23 @@ SsoSynapseLlmProdAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref SynapseLlmProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoSynapseLlmProdDeveloper:
+  Type: update-stacks
+  DependsOn: SsoLlmDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellm-prod-llmdeveloper'
+  StackDescription: 'SSO: llm developer role used by SynapseLlm prod developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref SynapseLlmProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-llmdeveloper-permission-set-arn' ]
 
 SsoImageCentralAmiLibrarian:
   Type: update-stacks
