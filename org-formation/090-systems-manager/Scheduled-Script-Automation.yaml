@@ -58,6 +58,10 @@ Parameters:
   TargetTagValue:
     Type: String
     Description: Value of the tag for instances to target.
+  ExecutionTimeoutSeconds:
+    Type: Number
+    Description:  Time limit for running the automation, in seconds
+    Default: 120
   TargetLocationMaxConcurrency:
     Type: String
     Default: '1'
@@ -168,6 +172,7 @@ Resources:
               TargetRegionIdsArray = b.split(",")
               TargetTagName=os.environ['TargetTagName']
               TargetTagValue=os.environ['TargetTagValue']
+              ExecutionTimeoutSeconds=os.environ['ExecutionTimeoutSeconds']
               TargetLocationMaxConcurrency=os.environ['TargetLocationMaxConcurrency']
               TargetLocationMaxErrors=os.environ['TargetLocationMaxErrors']
               ExecutionRoleName=os.environ['ExecutionRoleName']
@@ -184,6 +189,7 @@ Resources:
                       'TargetTagName' : [TargetTagName],
                       'TargetTagValue' : [TargetTagValue],
                       'ScriptUrl' : [ScriptUrl],
+                      'ExecutionTimeoutSeconds': [ExecutionTimeoutSeconds],
                       'ScriptParameters' : [ScriptParameters]
                   },
                   TargetLocations=[
@@ -214,6 +220,7 @@ Resources:
             ScriptParameters: !Ref ScriptParameters
             TargetTagName: !Ref TargetTagName
             TargetTagValue: !Ref TargetTagValue
+            ExecutionTimeoutSeconds: !Ref ExecutionTimeoutSeconds
       FunctionName: MultiAccountScriptExecution
       Handler: index.handler
       Role: !GetAtt AWSLambdaSSMMultiAccountScriptExecutionRole.Arn
@@ -270,10 +277,14 @@ Resources:
           TargetTagValue:
             type: String
             description: value of the tag marking instances on which to run the script
+          ExecutionTimeoutSeconds:
+            type: Number
+            description:  Time limit for running the automation, in seconds
+            default: 120
         mainSteps:
         - name: "runShellScript"
           action: "aws:runShellScript"
-          timeoutSeconds: 7200
+          timeoutSeconds: {{ ExecutionTimeoutSeconds }}
           onFailure: Abort
           inputs:
             Targets:

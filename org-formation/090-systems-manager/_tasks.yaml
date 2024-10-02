@@ -49,6 +49,18 @@ PatchManager:
     RunPatchBaselineOperation: "Install"
     TargetRegionIds: "us-east-1"
 
+PatchMembers:
+  Type: update-stacks
+  Template: AWS-SystemsManager-AutomationExecutionRole.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-patchmember'
+  StackDescription: Setup Systems manager patch management for the member
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: '*'
+    IncludeMasterAccount: true
+  Parameters:
+    ManagementAccountNumber: !Ref accountId
+
 # This will run the Stack Armor Nessus installation script each day
 # on any EC2 in us-east-1 tagged with execute-script:install-stack-armor-agent
 # Since the script is idempotent, running every day ensures the script
@@ -72,15 +84,3 @@ StackArmorAgentInstallation:
     TargetTagValue: install-stack-armor-agent
     ScriptUrl: https://raw.githubusercontent.com/Sage-Bionetworks/infra-utils/v1.0.11/stack-armor/install-nessus-agent.sh
     ScriptParameters: STACK_ARMOR_KEY:'{{resolve:ssm-secure:/stack-armor/install-nessus-key}}'
-
-PatchMembers:
-  Type: update-stacks
-  Template: AWS-SystemsManager-AutomationExecutionRole.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-patchmember'
-  StackDescription: Setup Systems manager patch management for the member
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: '*'
-    IncludeMasterAccount: true
-  Parameters:
-    ManagementAccountNumber: !Ref accountId
