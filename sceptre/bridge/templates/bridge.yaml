@@ -251,15 +251,32 @@ Resources:
         config:
           ignore_checks:
           - W3011
+          - W3045
     Type: AWS::S3::Bucket
     Condition: CreateProdResources
     Properties:
-      AccessControl: PublicRead
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       BucketName: android-apps.sagebridge.org
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
     DeletionPolicy: Retain
+  AndroidAppBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Condition: CreateProdResources
+    Properties:
+      Bucket: !Ref AWSS3AndroidAppBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${AWSS3AndroidAppBucket.Arn}/*'
 Outputs:
   AwsDefaultVpcId:
     Value: !Ref AwsDefaultVpcId
