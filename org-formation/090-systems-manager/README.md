@@ -20,7 +20,7 @@ which is referenced from the
 ### Script Execution
 
 This folder contain the automation required to run a given script on appropriately tagged EC2 instances on a schedule.
-It's primary application is to run the script that installs the Stack Armor monitoring agent on a set of target EC2s
+Its primary application is to run the script that installs the Stack Armor monitoring agent on a set of target EC2s
 but it's general enough that it can be used to run other scripts on other machines.  It allows passing in script
 parameters as key-value pairs which are passed to the script as environment variables.
 
