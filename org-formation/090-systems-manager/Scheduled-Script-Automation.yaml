@@ -190,7 +190,7 @@ Resources:
                       'TargetTagValue' : [TargetTagValue],
                       'ScriptUrl' : [ScriptUrl],
                       'ExecutionTimeoutSeconds': [ExecutionTimeoutSeconds],
-                      'ScriptParameters' : [ScriptParameters]
+                      'SsmParameterNameToEnvvarMap' : [ScriptParameters]
                   },
                   TargetLocations=[
                       {
