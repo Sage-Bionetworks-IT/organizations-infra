@@ -60,7 +60,7 @@ Parameters:
     Description: Value of the tag for instances to target.
   ExecutionTimeoutSeconds:
     Type: Number
-    Description:  Time limit for running the automation, in seconds
+    Description: Time limit for running the automation, in seconds
     Default: 120
   TargetLocationMaxConcurrency:
     Type: String
@@ -279,7 +279,7 @@ Resources:
             description: value of the tag marking instances on which to run the script
           ExecutionTimeoutSeconds:
             type: Number
-            description:  Time limit for running the automation, in seconds
+            description: Time limit for running the automation, in seconds
             default: 120
         mainSteps:
         - name: "runShellScript"
