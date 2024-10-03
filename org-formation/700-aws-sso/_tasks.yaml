@@ -928,7 +928,7 @@ SsoSynapseLlmProdAdmin:
   StackDescription: 'SSO: admin role used by synapsellmprod admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref SynapseLlmProdAccount
