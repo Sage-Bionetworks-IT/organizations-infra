@@ -621,7 +621,7 @@ SSoSynapseLlmDeveloper:
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: false
+    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref SynapseLlmProdAccount
