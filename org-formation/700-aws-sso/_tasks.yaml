@@ -970,23 +970,6 @@ SsoSynapseProdViewer:
     principalId: !Ref synapseProdViewerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-viewer-permission-set-arn' ]
 
-SsoSynapseLlmProdAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
-  StackName: !Sub '${resourcePrefix}-${appName}-synapsellm-prod-admin'
-  StackDescription: 'SSO: admin role used by SynapseLlm prod admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref SynapseLlmProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref SynapseLlmProdAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
 SsoImageCentralAmiLibrarian:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
