@@ -257,11 +257,12 @@ Resources:
   AutomationDocumentScriptExecution:
     Type: "AWS::SSM::Document"
     Properties:
-      DocumentType: "Command"
-      Name: "Automation-Run-Script"
+      DocumentType: "Command" # Automation
+      Name: "Automation-Run-Script-5" # TODO
       Content:
-        schemaVersion: "2.2"
+        schemaVersion: "2.2" # 0.3
         description: "Run a parameterized script on EC2 instances"
+#        assumeRole: '{{ AutomationAssumeRole }}' TODO
         parameters:
           ScriptUrl:
             type: String
@@ -278,13 +279,13 @@ Resources:
             type: String
             description: value of the tag marking instances on which to run the script
           ExecutionTimeoutSeconds:
-            type: Number
+            type: Integer
             description: Time limit for running the automation, in seconds
             default: 120
         mainSteps:
-        - name: "runShellScript"
-          action: "aws:runShellScript"
-          timeoutSeconds: {{ ExecutionTimeoutSeconds }}
+        - name: "runScript" # Note: spaces and hyphens are not allowed in this name
+          action: "aws:runShellScript" # aws:runCommand
+#          timeoutSeconds: '{{ ExecutionTimeoutSeconds }}' # TODO causes error "Invalid request provided: JSON not well-formed. at Line: 43, Column: 24"
           onFailure: Abort
           inputs:
             Targets:
@@ -297,12 +298,12 @@ Resources:
             MaxConcurrency: !Ref MaximumConcurrency
             MaxErrors: !Ref MaximumErrors
             runCommand:
-            - sudo su root
-            - SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )
-            - for KV in ${SSM_TO_ENV_MAP[@]} ; do
-            -   export ${KV%%:*}=${KV##*:}
-            - done
-            - SCRIPT_PATH=/tmp/script.sh
-            - wget -O $SCRIPT_PATH {{ ScriptUrl }}
-            - chmod +x $SCRIPT_PATH
-            - $SCRIPT_PATH
+            - "sudo su root"
+            - "SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )"
+            - "for KV in ${SSM_TO_ENV_MAP[@]} ; do"
+            - "  export ${KV%%:*}=${KV##*:}"
+            - "done"
+            - "SCRIPT_PATH=/tmp/script.sh"
+            - "wget -O $SCRIPT_PATH {{ ScriptUrl }}"
+            - "chmod +x $SCRIPT_PATH"
+            - "$SCRIPT_PATH"

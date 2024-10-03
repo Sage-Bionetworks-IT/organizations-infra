@@ -65,6 +65,11 @@ PatchMembers:
 # on any EC2 in us-east-1 tagged with execute-script:install-stack-armor-agent
 # Since the script is idempotent, running every day ensures the script
 # completes in case of a one-time outage
+#
+# The aim is to install the agent on instances running in the Synapse production
+# account. The automation to deploy the Synapse production stack will add the
+# necessary tags.  Other stacks deployed to the account will have to include
+# the tag in their deployment scripts.
 StackArmorAgentInstallation:
   Type: update-stacks
   Template: Scheduled-Script-Automation.yaml
