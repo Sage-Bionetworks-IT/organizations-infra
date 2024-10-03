@@ -934,7 +934,7 @@ SsoSynapseLlmProdAdmin:
       Account: !Ref SynapseLlmProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref synapseLlmProdAdminGroup
+    principalId: !Ref SynapseLlmProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoSynapseDevDeveloper:
