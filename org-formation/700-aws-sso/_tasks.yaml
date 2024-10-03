@@ -919,6 +919,24 @@ SsoSynapseProdAdmin:
     principalId: !Ref synapseProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
+SsoSynapseLlmProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellmprod-admin'
+  StackDescription: 'SSO: admin role used by synapsellmprod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseLlmProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
 SsoSynapseDevDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
