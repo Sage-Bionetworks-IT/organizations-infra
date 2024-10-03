@@ -923,6 +923,7 @@ SsoSynapseLlmProdAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
   StackName: !Sub '${resourcePrefix}-${appName}-synapsellmprod-admin'
   StackDescription: 'SSO: admin role used by synapsellmprod admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
