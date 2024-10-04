@@ -625,7 +625,7 @@ SsoLlmDeveloper:
     customerManagedPolicies:
       - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-llmdeveloper'
-  StackDescription: 'Permission set used by an LLM developer'
+  StackDescription: 'Permission set used by an Large Language Model developer'
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -636,7 +636,7 @@ SsoLlmDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref llmDeveloperGroup
-    permissionSetName: 'llmdeveloper'
+    permissionSetName: 'LlmDeveloper'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
       - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
