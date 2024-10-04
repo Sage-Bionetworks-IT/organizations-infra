@@ -610,14 +610,14 @@ SsoApplicationManager:
         ]
       }
 
-SSoSynapseLlmDeveloper:
+SSoLlmDeveloper:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
       - Name: !Ref CostExplorerPolicyName
-  StackName: !Sub '${resourcePrefix}-${appName}-synapsellmdeveloper'
-  StackDescription: 'Role used by LLM Developer group within Synapse LLM prod account'
+  StackName: !Sub '${resourcePrefix}-${appName}-ssollmdeveloper'
+  StackDescription: 'Role used by an LLM developer'
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -627,23 +627,12 @@ SSoSynapseLlmDeveloper:
       Account: !Ref SynapseLlmProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref SynapseLlmProdDeveloperGroup
-    permissionSetName: 'llm-developer'
+    principalId: !Ref ssoLlmProdDeveloperGroup
+    permissionSetName: 'ssollmdeveloper'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
       - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
     sessionDuration: 'PT12H'
-    inlinePolicy: >-
-      {
-          "Version": "2012-10-17",
-          "Statement": [
-              {
-                  "Effect": "Deny",
-                  "Action": "sts:AssumeRole",
-                  "Resource": "*"
-              }
-          ]
-      }
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
 SsoSynapseDWDevAthenaUser:
@@ -974,10 +963,10 @@ SsoSynapseLlmProdAdmin:
 
 SsoSynapseLlmProdDeveloper:
   Type: update-stacks
-  DependsOn: SsoSynapseLlmDeveloper
+  DependsOn: SsoLlmDeveloper
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
   TemplatingContext: {}
-  StackName: !Sub '${resourcePrefix}-${appName}-synapsellm-prod-llmdeveloper'
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellmprod-llmdeveloper'
   StackDescription: 'SSO: llm developer role used by SynapseLlm prod developer group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
@@ -988,7 +977,7 @@ SsoSynapseLlmProdDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref SynapseLlmProdDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-synapsellmdeveloper-permission-set-arn' ]
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ssollmdeveloper-permission-set-arn' ]
 
 SsoSynapseDevDeveloper:
   Type: update-stacks
