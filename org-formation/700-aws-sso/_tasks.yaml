@@ -17,9 +17,13 @@ Parameters:
     Type: String
     Default: '906769aa66-4b16d4b3-7c9c-44b7-85e0-adbf41dbf49d'
 
-  developerGroup:     #JC aws-develoers
+  developerGroup:     #JC aws-developers
     Type: String
     Default: '906769aa66-49d7689b-ae36-472b-bc3d-893753529227'
+
+  llmDeveloperGroup: #JC aws-llmdevelopers
+    Type: String
+    Default: '8458f408-2011-701d-03c4-a27ef3d4489c'
 
   scienceSupporterGroup:      #JC aws-science-supporters
     Type: String
@@ -326,6 +330,10 @@ Parameters:
     Type: String
     Default: 'd478d408-10e1-7071-2273-606c45bb8653'
 
+  SynapseLlmProdLlmDeveloperGroup:  # JC aws-synapsellm-prod-llmdevelopers
+    Type: String
+    Default: '44b8f4c8-9031-7097-01d8-d4e845d7d84d'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -609,6 +617,30 @@ SsoApplicationManager:
           }
         ]
       }
+
+SsoLlmDeveloper:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
+  StackName: !Sub '${resourcePrefix}-${appName}-llmdeveloper'
+  StackDescription: 'Permission set used by an Large Language Model developer'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref llmDeveloperGroup
+    permissionSetName: 'LlmDeveloper'
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
+      - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
+    sessionDuration: 'PT12H'
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
 SsoSynapseDWDevAthenaUser:
@@ -925,7 +957,7 @@ SsoSynapseLlmProdAdmin:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
   TemplatingContext: {}
   StackName: !Sub '${resourcePrefix}-${appName}-synapsellmprod-admin'
-  StackDescription: 'SSO: admin role used by synapsellmprod admin group'
+  StackDescription: 'SSO: admin role used by SynapseLlm prod admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -936,6 +968,42 @@ SsoSynapseLlmProdAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref SynapseLlmProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoSynapseLlmProdDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellmprod-developer'
+  StackDescription: 'SSO: developer role used by SynapseLlm prod developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref SynapseLlmProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoSynapseLlmProdLlmDeveloper:
+  Type: update-stacks
+  DependsOn: SsoLlmDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellmprod-llmdeveloper'
+  StackDescription: 'SSO: LLM developer role used by SynapseLlm prod LLM developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref SynapseLlmProdLlmDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-llmdeveloper-permission-set-arn' ]
 
 SsoSynapseDevDeveloper:
   Type: update-stacks
