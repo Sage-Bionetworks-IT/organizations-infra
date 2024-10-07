@@ -293,7 +293,7 @@ Resources:
             # see https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-action-runcommand.html
             DocumentName: AWS-RunShellScript
             MaxConcurrency: !Ref MaximumConcurrency
-            MaxErrors: !Ref MaximumErrors           
+            MaxErrors: !Ref MaximumErrors
             Targets:
             - Key: 'tag:{{ TargetTagName }}'
               Values:
