@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-macro-ssm-param/0.4.1/cfn-macro-ssm-param.yaml
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-macro-ssm-param/0.4.2/cfn-macro-ssm-param.yaml
 stack_name: "cfn-macro-ssm-param"
 dependencies:
   - "prod/bootstrap.yaml"
