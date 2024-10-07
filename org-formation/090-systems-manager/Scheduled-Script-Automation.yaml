@@ -257,12 +257,12 @@ Resources:
   AutomationDocumentScriptExecution:
     Type: "AWS::SSM::Document"
     Properties:
-      DocumentType: "Command" # Automation
-      Name: "Automation-Run-Script-5" # TODO
+      DocumentType: Automation
+      Name: "Automation-Run-Script"
       Content:
-        schemaVersion: "2.2" # 0.3
+        schemaVersion: '0.3'
         description: "Run a parameterized script on EC2 instances"
-#        assumeRole: '{{ AutomationAssumeRole }}' TODO
+        assumeRole: '{{ AutomationAssumeRole }}'
         parameters:
           ScriptUrl:
             type: String
@@ -284,26 +284,28 @@ Resources:
             default: 120
         mainSteps:
         - name: "runScript" # Note: spaces and hyphens are not allowed in this name
-          action: "aws:runShellScript" # aws:runCommand
-#          timeoutSeconds: '{{ ExecutionTimeoutSeconds }}' # TODO causes error "Invalid request provided: JSON not well-formed. at Line: 43, Column: 24"
+          action: aws:runCommand
           onFailure: Abort
           inputs:
+            # see https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-action-runcommand.html
+            DocumentName: AWS-RunShellScript
+            MaxConcurrency: !Ref MaximumConcurrency
+            MaxErrors: !Ref MaximumErrors           
             Targets:
             - Key: 'tag:{{ TargetTagName }}'
               Values:
                 - '{{ TargetTagValue }}'
+            TimeoutSeconds: '{{ ExecutionTimeoutSeconds }}'
             Parameters:
               ScriptUrl: '{{ ScriptUrl }}'
               SsmParameterNameToEnvvarMap: '{{ SsmParameterNameToEnvvarMap }}'
-            MaxConcurrency: !Ref MaximumConcurrency
-            MaxErrors: !Ref MaximumErrors
-            runCommand:
-            - "sudo su root"
-            - "SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )"
-            - "for KV in ${SSM_TO_ENV_MAP[@]} ; do"
-            - "  export ${KV%%:*}=${KV##*:}"
-            - "done"
-            - "SCRIPT_PATH=/tmp/script.sh"
-            - "wget -O $SCRIPT_PATH {{ ScriptUrl }}"
-            - "chmod +x $SCRIPT_PATH"
-            - "$SCRIPT_PATH"
+              Commands:
+              - "sudo su root"
+              - "SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )"
+              - "for KV in ${SSM_TO_ENV_MAP[@]} ; do"
+              - "  export ${KV%%:*}=${KV##*:}"
+              - "done"
+              - "SCRIPT_PATH=/tmp/script.sh"
+              - "wget -O $SCRIPT_PATH {{ ScriptUrl }}"
+              - "chmod +x $SCRIPT_PATH"
+              - "$SCRIPT_PATH"
