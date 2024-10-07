@@ -214,9 +214,9 @@ StackArmorReadOnlyAccess:
       - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
       - arn:aws:iam::aws:policy/AmazonVPCReadOnlyAccess
 
-# Setup SynapseProd cross-account access the BedRock in SynapseLlmProd
+# Setup cross-account access to BedRock in SynapseLlmProd account
 # https://repost.aws/knowledge-center/bedrock-invoke-with-cross-account
-SynapseProdBedrockFullAccess:
+SynapseLlmProdBedrockFullAccess:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
   StackName: synapseprod-bedrock-full-access
