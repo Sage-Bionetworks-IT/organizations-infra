@@ -264,6 +264,9 @@ Resources:
         description: "Run a parameterized script on EC2 instances"
         assumeRole: '{{ AutomationAssumeRole }}'
         parameters:
+          AutomationAssumeRole:
+            type: String
+            description: The ARN of the Automation service role to assume.
           ScriptUrl:
             type: String
             description: "The URL of the script to run"
