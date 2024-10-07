@@ -219,7 +219,7 @@ StackArmorReadOnlyAccess:
 SynapseLlmProdBedrockFullAccess:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
-  StackName: synapseprod-bedrock-full-access
+  StackName: synapsellmprod-bedrock-full-access
   DefaultOrganizationBinding:
     Account: !Ref SynapseLlmProdAccount
     Region: us-east-1
