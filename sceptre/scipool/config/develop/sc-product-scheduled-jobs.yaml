@@ -32,7 +32,11 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.2.2/batch/sc-batch-fargate.yaml'
       Name: 'v1.2.2'
-    - Description: 'Fix scheduled jobs. {{ range(1, 10000) | random }}'
+    - Description: 'Fix scheduled jobs.'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.2.3/batch/sc-batch-fargate.yaml'
       Name: 'v1.2.3'
+    - Description: 'Update lambda-batch-trigger. {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.4.6/batch/sc-batch-fargate.yaml'
+      Name: 'v1.4.6'

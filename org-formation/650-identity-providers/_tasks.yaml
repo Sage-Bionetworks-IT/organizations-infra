@@ -407,8 +407,6 @@ GithubOidcPackerImageDeploy:
         branches: ["master"]
       - name: "packer-base-ubuntu-jammy"
         branches: ["master"]
-      - name: "packer-rstudio"
-        branches: ["master"]
       - name: "packer-amazonlinux-docker"
         branches: ["master"]
       - name: "imagecentral-dashboard"
@@ -954,30 +952,42 @@ SynapseMonorepoCloudfrontAccessPolicy:
               "Effect": "Allow",
               "Action": [ "cloudfront:CreateInvalidation" ],
               "Resource": [
-                            "arn:aws:cloudfront::797640923903:distribution/E2K9BYXQN2MM76",
-                            "arn:aws:cloudfront::797640923903:distribution/E4NMTZ3W9RYFH",
-                            "arn:aws:cloudfront::797640923903:distribution/EJJ4MGTDA6BVU",
-                            "arn:aws:cloudfront::797640923903:distribution/E1DR9MZ7JV331W",
-                            "arn:aws:cloudfront::797640923903:distribution/E1615JO8VH4UJF",
-                            "arn:aws:cloudfront::797640923903:distribution/EQOBFEPCBQ0K2",
-                            "arn:aws:cloudfront::797640923903:distribution/E22NCIN36WXUIM",
-                            "arn:aws:cloudfront::797640923903:distribution/E2R3JZH26UN6SC",
-                            "arn:aws:cloudfront::797640923903:distribution/E2ECGO8UHOB343",
-                            "arn:aws:cloudfront::797640923903:distribution/EMQJ1QM9FGG2I",
-                            "arn:aws:cloudfront::797640923903:distribution/E320GYLPLPMTV3",
-                            "arn:aws:cloudfront::797640923903:distribution/E2YTVI3ZEL7OZ8",
-                            "arn:aws:cloudfront::797640923903:distribution/E10U4765KQQW5P",
-                            "arn:aws:cloudfront::797640923903:distribution/E11CE5BFBTPKGU",
-                            "arn:aws:cloudfront::797640923903:distribution/ELOO9GKN2R7DA",
-                            "arn:aws:cloudfront::797640923903:distribution/E4H3REED377EG",
-                            "arn:aws:cloudfront::797640923903:distribution/E2WFBXCOBA5ZU5",
-                            "arn:aws:cloudfront::797640923903:distribution/E1ULMEK3W2VXOF",
-                            "arn:aws:cloudfront::797640923903:distribution/E28YRVVHKPHIB1",
                             "arn:aws:cloudfront::797640923903:distribution/E1I74M7N2K06XT",
-                            "arn:aws:cloudfront::797640923903:distribution/ESC37TT819LAK",
-                            "arn:aws:cloudfront::797640923903:distribution/E14QCZ9L4VTPMD",
+                            "arn:aws:cloudfront::797640923903:distribution/E28YRVVHKPHIB1",
+                            "arn:aws:cloudfront::797640923903:distribution/E1VKBSA43441LD",
                             "arn:aws:cloudfront::797640923903:distribution/E3T3BUO9I33NZX",
-                            "arn:aws:cloudfront::797640923903:distribution/E27UC0961FPD8C"
+                            "arn:aws:cloudfront::797640923903:distribution/E27UC0961FPD8C",
+                            "arn:aws:cloudfront::797640923903:distribution/EQOBFEPCBQ0K2",
+                            "arn:aws:cloudfront::797640923903:distribution/E1615JO8VH4UJF",
+                            "arn:aws:cloudfront::797640923903:distribution/E2YTVI3ZEL7OZ8",
+                            "arn:aws:cloudfront::797640923903:distribution/E320GYLPLPMTV3",
+                            "arn:aws:cloudfront::797640923903:distribution/E2R3JZH26UN6SC",
+                            "arn:aws:cloudfront::797640923903:distribution/E22NCIN36WXUIM",
+                            "arn:aws:cloudfront::797640923903:distribution/E3B770094CSQFB",
+                            "arn:aws:cloudfront::797640923903:distribution/E11CE5BFBTPKGU",
+                            "arn:aws:cloudfront::797640923903:distribution/E10U4765KQQW5P",
+                            "arn:aws:cloudfront::797640923903:distribution/E1FILQHG8BTWIL",
+                            "arn:aws:cloudfront::797640923903:distribution/E14P60CJ0I6G7Y",
+                            "arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI",
+                            "arn:aws:cloudfront::797640923903:distribution/EY52HOUGKDP1F",
+                            "arn:aws:cloudfront::797640923903:distribution/E14F656YEGR4P3",
+                            "arn:aws:cloudfront::797640923903:distribution/E1CB47ERU70VWV",
+                            "arn:aws:cloudfront::797640923903:distribution/E2K9BYXQN2MM76",
+                            "arn:aws:cloudfront::797640923903:distribution/E3V5LOR3RVT8MS",
+                            "arn:aws:cloudfront::797640923903:distribution/EJJ4MGTDA6BVU",
+                            "arn:aws:cloudfront::797640923903:distribution/E53UUZGXFL713",
+                            "arn:aws:cloudfront::797640923903:distribution/E1DR9MZ7JV331W",
+                            "arn:aws:cloudfront::797640923903:distribution/E35XHVPP7QATHQ",
+                            "arn:aws:cloudfront::797640923903:distribution/E4H3REED377EG",
+                            "arn:aws:cloudfront::797640923903:distribution/ELOO9GKN2R7DA",
+                            "arn:aws:cloudfront::797640923903:distribution/EMQJ1QM9FGG2I",
+                            "arn:aws:cloudfront::797640923903:distribution/E2ECGO8UHOB343",
+                            "arn:aws:cloudfront::797640923903:distribution/E1ULMEK3W2VXOF",
+                            "arn:aws:cloudfront::797640923903:distribution/E2WFBXCOBA5ZU5",
+                            "arn:aws:cloudfront::797640923903:distribution/E14QCZ9L4VTPMD",
+                            "arn:aws:cloudfront::797640923903:distribution/ESC37TT819LAK",
+                            "arn:aws:cloudfront::797640923903:distribution/E1QXK5X5JV0YKJ",
+                            "arn:aws:cloudfront::797640923903:distribution/E7COI4Z95FFZQ"
                           ]
           }
         ]
