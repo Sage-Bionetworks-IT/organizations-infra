@@ -226,6 +226,7 @@ SynapseLlmProdBedrockFullAccess:
   Parameters:
     PrincipalArns:
       - arn:aws:iam::325565585839:root # SynapseProd AWS account ID
+      - arn:aws:iam::449435941126:root # SynapseDev AWS account ID
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
 
