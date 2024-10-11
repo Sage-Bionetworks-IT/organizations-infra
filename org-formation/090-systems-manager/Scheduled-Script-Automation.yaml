@@ -300,8 +300,6 @@ Resources:
                 - '{{ TargetTagValue }}'
             TimeoutSeconds: '{{ ExecutionTimeoutSeconds }}'
             Parameters:
-              ScriptUrl: '{{ ScriptUrl }}'
-              SsmParameterNameToEnvvarMap: '{{ SsmParameterNameToEnvvarMap }}'
               Commands:
               - "sudo su root"
               - "SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )"
