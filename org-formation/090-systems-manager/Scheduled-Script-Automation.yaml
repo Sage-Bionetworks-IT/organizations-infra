@@ -300,7 +300,7 @@ Resources:
                 - '{{ TargetTagValue }}'
             TimeoutSeconds: '{{ ExecutionTimeoutSeconds }}'
             Parameters:
-              Commands:
+              commands: # 'commands' is case-sensitive
               - "sudo su root"
               - "SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )"
               - "for KV in ${SSM_TO_ENV_MAP[@]} ; do"
