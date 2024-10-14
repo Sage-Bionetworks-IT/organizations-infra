@@ -1,0 +1,312 @@
+# file is adapted from:
+#   https://github.com/aws-samples/aws-systems-manager-schedule-central-patch-example/blob/main/Templates/Scheduled-Patch-Automation.yaml
+# *
+# * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# * SPDX-License-Identifier: MIT-0
+# *
+# * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# * software and associated documentation files (the "Software"), to deal in the Software
+# * without restriction, including without limitation the rights to use, copy, modify,
+# * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# * permit persons to whom the Software is furnished to do so.
+# *
+# * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# *
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS CloudFormation template to create a scheduled multi-account and multi-Region script execution.
+Parameters:
+  EventBridgeRuleSchedule:
+    Type: String
+    Description: >-
+      The cron or rate expression to use for the EventBridge rule. For example: cron(0 02 ? * TUE *). Important: The time zone used is UTC. For more information, see https://docs.aws.amazon.com/eventbridge/latest/userguide/scheduled-events.html.
+  ExecutionRoleName:
+    Type: String
+    Default: AWS-SystemsManager-AutomationExecutionRole
+    Description: >-
+      The Automation execution role to be assumed in target accounts during multi-account and multi-Region Automation operations.
+  ExistingAutomationAdministrationRole:
+    Type: String
+    Default: ''
+    Description: >-
+      (Optional) The IAM role ARN of an existing Automation Administration role which has permissions to invoke multi-account and multi-Region Automation workflows.
+  MaximumConcurrency:
+    Type: String
+    Default: 10%
+    Description: >-
+      Specify the number or percentage of targets on which to execute the task at the same time. You can specify a number, such as 10, or a percentage, such as 10%. The default value is 10%.
+  MaximumErrors:
+    Type: String
+    Default: 10%
+    Description: >-
+      The number of errors that are allowed before the system stops initiating the automation on additional targets. You can specify either an absolute number of errors, for example 10, or a percentage of the target set, for example 10%. The default value is 10%.
+  ScriptUrl:
+    Type: String
+    Description: The URL of the script to run on targeted instances. Must be publicly readable.
+  ScriptParameters:
+    Type: String
+    Description: >-
+      space delimited list of environment name-value pairs in the format name:value,
+      e.g., ENVNAME1:envval1 ENVNAME2:envval2
+  TargetTagName:
+    Type: String
+    Description: Name of the tag for instances to target.
+  TargetTagValue:
+    Type: String
+    Description: Value of the tag for instances to target.
+  ExecutionTimeoutSeconds:
+    Type: Number
+    Description: Time limit for running the automation, in seconds
+    Default: 120
+  TargetLocationMaxConcurrency:
+    Type: String
+    Default: '1'
+    Description: >-
+      Specify the number or percentage of locations (account-Region pairs) on which to execute the task at the same time. You can specify a number, such as 10, or a percentage, such as 10%. The default value is 1.
+  TargetLocationMaxErrors:
+    Type: String
+    Default: '1'
+    Description: >-
+      Specify an error threshold which will stop the task after the task fails on a specific number or percentage of locations. You can specify either an absolute number of errors, for example 10, or a percentage of the locations, for example 10%. The default value is 1.
+  TargetRegionIds:
+    Type: String
+    Description: >-
+      Comma separated list of AWS Regions to target. For example: us-east-1,ap-south-1.
+Conditions:
+  CreateAutomationAdministrationRoleCondition:
+    Fn::Equals:
+    - Ref: ExistingAutomationAdministrationRole
+    - ''
+Resources:
+  EventBridgeRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: EventBridge rule created for scheduled multi-account and multi-Region Automation script execution using AWS Lambda and AWS Systems Manager Automation
+      Name: Schedule-Trigger-for-Lambda-MultiAccountScriptExecution
+      ScheduleExpression:
+        Ref: EventBridgeRuleSchedule
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - MultiAccountScriptExecutionLambdaFunction
+          - Arn
+        Id: MultiAccountScriptExecution
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: MultiAccountScriptExecutionLambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn:
+        Fn::GetAtt:
+        - EventBridgeRule
+        - Arn
+  AWSLambdaSSMMultiAccountScriptExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AWS-Lambda-SSM-MultiAccountScriptExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action: sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: AWSLambdaSSMMultiAccountScriptExecutionPolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - ssm:StartAutomationExecution
+            Resource:
+              - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${AutomationDocumentScriptExecution}:$DEFAULT
+          - Action: iam:PassRole
+            Resource:
+              Fn::Sub: arn:${AWS::Partition}:iam::${AWS::AccountId}:role/AWS-SystemsManager-AutomationAdministrationRole
+            Effect: Allow
+          - Action: logs:CreateLogGroup
+            Resource:
+              Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:*
+            Effect: Allow
+          - Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource:
+              Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/MultiAccountScriptExecution:*
+            Effect: Allow
+  MultiAccountScriptExecutionLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: !Sub |
+          import boto3
+          import json
+          import logging
+          import os
+          import string
+          import uuid
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.DEBUG)
+
+          client = boto3.client('ssm')
+
+          def handler(event,context):
+              logger.debug("Received event: " + json.dumps(event, sort_keys=True))
+
+              TargetAccounts=os.environ['TargetAccounts']
+              b = str(TargetAccounts)
+              TargetAccountsArray = b.split(",")
+              TargetRegionIds=os.environ['TargetRegionIds']
+              b = str(TargetRegionIds)
+              TargetRegionIdsArray = b.split(",")
+              TargetTagName=os.environ['TargetTagName']
+              TargetTagValue=os.environ['TargetTagValue']
+              ExecutionTimeoutSeconds=os.environ['ExecutionTimeoutSeconds']
+              TargetLocationMaxConcurrency=os.environ['TargetLocationMaxConcurrency']
+              TargetLocationMaxErrors=os.environ['TargetLocationMaxErrors']
+              ExecutionRoleName=os.environ['ExecutionRoleName']
+              MasterAccountID=os.environ['MasterAccountID']
+              AutomationDocumentScriptExecution=os.environ['AutomationDocumentScriptExecution']
+              ScriptUrl=os.environ['ScriptUrl']
+              ScriptParameters=os.environ['ScriptParameters']
+
+              response = client.start_automation_execution(
+                  DocumentName=f'{AutomationDocumentScriptExecution}',
+
+                  Parameters={
+                      'AutomationAssumeRole':[f'arn:aws:iam::{MasterAccountID}:role/AWS-SystemsManager-AutomationAdministrationRole'],
+                      'TargetTagName' : [TargetTagName],
+                      'TargetTagValue' : [TargetTagValue],
+                      'ScriptUrl' : [ScriptUrl],
+                      'ExecutionTimeoutSeconds': [ExecutionTimeoutSeconds],
+                      'SsmParameterNameToEnvvarMap' : [ScriptParameters]
+                  },
+                  TargetLocations=[
+                      {
+                          'Accounts': TargetAccountsArray,
+                          'Regions': TargetRegionIdsArray,
+                          'TargetLocationMaxConcurrency': f'{TargetLocationMaxConcurrency}',
+                          'TargetLocationMaxErrors': f'{TargetLocationMaxErrors}',
+                          'ExecutionRoleName': f'{ExecutionRoleName}'
+                      }
+                  ]
+              )
+              print(response)
+      Environment:
+        Variables:
+            # Fn::EnumTargetAccounts is specific to org-formation. It returns all ScriptExecutionMemberBinding account IDs defined in _tasks.yaml
+            TargetAccounts:
+              Fn::Join:
+                - ","
+                - - Fn::EnumTargetAccounts ScriptExecutionMemberBinding ${account}
+            TargetRegionIds: !Ref TargetRegionIds
+            TargetLocationMaxConcurrency: !Ref TargetLocationMaxConcurrency
+            TargetLocationMaxErrors: !Ref TargetLocationMaxErrors
+            ExecutionRoleName: !Ref ExecutionRoleName
+            MasterAccountID: !Sub ${AWS::AccountId}
+            AutomationDocumentScriptExecution: !Ref AutomationDocumentScriptExecution
+            ScriptUrl: !Ref ScriptUrl
+            ScriptParameters: !Ref ScriptParameters
+            TargetTagName: !Ref TargetTagName
+            TargetTagValue: !Ref TargetTagValue
+            ExecutionTimeoutSeconds: !Ref ExecutionTimeoutSeconds
+      FunctionName: MultiAccountScriptExecution
+      Handler: index.handler
+      Role: !GetAtt AWSLambdaSSMMultiAccountScriptExecutionRole.Arn
+      Runtime: python3.12
+  AutomationAdministrationServiceRole:
+    Type: AWS::IAM::Role
+    Condition: CreateAutomationAdministrationRoleCondition
+    Properties:
+      RoleName: AWS-SystemsManager-AutomationAdministrationRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: ssm.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: AssumeRole-AWSSystemsManagerAutomationExecutionRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - sts:AssumeRole
+            Resource:
+              Fn::Sub: arn:${AWS::Partition}:iam::*:role/AWS-SystemsManager-AutomationExecutionRole
+          - Effect: Allow
+            Action:
+            - organizations:ListAccountsForParent
+            Resource:
+            - "*"
+  AutomationDocumentScriptExecution:
+    Type: "AWS::SSM::Document"
+    Properties:
+      DocumentType: Automation
+      Name: "Automation-Run-Script"
+      Content:
+        schemaVersion: '0.3'
+        description: "Run a parameterized script on EC2 instances"
+        assumeRole: '{{ AutomationAssumeRole }}'
+        parameters:
+          AutomationAssumeRole:
+            type: String
+            description: The ARN of the Automation service role to assume.
+          ScriptUrl:
+            type: String
+            description: "The URL of the script to run"
+          SsmParameterNameToEnvvarMap:
+            type: String
+            description: >-
+              space delimited list of environment name-value pairs in the format name:value,
+              e.g., ENVNAME1:envval1 ENVNAME2:envval2
+          TargetTagName:
+            type: String
+            description: name of the tag marking instances on which to run the script
+          TargetTagValue:
+            type: String
+            description: value of the tag marking instances on which to run the script
+          ExecutionTimeoutSeconds:
+            type: Integer
+            description: Time limit for running the automation, in seconds
+            default: 120
+        mainSteps:
+        - name: "runScript" # Note: spaces and hyphens are not allowed in this name
+          action: aws:runCommand
+          onFailure: Abort
+          inputs:
+            # see https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-action-runcommand.html
+            DocumentName: AWS-RunShellScript
+            MaxConcurrency: !Ref MaximumConcurrency
+            MaxErrors: !Ref MaximumErrors
+            Targets:
+            - Key: 'tag:{{ TargetTagName }}'
+              Values:
+                - '{{ TargetTagValue }}'
+            TimeoutSeconds: '{{ ExecutionTimeoutSeconds }}'
+            Parameters:
+              commands: # 'commands' is case-sensitive
+              - "sudo su root"
+              - "SSM_TO_ENV_MAP=( {{ SsmParameterNameToEnvvarMap }} )"
+              - "for KV in ${SSM_TO_ENV_MAP[@]} ; do"
+              - "  export ${KV%%:*}=${KV##*:}"
+              - "done"
+              - "SCRIPT_PATH=/tmp/script.sh"
+              - "wget -O $SCRIPT_PATH {{ ScriptUrl }}"
+              - "chmod +x $SCRIPT_PATH"
+              - "$SCRIPT_PATH"
