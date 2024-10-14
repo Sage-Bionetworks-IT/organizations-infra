@@ -24,8 +24,8 @@ Its primary application is to run the script that installs the Stack Armor monit
 but it's general enough that it can be used to run other scripts on other machines.  It allows passing in script
 parameters as key-value pairs which are passed to the script as environment variables.
 
-Note that this automation does not specify how EC2 instances are appropriately tagged but a likely approach is to
-specify the tags in the CloudFormation template that deploys the instances.
+WARNING: This automation depends upon EC2 instances behing appropriately tagged and will not work if the tags
+are absent. A likely approach is to specify the tags in the CloudFormation template that deploys the target instances.
 
 ### Deployments
 
