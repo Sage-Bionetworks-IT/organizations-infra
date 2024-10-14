@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-product-provider/1.0.0/cfn-cr-sc-product-provider.yaml
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-product-provider/1.0.1/cfn-cr-sc-product-provider.yaml
 stack_name: cfn-cr-sc-product-provider
 stack_tags:
   OwnerEmail: "it@sagebase.org"
