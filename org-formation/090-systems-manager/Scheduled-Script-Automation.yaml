@@ -50,8 +50,8 @@ Parameters:
   ScriptParameters:
     Type: String
     Description: >-
-      space delimited list of environment name-value pairs in the format name:value,
-      e.g., ENVNAME1:envval1 ENVNAME2:envval2
+      space delimited list of environment name-ssm parameter store pairs in the format env-name:ssm-name,
+      e.g., ENVNAME1:/ssm/name1 ENVNAME2:/ssm/name2
   TargetTagName:
     Type: String
     Description: Name of the tag for instances to target.
@@ -129,20 +129,25 @@ Resources:
             Action:
             - ssm:StartAutomationExecution
             Resource:
-              - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${AutomationDocumentScriptExecution}:$DEFAULT
+            - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${AutomationDocumentScriptExecution}:$DEFAULT
+          - Effect: Allow
+            Action:
+            - ssm:GetParameter
+            Resource:
+            - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter*
           - Action: iam:PassRole
             Resource:
-              Fn::Sub: arn:${AWS::Partition}:iam::${AWS::AccountId}:role/AWS-SystemsManager-AutomationAdministrationRole
+            - Fn::Sub: arn:${AWS::Partition}:iam::${AWS::AccountId}:role/AWS-SystemsManager-AutomationAdministrationRole
             Effect: Allow
           - Action: logs:CreateLogGroup
             Resource:
-              Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:*
+            - Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:*
             Effect: Allow
           - Action:
             - logs:CreateLogStream
             - logs:PutLogEvents
             Resource:
-              Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/MultiAccountScriptExecution:*
+            - Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/MultiAccountScriptExecution:*
             Effect: Allow
   MultiAccountScriptExecutionLambdaFunction:
     Type: AWS::Lambda::Function
@@ -180,6 +185,20 @@ Resources:
               AutomationDocumentScriptExecution=os.environ['AutomationDocumentScriptExecution']
               ScriptUrl=os.environ['ScriptUrl']
               ScriptParameters=os.environ['ScriptParameters']
+              ScriptParametersArray = str(ScriptParameters).split()
+              ScriptKeyValueParameters = None
+              for envParamNameString in ScriptParametersArray:
+                envParamNamePair = envParamNameString.split(":")
+                if len(envParamNamePair) != 2:
+                    raise Exception(f"Expected key:value pair but got {envParamNameString}")
+                envVarName=envParamNamePair[0]
+                ssmParamName=envParamNamePair[1]
+                envVarValue = client.get_parameter(Name=ssmParamName, WithDecryption=True)['Parameter']['Value']
+                keyValuePair=envVarName+":"+envVarValue
+                if ScriptKeyValueParameters is None:
+                    ScriptKeyValueParameters = keyValuePair
+                else:
+                    ScriptKeyValueParameters += " "+keyValuePair
 
               response = client.start_automation_execution(
                   DocumentName=f'{AutomationDocumentScriptExecution}',
@@ -190,7 +209,7 @@ Resources:
                       'TargetTagValue' : [TargetTagValue],
                       'ScriptUrl' : [ScriptUrl],
                       'ExecutionTimeoutSeconds': [ExecutionTimeoutSeconds],
-                      'SsmParameterNameToEnvvarMap' : [ScriptParameters]
+                      'SsmParameterNameToEnvvarMap' : [ScriptKeyValueParameters]
                   },
                   TargetLocations=[
                       {

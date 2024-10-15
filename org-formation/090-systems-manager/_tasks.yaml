@@ -88,4 +88,4 @@ StackArmorAgentInstallation:
     TargetTagName: execute-script
     TargetTagValue: install-stack-armor-agent
     ScriptUrl: https://raw.githubusercontent.com/Sage-Bionetworks/infra-utils/v1.0.11/stack-armor/install-nessus-agent.sh
-    ScriptParameters: STACK_ARMOR_KEY:'{{resolve:ssm-secure:/stack-armor/install-nessus-key}}'
+    ScriptParameters: STACK_ARMOR_KEY:/stack-armor/install-nessus-key
