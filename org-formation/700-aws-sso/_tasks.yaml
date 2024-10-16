@@ -410,6 +410,7 @@ SsoDeveloper:
     permissionSetName: 'Developer'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/PowerUserAccess'
+      - 'arn:aws:iam::aws:policy/IAMReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
