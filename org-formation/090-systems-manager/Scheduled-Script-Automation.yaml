@@ -51,7 +51,7 @@ Parameters:
     Type: String
     Description: >-
       space delimited list of environment name-ssm parameter store pairs in the format env-name:ssm-name,
-      e.g., ENVNAME1:/ssm/name1 ENVNAME2:/ssm/name2
+      e.g., ENVNAME1:/ssm/name1 ENVNAME2:/ssm/name2.  Note that the values must be stored as secure, encrypted values.
   TargetTagName:
     Type: String
     Description: Name of the tag for instances to target.

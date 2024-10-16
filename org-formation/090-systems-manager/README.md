@@ -24,7 +24,7 @@ Its primary application is to run the script that installs the Stack Armor monit
 but it's general enough that it can be used to run other scripts on other machines.  It allows passing in script
 parameters as key-value pairs.  In each pair the 'value' is the name of a secure SSM parameter which is then 
 retrieved, paired with the key and passed along to the script as an environment variable. E.g., if we pass in "foo:/my/param"
-and if SSM parameter store contains the value "bar" for the secure parameter named "/my/param", then the environment
+and if SSM parameter store contains the secure, encrypted value "bar" for the parameter named "/my/param", then the environment
 variable "foo=bar" will be passed along to the script.
 
 WARNING: This automation depends upon EC2 instances being appropriately tagged and will not work if the tags
