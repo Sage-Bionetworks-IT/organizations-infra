@@ -137,7 +137,7 @@ Resources:
             - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter*
           - Action: iam:PassRole
             Resource:
-            - Fn::Sub: arn:${AWS::Partition}:iam::${AWS::AccountId}:role/AWS-SystemsManager-AutomationAdministrationRole
+            - Fn::Sub: arn:${AWS::Partition}:iam::${AWS::AccountId}:role/AWS-SystemsManager-ScriptExecution-Automation-Role
             Effect: Allow
           - Action: logs:CreateLogGroup
             Resource:
@@ -204,7 +204,7 @@ Resources:
                   DocumentName=f'{AutomationDocumentScriptExecution}',
 
                   Parameters={
-                      'AutomationAssumeRole':[f'arn:aws:iam::{MasterAccountID}:role/AWS-SystemsManager-AutomationAdministrationRole'],
+                      'AutomationAssumeRole':[f'arn:aws:iam::{MasterAccountID}:role/AWS-SystemsManager-ScriptExecution-Automation-Role'],
                       'TargetTagName' : [TargetTagName],
                       'TargetTagValue' : [TargetTagValue],
                       'ScriptUrl' : [ScriptUrl],
@@ -248,7 +248,7 @@ Resources:
     Type: AWS::IAM::Role
     Condition: CreateAutomationAdministrationRoleCondition
     Properties:
-      RoleName: AWS-SystemsManager-AutomationAdministrationRole
+      RoleName: AWS-SystemsManager-ScriptExecution-Automation-Role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
