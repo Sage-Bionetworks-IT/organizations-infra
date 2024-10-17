@@ -22,12 +22,15 @@ which is referenced from the
 This folder contain the automation required to run a given script on appropriately tagged EC2 instances on a schedule.
 Its primary application is to run the script that installs the Stack Armor monitoring agent on a set of target EC2s
 but it's general enough that it can be used to run other scripts on other machines.  It allows passing in script
-parameters as key-value pairs which are passed to the script as environment variables.
+parameters as key-value pairs.  In each pair the 'value' is the name of a secure SSM parameter which is then
+retrieved, paired with the key and passed along to the script as an environment variable. E.g., if we pass in "foo:/my/param"
+and if SSM parameter store contains the secure, encrypted value "bar" for the parameter named "/my/param", then the environment
+variable "foo=bar" will be passed along to the script.
 
-WARNING: This automation depends upon EC2 instances behing appropriately tagged and will not work if the tags
+WARNING: This automation depends upon EC2 instances being appropriately tagged and will not work if the tags
 are absent. A likely approach is to specify the tags in the CloudFormation template that deploys the target instances.
 
 ### Deployments
 
 The templates for setting up the AWS system manager are deployed
-using org-formation
+using org-formation.
