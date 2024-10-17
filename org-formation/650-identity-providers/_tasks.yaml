@@ -296,6 +296,12 @@ GithubOidcLambdaTemplateDeploySage:
                           ]
           },
           {
+              "Sid": "CfnValidate",
+              "Effect": "Allow",
+              "Action": [ "cloudformation:ValidateTemplate" ],
+              "Resource": [ "*" ]
+          },
+          {
               "Sid": "SamValidate",
               "Effect": "Allow",
               "Action": [ "iam:ListPolicies" ],
@@ -357,6 +363,12 @@ GithubOidcLambdaTemplateDeploySageIT:
               "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*",
                             "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw/*"
                           ]
+          },
+          {
+              "Sid": "CfnValidate",
+              "Effect": "Allow",
+              "Action": [ "cloudformation:ValidateTemplate" ],
+              "Resource": [ "*" ]
           },
           {
               "Sid": "SamValidate",
