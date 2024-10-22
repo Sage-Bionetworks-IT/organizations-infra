@@ -240,4 +240,4 @@ SynapseDockerRegistryDevDnsForward:
     SourceHostedZoneId: Z28CDXGXBHW4TT
     # the value of the CNAME record
     TargetHostName: !CopyValue ['registry-dev-DockerFargateStack-LoadBalancerDNS', !Ref SynapseDevAccount]
-  
+
