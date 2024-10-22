@@ -232,7 +232,7 @@ SynapseDockerRegistryDevDnsForward:
   StackDescription: Setup a CNAME for synapse-docker-registry dev ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
+    Account: !Ref SynapseDevAccount
   Parameters:
     # the name of the CNAME record
     SourceHostName: "docker.dev.sagebase.org"
@@ -240,4 +240,3 @@ SynapseDockerRegistryDevDnsForward:
     SourceHostedZoneId: Z28CDXGXBHW4TT
     # the value of the CNAME record
     TargetHostName: !CopyValue ['registry-dev-DockerFargateStack-LoadBalancerDNS', !Ref SynapseDevAccount]
-  
