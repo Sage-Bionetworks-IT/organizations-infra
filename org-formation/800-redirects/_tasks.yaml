@@ -222,3 +222,22 @@ GenieBPCProdAppDnsForward:
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
     # the value of the CNAME record
     TargetHostName: !CopyValue ['genie-bpc-shiny-prod-DockerFargateStack-LoadBalancerDNS', !Ref GenieProdAccount]
+
+
+# forward dev-docker-registry.dev.sagebase.org to dev Synapse Docker registry ALB
+# https://github.com/Sage-Bionetworks/synapse-docker-registry
+SynapseDockerRegistryDevDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-synapse-docker-registry-dev-cname'
+  StackDescription: Setup a CNAME for synapse-docker-registry dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseDevAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dev-docker-registry.dev.sagebase.org"
+    # ID of the dev.sagebase.org zone (in Synapse dev account)
+    SourceHostedZoneId: Z28CDXGXBHW4TT
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['registry-dev-DockerFargateStack-LoadBalancerDNS', !Ref SynapseDevAccount]
