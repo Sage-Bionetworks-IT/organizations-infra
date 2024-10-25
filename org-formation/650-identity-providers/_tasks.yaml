@@ -14,7 +14,6 @@ MicrosoftDefenderCloudRoles:
   Template: microsoft-defender-cloud-roles.yaml
   StackName: !Sub ${resourcePrefix}-microsoft-defender-cloud-roles
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
     Account: !Ref SynapseProdAccount
     Region: us-east-1
 
