@@ -114,3 +114,15 @@ BridgeDigitalHealhHostedZone:
     Account: !Ref SageITAccount
   Parameters:
     DnsDomainName: "bridgedigital.health"
+
+# Hosted zone for DPE (data processing engineering) applications, e.g. 'myapp.sagedpe.org'
+SageDpeZone:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/R53-hostedzone.yaml
+  StackName: !Sub '${resourcePrefix}-sage-dpe-zone'
+  StackDescription: Create a shared hosted zone for application in dpe.org
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    DnsDomainName: "dpe.sagedpe.org"
