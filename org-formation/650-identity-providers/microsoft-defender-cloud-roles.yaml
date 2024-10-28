@@ -48,7 +48,7 @@ Parameters:
     AllowedValues:
       - Local
       - Organizational
-    Default: Organizational
+    Default: local
     Description: '(Required) Specifies the type of the Setup: either local or organizational.'
   ConfigurationID:
     Type: String
