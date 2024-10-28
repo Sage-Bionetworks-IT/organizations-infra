@@ -110,7 +110,7 @@ Parameters:
     Default: DefenderForCloud-DataSecurityPostureDB-stackArmor
   IsManagementAccountOnboarding:
     Type: String
-    Default: 'true'
+    Default: 'false'
     AllowedValues:
       - 'true'
       - 'false'
