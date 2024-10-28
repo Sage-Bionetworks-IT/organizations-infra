@@ -117,7 +117,7 @@ Parameters:
     Description: (Optional) Whether MDC setup is management account onboarding
   OidcAccountId:
     Type: String
-    Default: '505541372182'
+    Default: ''
     Description: (Optional) If MDC setup is management account, this is the management
       account id
   CiemOidcRoleName:
