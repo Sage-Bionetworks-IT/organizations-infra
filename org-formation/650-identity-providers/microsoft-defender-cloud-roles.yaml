@@ -1,0 +1,1436 @@
+# Microsoft Defender for Cloud (MDC) generated cloudformation template to setup
+# access to allow MDC to perform security scans on AWS accounts
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Cross Cloud Security Center IAM Role to set read permissions
+Parameters:
+  CspmMonitorAwsRoleName:
+    Type: String
+    Description: 'Provide a role ARN name (Example: CspmMonitorAws) for CSPM offering'
+    AllowedPattern: '[-_a-zA-Z0-9]+'
+    Default: CspmMonitorAws-stackArmor
+  MDCContainersAgentlessDiscoveryK8sRoleName:
+    Type: String
+    Description: Provide a role ARN name MDCContainersAgentlessDiscoveryK8sRole for
+      Containers offering
+    AllowedPattern: (MDC)[-_a-zA-Z0-9]+
+    Default: MDCContainersAgentlessDiscoveryK8sRole-stackArmor
+  MDCContainersImageAssessmentRoleName:
+    Type: String
+    Description: Provide a role ARN name MDCContainersImageAssessmentRole for Containers
+      offering
+    AllowedPattern: (MDC)[-_a-zA-Z0-9]+
+    Default: MDCContainersImageAssessmentRole-stackArmor
+  SensitiveDataDiscoveryRoleName:
+    Type: String
+    Description: Provide an role ARN name SensitiveDataDiscovery offering
+    AllowedPattern: '[-_a-zA-Z0-9]+'
+    Default: SensitiveDataDiscovery-stackArmor
+  DefenderForServersRoleName:
+    Type: String
+    Description: Provide a role ARN name DefenderForCloud-DefenderForServers for Servers
+      offering
+    AllowedPattern: '[-_a-zA-Z0-9]+'
+    Default: DefenderForCloud-DefenderForServers-stackArmor
+  DefenderForServersVmScannerRoleName:
+    Type: String
+    Description: Provide a role ARN name DefenderForCloud-AgentlessScanner for Servers
+      agentless scanning offering
+    AllowedPattern: '[-_a-zA-Z0-9]+'
+    Default: DefenderForCloud-AgentlessScanner-stackArmor
+  ArcAutoProvisioningRoleName:
+    Type: String
+    Description: Provide a role ARN name DefenderForCloud-ArcAutoProvisioning for
+      needed offerings
+    AllowedPattern: '[-_a-zA-Z0-9]+'
+    Default: DefenderForCloud-ArcAutoProvisioning-stackArmor
+  SetupType:
+    Type: String
+    AllowedValues:
+      - Local
+      - Organizational
+    Default: local
+    Description: '(Required) Specifies the type of the Setup: either local or organizational.'
+  ConfigurationID:
+    Type: String
+    Default: MDCSetup
+    Description: (Required) Unique identifier of the deployed configuration.
+  IsPolicyAttachAllowed:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: (Optional) Whether MDc setup is allowed to attach policies to existing
+      Instance profiles
+  ProvidedInstanceProfileName:
+    Type: String
+    Default: ''
+    Description: (Optional) Specifies the instance profile Name provided by the user
+      when SetupType=Local.
+  ProvidedAssumeRoleArn:
+    Type: String
+    Default: '*'
+    Description: (Optional) Specifies the automation assume role Arn provided by the
+      user when SetupType=Local.
+  TargetType:
+    Type: String
+    Default: '*'
+    AllowedValues:
+      - Tags
+      - InstanceIds
+      - '*'
+      - ResourceGroups
+    Description: (Optional) Specifies the way in which instances are targeted - applies
+      only for local MDCSetup.
+  TargetInstances:
+    Type: String
+    Default: '*'
+    Description: (Optional) Specifies the instances to be targeted when SetupType=Local
+      and TargetType=InstanceIds.
+  TargetTagKey:
+    Type: String
+    Default: ''
+    Description: (Optional) Specifies the tag key of instances to be targeted when
+      SetupType=Local and TargetType=Tags
+  TargetTagValue:
+    Type: String
+    Default: ''
+    Description: (Optional) Specifies the tag value of instances to be targeted when
+      SetupType=Local and TargetType=Tags
+  ResourceGroupName:
+    Type: String
+    Default: ''
+    Description: (Optional) Specifies the resource group name to be targeted when
+      SetupType=Local and TargetType=ResourceGroups
+  DataSecurityPostureDbRoleName:
+    Type: String
+    Description: Provide a role ARN name DefenderForCloud-DataSecurityPostureDB for
+      Databases DSPM offering
+    AllowedPattern: '[-_a-zA-Z0-9]+'
+    Default: DefenderForCloud-DataSecurityPostureDB-stackArmor
+  IsManagementAccountOnboarding:
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: (Optional) Whether MDC setup is management account onboarding
+  OidcAccountId:
+    Type: String
+    Default: ''
+    Description: (Optional) If MDC setup is management account, this is the management
+      account id
+  CiemOidcRoleName:
+    Type: String
+    Description: Provide an role name for CIEM OIDC data offering
+    AllowedPattern: '[-_a-zA-Z0-9]+'
+    Default: DefenderForCloud-OidcCiem-stackArmor
+  customerTenantId:
+    Type: String
+    Description: ID of the tenant where the application is created
+    Default: cf916b9c-3114-46b8-baf3-adab001357bf
+  AzureSPClientId:
+    Type: String
+    Description: Service Principal Client Id
+    Default: f0e6273c-29e4-49bc-b486-3fd31de2ffc0
+  CiemCloudTrailBucketName:
+    Type: String
+    Description: The name of the s3 bucket where cloudtrail logs are stored
+    Default: '*'
+  CiemRoleName:
+    Type: String
+    Description: Provide an role name for CIEM data offering
+    AllowedPattern: '[-_a-zA-Z0-9]+'
+    Default: DefenderForCloud-Ciem-stackArmor
+Conditions:
+  IsTagValueNotSpecified: !Equals
+    - !Ref 'TargetTagValue'
+    - ''
+  IsTagKeyAndValueTargeted: !And
+    - !Equals
+      - !Ref 'SetupType'
+      - Local
+    - !Equals
+      - !Ref 'TargetType'
+      - Tags
+    - !Not
+      - !Condition 'IsTagValueNotSpecified'
+  IsTagKeyOnlyTargeted: !And
+    - !Equals
+      - !Ref 'SetupType'
+      - Local
+    - !Equals
+      - !Ref 'TargetType'
+      - Tags
+    - !Condition 'IsTagValueNotSpecified'
+  IsResourceGroupTargeted: !And
+    - !Equals
+      - !Ref 'SetupType'
+      - Local
+    - !Equals
+      - !Ref 'TargetType'
+      - ResourceGroups
+  IsOrgMDCSetup: !Equals
+    - !Ref 'SetupType'
+    - Organizational
+  IsNoAutomationAssumeRoleProvided: !Or
+    - !Equals
+      - !Ref 'SetupType'
+      - Organizational
+    - !Equals
+      - !Ref 'ProvidedAssumeRoleArn'
+      - '*'
+  IsNoInstanceProfileProvided: !Or
+    - !Equals
+      - !Ref 'SetupType'
+      - Organizational
+    - !Equals
+      - !Ref 'ProvidedInstanceProfileName'
+      - ''
+  IsInstanceProfileProvided: !Not
+    - !Condition 'IsNoInstanceProfileProvided'
+  TargetAllAutomation: !Equals
+    - !Ref 'TargetInstances'
+    - '*'
+  TargetAll: !Equals
+    - !Ref 'TargetInstances'
+    - '*'
+  PolicyAttachAllowed: !Equals
+    - !Ref 'IsPolicyAttachAllowed'
+    - 'true'
+  IsRunningOnManagementAccount: !And
+    - !Equals
+      - !Ref 'IsManagementAccountOnboarding'
+      - 'true'
+    - !Equals
+      - !Ref 'OidcAccountId'
+      - !Sub '${AWS::AccountId}'
+  IsRunningOnMemberAccount: !And
+    - !Equals
+      - !Ref 'IsManagementAccountOnboarding'
+      - 'true'
+    - !Not
+      - !Equals
+        - !Ref 'OidcAccountId'
+        - !Sub '${AWS::AccountId}'
+  IsSingleAccountOnboarding: !Equals
+    - !Ref 'IsManagementAccountOnboarding'
+    - 'false'
+  ShouldCreateOidc: !Or
+    - !Condition 'IsRunningOnManagementAccount'
+    - !Condition 'IsSingleAccountOnboarding'
+  ShoudlCreateCiemDiscoveryRoleWithAwsAccountRef: !Or
+    - !Condition 'IsSingleAccountOnboarding'
+    - !Condition 'IsRunningOnManagementAccount'
+Resources:
+  ASCDefendersOIDCIdentityProvider:
+    Description: Identity provider resource using for MDC authentication with the
+      required thumbprint list and the issuer url
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      ClientIdList:
+        - api://4d8bed1f-eee7-4d8e-b0dc-8462049a4479
+        - api://6610e979-c931-41ec-adc7-b9920c9d52f1
+        - api://b2f86835-c959-461c-b08c-2cd5ca382af5
+        - api://AzureSecurityCenter.MultiCloud.DefenderForServers
+        - api://AzureSecurityCenter.MultiCloud.DefenderForServers.VmScanner
+        - api://AzureSecurityCenter.MultiCloud.DefenderForDatabases
+      ThumbprintList:
+        - 626d44e704d1ceabe3bf0d53397464ac8080142c
+      Url: https://sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/
+  CspmMonitorAwsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: MDC - CSPM ready only role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud: api://4d8bed1f-eee7-4d8e-b0dc-8462049a4479
+                sts:RoleSessionName: MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+      Policies:
+        - PolicyName: !Ref 'CspmMonitorAwsRoleName'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - iam:ListAttachedRolePolicies
+                  - iam:ListRolePolicies
+                  - iam:GetRolePolicy
+                  - acm:DescribeCertificate
+                  - acm:ListCertificates
+                  - acm:ListTagsForCertificate
+                  - apigateway:GET
+                  - application-autoscaling:DescribeScalableTargets
+                  - autoscaling:DescribeAutoScalingGroups
+                  - bedrock:GetModelInvocationLoggingConfiguration
+                  - bedrock:ListKnowledgeBases
+                  - bedrock:ListDataSources
+                  - bedrock:GetDataSource
+                  - bedrock:ListCustomModels
+                  - bedrock:ListFoundationModels
+                  - cloudformation:ListStacks
+                  - cloudformation:DescribeStacks
+                  - cloudformation:DescribeStackSet
+                  - cloudformation:ListStackSets
+                  - cloudformation:DescribeStackInstance
+                  - cloudformation:GetTemplate
+                  - cloudformation:ListStackInstances
+                  - cloudformation:ListStackResources
+                  - cloudfront:DescribeFunction
+                  - cloudfront:GetDistribution
+                  - cloudfront:GetDistributionConfig
+                  - cloudfront:ListTagsForResource
+                  - cloudfront:ListDistributions
+                  - cloudtrail:DescribeTrails
+                  - cloudtrail:GetEventSelectors
+                  - cloudtrail:ListTags
+                  - cloudtrail:LookupEvents
+                  - cloudtrail:GetTrailStatus
+                  - cloudwatch:ListTagsForResource
+                  - cloudwatch:DescribeAlarms
+                  - codebuild:BatchGetProjects
+                  - codebuild:ListSourceCredentials
+                  - codebuild:ListProjects
+                  - config:DescribeConfigurationRecorders
+                  - config:DescribeDeliveryChannels
+                  - config:DescribeConfigurationRecorderStatus
+                  - dax:DescribeClusters
+                  - dax:ListTags
+                  - dms:DescribeReplicationInstances
+                  - dynamodb:DescribeTable
+                  - dynamodb:ListTables
+                  - dynamodb:DescribeContinuousBackups
+                  - dynamodb:ListTagsOfResource
+                  - ec2:DescribeAddresses
+                  - ec2:DescribeInstances
+                  - ec2:DescribeSnapshotAttribute
+                  - ec2:DescribeVpcPeeringConnections
+                  - ec2:GetEbsEncryptionByDefault
+                  - ec2:DescribeFlowLogs
+                  - ec2:DescribeRegions
+                  - ec2:DescribeSnapshots
+                  - ec2:DescribeSecurityGroups
+                  - ec2:DescribeImages
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DescribeVpcs
+                  - ec2:DescribeVolumes
+                  - ec2:DescribeInstanceTypes
+                  - ec2:DescribeAccountAttributes
+                  - ec2:DescribeVpcEndpoints
+                  - ec2:DescribeSubnets
+                  - ec2:DescribeNetworkAcls
+                  - ec2:DescribeRouteTables
+                  - ec2:DescribeInstanceStatus
+                  - ecr:GetRegistryPolicy
+                  - ecr:DescribeImages
+                  - ecr:DescribeRepositories
+                  - ecr:GetRepositoryPolicy
+                  - ecs:ListServices
+                  - ecs:ListTagsForResource
+                  - ecs:DescribeServices
+                  - ecs:ListTaskDefinitions
+                  - ecs:DescribeTaskDefinition
+                  - ecs:ListClusters
+                  - eks:DescribeNodegroup
+                  - eks:ListNodegroups
+                  - eks:DescribeCluster
+                  - eks:ListClusters
+                  - elasticbeanstalk:DescribeEnvironments
+                  - elasticbeanstalk:DescribeConfigurationSettings
+                  - elasticfilesystem:DescribeMountTargets
+                  - elasticfilesystem:DescribeFileSystems
+                  - elasticloadbalancing:DescribeLoadBalancerAttributes
+                  - elasticloadbalancing:DescribeLoadBalancers
+                  - elasticloadbalancing:DescribeTags
+                  - elasticloadbalancing:DescribeLoadBalancerPolicies
+                  - elasticloadbalancing:DescribeListeners
+                  - elasticloadbalancing:DescribeTargetHealth
+                  - elasticloadbalancing:DescribeTargetGroups
+                  - elasticloadbalancing:DescribeRules
+                  - elasticmapreduce:ListClusters
+                  - elasticmapreduce:DescribeCluster
+                  - es:ListDomainNames
+                  - es:DescribeElasticsearchDomain
+                  - es:ListTags
+                  - es:DescribeElasticsearchDomains
+                  - guardduty:ListDetectors
+                  - iam:ListPolicies
+                  - iam:GenerateCredentialReport
+                  - iam:GetRole
+                  - iam:GetPolicyVersion
+                  - iam:GetAccountPasswordPolicy
+                  - iam:ListServerCertificates
+                  - iam:GetAccessKeyLastUsed
+                  - iam:ListEntitiesForPolicy
+                  - iam:ListUserPolicies
+                  - iam:ListMFADevices
+                  - iam:ListInstanceProfiles
+                  - iam:ListVirtualMFADevices
+                  - iam:ListGroupsForUser
+                  - iam:ListAttachedUserPolicies
+                  - iam:ListAccountAliases
+                  - iam:ListUsers
+                  - iam:GetAccountSummary
+                  - iam:ListAccessKeys
+                  - kms:ListKeys
+                  - kms:ListKeyPolicies
+                  - kms:GetKeyRotationStatus
+                  - kms:ListAliases
+                  - kms:GetKeyPolicy
+                  - kms:DescribeKey
+                  - lambda:ListFunctions
+                  - lambda:ListTags
+                  - lambda:GetFunction
+                  - lambda:GetPolicy
+                  - logs:DescribeLogGroups
+                  - logs:DescribeMetricFilters
+                  - network-firewall:DescribeLoggingConfiguration
+                  - network-firewall:DescribeResourcePolicy
+                  - network-firewall:DescribeRuleGroupMetadata
+                  - network-firewall:ListTagsForResource
+                  - network-firewall:DescribeRuleGroup
+                  - network-firewall:DescribeFirewallPolicy
+                  - network-firewall:ListFirewalls
+                  - network-firewall:DescribeFirewall
+                  - network-firewall:ListFirewallPolicies
+                  - network-firewall:ListRuleGroups
+                  - rds:DescribeDBClusterSnapshotAttributes
+                  - rds:DescribeEventSubscriptions
+                  - rds:DescribeDBSnapshots
+                  - rds:DescribeExportTasks
+                  - rds:DescribeDBClusterSnapshots
+                  - rds:DescribeDBInstances
+                  - rds:DescribeDBClusters
+                  - rds:DescribeDBSnapshotAttributes
+                  - redshift:DescribeClusters
+                  - redshift:DescribeLoggingStatus
+                  - redshift:DescribeClusterParameterGroups
+                  - redshift:DescribeClusterParameters
+                  - s3:GetEncryptionConfiguration
+                  - s3:GetBucketPublicAccessBlock
+                  - s3:GetBucketTagging
+                  - s3:GetBucketLogging
+                  - s3:GetBucketAcl
+                  - s3:GetBucketLocation
+                  - s3:GetBucketPolicy
+                  - s3:GetReplicationConfiguration
+                  - s3:GetAccountPublicAccessBlock
+                  - s3:GetObjectAcl
+                  - s3:GetObjectTagging
+                  - s3:ListBucket
+                  - s3:ListAllMyBuckets
+                  - s3:GetBucketPolicyStatus
+                  - s3:GetLifecycleConfiguration
+                  - s3:GetBucketVersioning
+                  - s3:GetAccountPublicAccessBlock
+                  - sagemaker:DescribeNotebookInstance
+                  - sagemaker:ListNotebookInstances
+                  - sagemaker:GetSearchSuggestions
+                  - sagemaker:Search
+                  - secretsmanager:GetResourcePolicy
+                  - secretsmanager:DescribeSecret
+                  - secretsmanager:ListSecrets
+                  - sns:ListTagsForResource
+                  - sns:GetTopicAttributes
+                  - sns:ListTopics
+                  - sns:ListSubscriptions
+                  - sqs:ListQueues
+                  - sqs:GetQueueAttributes
+                  - sqs:ListQueueTags
+                  - ssm:DescribeInstanceInformation
+                  - ssm:DescribeParameters
+                  - ssm:ListTagsForResource
+                  - ssm:ListResourceComplianceSummaries
+                  - sts:GetCallerIdentity
+                  - waf-regional:GetWebACLForResource
+                  - waf-regional:GetRuleGroup
+                  - waf-regional:GetPermissionPolicy
+                  - waf-regional:GetWebACL
+                  - waf-regional:GetSampledRequests
+                  - waf-regional:GetLoggingConfiguration
+                  - waf-regional:GetRule
+                  - wafv2:ListResourcesForWebACL
+                  - wafv2:ListWebACLs
+                  - waf:ListWebACLs
+                  - waf:GetLoggingConfiguration
+                  - waf:GetWebACL
+                  - route53:ListHostedZones
+                  - route53:ListResourceRecordSets
+                  - appsync:ListGraphqlApis
+                  - access-analyzer:ListAnalyzers
+                  - secretsmanager:GetResourcePolicy
+                  - route53domains:ListDomains
+                  - macie2:GetMacieSession
+                  - macie2:ListClassificationJobs
+                  - resource-explorer-2:ListTagsForResource
+                Resource: '*'
+      RoleName: !Ref 'CspmMonitorAwsRoleName'
+  MDCContainersAgentlessDiscoveryK8sRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns: []
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud: api://6610e979-c931-41ec-adc7-b9920c9d52f1
+                sts:RoleSessionName: MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+      Policies:
+        - PolicyName: !Ref 'MDCContainersAgentlessDiscoveryK8sRoleName'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - eks:UpdateClusterConfig
+                  - eks:DescribeCluster
+                  - eks:CreateAccessEntry
+                  - eks:ListAccessEntries
+                  - eks:AssociateAccessPolicy
+                  - eks:ListAssociatedAccessPolicies
+                Resource:
+                  - !Sub 'arn:aws:eks:*:${AWS::AccountId}:*'
+      RoleName: !Ref 'MDCContainersAgentlessDiscoveryK8sRoleName'
+  MDCContainersImageAssessmentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/AmazonElasticContainerRegistryPublicReadOnly
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud: api://6610e979-c931-41ec-adc7-b9920c9d52f1
+                sts:RoleSessionName: MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+      Policies: []
+      RoleName: !Ref 'MDCContainersImageAssessmentRoleName'
+  SensitiveDataDiscoveryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud: api://b2f86835-c959-461c-b08c-2cd5ca382af5
+                sts:RoleSessionName: MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+      Policies:
+        - PolicyName: !Ref 'SensitiveDataDiscoveryRoleName'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: kms:Decrypt
+                Resource: '*'
+      RoleName: !Ref 'SensitiveDataDiscoveryRoleName'
+  DefenderForServersRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: Azure Security Center - Defender For Servers role
+      ManagedPolicyArns: []
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud: api://AzureSecurityCenter.MultiCloud.DefenderForServers
+                sts:RoleSessionName: MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+      Policies:
+        - PolicyName: AzureSecurityCenter_DefenderForServers
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: JitNetworkAccess
+                Effect: Allow
+                Action:
+                  - ec2:RevokeSecurityGroupIngress
+                  - ec2:AuthorizeSecurityGroupIngress
+                  - ec2:DescribeInstances
+                  - ec2:DescribeSecurityGroupRules
+                  - ec2:DescribeVpcs
+                  - ec2:CreateSecurityGroup
+                  - ec2:DeleteSecurityGroup
+                  - ec2:ModifyNetworkInterfaceAttribute
+                  - ec2:ModifySecurityGroupRules
+                  - ec2:ModifyInstanceAttribute
+                  - ec2:DescribeSubnets
+                  - ec2:DescribeSecurityGroups
+                Resource: '*'
+      RoleName: !Ref 'DefenderForServersRoleName'
+  DefenderForServersVmScannerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: Azure Security Center - Defender For Servers VmScanner role
+      ManagedPolicyArns: []
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud: api://AzureSecurityCenter.MultiCloud.DefenderForServers.VmScanner
+                sts:RoleSessionName: MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+      Policies:
+        - PolicyName: AzureSecurityCenter_DefenderForServers_VmScanner
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: VmScannerDeleteSnapshotAccess
+                Effect: Allow
+                Action: ec2:DeleteSnapshot
+                Resource: arn:aws:ec2:*::snapshot/*
+                Condition:
+                  StringEquals:
+                    ec2:ResourceTag/CreatedBy: Microsoft Defender for Cloud
+              - Sid: VmScannerAccess
+                Effect: Allow
+                Action:
+                  - ec2:ModifySnapshotAttribute
+                  - ec2:DeleteTags
+                  - ec2:CreateTags
+                  - ec2:CreateSnapshots
+                  - ec2:CopySnapshot
+                  - ec2:CreateSnapshot
+                Resource:
+                  - arn:aws:ec2:*:*:instance/*
+                  - arn:aws:ec2:*::snapshot/*
+                  - arn:aws:ec2:*:*:volume/*
+              - Sid: VmScannerVerificationAccess
+                Effect: Allow
+                Action:
+                  - ec2:DescribeSnapshots
+                  - ec2:DescribeInstanceStatus
+                Resource: '*'
+              - Sid: VmScannerEncryptionKeyCreation
+                Effect: Allow
+                Action:
+                  - kms:CreateKey
+                  - kms:ListKeys
+                Resource: '*'
+              - Sid: VmScannerEncryptionKeyManagement
+                Effect: Allow
+                Action:
+                  - kms:TagResource
+                  - kms:GetKeyRotationStatus
+                  - kms:PutKeyPolicy
+                  - kms:GetKeyPolicy
+                  - kms:CreateAlias
+                  - kms:TagResource
+                  - kms:ListResourceTags
+                Resource:
+                  - !Sub 'arn:aws:kms:*:${AWS::AccountId}:key/*'
+                  - !Sub 'arn:aws:kms:*:${AWS::AccountId}:alias/DefenderForCloudKey'
+              - Sid: VmScannerEncryptionKeyUsage
+                Effect: Allow
+                Action:
+                  - kms:GenerateDataKeyWithoutPlaintext
+                  - kms:DescribeKey
+                  - kms:RetireGrant
+                  - kms:CreateGrant
+                  - kms:ReEncryptFrom
+                Resource: !Sub 'arn:aws:kms:*:*:key/*'
+      RoleName: !Ref 'DefenderForServersVmScannerRoleName'
+  ArcAutoProvisioningRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: MDC - ARC Auto provisioning role
+      ManagedPolicyArns: []
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud: api://AzureSecurityCenter.MultiCloud.DefenderForServers
+                sts:RoleSessionName: MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+      Policies:
+        - PolicyName: DefenderForCloud_ArcAutoProvisioning
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: RunInstallationCommands
+                Effect: Allow
+                Action: ssm:SendCommand
+                Resource:
+                  - arn:aws:ssm:*::document/AWS-RunPowerShellScript
+                  - arn:aws:ssm:*::document/AWS-RunShellScript
+                  - !Sub 'arn:aws:ec2:*:${AWS::AccountId}:instance/*'
+              - Sid: CheckInstallationCommandStatus
+                Effect: Allow
+                Action:
+                  - ssm:CancelCommand
+                  - ssm:DescribeInstanceInformation
+                  - ssm:GetCommandInvocation
+                Resource: '*'
+      RoleName: !Ref 'ArcAutoProvisioningRoleName'
+  RoleForAutomation:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ssm.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - iam:ListRoles
+                  - config:DescribeConfigurationRecorders
+                  - compute-optimizer:GetEnrollmentStatus
+                  - support:DescribeTrustedAdvisorChecks
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - ssm:UpdateServiceSetting
+                  - ssm:GetServiceSetting
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - :ssm:*:*:servicesetting/ssm/opsitem/ssm-patchmanager
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - :ssm:*:*:servicesetting/ssm/opsitem/EC2
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - :ssm:*:*:servicesetting/ssm/opsdata/ExplorerOnboarded
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - :ssm:*:*:servicesetting/ssm/opsdata/Association
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - :ssm:*:*:servicesetting/ssm/opsdata/ComputeOptimizer
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - :ssm:*:*:servicesetting/ssm/opsdata/ConfigCompliance
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - :ssm:*:*:servicesetting/ssm/opsdata/OpsData-TrustedAdvisor
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - :ssm:*:*:servicesetting/ssm/opsdata/SupportCenterCase
+              - Effect: Allow
+                Action:
+                  - iam:CreateServiceLinkedRole
+                Resource: !Join
+                  - ''
+                  - - 'arn:'
+                    - !Ref 'AWS::Partition'
+                    - :iam::*:role/aws-service-role/ssm.
+                    - !Ref 'AWS::URLSuffix'
+                    - /AWSServiceRoleForAmazonSSM
+                Condition:
+                  StringEquals:
+                    iam:AWSServiceName: ssm.amazonaws.com
+          PolicyName: SSMMDCSetupEnableExplorerInlinePolicy
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetAutomationExecution
+                  - ec2:DescribeIamInstanceProfileAssociations
+                  - ec2:DisassociateIamInstanceProfile
+                  - ec2:DescribeInstances
+                  - ssm:StartAutomationExecution
+                  - iam:GetInstanceProfile
+                  - iam:ListInstanceProfilesForRole
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - iam:AttachRolePolicy
+                Resource:
+                  - !If
+                    - PolicyAttachAllowed
+                    - '*'
+                    - !Join
+                      - ''
+                      - - 'arn:'
+                        - !Ref 'AWS::Partition'
+                        - ':iam::'
+                        - !Ref 'AWS::AccountId'
+                        - :role/AmazonSSMRoleForInstancesMDCSetup
+                Condition:
+                  ArnEquals:
+                    iam:PolicyARN:
+                      - !Join
+                        - ''
+                        - - 'arn:'
+                          - !Ref 'AWS::Partition'
+                          - :iam::aws:policy/AmazonSSMManagedInstanceCore
+                      - !Join
+                        - ''
+                        - - 'arn:'
+                          - !Ref 'AWS::Partition'
+                          - :iam::aws:policy/AmazonSSMPatchAssociation
+              - Effect: Allow
+                Action:
+                  - iam:AddRoleToInstanceProfile
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - ':iam::'
+                      - !Ref 'AWS::AccountId'
+                      - :instance-profile/AmazonSSMRoleForInstancesMDCSetup
+              - Effect: Allow
+                Action:
+                  - ec2:AssociateIamInstanceProfile
+                Resource: '*'
+                Condition:
+                  StringEquals:
+                    ec2:NewInstanceProfile: !Join
+                      - ''
+                      - - 'arn:'
+                        - !Ref 'AWS::Partition'
+                        - ':iam::'
+                        - !Ref 'AWS::AccountId'
+                        - :instance-profile/AmazonSSMRoleForInstancesMDCSetup
+              - Effect: Allow
+                Action:
+                  - iam:CreateInstanceProfile
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - ':iam::'
+                      - !Ref 'AWS::AccountId'
+                      - :instance-profile/AmazonSSMRoleForInstancesMDCSetup
+              - Effect: Allow
+                Action:
+                  - iam:GetRole
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - ':iam::'
+                      - !Ref 'AWS::AccountId'
+                      - :role/AmazonSSMRoleForInstancesMDCSetup
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - ':iam::'
+                      - !Ref 'AWS::AccountId'
+                      - :role/AWS-MDCSetup-HostMgmtRole-
+                      - !Ref 'AWS::Region'
+                      - '-'
+                      - !Ref 'ConfigurationID'
+              - Effect: Allow
+                Action:
+                  - iam:PassRole
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - ':iam::'
+                      - !Ref 'AWS::AccountId'
+                      - :role/AmazonSSMRoleForInstancesMDCSetup
+                Condition:
+                  StringEquals:
+                    iam:PassedToService:
+                      - ec2.amazonaws.com
+              - Effect: Allow
+                Action:
+                  - iam:PassRole
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - ':iam::'
+                      - !Ref 'AWS::AccountId'
+                      - :role/AWS-MDCSetup-HostMgmtRole-
+                      - !Ref 'AWS::Region'
+                      - '-'
+                      - !Ref 'ConfigurationID'
+                Condition:
+                  StringEquals:
+                    iam:PassedToService:
+                      - ssm.amazonaws.com
+              - Effect: Allow
+                Action:
+                  - iam:CreateRole
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:'
+                      - !Ref 'AWS::Partition'
+                      - ':iam::'
+                      - !Ref 'AWS::AccountId'
+                      - :role/AmazonSSMRoleForInstancesMDCSetup
+          PolicyName: !Join
+            - ''
+            - - AWS-MDCSetup-SSMHostMgmt-CreateAndAttachRoleInlinePolicy-
+              - !Ref 'AWS::Region'
+              - '-'
+              - !Ref 'ConfigurationID'
+      RoleName: !Join
+        - ''
+        - - AWS-MDCSetup-HostMgmtRole-
+          - !Ref 'AWS::Region'
+          - '-'
+          - !Ref 'ConfigurationID'
+  CreateAndAttachIAMToInstance:
+    Type: AWS::SSM::Document
+    Properties:
+      Content:
+        description: Composite document for MDC Setup Managing Instances association.
+          This document ensures IAM role for instance profile is created in account
+          with all required policies
+        schemaVersion: '0.3'
+        assumeRole: '{{AutomationAssumeRole}}'
+        parameters:
+          AutomationAssumeRole:
+            type: String
+          InstanceId:
+            type: String
+          IsPolicyAttachAllowed:
+            type: String
+        mainSteps:
+          - name: getExistingRoleName
+            action: aws:executeScript
+            inputs:
+              Runtime: python3.6
+              Handler: getInstanceProfileName
+              InputPayload:
+                InstanceId: '{{InstanceId}}'
+              Script: "import boto3\n\ndef getInstanceProfileName(events, context):\n\
+                \    ec2_client = boto3.client(\"ec2\")\n    response = ec2_client.describe_instances(InstanceIds=[events[\"\
+                InstanceId\"]])\n    if 'IamInstanceProfile' in response['Reservations'][0]['Instances'][0]:\n\
+                \        return {'RoleName': response['Reservations'][0]['Instances'][0]['IamInstanceProfile']['Arn'].split('instance-profile/')[1]}\n\
+                \    return {'RoleName': 'NoRoleFound'}"
+            outputs:
+              - Name: existingInstanceProfileRoleName
+                Selector: $.Payload.RoleName
+                Type: String
+            nextStep: branchIfProfileExists
+          - name: branchIfProfileExists
+            action: aws:branch
+            inputs:
+              Choices:
+                - NextStep: createRoleIfNotExists
+                  Variable: '{{getExistingRoleName.existingInstanceProfileRoleName}}'
+                  StringEquals: NoRoleFound
+              Default: checkIfPolicyAttachAllowed
+          - name: checkIfPolicyAttachAllowed
+            action: aws:branch
+            inputs:
+              Choices:
+                - NextStep: getRoleFromInstanceProfile
+                  Variable: '{{IsPolicyAttachAllowed}}'
+                  StringEquals: 'true'
+              Default: createRoleIfNotExists
+          - name: getRoleFromInstanceProfile
+            action: aws:executeAwsApi
+            inputs:
+              Service: iam
+              Api: GetInstanceProfile
+              InstanceProfileName: '{{getExistingRoleName.existingInstanceProfileRoleName}}'
+            outputs:
+              - Name: existingRoleName
+                Selector: $.InstanceProfile.Roles[0].RoleName
+                Type: String
+            nextStep: attachAmazonSSMManagedInstanceCoreToExistingRole
+          - name: attachAmazonSSMManagedInstanceCoreToExistingRole
+            action: aws:executeAwsApi
+            inputs:
+              Service: iam
+              Api: AttachRolePolicy
+              RoleName: '{{getRoleFromInstanceProfile.existingRoleName}}'
+              PolicyArn: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+            nextStep: attachAmazonSSMPatchAssociationToExistingRole
+          - name: attachAmazonSSMPatchAssociationToExistingRole
+            action: aws:executeAwsApi
+            inputs:
+              Service: iam
+              Api: AttachRolePolicy
+              RoleName: '{{getRoleFromInstanceProfile.existingRoleName}}'
+              PolicyArn: arn:aws:iam::aws:policy/AmazonSSMPatchAssociation
+            isEnd: true
+          - name: createRoleIfNotExists
+            action: aws:executeAwsApi
+            inputs:
+              Service: iam
+              Api: CreateRole
+              Path: /
+              RoleName: AmazonSSMRoleForInstancesMDCSetup
+              AssumeRolePolicyDocument: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ec2.amazonaws.com"},"Action":"sts:AssumeRole"}]}'
+              Description: EC2 role for SSM for MDC Setup
+            description: Create AmazonSSMRoleForInstancesMDCSetup Role For SSM MDC
+              Setup
+            onFailure: Continue
+            nextStep: assertRoleForInstanceProfileExists
+          - name: assertRoleForInstanceProfileExists
+            action: aws:assertAwsResourceProperty
+            inputs:
+              Service: iam
+              Api: GetRole
+              PropertySelector: $.Role.RoleName
+              DesiredValues:
+                - AmazonSSMRoleForInstancesMDCSetup
+              RoleName: AmazonSSMRoleForInstancesMDCSetup
+            nextStep: attachAmazonSSMManagedInstanceCoreToRole
+          - name: attachAmazonSSMManagedInstanceCoreToRole
+            action: aws:executeAwsApi
+            inputs:
+              Service: iam
+              Api: AttachRolePolicy
+              RoleName: AmazonSSMRoleForInstancesMDCSetup
+              PolicyArn: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+            nextStep: attachAmazonSSMPatchAssociationToRole
+          - name: attachAmazonSSMPatchAssociationToRole
+            action: aws:executeAwsApi
+            inputs:
+              Service: iam
+              Api: AttachRolePolicy
+              RoleName: AmazonSSMRoleForInstancesMDCSetup
+              PolicyArn: arn:aws:iam::aws:policy/AmazonSSMPatchAssociation
+            nextStep: createInstanceProfileIfNotExists
+          - name: createInstanceProfileIfNotExists
+            action: aws:executeAwsApi
+            inputs:
+              InstanceProfileName: AmazonSSMRoleForInstancesMDCSetup
+              Service: iam
+              Api: CreateInstanceProfile
+            onFailure: Continue
+            nextStep: addRoleToInstanceProfile
+          - name: addRoleToInstanceProfile
+            action: aws:executeAwsApi
+            inputs:
+              InstanceProfileName: AmazonSSMRoleForInstancesMDCSetup
+              RoleName: AmazonSSMRoleForInstancesMDCSetup
+              Service: iam
+              Api: AddRoleToInstanceProfile
+            onFailure: Continue
+            nextStep: executeAttachIAMToInstance
+          - name: executeAttachIAMToInstance
+            action: aws:executeAutomation
+            maxAttempts: 10
+            timeoutSeconds: 60
+            inputs:
+              DocumentName: AWS-AttachIAMToInstance
+              RuntimeParameters:
+                RoleName: AmazonSSMRoleForInstancesMDCSetup
+                ForceReplace: false
+                AutomationAssumeRole: '{{ AutomationAssumeRole }}'
+                InstanceId: '{{ InstanceId }}'
+            isEnd: true
+      DocumentType: Automation
+      Name: !Sub 'AWSMDCSetup-CreateAndAttachIAMToInstance-${ConfigurationID}'
+      TargetType: /AWS::EC2::Instance
+  UpdateExistingInstanceProfile:
+    Type: AWS::SSM::Document
+    Properties:
+      Content:
+        description: Composite document for MDC Setup Managing Instances association.
+          This document updates the user provided instance profile with roles and
+          policies
+        schemaVersion: '0.3'
+        assumeRole: '{{AutomationAssumeRole}}'
+        parameters:
+          AutomationAssumeRole:
+            type: String
+          InstanceId:
+            type: String
+          InstanceProfile:
+            type: String
+        mainSteps:
+          - name: getRoleFromInstanceProfile
+            action: aws:executeAwsApi
+            inputs:
+              Service: iam
+              Api: GetInstanceProfile
+              InstanceProfileName: '{{InstanceProfile}}'
+            outputs:
+              - Name: existingRoleName
+                Selector: $.InstanceProfile.Roles[0].RoleName
+                Type: String
+            nextStep: attachAmazonSSMManagedInstanceCoreToExistingRole
+          - name: attachAmazonSSMManagedInstanceCoreToExistingRole
+            action: aws:executeAwsApi
+            inputs:
+              Service: iam
+              Api: AttachRolePolicy
+              RoleName: '{{getRoleFromInstanceProfile.existingRoleName}}'
+              PolicyArn: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+            nextStep: attachAmazonSSMPatchAssociationToExistingRole
+          - name: attachAmazonSSMPatchAssociationToExistingRole
+            action: aws:executeAwsApi
+            inputs:
+              Service: iam
+              Api: AttachRolePolicy
+              RoleName: '{{getRoleFromInstanceProfile.existingRoleName}}'
+              PolicyArn: arn:aws:iam::aws:policy/AmazonSSMPatchAssociation
+            isEnd: true
+      DocumentType: Automation
+      Name: !Sub 'AWSMDCSetup-UpdateExistingInstanceProfile-${ConfigurationID}'
+      TargetType: /AWS::EC2::Instance
+  SystemAssociationForManagingInstances:
+    Type: AWS::SSM::Association
+    Properties:
+      Name: !Ref 'CreateAndAttachIAMToInstance'
+      AssociationName: !Join
+        - ''
+        - - AWS-MDCSetup-SSMHostMgmt-AttachIAMToInstance-
+          - !Ref 'ConfigurationID'
+      Parameters:
+        AutomationAssumeRole:
+          - !If
+            - IsNoAutomationAssumeRoleProvided
+            - !GetAtt 'RoleForAutomation.Arn'
+            - !Ref 'ProvidedAssumeRoleArn'
+        IsPolicyAttachAllowed:
+          - !Ref 'IsPolicyAttachAllowed'
+      AutomationTargetParameterName: InstanceId
+      Targets: !If
+        - IsOrgMDCSetup
+        - - Key: InstanceIds
+            Values:
+              - '*'
+        - !If
+          - IsTagKeyAndValueTargeted
+          - - Key: !Join
+                - ''
+                - - 'tag:'
+                  - !Ref 'TargetTagKey'
+              Values:
+                - !Ref 'TargetTagValue'
+          - !If
+            - IsTagKeyOnlyTargeted
+            - - Key: tag-key
+                Values:
+                  - !Ref 'TargetTagKey'
+            - !If
+              - IsResourceGroupTargeted
+              - - Key: ResourceGroup
+                  Values:
+                    - !Ref 'ResourceGroupName'
+              - !If
+                - TargetAll
+                - - Key: InstanceIds
+                    Values:
+                      - '*'
+                - - Key: ParameterValues
+                    Values: !Split
+                      - ','
+                      - !Ref 'TargetInstances'
+      ScheduleExpression: rate(30 days)
+    Condition: IsNoInstanceProfileProvided
+  SystemAssociationForUpdateManagingInstances:
+    Type: AWS::SSM::Association
+    Properties:
+      Name: !Ref 'UpdateExistingInstanceProfile'
+      AssociationName: !Join
+        - ''
+        - - AWS-MDCSetup-SSMHostMgmt-UpdateIAMForInstanceMgmt-
+          - !Ref 'ConfigurationID'
+      Parameters:
+        AutomationAssumeRole:
+          - !If
+            - IsNoAutomationAssumeRoleProvided
+            - !GetAtt 'RoleForAutomation.Arn'
+            - !Ref 'ProvidedAssumeRoleArn'
+        InstanceProfile:
+          - !Ref 'ProvidedInstanceProfileName'
+      AutomationTargetParameterName: InstanceId
+      Targets: !If
+        - IsOrgMDCSetup
+        - - Key: InstanceIds
+            Values:
+              - '*'
+        - !If
+          - IsTagKeyAndValueTargeted
+          - - Key: !Join
+                - ''
+                - - 'tag:'
+                  - !Ref 'TargetTagKey'
+              Values:
+                - !Ref 'TargetTagValue'
+          - !If
+            - IsTagKeyOnlyTargeted
+            - - Key: tag-key
+                Values:
+                  - !Ref 'TargetTagKey'
+            - !If
+              - IsResourceGroupTargeted
+              - - Key: ResourceGroup
+                  Values:
+                    - !Ref 'ResourceGroupName'
+              - !If
+                - TargetAll
+                - - Key: InstanceIds
+                    Values:
+                      - '*'
+                - - Key: ParameterValues
+                    Values: !Split
+                      - ','
+                      - !Ref 'TargetInstances'
+      ScheduleExpression: rate(30 days)
+    Condition: IsInstanceProfileProvided
+  DataSecurityPostureDbRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: Microsoft Defender for Cloud - Databases DSPM role
+      ManagedPolicyArns: []
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud: api://AzureSecurityCenter.MultiCloud.DefenderForDatabases
+                sts:RoleSessionName: MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+      Policies:
+        - PolicyName: AzureSecurityCenter_DatabasesDspm
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - rds:DescribeDBInstances
+                  - rds:DescribeDBClusters
+                  - rds:DescribeDBClusterSnapshots
+                  - rds:DescribeDBSnapshots
+                  - rds:CopyDBSnapshot
+                  - rds:CopyDBClusterSnapshot
+                Resource:
+                  - !Sub 'arn:aws:rds:*:${AWS::AccountId}:cluster:*'
+                  - !Sub 'arn:aws:rds:*:${AWS::AccountId}:db:*'
+                  - !Sub 'arn:aws:rds:*:${AWS::AccountId}:snapshot:*'
+                  - !Sub 'arn:aws:rds:*:${AWS::AccountId}:cluster-snapshot:*'
+              - Effect: Allow
+                Action:
+                  - rds:DeleteDBSnapshot
+                  - rds:DeleteDBClusterSnapshot
+                  - rds:ModifyDBSnapshotAttribute
+                  - rds:ModifyDBClusterSnapshotAttribute
+                Resource:
+                  - !Sub 'arn:aws:rds:*:${AWS::AccountId}:snapshot:defenderfordatabases*'
+                  - !Sub 'arn:aws:rds:*:${AWS::AccountId}:cluster-snapshot:defenderfordatabases*'
+              - Effect: Allow
+                Action:
+                  - rds:DescribeDBClusterParameters
+                  - rds:DescribeDBParameters
+                  - rds:DescribeOptionGroups
+                Resource:
+                  - !Sub 'arn:aws:rds:*:${AWS::AccountId}:pg:*'
+                  - !Sub 'arn:aws:rds:*:${AWS::AccountId}:og:*'
+                  - !Sub 'arn:aws:rds:*:${AWS::AccountId}:cluster-pg:*'
+              - Effect: Allow
+                Action:
+                  - kms:ListAliases
+                Resource: '*'
+              - Effect: Allow
+                Action: kms:CreateGrant
+                Resource: '*'
+                Condition:
+                  StringLike:
+                    kms:ViaService:
+                      - rds.*.amazonaws.com
+                  StringEquals:
+                    kms:CallerAccount: !Sub '${AWS::AccountId}'
+              - Effect: Allow
+                Action:
+                  - kms:CreateKey
+                  - kms:TagResource
+                  - kms:ListGrants
+                  - kms:DescribeKey
+                  - kms:PutKeyPolicy
+                  - kms:Encrypt
+                  - kms:CreateGrant
+                  - kms:EnableKey
+                  - kms:CancelKeyDeletion
+                  - kms:DisableKey
+                  - kms:ScheduleKeyDeletion
+                  - kms:UpdateAlias
+                  - kms:UpdateKeyDescription
+                Resource: '*'
+                Condition:
+                  ForAnyValue:StringLike:
+                    aws:TagKeys: DefenderForDatabases*
+              - Effect: Allow
+                Action:
+                  - kms:CreateAlias
+                Resource:
+                  - !Sub 'arn:aws:kms:*:${AWS::AccountId}:alias/DefenderForDatabases*'
+                  - !Sub 'arn:aws:kms:*:${AWS::AccountId}:key/*'
+      RoleName: !Ref 'DataSecurityPostureDbRoleName'
+  MDCCiemOIDCIdentityProvider:
+    Condition: ShouldCreateOidc
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      ClientIdList:
+        - api://mciem-aws-oidc-app
+      ThumbprintList:
+        - 626d44e704d1ceabe3bf0d53397464ac8080142c
+      Url: https://sts.windows.net/cf916b9c-3114-46b8-baf3-adab001357bf/
+  CiemOidcAssumeRolePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Sub 'mdc-mciem-oidc-${customerTenantId}-assume'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+              - sts:GetAccessKeyInfo
+              - sts:GetCallerIdentity
+              - sts:GetFederationToken
+              - sts:GetServiceBearerToken
+              - sts:GetSessionToken
+              - sts:TagSession
+            Resource: !Sub 'arn:aws:iam::*:role/${CiemRoleName}'
+  CiemOidcRole:
+    Type: AWS::IAM::Role
+    Condition: ShouldCreateOidc
+    Properties:
+      RoleName: !Ref 'CiemOidcRoleName'
+      AssumeRolePolicyDocument: !Sub '{"Version": "2012-10-17","Statement": [{"Effect":
+        "Allow","Principal": {"Federated": "arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/${customerTenantId}/"},"Action":
+        "sts:AssumeRoleWithWebIdentity","Condition": {"StringEquals": {"sts.windows.net/${customerTenantId}/:aud":
+        "api://mciem-aws-oidc-app","sts.windows.net/${customerTenantId}/:sub": "${AzureSPClientId}"}}}]}'
+      Path: /
+      ManagedPolicyArns:
+        - !Ref 'CiemOidcAssumeRolePolicy'
+  CiemCloudTrailAccessPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Sub 'mdc-ciem-cloudtrail-${customerTenantId}'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+              - s3:ListBucket
+            Resource:
+              - !Sub 'arn:aws:s3:::${CiemCloudTrailBucketName}'
+              - !Sub 'arn:aws:s3:::${CiemCloudTrailBucketName}/*'
+  CiemMemberAccountRole:
+    Type: AWS::IAM::Role
+    Condition: IsRunningOnMemberAccount
+    Properties:
+      RoleName: !Ref 'CiemRoleName'
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${OidcAccountId}:role/${CiemOidcRoleName}'
+            Action: sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/SecurityAudit
+        - !Ref 'CiemCloudTrailAccessPolicy'
+  CiemAccountRole:
+    Type: AWS::IAM::Role
+    DependsOn: CiemOidcRole
+    Condition: ShoudlCreateCiemDiscoveryRoleWithAwsAccountRef
+    Properties:
+      RoleName: !Ref 'CiemRoleName'
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:role/${CiemOidcRoleName}'
+            Action: sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/SecurityAudit
+        - !Ref 'CiemCloudTrailAccessPolicy'
+Outputs:
+  CrossCloudSecurityCenterReadOnlyARN:
+    Value: !GetAtt 'SensitiveDataDiscoveryRole.Arn'
+    Description: Role ARN for Sensitive Data Discovery offering
+  MDCContainersAgentlessDiscoveryK8sRoleARN:
+    Value: !GetAtt 'MDCContainersAgentlessDiscoveryK8sRole.Arn'
+  MDCContainersImageAssessmentRoleARN:
+    Value: !GetAtt 'MDCContainersImageAssessmentRole.Arn'
+  DefenderForServersRoleARN:
+    Value: !GetAtt 'DefenderForServersRole.Arn'
+    Description: Role ARN for Servers offering
+  DefenderForServersVmScannerRoleARN:
+    Value: !GetAtt 'DefenderForServersVmScannerRole.Arn'
+    Description: Role ARN for VmScanner offering
+  ArcAutoProvisioningRoleARN:
+    Value: !GetAtt 'ArcAutoProvisioningRole.Arn'
+    Description: Role ARN for Arc auto provisioning
+  DataSecurityPostureDbRoleARN:
+    Value: !GetAtt 'DataSecurityPostureDbRole.Arn'
+    Description: Role ARN for databases DSPM
+  CiemOidcRoleArn:
+    Condition: ShouldCreateOidc
+    Value: !GetAtt 'CiemOidcRole.Arn'
+    Description: Role ARN for CIEM OIDC Role
+  CiemAccountRoleArn:
+    Condition: ShoudlCreateCiemDiscoveryRoleWithAwsAccountRef
+    Value: !GetAtt 'CiemAccountRole.Arn'
+    Description: Role ARN for CIEM Role
+  CiemMemberAccountRoleArn:
+    Condition: IsRunningOnMemberAccount
+    Value: !GetAtt 'CiemMemberAccountRole.Arn'
+    Description: Role ARN for CIEM Role

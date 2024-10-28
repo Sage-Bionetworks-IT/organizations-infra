@@ -5,6 +5,22 @@ Parameters:
     Type: String
     Default: 'github-oidc'
 
+##################################################################################
+# Resources needed to integrate AWS environments with Microsoft Defender for Cloud
+##################################################################################
+
+MicrosoftDefenderCloudRoles:
+  Type: update-stacks
+  Template: microsoft-defender-cloud-roles.yaml
+  StackName: !Sub ${resourcePrefix}-microsoft-defender-cloud-roles
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+    Region: us-east-1
+
+#####################################################
+# Resources to allow Github CI to access AWS accounts
+#####################################################
+
 GithubOidcSageBionetworks:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/oidc-provider.yaml
