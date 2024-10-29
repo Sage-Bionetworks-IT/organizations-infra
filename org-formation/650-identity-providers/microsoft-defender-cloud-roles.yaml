@@ -69,48 +69,48 @@ Parameters:
 Conditions:
     IsRunningOnManagementAccount:
         'Fn::And':
-            - 
+            -
                 'Fn::Equals':
-                    - 
+                    -
                         Ref: IsManagementAccountOnboarding
                     - 'true'
-            - 
+            -
                 'Fn::Equals':
-                    - 
+                    -
                         Ref: OidcAccountId
-                    - 
+                    -
                         'Fn::Sub': '${AWS::AccountId}'
     IsRunningOnMemberAccount:
         'Fn::And':
-            - 
+            -
                 'Fn::Equals':
-                    - 
+                    -
                         Ref: IsManagementAccountOnboarding
                     - 'true'
-            - 
+            -
                 'Fn::Not':
-                    - 
+                    -
                         'Fn::Equals':
-                            - 
+                            -
                                 Ref: OidcAccountId
-                            - 
+                            -
                                 'Fn::Sub': '${AWS::AccountId}'
     IsSingleAccountOnboarding:
         'Fn::Equals':
-            - 
+            -
                 Ref: IsManagementAccountOnboarding
             - 'false'
     ShouldCreateOidc:
         'Fn::Or':
-            - 
+            -
                 Condition: IsRunningOnManagementAccount
-            - 
+            -
                 Condition: IsSingleAccountOnboarding
     ShoudlCreateCiemDiscoveryRoleWithAwsAccountRef:
         'Fn::Or':
-            - 
+            -
                 Condition: IsSingleAccountOnboarding
-            - 
+            -
                 Condition: IsRunningOnManagementAccount
 Resources:
     ASCDefendersOIDCIdentityProvider:
@@ -133,7 +133,7 @@ Resources:
             AssumeRolePolicyDocument:
                 Version: '2012-10-17'
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Principal:
                             Federated:
@@ -144,13 +144,13 @@ Resources:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://4d8bed1f-eee7-4d8e-b0dc-8462049a4479'
                                 'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
             Policies:
-                - 
+                -
                     PolicyName:
                         Ref: CspmMonitorAwsRoleName
                     PolicyDocument:
                         Version: '2012-10-17'
                         Statement:
-                            - 
+                            -
                                 Effect: Allow
                                 Action:
                                     - 'iam:ListAttachedRolePolicies'
@@ -375,7 +375,7 @@ Resources:
             AssumeRolePolicyDocument:
                 Version: '2012-10-17'
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Principal:
                             Federated:
@@ -386,13 +386,13 @@ Resources:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://b2f86835-c959-461c-b08c-2cd5ca382af5'
                                 'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
             Policies:
-                - 
+                -
                     PolicyName:
                         Ref: SensitiveDataDiscoveryRoleName
                     PolicyDocument:
                         Version: '2012-10-17'
                         Statement:
-                            - 
+                            -
                                 Effect: Allow
                                 Action: 'kms:Decrypt'
                                 Resource: '*'
@@ -406,7 +406,7 @@ Resources:
             AssumeRolePolicyDocument:
                 Version: '2012-10-17'
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Principal:
                             Federated:
@@ -417,12 +417,12 @@ Resources:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://AzureSecurityCenter.MultiCloud.DefenderForServers'
                                 'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
             Policies:
-                - 
+                -
                     PolicyName: AzureSecurityCenter_DefenderForServers
                     PolicyDocument:
                         Version: '2012-10-17'
                         Statement:
-                            - 
+                            -
                                 Sid: JitNetworkAccess
                                 Effect: Allow
                                 Action:
@@ -449,7 +449,7 @@ Resources:
             AssumeRolePolicyDocument:
                 Version: '2012-10-17'
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Principal:
                             Federated:
@@ -460,12 +460,12 @@ Resources:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://AzureSecurityCenter.MultiCloud.DefenderForServers.VmScanner'
                                 'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
             Policies:
-                - 
+                -
                     PolicyName: AzureSecurityCenter_DefenderForServers_VmScanner
                     PolicyDocument:
                         Version: '2012-10-17'
                         Statement:
-                            - 
+                            -
                                 Sid: VmScannerDeleteSnapshotAccess
                                 Effect: Allow
                                 Action: 'ec2:DeleteSnapshot'
@@ -473,7 +473,7 @@ Resources:
                                 Condition:
                                     StringEquals:
                                         'ec2:ResourceTag/CreatedBy': Microsoft Defender for Cloud
-                            - 
+                            -
                                 Sid: VmScannerAccess
                                 Effect: Allow
                                 Action:
@@ -487,21 +487,21 @@ Resources:
                                     - 'arn:aws:ec2:*:*:instance/*'
                                     - 'arn:aws:ec2:*::snapshot/*'
                                     - 'arn:aws:ec2:*:*:volume/*'
-                            - 
+                            -
                                 Sid: VmScannerVerificationAccess
                                 Effect: Allow
                                 Action:
                                     - 'ec2:DescribeSnapshots'
                                     - 'ec2:DescribeInstanceStatus'
                                 Resource: '*'
-                            - 
+                            -
                                 Sid: VmScannerEncryptionKeyCreation
                                 Effect: Allow
                                 Action:
                                     - 'kms:CreateKey'
                                     - 'kms:ListKeys'
                                 Resource: '*'
-                            - 
+                            -
                                 Sid: VmScannerEncryptionKeyManagement
                                 Effect: Allow
                                 Action:
@@ -513,11 +513,11 @@ Resources:
                                     - 'kms:TagResource'
                                     - 'kms:ListResourceTags'
                                 Resource:
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:kms:*:${AWS::AccountId}:key/*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:kms:*:${AWS::AccountId}:alias/DefenderForCloudKey'
-                            - 
+                            -
                                 Sid: VmScannerEncryptionKeyUsage
                                 Effect: Allow
                                 Action:
@@ -538,7 +538,7 @@ Resources:
             AssumeRolePolicyDocument:
                 Version: '2012-10-17'
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Principal:
                             Federated:
@@ -549,12 +549,12 @@ Resources:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://AzureSecurityCenter.MultiCloud.DefenderForDatabases'
                                 'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
             Policies:
-                - 
+                -
                     PolicyName: AzureSecurityCenter_DefenderForDatabases
                     PolicyDocument:
                         Version: '2012-10-17'
                         Statement:
-                            - 
+                            -
                                 Sid: RdsRead
                                 Effect: Allow
                                 Action:
@@ -577,15 +577,15 @@ Resources:
                                     - 'rds:DescribeDBClusterParameterGroups'
                                     - 'rds:DescribeOptionGroups'
                                 Resource:
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:cluster:*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:db:*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:pg:*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:og:*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:cluster-pg:*'
             RoleName:
                 Ref: DefenderForDatabasesRoleName
@@ -597,7 +597,7 @@ Resources:
             AssumeRolePolicyDocument:
                 Version: '2012-10-17'
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Principal:
                             Federated:
@@ -608,12 +608,12 @@ Resources:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://AzureSecurityCenter.MultiCloud.DefenderForDatabases'
                                 'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
             Policies:
-                - 
+                -
                     PolicyName: AzureSecurityCenter_DatabasesDspm
                     PolicyDocument:
                         Version: '2012-10-17'
                         Statement:
-                            - 
+                            -
                                 Effect: Allow
                                 Action:
                                     - 'rds:DescribeDBInstances'
@@ -623,15 +623,15 @@ Resources:
                                     - 'rds:CopyDBSnapshot'
                                     - 'rds:CopyDBClusterSnapshot'
                                 Resource:
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:cluster:*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:db:*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:snapshot:*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:cluster-snapshot:*'
-                            - 
+                            -
                                 Effect: Allow
                                 Action:
                                     - 'rds:DeleteDBSnapshot'
@@ -639,29 +639,29 @@ Resources:
                                     - 'rds:ModifyDBSnapshotAttribute'
                                     - 'rds:ModifyDBClusterSnapshotAttribute'
                                 Resource:
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:snapshot:defenderfordatabases*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:cluster-snapshot:defenderfordatabases*'
-                            - 
+                            -
                                 Effect: Allow
                                 Action:
                                     - 'rds:DescribeDBClusterParameters'
                                     - 'rds:DescribeDBParameters'
                                     - 'rds:DescribeOptionGroups'
                                 Resource:
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:pg:*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:og:*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:rds:*:${AWS::AccountId}:cluster-pg:*'
-                            - 
+                            -
                                 Effect: Allow
                                 Action:
                                     - 'kms:ListAliases'
                                 Resource: '*'
-                            - 
+                            -
                                 Effect: Allow
                                 Action: 'kms:CreateGrant'
                                 Resource: '*'
@@ -672,7 +672,7 @@ Resources:
                                     StringEquals:
                                         'kms:CallerAccount':
                                             'Fn::Sub': '${AWS::AccountId}'
-                            - 
+                            -
                                 Effect: Allow
                                 Action:
                                     - 'kms:CreateKey'
@@ -692,14 +692,14 @@ Resources:
                                 Condition:
                                     'ForAnyValue:StringLike':
                                         'aws:TagKeys': 'DefenderForDatabases*'
-                            - 
+                            -
                                 Effect: Allow
                                 Action:
                                     - 'kms:CreateAlias'
                                 Resource:
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:kms:*:${AWS::AccountId}:alias/DefenderForDatabases*'
-                                    - 
+                                    -
                                         'Fn::Sub': 'arn:aws:kms:*:${AWS::AccountId}:key/*'
             RoleName:
                 Ref: DataSecurityPostureDbRoleName
@@ -720,7 +720,7 @@ Resources:
             PolicyDocument:
                 Version: '2012-10-17'
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Action:
                             - 'sts:AssumeRole'
@@ -742,7 +742,7 @@ Resources:
                 'Fn::Sub': '{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Principal": {"Federated": "arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/${customerTenantId}/"},"Action": "sts:AssumeRoleWithWebIdentity","Condition": {"StringEquals": {"sts.windows.net/${customerTenantId}/:aud": "api://mciem-aws-oidc-app","sts.windows.net/${customerTenantId}/:sub": "${AzureSPClientId}"}}}]}'
             Path: /
             ManagedPolicyArns:
-                - 
+                -
                     Ref: CiemOidcAssumeRolePolicy
     CiemCloudTrailAccessPolicy:
         Type: 'AWS::IAM::ManagedPolicy'
@@ -752,15 +752,15 @@ Resources:
             PolicyDocument:
                 Version: '2012-10-17'
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Action:
                             - 's3:GetObject'
                             - 's3:ListBucket'
                         Resource:
-                            - 
+                            -
                                 'Fn::Sub': 'arn:aws:s3:::${CiemCloudTrailBucketName}'
-                            - 
+                            -
                                 'Fn::Sub': 'arn:aws:s3:::${CiemCloudTrailBucketName}/*'
     CiemMemberAccountRole:
         Type: 'AWS::IAM::Role'
@@ -770,7 +770,7 @@ Resources:
                 Ref: CiemRoleName
             AssumeRolePolicyDocument:
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Principal:
                             AWS:
@@ -779,7 +779,7 @@ Resources:
             Path: /
             ManagedPolicyArns:
                 - 'arn:aws:iam::aws:policy/SecurityAudit'
-                - 
+                -
                     Ref: CiemCloudTrailAccessPolicy
     CiemAccountRole:
         Type: 'AWS::IAM::Role'
@@ -790,7 +790,7 @@ Resources:
                 Ref: CiemRoleName
             AssumeRolePolicyDocument:
                 Statement:
-                    - 
+                    -
                         Effect: Allow
                         Principal:
                             AWS:
@@ -799,7 +799,7 @@ Resources:
             Path: /
             ManagedPolicyArns:
                 - 'arn:aws:iam::aws:policy/SecurityAudit'
-                - 
+                -
                     Ref: CiemCloudTrailAccessPolicy
 Outputs:
     CrossCloudSecurityCenterReadOnlyARN:
