@@ -241,3 +241,20 @@ SynapseDockerRegistryDevDnsForward:
     SourceHostedZoneId: Z28CDXGXBHW4TT
     # the value of the CNAME record
     TargetHostName: !CopyValue ['registry-dev-DockerFargateStack-LoadBalancerDNS', !Ref SynapseDevAccount]
+
+# forward docker.synapse.org to prod' Synapse Docker registry ALB
+SynapseDockerRegistryProdDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-synapse-docker-registry-prod-cname'
+  StackDescription: Setup a CNAME for synapse-docker-registry prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "docker.synapse.org"
+    # ID of the synapse.org zone (in Synapse prod account)
+    SourceHostedZoneId: ZHAU99KV4A1WU
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['registry-prod-DockerFargateStack-LoadBalancerDNS', !Ref SynapseProdAccount]
