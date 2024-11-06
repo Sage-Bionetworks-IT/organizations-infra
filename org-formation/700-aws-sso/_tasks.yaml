@@ -650,6 +650,11 @@ SsoLlmDeveloper:
                   "Effect": "Allow",
                   "Action": "s3:*",
                   "Resource": "arn:aws:s3:::cf-template*"
+              },
+              {
+                  "Effect": "Allow",
+                  "Action": [ "iam:CreateRole", "iam:UpdateRole" ],
+                  "Resource": "*"
               }
           ]
       }
