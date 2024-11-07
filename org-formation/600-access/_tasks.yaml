@@ -389,10 +389,10 @@ SynapseAthenaUserAccessPolicy:
       }
     PolicyName: SynapseAthenaUserAccessPolicy
 
-SynapseLlmBedrockAgentPolicy:
+SynapseLlmDeveloperPolicy:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
-  StackName: synapsellm-bedrock-agent-policy
+  StackName: synapsellm-developer-policy
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account:
@@ -415,4 +415,4 @@ SynapseLlmBedrockAgentPolicy:
           }
         ]
       }
-    PolicyName: SynapseLlmBedrockAgentPolicyName
+    PolicyName: SynapseLlmDeveloperPolicy
