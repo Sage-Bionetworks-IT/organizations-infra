@@ -222,3 +222,39 @@ GenieBPCProdAppDnsForward:
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-app-zone-HostedZoneId']
     # the value of the CNAME record
     TargetHostName: !CopyValue ['genie-bpc-shiny-prod-DockerFargateStack-LoadBalancerDNS', !Ref GenieProdAccount]
+
+
+# forward docker-staging.dev.sagebase.org to dev Synapse Docker registry ALB
+# https://github.com/Sage-Bionetworks/synapse-docker-registry
+SynapseDockerRegistryDevDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-synapse-docker-registry-dev-cname'
+  StackDescription: Setup a CNAME for synapse-docker-registry dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseDevAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "docker-staging.dev.sagebase.org"
+    # ID of the dev.sagebase.org zone (in Synapse dev account)
+    SourceHostedZoneId: Z28CDXGXBHW4TT
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['registry-dev-DockerFargateStack-LoadBalancerDNS', !Ref SynapseDevAccount]
+
+# forward docker.synapse.org to prod' Synapse Docker registry ALB
+SynapseDockerRegistryProdDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-synapse-docker-registry-prod-cname'
+  StackDescription: Setup a CNAME for synapse-docker-registry prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "docker.synapse.org"
+    # ID of the synapse.org zone (in Synapse prod account)
+    SourceHostedZoneId: ZHAU99KV4A1WU
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['registry-prod-DockerFargateStack-LoadBalancerDNS', !Ref SynapseProdAccount]

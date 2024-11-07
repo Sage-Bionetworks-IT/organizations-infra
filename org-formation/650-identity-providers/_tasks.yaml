@@ -5,6 +5,22 @@ Parameters:
     Type: String
     Default: 'github-oidc'
 
+##################################################################################
+# Resources needed to integrate AWS environments with Microsoft Defender for Cloud
+##################################################################################
+
+MicrosoftDefenderCloudRoles:
+  Type: update-stacks
+  Template: microsoft-defender-cloud-roles.yaml
+  StackName: !Sub ${resourcePrefix}-microsoft-defender-cloud-roles
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+    Region: us-east-1
+
+#####################################################
+# Resources to allow Github CI to access AWS accounts
+#####################################################
+
 GithubOidcSageBionetworks:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/oidc-provider.yaml
@@ -296,6 +312,12 @@ GithubOidcLambdaTemplateDeploySage:
                           ]
           },
           {
+              "Sid": "CfnValidate",
+              "Effect": "Allow",
+              "Action": [ "cloudformation:ValidateTemplate" ],
+              "Resource": [ "*" ]
+          },
+          {
               "Sid": "SamValidate",
               "Effect": "Allow",
               "Action": [ "iam:ListPolicies" ],
@@ -357,6 +379,12 @@ GithubOidcLambdaTemplateDeploySageIT:
               "Resource": [ "arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*",
                             "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-x29ftznj6pqw/*"
                           ]
+          },
+          {
+              "Sid": "CfnValidate",
+              "Effect": "Allow",
+              "Action": [ "cloudformation:ValidateTemplate" ],
+              "Resource": [ "*" ]
           },
           {
               "Sid": "SamValidate",
@@ -846,6 +874,7 @@ SynapseMonorepoBucketAccessPolicy:
               "Resource": [
                             "arn:aws:s3:::prod.accounts.sagebionetworks.org",
                             "arn:aws:s3:::staging.accounts.sagebionetworks.org",
+                            "arn:aws:s3:::dev.accounts.sagebionetworks.org",
                             "arn:aws:s3:::prod.accounts.synapse.org",
                             "arn:aws:s3:::staging.accounts.synapse.org",
                             "arn:aws:s3:::prod-adknowledgeportalsynapse-org-websitebucket-1wcys549ufmd",
@@ -898,6 +927,7 @@ SynapseMonorepoFileAccessPolicy:
               "Resource": [
                             "arn:aws:s3:::prod.accounts.sagebionetworks.org/*",
                             "arn:aws:s3:::staging.accounts.sagebionetworks.org/*",
+                            "arn:aws:s3:::dev.accounts.sagebionetworks.org/*",
                             "arn:aws:s3:::prod.accounts.synapse.org/*",
                             "arn:aws:s3:::staging.accounts.synapse.org/*",
                             "arn:aws:s3:::prod-adknowledgeportalsynapse-org-websitebucket-1wcys549ufmd/*",
@@ -950,6 +980,7 @@ SynapseMonorepoCloudfrontAccessPolicy:
               "Resource": [
                             "arn:aws:cloudfront::797640923903:distribution/E1I74M7N2K06XT",
                             "arn:aws:cloudfront::797640923903:distribution/E28YRVVHKPHIB1",
+                            "arn:aws:cloudfront::797640923903:distribution/E39Y0MUIDX97EG",
                             "arn:aws:cloudfront::797640923903:distribution/E1VKBSA43441LD",
                             "arn:aws:cloudfront::797640923903:distribution/E3T3BUO9I33NZX",
                             "arn:aws:cloudfront::797640923903:distribution/E27UC0961FPD8C",

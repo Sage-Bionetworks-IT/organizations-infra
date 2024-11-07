@@ -76,12 +76,12 @@ Resources:
             Action:
             - ssm:StartAutomationExecution
             Resource:
-            - arn:aws:ssm:*:*:automation-definition/Automation-RunPatchBaseline:*
+            - arn:aws:ssm:*:*:automation-definition/*
           - Effect: Allow
             Action:
             - ssm:SendCommand
             Resource:
-            - arn:aws:ssm:*::document/AWS-RunPatchBaseline
+            - arn:aws:ssm:*::document/*
             - arn:aws:ec2:*:*:instance/*
             - arn:aws:ssm:*:*:managed-instance/*
       - PolicyName: describeEC2AndSSMPermissions
