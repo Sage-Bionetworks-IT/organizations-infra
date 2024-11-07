@@ -837,7 +837,7 @@ GithubOidcNbConvertDeploy:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-nbconvert-deploy
     MaxSessionDuration: 7200
     ManagedPolicyArns:
-      - "arn:aws:iam::449435941126:policy/cdk-assume-role-policy"
+      - "arn:aws:iam::${AWS::AccountId}:policy/cdk-assume-role-policy"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
