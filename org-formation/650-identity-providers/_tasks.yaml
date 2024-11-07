@@ -878,6 +878,7 @@ SynapseMonorepoBucketAccessPolicy:
               "Resource": [
                             "arn:aws:s3:::prod.accounts.sagebionetworks.org",
                             "arn:aws:s3:::staging.accounts.sagebionetworks.org",
+                            "arn:aws:s3:::dev.accounts.sagebionetworks.org",
                             "arn:aws:s3:::prod.accounts.synapse.org",
                             "arn:aws:s3:::staging.accounts.synapse.org",
                             "arn:aws:s3:::prod-adknowledgeportalsynapse-org-websitebucket-1wcys549ufmd",
@@ -930,6 +931,7 @@ SynapseMonorepoFileAccessPolicy:
               "Resource": [
                             "arn:aws:s3:::prod.accounts.sagebionetworks.org/*",
                             "arn:aws:s3:::staging.accounts.sagebionetworks.org/*",
+                            "arn:aws:s3:::dev.accounts.sagebionetworks.org/*",
                             "arn:aws:s3:::prod.accounts.synapse.org/*",
                             "arn:aws:s3:::staging.accounts.synapse.org/*",
                             "arn:aws:s3:::prod-adknowledgeportalsynapse-org-websitebucket-1wcys549ufmd/*",
@@ -982,6 +984,7 @@ SynapseMonorepoCloudfrontAccessPolicy:
               "Resource": [
                             "arn:aws:cloudfront::797640923903:distribution/E1I74M7N2K06XT",
                             "arn:aws:cloudfront::797640923903:distribution/E28YRVVHKPHIB1",
+                            "arn:aws:cloudfront::797640923903:distribution/E39Y0MUIDX97EG",
                             "arn:aws:cloudfront::797640923903:distribution/E1VKBSA43441LD",
                             "arn:aws:cloudfront::797640923903:distribution/E3T3BUO9I33NZX",
                             "arn:aws:cloudfront::797640923903:distribution/E27UC0961FPD8C",
