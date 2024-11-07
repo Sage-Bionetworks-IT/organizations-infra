@@ -388,3 +388,31 @@ SynapseAthenaUserAccessPolicy:
         ]
       }
     PolicyName: SynapseAthenaUserAccessPolicy
+
+SynapseLlmBedrockAgentPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: synapsellm-bedrock-agent-policy
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account:
+      - SynapseLlmProdAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::cf-template*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "*"
+          }
+        ]
+      }
+    PolicyName: SynapseLlmBedrockAgentPolicyName
