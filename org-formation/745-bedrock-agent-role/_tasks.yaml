@@ -1,0 +1,14 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'BedrockAgentRole'
+
+BedrockAgentRole:
+  Type: update-stacks
+  Template: ./bedrock-agent-role.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-BedrockAgentRole'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseLlmProdAccount
