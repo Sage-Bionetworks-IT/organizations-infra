@@ -83,7 +83,7 @@ StackArmorAgentInstallation:
       Account: '*'
       IncludeMasterAccount: true
   Parameters:
-    EventBridgeRuleSchedule: "cron(0 * * * ? *)"
+    EventBridgeRuleSchedule: "cron(0 2 * * ? *)"
     TargetRegionIds: "us-east-1"
     TargetTagName: execute-script
     TargetTagValue: install-stack-armor-agent

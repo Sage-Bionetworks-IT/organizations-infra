@@ -842,7 +842,7 @@ GithubOidcNbConvertDeploy:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "nbconvert-webapp"
-        branches: ["master"]
+        branches: ["master", "develop"]
   DefaultOrganizationBinding:
     Account:
       - !Ref SynapseDevAccount
