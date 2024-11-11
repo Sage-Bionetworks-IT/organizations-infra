@@ -416,3 +416,11 @@ SynapseLlmDeveloperPolicy:
         ]
       }
     PolicyName: SynapseLlmDeveloperPolicy
+
+BedrockAgentRole:
+  Type: update-stacks
+  Template: ./bedrock-agent-role.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-BedrockAgentRole'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseLlmProdAccount
