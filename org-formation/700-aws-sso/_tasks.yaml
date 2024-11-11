@@ -641,6 +641,18 @@ SsoLlmDeveloper:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
       - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
+#   https://stackoverflow.com/questions/58125181/cloud-formation-cant-upload-template-file
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Effect": "Allow",
+                  "Action": "s3:*",
+                  "Resource": "arn:aws:s3:::cf-template*"
+              }
+          ]
+      }
     sessionDuration: 'PT12H'
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
