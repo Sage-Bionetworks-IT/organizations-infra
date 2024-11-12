@@ -112,10 +112,10 @@ GithubOidcSageBionetworksSchematicInfra:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks"
+    GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
-      - name: "schematic-infra"
-        branches: ["*"]
+      - name: "schematic-infra-v2"
+        branches: ["dev", "stage", "prod"]
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
