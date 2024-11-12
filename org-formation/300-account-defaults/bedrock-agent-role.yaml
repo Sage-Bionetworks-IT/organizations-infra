@@ -2,6 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Enables executing a Bedrock model
 
 Resources:
+# https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html
   bedrockAgentRole:
     Type: AWS::IAM::Role
     Properties:
