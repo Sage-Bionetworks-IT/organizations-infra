@@ -112,6 +112,28 @@ GithubOidcSageBionetworksSchematicInfra:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "schematic-infra"
+        branches: ["*"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DnTDevAccount
+      - !Ref DCAProdAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksSchematicInfrav2:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
       - name: "schematic-infra-v2"
