@@ -396,7 +396,7 @@ SynapseLlmDeveloperPolicy:
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account:
-      - SynapseLlmProdAccount
+      - !Ref SynapseLlmProdAccount
     Region: !Ref primaryRegion
   Parameters:
     PolicyDocument: >-
