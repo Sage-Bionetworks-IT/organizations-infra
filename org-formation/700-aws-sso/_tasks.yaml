@@ -624,7 +624,7 @@ SsoLlmDeveloper:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
-      - Name: !Ref CostExplorerPolicyName
+      - Name: SynapseLlmDeveloperPolicy
   StackName: !Sub '${resourcePrefix}-${appName}-llmdeveloper'
   StackDescription: 'Permission set used by an Large Language Model developer'
   TerminationProtection: false
@@ -641,7 +641,6 @@ SsoLlmDeveloper:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
       - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
-      - !Sub 'arn:aws:iam::${AWS::AccountId}:policy/SynapseLlmDeveloperPolicy'
     sessionDuration: 'PT12H'
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
