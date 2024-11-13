@@ -33,4 +33,4 @@ Outputs:
     Description: The ARN of the Bedrock Agent Role
     Value: !GetAtt bedrockAgentRole.Arn
     Export:
-      Name: BedrockAgentRoleArn
+      Name: !Sub '${AWS::StackName}-BedrockAgentRoleArn'
