@@ -389,6 +389,7 @@ SynapseAthenaUserAccessPolicy:
       }
     PolicyName: SynapseAthenaUserAccessPolicy
 
+#   https://stackoverflow.com/questions/58125181/cloud-formation-cant-upload-template-file
 SynapseLlmDeveloperPolicy:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml

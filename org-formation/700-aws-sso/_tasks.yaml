@@ -641,7 +641,6 @@ SsoLlmDeveloper:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
       - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
-#   https://stackoverflow.com/questions/58125181/cloud-formation-cant-upload-template-file
       - !Sub 'arn:aws:iam::${AWS::AccountId}:policy/SynapseLlmDeveloperPolicy'
     sessionDuration: 'PT12H'
 
