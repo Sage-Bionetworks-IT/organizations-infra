@@ -122,6 +122,28 @@ GithubOidcSageBionetworksSchematicInfra:
       - !Ref DCAProdAccount
     Region: us-east-1
 
+GithubOidcSageBionetworksItSchematicInfraV2:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-schematic-infra-v2
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-schematic-infra-v2
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "schematic-infra-v2"
+        branches: ["dev", "stage", "prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DnTDevAccount
+      - !Ref DCAProdAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksSynapseDockerRegistry:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
@@ -846,7 +868,7 @@ GithubOidcNbConvertDeploy:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "nbconvert-webapp"
-        branches: ["master"]
+        branches: ["master", "develop"]
   DefaultOrganizationBinding:
     Account:
       - !Ref SynapseDevAccount
@@ -878,6 +900,7 @@ SynapseMonorepoBucketAccessPolicy:
               "Resource": [
                             "arn:aws:s3:::prod.accounts.sagebionetworks.org",
                             "arn:aws:s3:::staging.accounts.sagebionetworks.org",
+                            "arn:aws:s3:::dev.accounts.sagebionetworks.org",
                             "arn:aws:s3:::prod.accounts.synapse.org",
                             "arn:aws:s3:::staging.accounts.synapse.org",
                             "arn:aws:s3:::prod-adknowledgeportalsynapse-org-websitebucket-1wcys549ufmd",
@@ -930,6 +953,7 @@ SynapseMonorepoFileAccessPolicy:
               "Resource": [
                             "arn:aws:s3:::prod.accounts.sagebionetworks.org/*",
                             "arn:aws:s3:::staging.accounts.sagebionetworks.org/*",
+                            "arn:aws:s3:::dev.accounts.sagebionetworks.org/*",
                             "arn:aws:s3:::prod.accounts.synapse.org/*",
                             "arn:aws:s3:::staging.accounts.synapse.org/*",
                             "arn:aws:s3:::prod-adknowledgeportalsynapse-org-websitebucket-1wcys549ufmd/*",
@@ -982,6 +1006,7 @@ SynapseMonorepoCloudfrontAccessPolicy:
               "Resource": [
                             "arn:aws:cloudfront::797640923903:distribution/E1I74M7N2K06XT",
                             "arn:aws:cloudfront::797640923903:distribution/E28YRVVHKPHIB1",
+                            "arn:aws:cloudfront::797640923903:distribution/E39Y0MUIDX97EG",
                             "arn:aws:cloudfront::797640923903:distribution/E1VKBSA43441LD",
                             "arn:aws:cloudfront::797640923903:distribution/E3T3BUO9I33NZX",
                             "arn:aws:cloudfront::797640923903:distribution/E27UC0961FPD8C",

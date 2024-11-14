@@ -624,7 +624,7 @@ SsoLlmDeveloper:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
-      - Name: !Ref CostExplorerPolicyName
+      - Name: SynapseLlmDeveloperPolicy
   StackName: !Sub '${resourcePrefix}-${appName}-llmdeveloper'
   StackDescription: 'Permission set used by an Large Language Model developer'
   TerminationProtection: false
