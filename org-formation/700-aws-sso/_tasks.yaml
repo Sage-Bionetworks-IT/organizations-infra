@@ -345,7 +345,7 @@ Parameters:
 
   MkPreYnAdminGroup:             #JC aws-MkPreYn-admins
     Type: String
-    Default: 'TBD'
+    Default: 'd4284428-6061-70b8-191c-37e390b2a596'
 
 #----------------------------------------------------------------------------------------------
 
