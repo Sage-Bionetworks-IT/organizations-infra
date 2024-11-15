@@ -343,6 +343,10 @@ Parameters:
     Type: String
     Default: '143894c8-1031-70c4-b98a-9d2a9aec59bd'
 
+  MkPreYnAdminGroup:             #JC aws-MkPreYn-admins
+    Type: String
+    Default: 'd4284428-6061-70b8-191c-37e390b2a596'
+
 #----------------------------------------------------------------------------------------------
 
 SsoAdministrator:
@@ -1702,6 +1706,23 @@ SsoBWmErzkAdmin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref BWmErzkAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoMkPreYnAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-MkPreYn-admin'
+  StackDescription: 'SSO: admin role used by MkPreYn admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref  MkPreYnAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref MkPreYnAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoRecoverDevAdmin:
