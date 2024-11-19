@@ -153,10 +153,10 @@ SchematicDevAppDnsForward:
 
 # forward schematic-staging.api.sagebionetworks.org to schematic-infra ALB
 # https://github.com/Sage-Bionetworks-IT/schematic-infra-v2
-SchematicStagingAppDnsForward:
+SchematicStageAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-schematic-staging-cname'
+  StackName: !Sub '${resourcePrefix}-schematic-stage-cname'
   StackDescription: Setup a CNAME for schematic-infra stage ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
