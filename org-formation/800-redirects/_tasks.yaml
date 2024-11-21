@@ -170,7 +170,7 @@ SchematicStagingAppDnsForward:
     TargetHostName: !CopyValue ['schematic-stage-load-balancer-dns', !Ref DCAProdAccount]
 
 # forward schematic.api.sagebionetworks.org to schematic-infra ALB
-# https://github.com/Sage-Bionetworks/schematic-infra
+# https://github.com/Sage-Bionetworks/schematic-infra-v2
 SchematicProdAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
