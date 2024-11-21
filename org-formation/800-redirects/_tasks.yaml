@@ -185,7 +185,7 @@ SchematicProdAppDnsForward:
     # ID of the api.sagebionetworks.org zone (in sageit account)
     SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
     # the value of the CNAME record
-    TargetHostName: !CopyValue ['schematic-prod-DockerFargateStack-LoadBalancerDNS', !Ref DCAProdAccount]
+    TargetHostName: !CopyValue ['schematic-prod-load-balancer-dns', !Ref DCAProdAccount]
 
 # forward https://genie-bpc.app.sagebionetworks.org to genie-bpc-infra ALB
 # https://github.com/Sage-Bionetworks/genie-bpc-infra
