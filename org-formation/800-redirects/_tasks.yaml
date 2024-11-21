@@ -260,12 +260,13 @@ SynapseDockerRegistryProdDnsForward:
     TargetHostName: !CopyValue ['registry-prod-DockerFargateStack-LoadBalancerDNS', !Ref SynapseProdAccount]
 
 
-# forward dev.sagebase.org to dev Signoz ALB in org-sagebase-dnt-dev
-SignozDevAppDnsForward:
+# forward dev.sagedpe.org to dev EKS stack ALB in org-sagebase-dnt-dev
+# apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
+SageDpeDevAppDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-signoz-dev-cname'
-  StackDescription: Setup a CNAME for signoz dev ALB
+  StackName: !Sub '${resourcePrefix}-sagedpe-dev-cname'
+  StackDescription: Setup a CNAME for sagepde.org dev ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
