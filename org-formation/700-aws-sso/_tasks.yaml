@@ -643,8 +643,18 @@ SsoLlmDeveloper:
     principalId: !Ref llmDeveloperGroup
     permissionSetName: 'LlmDeveloper'
     managedPolicies:
-      - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
-      - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
+      - 'arn:aws:iam::aws:policy/PowerUserAccess'
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Effect": "Deny",
+                  "Action": "sts:AssumeRole",
+                  "Resource": "*"
+              }
+          ]
+      }
     sessionDuration: 'PT12H'
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
