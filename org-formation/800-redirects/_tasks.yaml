@@ -296,3 +296,58 @@ SageDpeProdAppDnsForward:
     SourceHostedZoneId: "Z04325181I2YIP983P1AD"
     # the value of the CNAME record
     TargetHostName: "aa14266f054574a309d8ec5a2fb2c77c-1977172949.us-east-1.elb.amazonaws.com"
+
+
+# forward agora.dev.adknowledgeportal.org to agora-infra-v3 ALB
+# https://github.com/Sage-Bionetworks/agora-infra-v3
+AgoraDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-agora-dev-cname'
+  StackDescription: Setup a CNAME for agora-infra-v3 prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "agora.dev.adknowledgeportal.org"
+    # ID of the adknowledgeportal.org zone (in sageit account)
+    SourceHostedZoneId: "Z2DTJC6JTFRHBN"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['agora-dev-load-balancer-dns', !Ref AgoraDevAccount]
+
+# forward agora.stage.adknowledgeportal.org to agora-infra-v3 ALB
+# https://github.com/Sage-Bionetworks/agora-infra-v3
+AgoraStageAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-agora-stage-cname'
+  StackDescription: Setup a CNAME for agora-infra-v3 prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "agora.stage.adknowledgeportal.org"
+    # ID of the adknowledgeportal.org zone (in sageit account)
+    SourceHostedZoneId: "Z2DTJC6JTFRHBN"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['agora-stage-load-balancer-dns', !Ref AgoraProdAccount]
+
+# forward agora.prod.adknowledgeportal.org to agora-infra-v3 ALB
+# https://github.com/Sage-Bionetworks/agora-infra-v3
+AgoraProdAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-agora-prod-cname'
+  StackDescription: Setup a CNAME for agora-infra-v3 prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "agora.prod.adknowledgeportal.org"
+    # ID of the adknowledgeportal.org zone (in sageit account)
+    SourceHostedZoneId: "Z2DTJC6JTFRHBN"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['agora-prod-load-balancer-dns', !Ref AgoraProdAccount]
