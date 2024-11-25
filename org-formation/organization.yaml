@@ -140,6 +140,7 @@ Organization:
       Accounts:
         - !Ref BuA2aDwAccount
         - !Ref BWmErzkAccount
+        - !Ref MkPreYnAccount
 
   #------- Accounts -----------
   MasterAccount:
@@ -673,3 +674,15 @@ Organization:
         AccountOwner: susheel.varma@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws.BWmErzk@sagebase.org
+
+  MkPreYnAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-MkPreYn
+      RootEmail: aws.MkPreYn@sagebase.org
+      Alias: org-sagebase-MkPreYn
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: mieko.hashimoto@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws.MkPreYn@sagebase.org
