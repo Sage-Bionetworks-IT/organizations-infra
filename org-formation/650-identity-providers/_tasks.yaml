@@ -881,18 +881,9 @@ GithubOidcNbConvertDeploy:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-nbconvert-deploy
     MaxSessionDuration: 7200
-    PolicyDocument: !Sub |
-      {
-          "Version": "2012-10-17",
-          "Statement": [
-              {
-                  "Sid": "AssumeRoleStatement",
-                  "Effect": "Allow",
-                  "Action": "sts:AssumeRole",
-                  "Resource": "arn:aws:iam::${AWS::AccountId}:role/cdk-*-role-*-us-east-1"
-              }
-          ]
-      }
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
