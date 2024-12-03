@@ -260,6 +260,24 @@ SageDpeDevAppDnsForward:
     # the value of the CNAME record
     TargetHostName: "ac5c848ac4ff54e2bb11dd87685375b0-1875694220.us-east-1.elb.amazonaws.com"
 
+# forward signoz-dev.sagedpe.org to dev EKS stack ALB in org-sagebase-dnt-dev
+# apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
+SageDpeSigNozDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-sagedpe-signoz-dev-cname'
+  StackDescription: Setup a CNAME for sagepde.org dev signoz ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "signoz-dev.sagedpe.org"
+    # ID of the sagedpe.org zone (in sageit account)
+    SourceHostedZoneId: "Z04325181I2YIP983P1AD"
+    # the value of the CNAME record
+    TargetHostName: "ac5c848ac4ff54e2bb11dd87685375b0-1875694220.us-east-1.elb.amazonaws.com"
+
 # forward staging.sagedpe.org to staging EKS stack ALB in org-sagebase-dpe-prod
 # apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
 SageDpeStagingAppDnsForward:
@@ -278,6 +296,23 @@ SageDpeStagingAppDnsForward:
     # the value of the CNAME record
     TargetHostName: "ae44aad490bd44942875e55a14963d7a-688764136.us-east-1.elb.amazonaws.com"
 
+# forward signoz-staging.sagedpe.org to staging EKS stack ALB in org-sagebase-dpe-prod
+# apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
+SageDpeSigNozStagingAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-sagedpe-signoz-staging-cname'
+  StackDescription: Setup a CNAME for sagepde.org staging signoz ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "signoz-staging.sagedpe.org"
+    # ID of the sagedpe.org zone (in sageit account)
+    SourceHostedZoneId: "Z04325181I2YIP983P1AD"
+    # the value of the CNAME record
+    TargetHostName: "ae44aad490bd44942875e55a14963d7a-688764136.us-east-1.elb.amazonaws.com"
 
 # forward prod.sagedpe.org to prod EKS stack ALB in org-sagebase-dpe-prod
 # apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
@@ -292,6 +327,24 @@ SageDpeProdAppDnsForward:
   Parameters:
     # the name of the CNAME record
     SourceHostName: "prod.sagedpe.org"
+    # ID of the sagedpe.org zone (in sageit account)
+    SourceHostedZoneId: "Z04325181I2YIP983P1AD"
+    # the value of the CNAME record
+    TargetHostName: "aa14266f054574a309d8ec5a2fb2c77c-1977172949.us-east-1.elb.amazonaws.com"
+
+# forward signoz.sagedpe.org to prod EKS stack ALB in org-sagebase-dpe-prod
+# apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
+SageDpeSigNozProdAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-sagedpe-signoz-prod-cname'
+  StackDescription: Setup a CNAME for sagepde.org prod signoz ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "signoz.sagedpe.org"
     # ID of the sagedpe.org zone (in sageit account)
     SourceHostedZoneId: "Z04325181I2YIP983P1AD"
     # the value of the CNAME record
