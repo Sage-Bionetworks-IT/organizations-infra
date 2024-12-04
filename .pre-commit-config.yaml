@@ -1,3 +1,5 @@
+ci:
+  autoupdate_schedule: monthly
 repos:
   - repo: https://github.com/awslabs/git-secrets
     rev: b9e96b3212fa06aea65964ff0d5cda84ce935f38
