@@ -37,34 +37,37 @@ As a pre-deployment step we syntatically validate our sceptre and
 cloudformation yaml files with [pre-commit](https://pre-commit.com).
 
 Please install pre-commit, once installed the file validations will
-automatically run on every commit.  Alternatively you can manually
+automatically run on every commit. Alternatively you can manually
 execute the validations by running `pre-commit run --all-files`.
 Please install pre-commit, once installed the file validations will
 automatically run on every commit.
 
 ### Functional Testing
 The process to test the functionality of an AMI and it's integration with our
-Service Catalog products is to first manually create a new AMI, then manually
-upload a new product template to S3, and finally create a test product in
-Service Catalog through a pull request to `organizations-infra`:
+Service Catalog products is to first create a test AMI, upload a modified
+product template to S3, and create a new Service Catalog product in the
+scipool dev account to verify manually from https://sc-dev.sageit.org/
 
-1. Make local changes to the packer repo to update or modify the AMI.
-1. Run packer manually with admin credentials for the `itsandbox` account
-  to create a test AMI.
-1. Create an EC2 instance in the `itsandbox` account from the test AMI for any
-  initial system validation.
-1. Make local changes to `service-catalog-library` to update the desired template
-  to reference the test AMI.
-1. Manually upload the test template to S3 in the `itsandbox` account.
+The deploy pipelines for both our packer repos and our service catalog library
+will create artifacts for branches that begin with `test/` in the sandbox
+account, allowing anyone with write access to the packer repos to create test
+AMIs, and anyone with write access to service-catalog-library to upload test
+templates for service catalog to S3.
+
+1. Commit changes to the packer repo to update or modify the AMI on a branch
+   that starts with `test/`, and push directly to the origin repo.
+1. Manually create an EC2 instance in the `itsandbox` account from the test AMI
+   for any initial system validation, then terminate it.
+1. Commit changes to `service-catalog-library` on a branch that starts with
+   `test/` to update the desired template, and push directly to the origin repo.
 1. Create a pull request for `organizations-infra` to add a new Service Catalog
-  product to `scipool-dev` with 'test' in the name.
+   product to `scipool-dev` with 'test' in the name for the test template.
 1. Provision the test product from http://sc-dev.sageit.org to validate AMI
-  integration with the product template
+   integration with the product template
 1. Create a pull request for the packer repo to modify the AMI.
 1. Create a pull request for `service-catalog-library` to reference the new AMI.
 1. Create a pull request for `organizations-infra` to remove the test product and
-  update the target product with the new template version.
-1. Delete the manually-created resources from `itsandbox`.
+   update the target product with the new template version.
 
 ## Issues
 * https://sagebionetworks.jira.com/projects/IT
