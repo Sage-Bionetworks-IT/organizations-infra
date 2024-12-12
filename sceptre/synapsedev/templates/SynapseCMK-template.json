@@ -249,6 +249,11 @@
                                 },
                                 {
                                     "Effect": "Allow",
+                                    "Action": [ "aoss:*" ],
+                                    "Resource": "*"
+                                },
+                                {
+                                    "Effect": "Allow",
                                     "Action": [
                                         "aws-marketplace:Subscribe",
                                         "aws-marketplace:ViewSubscriptions"
