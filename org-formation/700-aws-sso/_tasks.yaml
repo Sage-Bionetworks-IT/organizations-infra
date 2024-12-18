@@ -313,6 +313,10 @@ Parameters:
     Type: String
     Default: '2448e4e8-50b1-70e5-def0-07e0f4fcd60e'
 
+  OpenchallengesDevDeveloperGroup:     # JC aws-openchallenges-dev-developers
+    Type: String
+    Default: '44183438-a051-7070-f706-284ffd41907b'
+
   OpenchallengesDevAdminGroup:     # JC aws-openchallenges-dev-admins
     Type: String
     Default: 'e4388458-2011-7096-3f98-3a6eeb10e458'
@@ -643,8 +647,18 @@ SsoLlmDeveloper:
     principalId: !Ref llmDeveloperGroup
     permissionSetName: 'LlmDeveloper'
     managedPolicies:
-      - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
-      - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
+      - 'arn:aws:iam::aws:policy/PowerUserAccess'
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Effect": "Deny",
+                  "Action": "sts:AssumeRole",
+                  "Resource": "*"
+              }
+          ]
+      }
     sessionDuration: 'PT12H'
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
@@ -2152,6 +2166,23 @@ SsoItsandboxDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref itsandboxDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoOpenchallengesDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-dev-developer'
+  StackDescription: 'SSO: Developer role used by openchallenges developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref OpenChallengesDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref OpenchallengesDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
 SsoOpenchallengesDevAdmin:
