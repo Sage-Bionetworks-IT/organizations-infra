@@ -364,8 +364,10 @@ Resources:
           findings:
             GeneratorId:
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.3'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/5.3' # same as v/1.2.0/rule/4.3
               - 'aws-foundational-security-best-practices/v/1.0.0/EC2.2'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/1.6' # same as v/1.2.0/rule/1.14
               - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
               - 'cis-aws-foundations-benchmark/v/1.4.0/3.7'
