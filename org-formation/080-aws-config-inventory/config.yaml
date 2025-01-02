@@ -67,6 +67,16 @@ Resources:
             Condition:
               StringEquals:
                 's3:x-amz-acl': 'bucket-owner-full-control'
+          - Sid: AWSConfigBucketDenyInsecure
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:*'
+            Resource:
+              - !Sub '${ConfigAuditBucket.Arn}'
+              - !Sub '${ConfigAuditBucket.Arn}/*'
+            Condition:
+              Bool:
+                'aws:SecureTransport': 'false'
 
   ConfigurationRecorder:
     Type: 'AWS::Config::ConfigurationRecorder'
