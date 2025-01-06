@@ -175,3 +175,20 @@
             Action:
               - organizations:LeaveOrganization
             Resource: "*"
+
+  RequireSecureS3:
+    Type: OC::ORG::ServiceControlPolicy
+    Properties:
+      PolicyName: RequireSecureS3
+      Description: Restrict users from accessing S3 over HTTP
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyInsecureS3
+            Effect: Deny
+            Action:
+              - 's3:*'
+            Resource: '*'
+            Condition:
+              Bool:
+                'aws:SecureTransport': false
