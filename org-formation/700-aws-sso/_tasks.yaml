@@ -2235,7 +2235,7 @@ SsoCodeOceanProdAdmin:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref OpenChallengesProdAccount
+      Account: !Ref CodeOceanProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref CodeOceanProdAdminGroup
