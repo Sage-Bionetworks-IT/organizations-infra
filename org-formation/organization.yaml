@@ -53,6 +53,7 @@ Organization:
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
         - !Ref OpenChallengesProdAccount
+        - !Ref CodeOceanProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -649,6 +650,19 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-synapsellm-prod@sagebase.org
+
+  CodeOceanProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-codeocean-prod
+      RootEmail: aws-codeocean-prod@sagebase.org
+      Alias: org-sagebase-codeocean-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-codeocean-prod@sagebase.org
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
