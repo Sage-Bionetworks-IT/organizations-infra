@@ -31,7 +31,9 @@ Resources:
                 Action: "lambda:InvokeFunction"
                 Resource:
                   - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*"
-
+              - Effect: Allow
+                Action: "s3:*"
+                Resource: "*"
 Outputs:
   BedrockAgentRoleArn:
     Description: The ARN of the Bedrock Agent Role
