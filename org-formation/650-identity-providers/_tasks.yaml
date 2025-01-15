@@ -465,6 +465,8 @@ GithubOidcPackerImageDeploy:
         branches: ["master"]
       - name: "packer-winserver-2022"
         branches: ["master"]
+      - name: "aws-ami-monorepo"
+        branches: ["main"]
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
     Region: us-east-1
