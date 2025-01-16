@@ -1060,5 +1060,5 @@ GithubOidcSageBionetworksItCodeOceanInfra:
         branches: ["main"]
   DefaultOrganizationBinding:
     Account:
-      - !Ref CodeOceanInfraAccount
+      - !Ref CodeOceanProdAccount
     Region: us-east-1
