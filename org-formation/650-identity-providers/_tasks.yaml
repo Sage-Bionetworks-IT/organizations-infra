@@ -480,8 +480,8 @@ GithubOidcImageBuilderDeploy:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-imagebuilder-deploy
     MaxSessionDuration: 7200
     ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AmazonEC2FullAccess
-      - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      - arn:aws:iam::aws:policy/AWSImageBuilderFullAccess
+      - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
