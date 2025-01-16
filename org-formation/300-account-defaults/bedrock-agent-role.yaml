@@ -27,6 +27,10 @@ Resources:
                 Action: "bedrock:InvokeModel"
                 Resource:
                   - !Sub "arn:aws:bedrock:${AWS::Region}::foundation-model/*"
+              - Effect: Allow
+                Action: "lambda:InvokeFunction"
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*"
 
 Outputs:
   BedrockAgentRoleArn:
