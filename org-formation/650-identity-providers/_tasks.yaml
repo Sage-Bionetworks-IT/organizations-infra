@@ -1041,3 +1041,24 @@ SynapseMonorepoCloudfrontAccessPolicy:
         ]
       }
     PolicyName: SynapseMonorepoCloudfrontAccessPolicy
+
+GithubOidcSageBionetworksItCodeOceanInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-codeocean-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-codeocean-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "codeocean-infra"
+        branches: ["main"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref CodeOceanInfraAccount
+    Region: us-east-1
