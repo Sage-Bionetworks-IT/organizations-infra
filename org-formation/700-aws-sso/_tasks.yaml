@@ -245,6 +245,10 @@ Parameters:
     Type: String
     Default: '540864c8-1021-7048-7142-4563c3f12645'
 
+  dcaProdAdminGroup:      # JC aws-dca-prod-admins
+    Type: String
+    Default: 'e4d814e8-c071-70fb-2b1e-931d3aed6a46'
+
   genieProdViewerGroup:      #JC aws-genie-prod-viewers
     Type: String
     Default: '9478a4f8-3001-707d-dadb-0c9fffb968be'
@@ -1915,6 +1919,24 @@ SsoDCAProdApplicationManager:
     instanceArn: !Ref instanceArn
     principalId: !Ref dcaProdApplicationManagerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
+
+SsoDCAProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-dca-prod-admin'
+  StackDescription: 'SSO: Administrator role used by DCA admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DCAProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dcaProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoGenieProdViewer:
   Type: update-stacks
