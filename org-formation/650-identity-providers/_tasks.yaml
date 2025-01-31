@@ -889,10 +889,9 @@ GithubOidcOpenChallengesDeploy:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
       - name: "openchallenges"
-        branches: ["dev", "stage", "prod"]
+        branches: ["stage", "prod"]
   DefaultOrganizationBinding:
     Account:
-      - !Ref OpenChallengesDevAccount
       - !Ref OpenChallengesProdAccount
     Region: us-east-1
 
