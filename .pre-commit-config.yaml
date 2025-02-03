@@ -22,7 +22,7 @@ repos:
     hooks:
       - id: yamllint
   - repo: https://github.com/awslabs/cfn-python-lint
-    rev: v1.22.3
+    rev: v1.23.1
     hooks:
       - id: cfn-python-lint
         files: templates/.*\.(json|yml|yaml)$
@@ -32,7 +32,7 @@ repos:
     hooks:
       - id: remove-tabs
   - repo: https://github.com/sirosen/check-jsonschema
-    rev: 0.30.0
+    rev: 0.31.1
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
