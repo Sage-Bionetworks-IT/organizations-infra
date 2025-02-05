@@ -1102,6 +1102,7 @@ SsoImageCentralAmiLibrarian:
       - 'arn:aws:iam::aws:policy/AmazonEC2FullAccess'
       - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
       - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
+      - 'arn:aws:iam::aws:policy/AWSImageBuilderFullAccess'
     sessionDuration: 'PT12H'
     inlinePolicy: >-
       {
