@@ -464,3 +464,35 @@ Resources:
           - SecurityHubFindingsQueue
           - Arn
         Id: Target0
+
+  # This rule suppresses findings in org-sagebase-imagecentral for EBS encryption since the volumes
+  # in this account are used for creating public AMIs
+  SuppressFindingsForPublicImagesRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress findings for EBS encryption
+      EventPattern:
+        detail:
+          findings:
+            Resources:
+              Id:
+                # image-central
+                - 'AWS::::Account:867686887310'
+            GeneratorId:
+              # EBS encryption enabled by default
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.2.1'
+            Workflow:
+              Status:
+              - NEW
+              - NOTIFIED
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
