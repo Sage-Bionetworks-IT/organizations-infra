@@ -470,7 +470,7 @@ Resources:
   SuppressFindingsForPublicImagesRule:
     Type: AWS::Events::Rule
     Properties:
-      Description: SecHubSuppress findings in org-sagebase-imagecentral for EBS encryption
+      Description: SecHubSuppress findings for EBS encryption
       EventPattern:
         detail:
           findings:
