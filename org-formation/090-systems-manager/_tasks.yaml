@@ -61,6 +61,18 @@ PatchMembers:
   Parameters:
     ManagementAccountNumber: !Ref accountId
 
+PatchPolicy:
+  Type: update-stacks
+  Template: QuickSetup-PatchPolicy-Prod.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-patchpolicy'
+  StackDescription: Setup Systems manager patch policy for prod OUs
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  Parameters:
+    TargetOrgUnits: !Ref PlatformOU
+    TargetRegions: !Ref primaryRegion
+
 # This will run the Stack Armor Nessus installation script each day
 # on any EC2 in us-east-1 tagged with execute-script:install-stack-armor-agent
 # Since the script is idempotent, running every day ensures the script
