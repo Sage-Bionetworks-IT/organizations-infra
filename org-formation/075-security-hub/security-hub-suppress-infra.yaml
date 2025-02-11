@@ -354,6 +354,8 @@ Resources:
   # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
   # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
 
+  # Event format: https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cwe-event-formats.html
+
   # This rule suppresses findings for the given controls (GeneratorId) in all the accounts
   SuppressFindingsInAllAccountsRule:
     Type: AWS::Events::Rule
@@ -485,6 +487,37 @@ Resources:
               Status:
               - NEW
               - NOTIFIED
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
+
+  # Suppress all findings for insecure access to S3 buckets in the bridge accounts
+  # because consent forms are accessed via HTTP
+  SuppressFindingsForBridgeAccounts:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress findings for HTTP access in Bridge
+      EventPattern:
+        detail:
+          findings:
+            GeneratorId:
+              # Ensure S3 Bucket Policy is set to deny HTTP requests
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.2'
+            Workflow:
+              Status:
+              - NEW
+              - NOTIFIED
+        account:
+        - '420786776710' # bridge-dev
+        - '649232250620' # bridge-prod
         detail-type:
         - Security Hub Findings - Imported
         source:
