@@ -417,3 +417,26 @@ SynapseLlmDeveloperPolicy:
         ]
       }
     PolicyName: SynapseLlmDeveloperPolicy
+
+SynapseLlmLambdaExecRoleBoundary:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: synllm-lambdaexecrole-boundary
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account:
+      - !Ref SynapseLlmProdAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": ["logs:*", "bedrock:*" ],
+            "Resource": "*"
+          }
+        ]
+      }
+    PolicyName: SynLlmLambdaExecRoleBoundary
