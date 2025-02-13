@@ -413,6 +413,40 @@ SynapseLlmDeveloperPolicy:
             "Effect": "Allow",
             "Action": "iam:PassRole",
             "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreateRole",
+              "iam:PutRolePermissionsBoundary"
+            ],
+            "Resource": "arn:aws:iam::${AWS::AccountId}:role/synllmrole-*",
+            "Condition": {
+              "StringEquals": {
+                "iam:PermissionsBoundary": "${synLlmLambdaExecPermissionBoundary}"
+              }
+            }
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "iam:UpdateRole",
+              "iam:DeleteRole",
+              "iam:AttachRolePolicy",
+              "iam:DetachRolePolicy"
+            ],
+            "Resource": "arn:aws:iam::${AWS::AccountId}:role/synllmrole-*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreatePolicy",
+              "iam:DeletePolicy",
+              "iam:CreatePolicyVersion",
+              "iam:SetDefaultPolicyVersion",
+              "iam:DeletePolicyVersion"
+            ],
+            "Resource": "arn:aws:iam::${AWS::AccountId}:policy/synllmpol-*"
           }
         ]
       }
