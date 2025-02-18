@@ -944,7 +944,9 @@ SynapseMonorepoBucketAccessPolicy:
                             "arn:aws:s3:::prod.psychencode.synapse.org",
                             "arn:aws:s3:::staging.psychencode.synapse.org",
                             "arn:aws:s3:::stopadportal.synapse.org",
-                            "arn:aws:s3:::staging.stopadportal.synapse.org"
+                            "arn:aws:s3:::staging.stopadportal.synapse.org",
+                            "arn:aws:s3:::prod.standards.synapse.org",
+                            "arn:aws:s3:::staging.standards.synapse.org"
                           ]
           }
         ]
@@ -995,7 +997,9 @@ SynapseMonorepoFileAccessPolicy:
                             "arn:aws:s3:::prod.psychencode.synapse.org/*",
                             "arn:aws:s3:::staging.psychencode.synapse.org/*",
                             "arn:aws:s3:::stopadportal.synapse.org/*",
-                            "arn:aws:s3:::staging.stopadportal.synapse.org/*"
+                            "arn:aws:s3:::staging.stopadportal.synapse.org/*",
+                            "arn:aws:s3:::prod.standards.synapse.org/*",
+                            "arn:aws:s3:::staging.standards.synapse.org/*"
                           ]
           }
         ]
@@ -1054,7 +1058,9 @@ SynapseMonorepoCloudfrontAccessPolicy:
                             "arn:aws:cloudfront::797640923903:distribution/E14QCZ9L4VTPMD",
                             "arn:aws:cloudfront::797640923903:distribution/ESC37TT819LAK",
                             "arn:aws:cloudfront::797640923903:distribution/E1QXK5X5JV0YKJ",
-                            "arn:aws:cloudfront::797640923903:distribution/E7COI4Z95FFZQ"
+                            "arn:aws:cloudfront::797640923903:distribution/E7COI4Z95FFZQ",
+                            "arn:aws:cloudfront::797640923903:distribution/E1TUIXZC1K5CUN",
+                            "arn:aws:cloudfront::797640923903:distribution/EZWEDLI9NN764"
                           ]
           }
         ]
