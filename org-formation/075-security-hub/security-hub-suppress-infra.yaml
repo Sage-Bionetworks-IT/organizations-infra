@@ -377,6 +377,8 @@ Resources:
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.1'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.2'
               - 'cis-aws-foundations-benchmark/v/1.4.0/3.5'  # (IT-3619) "3.5 Ensure AWS Config is enabled in all regions"
+              # suppress cis-aws-foundations-benchmark/v/1.4.0/3.9 since we use GuardDuty to monitor flow logs:
+              - 'cis-aws-foundations-benchmark/v/1.4.0/3.9'
             Workflow:
               Status:
               - NEW
