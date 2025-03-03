@@ -65,12 +65,12 @@ PatchPolicy:
   Type: update-stacks
   Template: QuickSetup-PatchPolicy.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-patchpolicy'
-  StackDescription: Setup Systems manager patch policy for prod OUs
+  StackDescription: Setup Systems manager patch policy for the entire Org
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref accountId
   Parameters:
-    TargetOrgUnits: !Ref PlatformOU
+    TargetOrgUnits: !Ref OrganizationRoot
     TargetRegions: !Ref primaryRegion
 
 # This will run the Stack Armor Nessus installation script each day
