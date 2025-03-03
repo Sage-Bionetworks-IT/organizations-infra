@@ -428,13 +428,13 @@ GithubOidcLambdaTemplateDeploySageIT:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
       - name: "lambda-*"
-        branches: ["master"]
+        branches: ["master", "main"]
       - name: "cfn-cr-*"
-        branches: ["master"]
+        branches: ["master", "main"]
       - name: "cfn-macro-*"
-        branches: ["master"]
+        branches: ["master", "main"]
       - name: "cfn-*-macro"
-        branches: ["master"]
+        branches: ["master", "main"]
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
