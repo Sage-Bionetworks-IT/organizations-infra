@@ -428,13 +428,13 @@ GithubOidcLambdaTemplateDeploySageIT:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
       - name: "lambda-*"
-        branches: ["master"]
+        branches: ["master", "main"]
       - name: "cfn-cr-*"
-        branches: ["master"]
+        branches: ["master", "main"]
       - name: "cfn-macro-*"
-        branches: ["master"]
+        branches: ["master", "main"]
       - name: "cfn-*-macro"
-        branches: ["master"]
+        branches: ["master", "main"]
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
@@ -946,7 +946,8 @@ SynapseMonorepoBucketAccessPolicy:
                             "arn:aws:s3:::stopadportal.synapse.org",
                             "arn:aws:s3:::staging.stopadportal.synapse.org",
                             "arn:aws:s3:::prod.standards.synapse.org",
-                            "arn:aws:s3:::staging.standards.synapse.org"
+                            "arn:aws:s3:::staging.standards.synapse.org",
+                            "arn:aws:s3:::dev-signin.synapse.org"
                           ]
           }
         ]
@@ -999,7 +1000,8 @@ SynapseMonorepoFileAccessPolicy:
                             "arn:aws:s3:::stopadportal.synapse.org/*",
                             "arn:aws:s3:::staging.stopadportal.synapse.org/*",
                             "arn:aws:s3:::prod.standards.synapse.org/*",
-                            "arn:aws:s3:::staging.standards.synapse.org/*"
+                            "arn:aws:s3:::staging.standards.synapse.org/*",
+                            "arn:aws:s3:::dev-signin.synapse.org/*"
                           ]
           }
         ]
@@ -1060,7 +1062,8 @@ SynapseMonorepoCloudfrontAccessPolicy:
                             "arn:aws:cloudfront::797640923903:distribution/E1QXK5X5JV0YKJ",
                             "arn:aws:cloudfront::797640923903:distribution/E7COI4Z95FFZQ",
                             "arn:aws:cloudfront::797640923903:distribution/E1TUIXZC1K5CUN",
-                            "arn:aws:cloudfront::797640923903:distribution/EZWEDLI9NN764"
+                            "arn:aws:cloudfront::797640923903:distribution/EZWEDLI9NN764",
+                            "arn:aws:cloudfront::797640923903:distribution/E237A0ZZH0I63"
                           ]
           }
         ]
