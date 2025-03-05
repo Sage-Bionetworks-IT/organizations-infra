@@ -895,6 +895,27 @@ GithubOidcOpenChallengesDeploy:
       - !Ref OpenChallengesProdAccount
     Region: us-east-1
 
+GithubOidcSceptreAws:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sceptre-aws
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sceptre-aws
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sceptre"
+    Repositories:
+      - name: "sceptre-aws"    # ci/cd to manage resources for Sceptre integration tests
+        branches: ["master"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SceptreDevAccount
+    Region: us-east-1
+
 ############################### Managed Policies ###############################
 # Managed policies used in github OIDC providers
 # Note: Managed policies can be used as work around for the AWS cloudformation
