@@ -354,7 +354,8 @@ Resources:
   # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
   # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
 
-  # Event format: https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cwe-event-formats.html
+  # Event schema: https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cwe-event-formats.html
+  # Findings schema:https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-format.html
 
   # This rule suppresses findings for the given controls (GeneratorId) in all the accounts
   SuppressFindingsInAllAccountsRule:
@@ -522,9 +523,9 @@ Resources:
               Status:
               - NEW
               - NOTIFIED
-        account:
-        - '420786776710' # bridge-dev
-        - '649232250620' # bridge-prod
+            AwsAccountId:
+            - '420786776710' # bridge-dev
+            - '649232250620' # bridge-prod
         detail-type:
         - Security Hub Findings - Imported
         source:
