@@ -26,6 +26,7 @@ Resources:
           #   https://aws.amazon.com/blogs/mt/deploy-aws-systems-manager-quick-setup-programmatically-across-your-aws-organization/
           #   https://github.com/aws-samples/aws-management-and-governance-samples/blob/master/AWSSystemsManager/Quick-Setup-API/patch-policy-examples/patch-policy-cfn-template.yaml
           #   https://github.com/aws-samples/aws-management-and-governance-samples/blob/master/AWSSystemsManager/Quick-Setup-API/patch-policy-examples/default-patch-baselines.txt
+          PatchBaselineRegion: 'us-east-1'
           SelectedPatchBaselines: '{"ALMA_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0cb0c4966f86b059b","label":"AWS-AlmaLinuxDefaultPatchBaseline","description":"Default
             Patch Baseline for Alma Linux Provided by AWS.","disabled":false},"AMAZON_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c10e657807c7a700","label":"AWS-AmazonLinuxDefaultPatchBaseline","description":"Default
             Patch Baseline for Amazon Linux Provided by AWS.","disabled":false},"AMAZON_LINUX_2":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0be8c61cde3be63f3","label":"AWS-AmazonLinux2DefaultPatchBaseline","description":"Baseline
