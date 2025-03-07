@@ -16,7 +16,7 @@ Resources:
       Name: "PatchResourceGroup"
       Description: "Patch all SSM managed nodes"
       ConfigurationDefinitions:
-        Type: AWSQuickSetupType-PatchPolicy
+      - Type: AWSQuickSetupType-PatchPolicy
         Parameters:
           PatchPolicyName: PatchPolicy
           # Patch baselines can be found with the command:
