@@ -68,7 +68,7 @@ PatchPolicy:
   StackDescription: Setup Systems manager patch policy for the entire Org
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    Account: !Ref accountId
+    Account: !Ref MasterAccount
   Parameters:
     TargetOrgUnits: !Ref OrganizationRoot
     TargetRegions: !Ref primaryRegion
