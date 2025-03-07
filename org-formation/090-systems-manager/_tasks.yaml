@@ -71,7 +71,7 @@ PatchPolicy:
     Account: !Ref accountId
   Parameters:
     TargetOrgUnits: !Ref OrganizationRoot
-    TargetRegions: !Ref primaryRegion
+    TargetRegions: 'us-east-1'
 
 # This will run the Stack Armor Nessus installation script each day
 # on any EC2 in us-east-1 tagged with execute-script:install-stack-armor-agent
