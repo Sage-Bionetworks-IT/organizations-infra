@@ -26,8 +26,7 @@ Resources:
           #   https://aws.amazon.com/blogs/mt/deploy-aws-systems-manager-quick-setup-programmatically-across-your-aws-organization/
           #   https://github.com/aws-samples/aws-management-and-governance-samples/blob/master/AWSSystemsManager/Quick-Setup-API/patch-policy-examples/patch-policy-cfn-template.yaml
           #   https://github.com/aws-samples/aws-management-and-governance-samples/blob/master/AWSSystemsManager/Quick-Setup-API/patch-policy-examples/default-patch-baselines.txt
-          SelectedPatchBaselines: >-
-            {
+          SelectedPatchBaselines: '{
               "ALMA_LINUX": {"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0cb0c4966f86b059b","label":"AWS-AlmaLinuxDefaultPatchBaseline","description":"Default Patch Baseline for Alma Linux Provided by AWS.","disabled":false},
               "AMAZON_LINUX": {"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c10e657807c7a700","label":"AWS-AmazonLinuxDefaultPatchBaseline","description":"Default Patch Baseline for Amazon Linux Provided by AWS.","disabled":false},
               "AMAZON_LINUX_2": {"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0be8c61cde3be63f3","label":"AWS-AmazonLinux2DefaultPatchBaseline","description":"Default Patch Baseline for Amazon Linux 2 Provided by AWS.","disabled":false},
@@ -43,7 +42,7 @@ Resources:
               "SUSE": {"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-07d8884178197b66b","label":"AWS-SuseDefaultPatchBaseline","description":"Default Patch Baseline for Suse Provided by AWS.","disabled":false},
               "UBUNTU": {"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c7e89f711c3095f4","label":"AWS-UbuntuDefaultPatchBaseline","description":"Default Patch Baseline for Ubuntu Provided by AWS.","disabled":false},
               "WINDOWS": {"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0fafa8379afee7c83","label":"AWS-WindowsPredefinedPatchBaseline-OS-Applications","description":"For the Windows Server operating system, approves all patches that are classified as CriticalUpdates or SecurityUpdates and that have an MSRC severity of Critical or Important. For Microsoft applications, approves all patches. Patches are auto-approved seven days after release.","disabled":false}
-            }
+            }'
           ConfigurationOptionsPatchOperation: "ScanAndInstall"
           TargetType: '*'
           TargetOrganizationalUnits: !Ref TargetOrgUnits
