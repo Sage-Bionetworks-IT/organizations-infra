@@ -20,17 +20,16 @@ VpcFlowLogsBucket:
     LifecycleDataStorageClass: "GLACIER"
     LifecycleDataExpiration: "360"
 
-# temporarily disable due to issue IT-3721
 # Use AWS config to enable VPC flow logs and configure it to send logs to the central S3 bucket
-#AutoEnableVpcFlowLogs:
-#  DependsOn: VpcFlowLogsBucket
-#  Type: update-stacks
-#  Template: aws-config-rule.yaml
-#  StackName: !Sub '${resourcePrefix}-${appName}-remediate'
-#  StackDescription: Use AWS config to automatically enable VPC flow logs
-#  DefaultOrganizationBindingRegion: !Ref primaryRegion
-#  DefaultOrganizationBinding:
-#    IncludeMasterAccount: true
-#    Account: '*'
-#  Parameters:
-#    CentralizedS3LoggingBucket: !CopyValue [!Sub '${resourcePrefix}-${appName}-bucket-BucketName', !Ref LogCentralAccount]
+AutoEnableVpcFlowLogs:
+  DependsOn: VpcFlowLogsBucket
+  Type: update-stacks
+  Template: aws-config-rule.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-remediate'
+  StackDescription: Use AWS config to automatically enable VPC flow logs
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+  Parameters:
+    CentralizedS3LoggingBucket: !CopyValue [!Sub '${resourcePrefix}-${appName}-bucket-BucketName', !Ref LogCentralAccount]

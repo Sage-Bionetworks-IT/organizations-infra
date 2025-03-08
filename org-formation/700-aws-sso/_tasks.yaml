@@ -1100,8 +1100,55 @@ SsoImageCentralAmiLibrarian:
     permissionSetName: 'AMI-Librarian'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonEC2FullAccess'
-      - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+      - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+      - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
+      - 'arn:aws:iam::aws:policy/AWSImageBuilderFullAccess'
     sessionDuration: 'PT12H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "InstanceRoleAccess",
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreateRole",
+              "iam:AttachRolePolicy",
+              "iam:DetachRolePolicy",
+              "iam:DeleteRole"
+            ],
+            "Resource": "arn:aws:iam::867686887310:role/executionServiceEC2Role/*"
+          },
+          {
+            "Sid": "InstanceProfileAccess",
+            "Effect": "Allow",
+            "Action": [
+              "iam:AddRoleToInstanceProfile",
+              "iam:CreateInstanceProfile",
+              "iam:GetInstanceProfile",
+              "iam:PassRole",
+              "iam:DeleteInstanceProfile",
+              "iam:GetInstanceProfile",
+              "iam:RemoveRoleFromInstanceProfile"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "ImageInfrastructureConfigurationAccess",
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreateServiceLinkedRole",
+              "iam:GetInstanceProfile",
+              "iam:GetRole",
+              "iam:PassRole",
+              "sns:Publish",
+              "ecr:BatchGetRepositoryScanningConfiguration",
+              "inspector2:BatchGetAccountStatus"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
 
 SsoBridgeDevAdmin:
   Type: update-stacks
