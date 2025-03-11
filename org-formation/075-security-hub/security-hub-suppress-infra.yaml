@@ -413,6 +413,16 @@ Resources:
                 - prefix: 'arn:aws:s3:::cf-templates-'
                 - prefix: 'arn:aws:s3:::cloudformationmanageduploadinfra'
                 - prefix: 'arn:aws:s3:::cost-and-usage-reports.sagebase.org'
+                - prefix: 'arn:aws:s3:::android-apps.sagebridge.org'
+                - prefix: 'arn:aws:s3:::ios-apps.sagebridge.org'
+                - prefix: 'arn:aws:s3:::research.sagebridge.org'
+                - prefix: 'arn:aws:s3:::research-staging.sagebridge.org'
+                - prefix: 'arn:aws:s3:::admin.sagebridge.org'
+                - prefix: 'arn:aws:s3:::admin-staging.sagebridge.org'
+                - prefix: 'arn:aws:s3:::developer.sagebridge.org'
+                - prefix: 'arn:aws:s3:::mpower.sagebridge.org'
+                - prefix: 'arn:aws:s3:::smart4sure.sagebridge.org'
+                - prefix: 'arn:aws:s3:::parkinsonmpower.org'
                 # This should only match with 2.1.5.1
                 - 'AWS::::Account:140124849929'
             GeneratorId:
