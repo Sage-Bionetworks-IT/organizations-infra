@@ -423,6 +423,8 @@ Resources:
                 - prefix: 'arn:aws:s3:::mpower.sagebridge.org'
                 - prefix: 'arn:aws:s3:::smart4sure.sagebridge.org'
                 - prefix: 'arn:aws:s3:::parkinsonmpower.org'
+                # See ticket DPE-1234
+                - prefix: 'arn:aws:s3:::synapse-croissant-metadata'
                 # This should only match with 2.1.5.1
                 - 'AWS::::Account:140124849929'
             GeneratorId:
