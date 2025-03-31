@@ -413,6 +413,7 @@ Resources:
                 - prefix: 'arn:aws:s3:::cf-templates-'
                 - prefix: 'arn:aws:s3:::cloudformationmanageduploadinfra'
                 - prefix: 'arn:aws:s3:::cost-and-usage-reports.sagebase.org'
+                # IT-4072 public Bridge buckets
                 - prefix: 'arn:aws:s3:::android-apps.sagebridge.org'
                 - prefix: 'arn:aws:s3:::ios-apps.sagebridge.org'
                 - prefix: 'arn:aws:s3:::research.sagebridge.org'
@@ -425,6 +426,14 @@ Resources:
                 - prefix: 'arn:aws:s3:::parkinsonmpower.org'
                 - prefix: 'arn:aws:s3:::cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz'
                 - prefix: 'arn:aws:s3:::sagebase-rules-microservice-outputbucket-17vzcnk2xnq0'
+                - prefix: 'arn:aws:s3:::sharethejourneyapp.org'
+                - prefix: 'arn:aws:s3:::org-sagebridge-repo-maven-releases'
+                - prefix: 'arn:aws:s3:::org-sagebridge-static-bcs'
+                - prefix: 'arn:aws:s3:::org-sagebridge-static-pd'
+                - prefix: 'arn:aws:s3:::org-sagebridge-teamstudy'
+                - prefix: 'arn:aws:s3:::org-sagebridge-truststore'
+                - prefix: 'arn:aws:s3:::org-sagebridge-ui-test'
+                - prefix: 'arn:aws:s3:::web-mpower-2'
                 # See ticket DPE-1234
                 - prefix: 'arn:aws:s3:::synapse-croissant-metadata'
                 # This should only match with 2.1.5.1
