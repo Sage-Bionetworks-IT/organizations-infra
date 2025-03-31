@@ -424,6 +424,8 @@ Resources:
                 - prefix: 'arn:aws:s3:::mpower.sagebridge.org'
                 - prefix: 'arn:aws:s3:::smart4sure.sagebridge.org'
                 - prefix: 'arn:aws:s3:::parkinsonmpower.org'
+                - prefix: 'arn:aws:s3:::cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz'
+                - prefix: 'arn:aws:s3:::sagebase-rules-microservice-outputbucket-17vzcnk2xnq0'
                 - prefix: 'arn:aws:s3:::sharethejourneyapp.org'
                 - prefix: 'arn:aws:s3:::org-sagebridge-repo-maven-releases'
                 - prefix: 'arn:aws:s3:::org-sagebridge-static-bcs'
