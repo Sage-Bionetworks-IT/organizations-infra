@@ -344,7 +344,7 @@ Parameters:
 
   GenAiIcDevAdminGroup:     # JC aws-genaiic-dev-admins
     Type: String
-    Default: 'TBD'
+    Default: 'f48844f8-3051-70ad-e0da-5146fc17caf7'
 
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
