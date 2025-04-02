@@ -34,6 +34,7 @@ Organization:
         - !Ref ScceDevAccount
         - !Ref CnbDevAccount
         - !Ref OpenChallengesDevAccount
+        - !Ref GenAiIcDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -649,6 +650,19 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-synapsellm-prod@sagebase.org
+
+  GenAiIcDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-genaiic-dev
+      RootEmail: aws-genaiic-dev@sagebase.org
+      Alias: org-sagebase-genaiic-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: milen.nikolov@sagebase.org
+        CostCenter: ARPA-H with Leidos / 125200
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-genaiic-dev@sagebase.org
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
