@@ -659,8 +659,8 @@ Organization:
       Alias: org-sagebase-genaiic-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        AccountOwner: it@sagebase.org
-        CostCenter: NO PROGRAM / 000000
+        AccountOwner: milen.nikolov@sagebase.org
+        CostCenter: ARPA-H with Leidos / 125200
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-genaiic-dev@sagebase.org
 
