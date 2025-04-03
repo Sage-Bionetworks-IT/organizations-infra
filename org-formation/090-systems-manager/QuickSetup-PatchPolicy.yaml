@@ -1,15 +1,46 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: An SSM patch policy to patch all instances in the given OUs
 Parameters:
-  TargetOrgUnits:
+  TargetOrgRoot:
     Type: String
     Description: >-
-      Comma separated list of AWS Organizational Units to target.
+      AWS Organization root ID to target.
   TargetRegions:
     Type: String
     Description: >-
-      Comma separated list of AWS Organizational Units to target.
+      Comma separated list of AWS regions to target.
 Resources:
+  PatchLogBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  PatchLogBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref PatchLogBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          # All member accounts need write access to this bucket
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - 's3:Get*'
+              - 's3:List*'
+              - 's3:Put*'
+            Resource:
+              - !Sub '${PatchLogBucket.Arn}'
+              - !Sub '${PatchLogBucket.Arn}/*'
+            Condition:
+              # require an account principal associated with our Org
+              StringEquals:
+                "aws:PrincipalOrgID": !Ref TargetOrgRoot
+              ArnLike:
+                "aws:PrincipalArn": "arn:aws:iam::*:root"
   PatchPolicy:
     Type: "AWS::SSMQuickSetup::ConfigurationManager"
     Properties:
@@ -17,8 +48,10 @@ Resources:
       Description: "Patch all SSM managed nodes"
       ConfigurationDefinitions:
       - Type: AWSQuickSetupType-PatchPolicy
+        LocalDeploymentExecutionRoleName: AWS-QuickSetup-StackSet-Local-ExecutionRole
+        LocalDeploymentAdministrationRoleArn: "arn:aws:iam::531805629419:role/AWS-QuickSetup-PatchPolicy-LocalAdministrationRole"
         Parameters:
-          PatchPolicyName: PatchPolicy
+          PatchPolicyName: PatchPolicyAll
           # Patch baselines can be found with the command:
           #   aws ssm describe-patch-baselines |jq '.BaselineIdentities | map({ (.OperatingSystem): (.value = .BaselineId | .label = .BaselineName | .description = .BaselineDescription | .disabled=false | del(.BaselineId, .BaselineName, .OperatingSystem, .BaselineDescription, .DefaultBaseline)) }) | add'
           #
@@ -26,6 +59,12 @@ Resources:
           #   https://aws.amazon.com/blogs/mt/deploy-aws-systems-manager-quick-setup-programmatically-across-your-aws-organization/
           #   https://github.com/aws-samples/aws-management-and-governance-samples/blob/master/AWSSystemsManager/Quick-Setup-API/patch-policy-examples/patch-policy-cfn-template.yaml
           #   https://github.com/aws-samples/aws-management-and-governance-samples/blob/master/AWSSystemsManager/Quick-Setup-API/patch-policy-examples/default-patch-baselines.txt
+          ConfigurationOptionsPatchOperation: "ScanAndInstall"
+          ConfigurationOptionsScanValue: "cron(0 17 ? * * *)"  # 10am PST
+          ConfigurationOptionsInstallValue: "cron(0 19 ? * WED *)"  # 12pm PST
+          OutputLogEnableS3: true
+          OutputS3BucketName: !Ref PatchLogBucket
+          OutputBucketRegion: !Ref "AWS::Region"
           PatchBaselineRegion: 'us-east-1'
           SelectedPatchBaselines: '{"ALMA_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0cb0c4966f86b059b","label":"AWS-AlmaLinuxDefaultPatchBaseline","description":"Default
             Patch Baseline for Alma Linux Provided by AWS.","disabled":false},"AMAZON_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c10e657807c7a700","label":"AWS-AmazonLinuxDefaultPatchBaseline","description":"Default
@@ -42,13 +81,12 @@ Resources:
             Patch Baseline for Rocky Linux Provided by AWS.","disabled":false},"SUSE":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-07d8884178197b66b","label":"AWS-SuseDefaultPatchBaseline","description":"Default
             Patch Baseline for Suse Provided by AWS.","disabled":false},"UBUNTU":{"value":"pb-06e3563bd35503f2b","label":"custom-UbuntuServer-Blog-Baseline","description":"Default
             Patch Baseline for Ubuntu Provided by AWS.","disabled":false},"WINDOWS":{"value":"pb-016889927b2bb8542","label":"custom-WindowsServer-Blog-Baseline","disabled":false}}'
-          ConfigurationOptionsPatchOperation: "ScanAndInstall"
           TargetType: '*'
-          TargetOrganizationalUnits: !Ref TargetOrgUnits
+          TargetOrganizationalRoot: !Ref TargetOrgRoot
           TargetRegions: !Ref TargetRegions
 Outputs:
   PatchPolicyArn:
     Description: 'Patch policy ARN'
-    Value: !Ref PatchPolicy
+    Value: !Ref PatchPolicyAll
     Export:
       Name: !Sub '${AWS::StackName}-PatchPolicyArn'

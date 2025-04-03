@@ -70,7 +70,7 @@ PatchPolicy:
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
   Parameters:
-    TargetOrgUnits: !Ref OrganizationRoot
+    TargetOrgRoot: !Ref OrganizationRoot
     TargetRegions: !Ref primaryRegion
 
 # This will run the Stack Armor Nessus installation script each day
