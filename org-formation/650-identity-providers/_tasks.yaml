@@ -971,7 +971,6 @@ SynapseMonorepoBucketAccessPolicy:
                             "arn:aws:s3:::dev-signin.synapse.org",
                             "arn:aws:s3:::prod.ampals.synapse.org",
                             "arn:aws:s3:::staging.ampals.synapse.org"
-
                           ]
           }
         ]
