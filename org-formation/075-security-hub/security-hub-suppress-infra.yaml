@@ -434,6 +434,7 @@ Resources:
                 - prefix: 'arn:aws:s3:::org-sagebridge-truststore'
                 - prefix: 'arn:aws:s3:::org-sagebridge-ui-test'
                 - prefix: 'arn:aws:s3:::web-mpower-2'
+                - prefix: 'arn:aws:s3:::sage-igenomes'
                 # See ticket DPE-1234
                 - prefix: 'arn:aws:s3:::synapse-croissant-metadata'
                 # This should only match with 2.1.5.1
