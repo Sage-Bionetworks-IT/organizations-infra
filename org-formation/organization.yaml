@@ -116,7 +116,6 @@ Organization:
       OrganizationalUnitName: synapse
       Accounts:
         - !Ref SynapseDevAccount
-        - !Ref SynapseDWAccount
         - !Ref SynapseProdAccount
         - !Ref SynapseLlmDevAccount
         - !Ref SynapseLlmProdAccount
@@ -181,16 +180,6 @@ Organization:
       AccountId: '449435941126'
       RootEmail: synapse.dev@sagebase.org
       Alias: org-sagebase-synapsedev
-      Tags:
-        <<: !Include ./_platform_org_tags.yaml
-
-  SynapseDWAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-synapsedw
-      AccountId: '383874245509'
-      RootEmail: synapse.dw@sagebase.org
-      Alias: org-sagebase-synapsedw
       Tags:
         <<: !Include ./_platform_org_tags.yaml
 
