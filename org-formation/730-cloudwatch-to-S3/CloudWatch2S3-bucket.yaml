@@ -19,6 +19,11 @@ Resources:
     Type: "AWS::S3::Bucket"
     Properties:
       BucketName: !If [HasBucketName, !Ref BucketName, !Ref 'AWS::NoValue']
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
       VersioningConfiguration:
         Status: !Ref BucketVersioning
       BucketEncryption:
