@@ -338,13 +338,17 @@ Parameters:
     Type: String
     Default: 'd478d408-10e1-7071-2273-606c45bb8653'
 
-  SynapseLlmProdLlmDeveloperGroup:  # JC aws-synapsellm-prod-llmdevelopers
+  SynapseLlmProdLlmDeveloperGroup:  # JC aws-synapsellm-prod-llm-developers
     Type: String
     Default: '44b8f4c8-9031-7097-01d8-d4e845d7d84d'
 
   GenAiIcDevAdminGroup:     # JC aws-genaiic-dev-admins
     Type: String
     Default: 'f48844f8-3051-70ad-e0da-5146fc17caf7'
+
+  GenAiIcDevDevelopersGroup:     # JC aws-genaiic-dev-developers
+    Type: String
+    Default: '04182458-5011-7026-862d-509a06438571'
 
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
@@ -2308,3 +2312,20 @@ SsoGenAiIcDevAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref GenAiIcDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoGenAiIcDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-genaiic-dev-developer'
+  StackDescription: 'SSO: admin role used by GenAiIc dev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref GenAiIcDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref GenAiIcDevDevelopersGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
