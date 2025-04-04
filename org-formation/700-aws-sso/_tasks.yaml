@@ -338,7 +338,7 @@ Parameters:
     Type: String
     Default: 'd478d408-10e1-7071-2273-606c45bb8653'
 
-  SynapseLlmProdLlmDeveloperGroup:  # JC aws-synapsellm-prod-llm-developers
+  SynapseLlmProdLlmDeveloperGroup:  # JC aws-synapsellm-prod-llmdevelopers
     Type: String
     Default: '44b8f4c8-9031-7097-01d8-d4e845d7d84d'
 
