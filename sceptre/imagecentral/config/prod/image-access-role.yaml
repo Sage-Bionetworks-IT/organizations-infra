@@ -1,0 +1,5 @@
+template:
+  path: "image-access-role.yaml"
+stack_name: "image-access-role."
+dependencies:
+  - "prod/image-access-role.yaml"
