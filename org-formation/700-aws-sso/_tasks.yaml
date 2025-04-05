@@ -342,9 +342,9 @@ Parameters:
     Type: String
     Default: '44b8f4c8-9031-7097-01d8-d4e845d7d84d'
 
-  CodeOceanProdAdminGroup:     # JC aws-codeocean-prod-admins
+  GenAiIcDevAdminGroup:     # JC aws-genaiic-dev-admins
     Type: String
-    Default: '8408c468-40f1-70e2-f2ca-ec2874400609'
+    Default: 'f48844f8-3051-70ad-e0da-5146fc17caf7'
 
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
@@ -2292,20 +2292,19 @@ SsoOpenchallengesProdAdmin:
     principalId: !Ref OpenchallengesProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-
-SsoCodeOceanProdAdmin:
+SsoGenAiIcDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-codeocean-prod-admin'
-  StackDescription: 'SSO: admin role used by CodeOcean prod admin group'
+  StackName: !Sub '${resourcePrefix}-${appName}-genaiic-dev-admin'
+  StackDescription: 'SSO: admin role used by GenAiIc dev admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref CodeOceanProdAccount
+      Account: !Ref GenAiIcDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref CodeOceanProdAdminGroup
+    principalId: !Ref GenAiIcDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
