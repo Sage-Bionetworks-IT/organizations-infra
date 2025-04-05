@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  OrganizationId:
+    Description: 'The ID of the organization, o-xxxxxxx'
+    Type: String
+    Default: "o-69lcdj4kro"
+Resources:
+
+  ImageAccessRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        # allow anyone in our AWS organization to assume this role
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Condition:
+              StringEquals:
+                aws:PrincipalOrgID: !Ref OrganizationId
+            Action: 'sts:AssumeRole'
+
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AWSImageBuilderReadOnlyAccess'
