@@ -522,7 +522,6 @@ SsoViewer:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
-      - 'arn:aws:iam::aws:policy/AWSImageBuilderReadOnlyAccess'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
@@ -583,7 +582,6 @@ SsoViewerPlus:
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSNetworkManagerReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
-      - arn:aws:iam::aws:policy/AWSImageBuilderReadOnlyAccess
     inlinePolicy: >-
       {
         "Version": "2012-10-17",
