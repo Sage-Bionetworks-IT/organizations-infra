@@ -470,8 +470,6 @@ Resources:
           findings:
             Resources:
               Id:
-                # synapsedw IT-2308, do not exempt human users
-                - 'arn:aws:iam::383874245509:user/prod-warehouse'
                 # synapseprod IT-2396, do not exempt human users
                 - 'arn:aws:iam::325565585839:user/ran-uploader'
                 # scipool IT-2315
