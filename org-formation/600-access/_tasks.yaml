@@ -208,6 +208,7 @@ SynapseLlmProdBedrockFullAccess:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
 
+
 # Setup Gen AI AWS team access (issue IT-4355)
 GenAiIcCollaboratorAccess:
   Type: update-stacks
