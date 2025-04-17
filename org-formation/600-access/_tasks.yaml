@@ -200,6 +200,182 @@ SynapseLlmProdBedrockFullAccess:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
 
+
+# Setup Gen AI AWS team access (issue IT-4355)
+GenAiIcCollaboratorAccess:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  StackName: genaiic-collaborator-access
+  DefaultOrganizationBinding:
+    Account: !Ref GenAiIcAccount
+    Region: us-east-1
+  Parameters:
+    PrincipalArns:
+      - TBD
+    PolicyDocument: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Sid": "DefaultGenAiICPermissions",
+                  "Effect": "Allow",
+                  "Action": [
+                      "bedrock:*",
+                      "sagemaker:*",
+                      "sagemaker-mlflow:*",
+                      "textract:*",
+                      "transcribe:*",
+                      "rekognition:*",
+                      "lambda:*",
+                      "states:*",
+                      "s3:*",
+                      "execute-api:*",
+                      "apigateway:*",
+                      "es:*",
+                      "aoss:*",
+                      "osis:*",
+                      "dynamodb:*",
+                      "dax:*",
+                      "ecs:*",
+                      "ecr:*",
+                      "iam:*",
+                      "codepipeline:*",
+                      "ec2:*",
+                      "events:*",
+                      "scheduler:*",
+                      "sns:*",
+                      "sqs:*",
+                      "securityhub:*",
+                      "guardduty:*",
+                      "config:*",
+                      "cloudtrail:*",
+                      "macie2:*",
+                      "inspector2:*"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Sid": "ModelEnablementPermission",
+                  "Effect": "Allow",
+                  "Action": [
+                      "aws-marketplace:Subscribe"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Sid": "RestrictPublicAccess",
+                  "Effect": "Deny",
+                  "Action": [
+                      "elasticmapreduce:PutBlockPublicAccessConfiguration",
+                      "s3:PutAccountPublicAccessBlock"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Sid": "SecureLoggingConfigs",
+                  "Effect": "Deny",
+                  "Action": [
+                      "cloudtrail:StopLogging",
+                      "cloudtrail:DeleteTrail",
+                      "cloudwatch:DeleteAlarms",
+                      "cloudwatch:DeleteDashboards",
+                      "cloudwatch:DisableAlarmActions"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Sid": "SecureSecurityServices",
+                  "Effect": "Deny",
+                  "Action": [
+                      "guardduty:DeleteDetector",
+                      "guardduty:DeleteInvitations",
+                      "guardduty:DeleteIPSet",
+                      "guardduty:DeleteMembers",
+                      "guardduty:DeleteThreatIntelSet",
+                      "guardduty:DisassociateFromMasterAccount",
+                      "guardduty:DisassociateMembers",
+                      "guardduty:StopMonitoringMembers",
+                      "guardduty:UpdateDetector",
+                      "config:DeleteConfigRule",
+                      "config:DeleteConfigurationRecorder",
+                      "config:DeleteDeliveryChannel",
+                      "config:StopConfigurationRecorder",
+                      "securityhub:Disable*",
+                      "securityhub:BatchDeleteAutomationRules",
+                      "securityhub:BatchDisableStandards",
+                      "securityhub:Delete*",
+                      "securityhub:Disassociate*",
+                      "macie2:CreateClassificationJob",
+                      "macie2:UpdateClassificationJob",
+                      "macie2:UpdateFindingsFilter",
+                      "macie2:CreateFindingsFilter",
+                      "macie2:DeleteFindingsFilter",
+                      "macie2:DeleteMember",
+                      "macie2:DisableMacie",
+                      "macie2:DisableOrganizationAdminAccount",
+                      "macie2:DisassociateFromAdministratorAccount",
+                      "macie2:DisassociateMember",
+                      "macie2:UpdateMacieSession",
+                      "macie2:UpdateMemberSession"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Sid": "RestrictInternetAccesstoVPC",
+                  "Effect": "Deny",
+                  "Action": [
+                      "ec2:AttachInternetGateway",
+                      "ec2:CreateInternetGateway",
+                      "ec2:CreateEgressOnlyInternetGateway",
+                      "globalaccelerator:Create*",
+                      "globalaccelerator:Update*"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Sid": "RestrictUserActions",
+                  "Effect": "Deny",
+                  "Action": [
+                      "iam:AttachUserPolicy",
+                      "iam:CreateUser",
+                      "iam:DeleteUserPolicy",
+                      "iam:DetachUserPolicy",
+                      "iam:PutUserPermissionsBoundary",
+                      "iam:PutUserPolicy",
+                      "iam:AddUserToGroup",
+                      "iam:DeleteUser",
+                      "iam:RemoveUserFromGroup",
+                      "iam:UpdateUser",
+                      "iam:DeleteUserPermissionsBoundary",
+                      "sts:AssumeRole"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Sid": "DenyHighRiskNetworking",
+                  "Effect": "Deny",
+                  "Action": [
+                      "ec2:AcceptTransitGateway*",
+                      "ec2:AssociateTransitGateway*",
+                      "ec2:CreateTransitGateway*",
+                      "ec2:DeleteTransitGateway*",
+                      "ec2:DeregisterTransitGateway*",
+                      "ec2:DisableTransitGateway*",
+                      "ec2:ModifyTransitGateway*",
+                      "ec2:RegisterTransitGateway*",
+                      "ec2:AcceptVpcPeeringConnection",
+                      "ec2:CreateVpcPeeringConnection",
+                      "ec2:DeleteVpcPeeringConnection",
+                      "ec2:ModifyVpcPeeringConnectionOptions",
+                      "ec2:RejectTransitGatewayPeeringAttachment",
+                      "ec2:RejectVpcPeeringConnection"
+                  ],
+                  "Resource": "*"
+              }
+          ]
+      }
+
+
 #---------- Policies -------------
 CostExplorerAccessPolicy:
   Type: update-stacks
