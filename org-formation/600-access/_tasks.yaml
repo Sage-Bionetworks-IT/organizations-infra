@@ -207,7 +207,7 @@ GenAiIcCollaboratorAccess:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
   StackName: genaiic-collaborator-access
   DefaultOrganizationBinding:
-    Account: !Ref GenAiIcAccount
+    Account: !Ref GenAiIcDevAccount
     Region: us-east-1
   Parameters:
     PrincipalArns:
