@@ -211,7 +211,7 @@ GenAiIcCollaboratorAccess:
     Region: us-east-1
   Parameters:
     PrincipalArns:
-      - TBD
+      - arn:aws:iam::029325337269:role/Admin
     PolicyDocument: >-
       {
           "Version": "2012-10-17",
