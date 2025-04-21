@@ -8,7 +8,7 @@ Resources:
     Properties:
       Active: true
       Key: "CostCenter"
-      Value: {{ CostCenter }}
+      Value: {{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}
   {% endfor %}
 {% endif %}
 
@@ -30,7 +30,7 @@ Outputs:
 {% if sceptre_user_data.CostCenters is defined %}
   {% for CostCenter in sceptre_user_data.CostCenters %}
   {{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag:
-    Value: !Ref "{{ CostCenter.replace(' ','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
+    Value: !Ref "{{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
     Export:
       Name: !Sub "${AWS::Region}-${AWS::StackName}-{{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}CostCenterTag"
   {% endfor %}
