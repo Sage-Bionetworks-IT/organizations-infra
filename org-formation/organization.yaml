@@ -33,6 +33,8 @@ Organization:
         - !Ref RecoverDevAccount
         - !Ref ScceDevAccount
         - !Ref CnbDevAccount
+        - !Ref OpenChallengesDevAccount
+        - !Ref GenAiIcDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -47,11 +49,11 @@ Organization:
         - !Ref MobileHealthDataEngineeringProdAccount
         - !Ref CnbAccount
         - !Ref AgoraProdAccount
-        - !Ref IncludeChopProdAccount
         - !Ref RecoverProdAccount
         - !Ref GenieProdAccount
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
+        - !Ref OpenChallengesProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -114,8 +116,9 @@ Organization:
       OrganizationalUnitName: synapse
       Accounts:
         - !Ref SynapseDevAccount
-        - !Ref SynapseDWAccount
         - !Ref SynapseProdAccount
+        - !Ref SynapseLlmDevAccount
+        - !Ref SynapseLlmProdAccount
 
   BridgeOU:
     Type: OC::ORG::OrganizationalUnit
@@ -137,15 +140,16 @@ Organization:
       Accounts:
         - !Ref BuA2aDwAccount
         - !Ref BWmErzkAccount
+        - !Ref MkPreYnAccount
 
   #------- Accounts -----------
   MasterAccount:
     Type: OC::ORG::MasterAccount
     Properties:
-      AccountName: organizations
+      AccountName: 'NIH-Awd.SageBase.NCI.STRIDES.Master'
       AccountId: '531805629419'
       RootEmail: aws.organizations@sagebase.org
-      Alias: org-sagebase-organizations
+      Alias: 'NIH-Awd.SageBase.NCI.STRIDES.Master'
       Tags:
         <<: !Include ./_platform_org_tags.yaml
 
@@ -176,16 +180,6 @@ Organization:
       AccountId: '449435941126'
       RootEmail: synapse.dev@sagebase.org
       Alias: org-sagebase-synapsedev
-      Tags:
-        <<: !Include ./_platform_org_tags.yaml
-
-  SynapseDWAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-synapsedw
-      AccountId: '383874245509'
-      RootEmail: synapse.dw@sagebase.org
-      Alias: org-sagebase-synapsedw
       Tags:
         <<: !Include ./_platform_org_tags.yaml
 
@@ -312,20 +306,6 @@ Organization:
       Alias: org-sagebase-scicomp
       Tags:
         <<: !Include ./_default_org_tags.yaml
-
-  # INCLUDE is the grant where we collaborate with CHOP
-  IncludeChopProdAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-include-chop-prod
-      RootEmail: aws-include-prod@sagebase.org
-      Alias: org-sagebase-include-chop-prod
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        AccountOwner: thomas.yu@sagebase.org
-        budget-alarm-threshold: 20000
-        CostCenter: "INCLUDE - CHOP / 122000"
-        budget-alarm-threshold-email-recipient: aws-include-prod@sagebase.org
 
   # This account is used to host the challenge registry
   # Challenge submission infrastructure that can't be supported using service catalog
@@ -606,6 +586,73 @@ Organization:
         budget-alarm-threshold: 10000
         budget-alarm-threshold-email-recipient: aws-scce-dev@sagebase.org
 
+  OpenChallengesDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-openchallenges-dev
+      RootEmail: aws-openchallenges-dev@sagebase.org
+      Alias: org-sagebase-openchallenges-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: thomas.schaffter@sagebase.org
+        CostCenter: ITCR / 101600
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-openchallenges-dev@sagebase.org
+
+  OpenChallengesProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-openchallenges-prod
+      RootEmail: aws-openchallenges-prod@sagebase.org
+      Alias: org-sagebase-openchallenges-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: thomas.schaffter@sagebase.org
+        CostCenter: ITCR / 101600
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-openchallenges-prod@sagebase.org
+
+# Synapse Large Language Model dev account: hosts development Bedrock-related resources
+  SynapseLlmDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-synapsellm-dev
+      RootEmail: aws-synapsellm-dev@sagebase.org
+      Alias: org-sagebase-synapsellm-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-synapsellm-dev@sagebase.org
+
+# Synapse Large Language Model prod account: hosts development Bedrock-related resources
+  SynapseLlmProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-synapsellm-prod
+      RootEmail: aws-synapsellm-prod@sagebase.org
+      Alias: org-sagebase-synapsellm-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-synapsellm-prod@sagebase.org
+
+  GenAiIcDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-genaiic-dev
+      RootEmail: aws-genaiic-dev@sagebase.org
+      Alias: org-sagebase-genaiic-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: milen.nikolov@sagebase.org
+        CostCenter: ARPA-H with Leidos / 125200
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-genaiic-dev@sagebase.org
+
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
     Type: OC::ORG::Account
@@ -630,3 +677,15 @@ Organization:
         AccountOwner: susheel.varma@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws.BWmErzk@sagebase.org
+
+  MkPreYnAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-MkPreYn
+      RootEmail: aws.MkPreYn@sagebase.org
+      Alias: org-sagebase-MkPreYn
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: mieko.hashimoto@sagebase.org
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws.MkPreYn@sagebase.org

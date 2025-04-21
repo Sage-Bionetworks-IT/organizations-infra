@@ -5,6 +5,22 @@ Parameters:
     Type: String
     Default: 'github-oidc'
 
+##################################################################################
+# Resources needed to integrate AWS environments with Microsoft Defender for Cloud
+##################################################################################
+
+MicrosoftDefenderCloudRoles:
+  Type: update-stacks
+  Template: microsoft-defender-cloud-roles.yaml
+  StackName: !Sub ${resourcePrefix}-microsoft-defender-cloud-roles
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+    Region: us-east-1
+
+#####################################################
+# Resources to allow Github CI to access AWS accounts
+#####################################################
+
 GithubOidcSageBionetworks:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/oidc-provider.yaml
@@ -84,26 +100,72 @@ GithubOidcSageBionetworksDataCuratorInfra:
       - !Ref DCAProdAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksSchematicInfra:
+GithubOidcSageBionetworksItSchematicInfraV2:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-schematic-infra-v2
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-schematic-infra
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-schematic-infra-v2
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "schematic-infra-v2"
+        branches: ["dev", "stage", "prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DnTDevAccount
+      - !Ref DCAProdAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksSynapseDockerRegistry:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-docker-registry
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-docker-registry
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
-      - name: "schematic-infra"
+      - name: "synapse-docker-registry"
         branches: ["*"]
   DefaultOrganizationBinding:
     Account:
-      - !Ref DnTDevAccount
-      - !Ref DCAProdAccount
+      - !Ref SynapseDevAccount
+      - !Ref SynapseProdAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksSynapse:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-docker-registry"
+        branches: ["*"]
+      - name: "nbconvert-webapp"
+        branches: ["master", "develop"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseDevAccount
+      - !Ref SynapseProdAccount
     Region: us-east-1
 
 GithubOidcSageBionetworksGenieBPCInfra:
@@ -274,6 +336,12 @@ GithubOidcLambdaTemplateDeploySage:
                           ]
           },
           {
+              "Sid": "CfnValidate",
+              "Effect": "Allow",
+              "Action": [ "cloudformation:ValidateTemplate" ],
+              "Resource": [ "*" ]
+          },
+          {
               "Sid": "SamValidate",
               "Effect": "Allow",
               "Action": [ "iam:ListPolicies" ],
@@ -337,6 +405,12 @@ GithubOidcLambdaTemplateDeploySageIT:
                           ]
           },
           {
+              "Sid": "CfnValidate",
+              "Effect": "Allow",
+              "Action": [ "cloudformation:ValidateTemplate" ],
+              "Resource": [ "*" ]
+          },
+          {
               "Sid": "SamValidate",
               "Effect": "Allow",
               "Action": [ "iam:ListPolicies" ],
@@ -354,13 +428,13 @@ GithubOidcLambdaTemplateDeploySageIT:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
       - name: "lambda-*"
-        branches: ["master"]
+        branches: ["master", "main"]
       - name: "cfn-cr-*"
-        branches: ["master"]
+        branches: ["master", "main"]
       - name: "cfn-macro-*"
-        branches: ["master"]
+        branches: ["master", "main"]
       - name: "cfn-*-macro"
-        branches: ["master"]
+        branches: ["master", "main"]
   DefaultOrganizationBinding:
     Account: !Ref AdminCentralAccount
     Region: us-east-1
@@ -385,14 +459,34 @@ GithubOidcPackerImageDeploy:
         branches: ["master"]
       - name: "packer-base-ubuntu-jammy"
         branches: ["master"]
-      - name: "packer-rstudio"
-        branches: ["master"]
       - name: "packer-amazonlinux-docker"
         branches: ["master"]
       - name: "imagecentral-dashboard"
         branches: ["master"]
       - name: "packer-winserver-2022"
         branches: ["master"]
+  DefaultOrganizationBinding:
+    Account: !Ref ImageCentralAccount
+    Region: us-east-1
+
+# GH OIDC for AWS image builder deployments to AWS imagecentral account
+GithubOidcImageBuilderDeploy:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-imagebuilder-deploy
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-imagebuilder-deploy
+    MaxSessionDuration: 7200
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "aws-ami-monorepo"
+        branches: ["main"]
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
     Region: us-east-1
@@ -471,42 +565,10 @@ GithubOidcSageBionetworksWebMonorepoInfra:
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-web-monorepo-infra
-    PolicyDocument: |
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-              "Sid": "ListObjectsInBucket",
-              "Effect": "Allow",
-              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
-              "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org",
-                            "arn:aws:s3:::staging.accounts.sagebionetworks.org",
-                            "arn:aws:s3:::prod.accounts.synapse.org",
-                            "arn:aws:s3:::staging.accounts.synapse.org"
-                          ]
-          },
-          {
-              "Sid": "AllObjectActions",
-              "Effect": "Allow",
-              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
-              "Resource": [ "arn:aws:s3:::prod.accounts.sagebionetworks.org/*",
-                            "arn:aws:s3:::staging.accounts.sagebionetworks.org/*",
-                            "arn:aws:s3:::prod.accounts.synapse.org/*",
-                            "arn:aws:s3:::staging.accounts.synapse.org/*"
-                          ]
-          },
-          {
-              "Sid": "CloudfrontActions",
-              "Effect": "Allow",
-              "Action": [ "cloudfront:CreateInvalidation" ],
-              "Resource": [ "arn:aws:cloudfront::797640923903:distribution/E2656IE63W1MXI",
-                            "arn:aws:cloudfront::797640923903:distribution/EY52HOUGKDP1F",
-                            "arn:aws:cloudfront::797640923903:distribution/E7COI4Z95FFZQ",
-                            "arn:aws:cloudfront::797640923903:distribution/E1QXK5X5JV0YKJ"
-                          ]
-          }
-        ]
-      }
+    ManagedPolicyArns:
+      - "arn:aws:iam::797640923903:policy/SynapseMonorepoBucketAccessPolicy"
+      - "arn:aws:iam::797640923903:policy/SynapseMonorepoCloudfrontAccessPolicy"
+      - "arn:aws:iam::797640923903:policy/SynapseMonorepoFileAccessPolicy"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -766,6 +828,29 @@ GithubOidcAgoraInfraDeploy:
       - !Ref AgoraProdAccount
     Region: us-east-1
 
+GithubOidcAgoraInfraV3:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-agora-infra-v3
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-agora-infra-v3
+    MaxSessionDuration: 7200
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "agora-infra-v3"
+        branches: ["dev","stage","prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref AgoraDevAccount
+      - !Ref AgoraProdAccount
+    Region: us-east-1
+
 GithubOidcAgoraEBDeploy:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
@@ -787,3 +872,227 @@ GithubOidcAgoraEBDeploy:
       - !Ref AgoraDevAccount
       - !Ref AgoraProdAccount
     Region: us-east-1
+
+GithubOidcOpenChallengesDeploy:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-openchallenges-deploy
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-openchallenges-deploy
+    MaxSessionDuration: 7200
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "openchallenges"
+        branches: ["stage", "prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref OpenChallengesProdAccount
+    Region: us-east-1
+
+GithubOidcSceptreAws:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sceptre-aws
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sceptre-aws
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sceptre"
+    Repositories:
+      - name: "sceptre-aws"    # ci/cd to manage resources for Sceptre integration tests
+        branches: ["master"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SceptreDevAccount
+    Region: us-east-1
+
+############################### Managed Policies ###############################
+# Managed policies used in github OIDC providers
+# Note: Managed policies can be used as work around for the AWS cloudformation
+#       Parameter value limit of 4096 characters.
+
+SynapseMonorepoBucketAccessPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: synmono-bucket-access-policy
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref SageITAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
+              "Resource": [
+                            "arn:aws:s3:::dev.accounts.synapse.org",
+                            "arn:aws:s3:::prod.accounts.synapse.org",
+                            "arn:aws:s3:::staging.accounts.synapse.org",
+                            "arn:aws:s3:::prod-adknowledgeportalsynapse-org-websitebucket-1wcys549ufmd",
+                            "arn:aws:s3:::staging-adknowledgeportalsynapse-or-websitebucket-tgdvklhnhjfc",
+                            "arn:aws:s3:::prod-arkportal-synapse-org-websitebucket-1557e1kxr3if1",
+                            "arn:aws:s3:::staging-arkportal-synapse-org-websitebucket-148szg14ri4v4",
+                            "arn:aws:s3:::prod.bsmn.synapse.org",
+                            "arn:aws:s3:::staging.bsmn.synapse.org",
+                            "arn:aws:s3:::prod.cancercomplexity.synapse.org",
+                            "arn:aws:s3:::staging.cancercomplexity.synapse.org",
+                            "arn:aws:s3:::prod-challenges-synapse-org-websitebucket-gr83m4q9l1q",
+                            "arn:aws:s3:::staging-challenges-synapse-org-websitebucket-13q3n3sfkm04z",
+                            "arn:aws:s3:::prod.covidrecoverycorpsresearcher.synapse.org",
+                            "arn:aws:s3:::staging.covidrecoverycorpsresearcher.synapse.org",
+                            "arn:aws:s3:::prod.dhealth.synapse.org",
+                            "arn:aws:s3:::staging.dhealth.synapse.org",
+                            "arn:aws:s3:::prod-eliteportal-synapse-org-websitebucket-f9bag5pqbqc8",
+                            "arn:aws:s3:::staging-eliteportal-synapse-org-websitebucket-enedr8ccgn9x",
+                            "arn:aws:s3:::prod-genie-synapse-org-websitebucket-xlukn82knv8g",
+                            "arn:aws:s3:::staging-genie-synapse-org-websitebucket-8tvf8x9dwuqe",
+                            "arn:aws:s3:::prod.nf.synapse.org",
+                            "arn:aws:s3:::staging.nf.synapse.org",
+                            "arn:aws:s3:::prod.psychencode.synapse.org",
+                            "arn:aws:s3:::staging.psychencode.synapse.org",
+                            "arn:aws:s3:::stopadportal.synapse.org",
+                            "arn:aws:s3:::staging.stopadportal.synapse.org",
+                            "arn:aws:s3:::prod.standards.synapse.org",
+                            "arn:aws:s3:::staging.standards.synapse.org",
+                            "arn:aws:s3:::dev-signin.synapse.org",
+                            "arn:aws:s3:::prod.ampals.synapse.org",
+                            "arn:aws:s3:::staging.ampals.synapse.org"
+                          ]
+          }
+        ]
+      }
+    PolicyName: SynapseMonorepoBucketAccessPolicy
+
+SynapseMonorepoFileAccessPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: synmono-file-access-policy
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref SageITAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
+              "Resource": [
+                            "arn:aws:s3:::dev.accounts.synapse.org/*",
+                            "arn:aws:s3:::prod.accounts.synapse.org/*",
+                            "arn:aws:s3:::staging.accounts.synapse.org/*",
+                            "arn:aws:s3:::prod-adknowledgeportalsynapse-org-websitebucket-1wcys549ufmd/*",
+                            "arn:aws:s3:::staging-adknowledgeportalsynapse-or-websitebucket-tgdvklhnhjfc/*",
+                            "arn:aws:s3:::prod-arkportal-synapse-org-websitebucket-1557e1kxr3if1/*",
+                            "arn:aws:s3:::staging-arkportal-synapse-org-websitebucket-148szg14ri4v4/*",
+                            "arn:aws:s3:::prod.bsmn.synapse.org/*",
+                            "arn:aws:s3:::staging.bsmn.synapse.org/*",
+                            "arn:aws:s3:::prod.cancercomplexity.synapse.org/*",
+                            "arn:aws:s3:::staging.cancercomplexity.synapse.org/*",
+                            "arn:aws:s3:::prod-challenges-synapse-org-websitebucket-gr83m4q9l1q/*",
+                            "arn:aws:s3:::staging-challenges-synapse-org-websitebucket-13q3n3sfkm04z/*",
+                            "arn:aws:s3:::prod.covidrecoverycorpsresearcher.synapse.org/*",
+                            "arn:aws:s3:::staging.covidrecoverycorpsresearcher.synapse.org/*",
+                            "arn:aws:s3:::prod.dhealth.synapse.org/*",
+                            "arn:aws:s3:::staging.dhealth.synapse.org/*",
+                            "arn:aws:s3:::prod-eliteportal-synapse-org-websitebucket-f9bag5pqbqc8/*",
+                            "arn:aws:s3:::staging-eliteportal-synapse-org-websitebucket-enedr8ccgn9x/*",
+                            "arn:aws:s3:::prod-genie-synapse-org-websitebucket-xlukn82knv8g/*",
+                            "arn:aws:s3:::staging-genie-synapse-org-websitebucket-8tvf8x9dwuqe/*",
+                            "arn:aws:s3:::prod.nf.synapse.org/*",
+                            "arn:aws:s3:::staging.nf.synapse.org/*",
+                            "arn:aws:s3:::prod.psychencode.synapse.org/*",
+                            "arn:aws:s3:::staging.psychencode.synapse.org/*",
+                            "arn:aws:s3:::stopadportal.synapse.org/*",
+                            "arn:aws:s3:::staging.stopadportal.synapse.org/*",
+                            "arn:aws:s3:::prod.standards.synapse.org/*",
+                            "arn:aws:s3:::staging.standards.synapse.org/*",
+                            "arn:aws:s3:::dev-signin.synapse.org/*",
+                            "arn:aws:s3:::prod.ampals.synapse.org/*",
+                            "arn:aws:s3:::staging.ampals.synapse.org/*"
+                          ]
+          }
+        ]
+      }
+    PolicyName: SynapseMonorepoFileAccessPolicy
+
+SynapseMonorepoCloudfrontAccessPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: synmono-cloudfront-access-policy
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref SageITAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "CloudfrontActions",
+              "Effect": "Allow",
+              "Action": [ "cloudfront:CreateInvalidation" ],
+              "Resource": [
+                            "arn:aws:cloudfront::797640923903:distribution/E1I74M7N2K06XT",
+                            "arn:aws:cloudfront::797640923903:distribution/E28YRVVHKPHIB1",
+                            "arn:aws:cloudfront::797640923903:distribution/E39Y0MUIDX97EG",
+                            "arn:aws:cloudfront::797640923903:distribution/E1VKBSA43441LD",
+                            "arn:aws:cloudfront::797640923903:distribution/E3T3BUO9I33NZX",
+                            "arn:aws:cloudfront::797640923903:distribution/E27UC0961FPD8C",
+                            "arn:aws:cloudfront::797640923903:distribution/EQOBFEPCBQ0K2",
+                            "arn:aws:cloudfront::797640923903:distribution/E1615JO8VH4UJF",
+                            "arn:aws:cloudfront::797640923903:distribution/E2YTVI3ZEL7OZ8",
+                            "arn:aws:cloudfront::797640923903:distribution/E320GYLPLPMTV3",
+                            "arn:aws:cloudfront::797640923903:distribution/E2R3JZH26UN6SC",
+                            "arn:aws:cloudfront::797640923903:distribution/E22NCIN36WXUIM",
+                            "arn:aws:cloudfront::797640923903:distribution/E3B770094CSQFB",
+                            "arn:aws:cloudfront::797640923903:distribution/E11CE5BFBTPKGU",
+                            "arn:aws:cloudfront::797640923903:distribution/E10U4765KQQW5P",
+                            "arn:aws:cloudfront::797640923903:distribution/E1FILQHG8BTWIL",
+                            "arn:aws:cloudfront::797640923903:distribution/E14P60CJ0I6G7Y",
+                            "arn:aws:cloudfront::797640923903:distribution/E14F656YEGR4P3",
+                            "arn:aws:cloudfront::797640923903:distribution/E1CB47ERU70VWV",
+                            "arn:aws:cloudfront::797640923903:distribution/E2K9BYXQN2MM76",
+                            "arn:aws:cloudfront::797640923903:distribution/E3V5LOR3RVT8MS",
+                            "arn:aws:cloudfront::797640923903:distribution/EJJ4MGTDA6BVU",
+                            "arn:aws:cloudfront::797640923903:distribution/E53UUZGXFL713",
+                            "arn:aws:cloudfront::797640923903:distribution/E1DR9MZ7JV331W",
+                            "arn:aws:cloudfront::797640923903:distribution/E35XHVPP7QATHQ",
+                            "arn:aws:cloudfront::797640923903:distribution/E4H3REED377EG",
+                            "arn:aws:cloudfront::797640923903:distribution/ELOO9GKN2R7DA",
+                            "arn:aws:cloudfront::797640923903:distribution/EMQJ1QM9FGG2I",
+                            "arn:aws:cloudfront::797640923903:distribution/E2ECGO8UHOB343",
+                            "arn:aws:cloudfront::797640923903:distribution/E1ULMEK3W2VXOF",
+                            "arn:aws:cloudfront::797640923903:distribution/E2WFBXCOBA5ZU5",
+                            "arn:aws:cloudfront::797640923903:distribution/E14QCZ9L4VTPMD",
+                            "arn:aws:cloudfront::797640923903:distribution/ESC37TT819LAK",
+                            "arn:aws:cloudfront::797640923903:distribution/E1QXK5X5JV0YKJ",
+                            "arn:aws:cloudfront::797640923903:distribution/E7COI4Z95FFZQ",
+                            "arn:aws:cloudfront::797640923903:distribution/E1TUIXZC1K5CUN",
+                            "arn:aws:cloudfront::797640923903:distribution/EZWEDLI9NN764",
+                            "arn:aws:cloudfront::797640923903:distribution/E237A0ZZH0I63",
+                            "arn:aws:cloudfront::797640923903:distribution/E1YSZZSCY9FB9L",
+                            "arn:aws:cloudfront::797640923903:distribution/EZY77E5LBAYK7"
+                          ]
+          }
+        ]
+      }
+    PolicyName: SynapseMonorepoCloudfrontAccessPolicy

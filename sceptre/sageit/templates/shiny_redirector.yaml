@@ -53,8 +53,6 @@ Resources:
       Bucket: !Ref WebsiteBucket
   Cloudfront:
     Type: AWS::CloudFront::Distribution
-    DependsOn:
-      - WebsiteBucket
     Properties:
       DistributionConfig:
         Comment: Cloudfront Distribution pointing to S3 bucket
@@ -151,6 +149,7 @@ Resources:
         config:
           ignore_checks:
           - E3001
+          - E3006
     Properties:
       Target:
         Bucket: !Ref WebsiteBucket

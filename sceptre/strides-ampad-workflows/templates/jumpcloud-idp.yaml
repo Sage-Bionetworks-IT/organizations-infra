@@ -4,6 +4,9 @@ Parameters:
   AdminMetadata:
     Type: String
     Description: "Public certificate for the admin Jumpcloud AWS app"
+  DeveloperMetadata:
+    Type: String
+    Description: "Public certificate for the developer Jumpcloud AWS app"
   AuditorMetadata:
     Type: String
     Description: "Public certificate for the auditor Jumpcloud AWS app"
@@ -51,6 +54,33 @@ Resources:
           - Effect: Allow
             Principal:
               Federated: !Ref AdminSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+  DeveloperSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "strides-ampad-workflows-developer"
+      Metadata: !Ref DeveloperMetadata
+      URL: ""
+  DeveloperSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt DeveloperSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/PowerUserAccess
+        - arn:aws:iam::aws:policy/job-function/Billing
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref DeveloperSamlProvider
             Action: sts:AssumeRoleWithSAML
             Condition:
               StringEquals:
@@ -129,6 +159,14 @@ Outputs:
     Value: !GetAtt AdminSamlProviderRole.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-AdminSamlProviderRoleArn'
+  DeveloperSamlProviderArn:
+    Value: !Ref DeveloperSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-DeveloperSamlProviderArn'
+  DeveloperSamlProviderRoleArn:
+    Value: !GetAtt DeveloperSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-DeveloperSamlProviderRoleArn'
   AuditorSamlProviderArn:
     Value: !Ref AuditorSamlProvider
     Export:

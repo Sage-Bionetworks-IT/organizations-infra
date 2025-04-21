@@ -49,6 +49,7 @@ Resources:
                   - "lambda:DeleteFunction"
                   - "lambda:GetFunction"
                   - "lambda:GetFunctionConfiguration"
+                  - "lambda:UpdateFunctionCode"
                   - "lambda:AddPermission"
                   - "lambda:RemovePermission"
                   - "lambda:InvokeFunction"

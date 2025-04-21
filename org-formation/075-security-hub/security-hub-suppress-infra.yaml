@@ -354,6 +354,9 @@ Resources:
   # Below this point, rules are defined to send findings to the SecurityHubFindingsQueue above
   # The findings on the queue will be processed by a lambda that will suppress them in SecurityHub
 
+  # Event schema: https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cwe-event-formats.html
+  # Findings schema:https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-format.html
+
   # This rule suppresses findings for the given controls (GeneratorId) in all the accounts
   SuppressFindingsInAllAccountsRule:
     Type: AWS::Events::Rule
@@ -364,8 +367,10 @@ Resources:
           findings:
             GeneratorId:
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.3'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/5.3' # same as v/1.2.0/rule/4.3
               - 'aws-foundational-security-best-practices/v/1.0.0/EC2.2'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14'
+              - 'cis-aws-foundations-benchmark/v/1.4.0/1.6' # same as v/1.2.0/rule/1.14
               - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
               - 'cis-aws-foundations-benchmark/v/1.4.0/3.7'
@@ -375,6 +380,8 @@ Resources:
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.1'
               - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.2'
               - 'cis-aws-foundations-benchmark/v/1.4.0/3.5'  # (IT-3619) "3.5 Ensure AWS Config is enabled in all regions"
+              - 'cis-aws-foundations-benchmark/v/1.4.0/5.1'  # (IT-4190) "5.1 Ensure no Network ACLs allow ingress from 0.0.0.0/0 to remote server administration ports"
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1'  # (IT-4236) "2.1.5.1 S3 Block Public Access setting should be enabled"
             Workflow:
               Status:
               - NEW
@@ -406,6 +413,30 @@ Resources:
                 - prefix: 'arn:aws:s3:::cf-templates-'
                 - prefix: 'arn:aws:s3:::cloudformationmanageduploadinfra'
                 - prefix: 'arn:aws:s3:::cost-and-usage-reports.sagebase.org'
+                # IT-4072 public Bridge buckets
+                - prefix: 'arn:aws:s3:::android-apps.sagebridge.org'
+                - prefix: 'arn:aws:s3:::ios-apps.sagebridge.org'
+                - prefix: 'arn:aws:s3:::research.sagebridge.org'
+                - prefix: 'arn:aws:s3:::research-staging.sagebridge.org'
+                - prefix: 'arn:aws:s3:::admin.sagebridge.org'
+                - prefix: 'arn:aws:s3:::admin-staging.sagebridge.org'
+                - prefix: 'arn:aws:s3:::developer.sagebridge.org'
+                - prefix: 'arn:aws:s3:::mpower.sagebridge.org'
+                - prefix: 'arn:aws:s3:::smart4sure.sagebridge.org'
+                - prefix: 'arn:aws:s3:::parkinsonmpower.org'
+                - prefix: 'arn:aws:s3:::cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz'
+                - prefix: 'arn:aws:s3:::sagebase-rules-microservice-outputbucket-17vzcnk2xnq0'
+                - prefix: 'arn:aws:s3:::sharethejourneyapp.org'
+                - prefix: 'arn:aws:s3:::org-sagebridge-repo-maven-releases'
+                - prefix: 'arn:aws:s3:::org-sagebridge-static-bcs'
+                - prefix: 'arn:aws:s3:::org-sagebridge-static-pd'
+                - prefix: 'arn:aws:s3:::org-sagebridge-teamstudy'
+                - prefix: 'arn:aws:s3:::org-sagebridge-truststore'
+                - prefix: 'arn:aws:s3:::org-sagebridge-ui-test'
+                - prefix: 'arn:aws:s3:::web-mpower-2'
+                - prefix: 'arn:aws:s3:::sage-igenomes'
+                # See ticket DPE-1234
+                - prefix: 'arn:aws:s3:::synapse-croissant-metadata'
                 # This should only match with 2.1.5.1
                 - 'AWS::::Account:140124849929'
             GeneratorId:
@@ -439,8 +470,6 @@ Resources:
           findings:
             Resources:
               Id:
-                # synapsedw IT-2308, do not exempt human users
-                - 'arn:aws:iam::383874245509:user/prod-warehouse'
                 # synapseprod IT-2396, do not exempt human users
                 - 'arn:aws:iam::325565585839:user/ran-uploader'
                 # scipool IT-2315
@@ -451,6 +480,74 @@ Resources:
               Status:
               - NEW
               - NOTIFIED
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
+
+  # This rule suppresses findings in org-sagebase-imagecentral for EBS encryption since the volumes
+  # in this account are used for creating public AMIs
+  SuppressFindingsForPublicImagesRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress findings for EBS encryption
+      EventPattern:
+        detail:
+          findings:
+            Resources:
+              Id:
+                # image-central
+                - 'AWS::::Account:867686887310'
+            GeneratorId:
+              # EBS encryption enabled by default
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.2.1'
+            Workflow:
+              Status:
+              - NEW
+              - NOTIFIED
+        detail-type:
+        - Security Hub Findings - Imported
+        source:
+        - aws.securityhub
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - SecurityHubFindingsQueue
+          - Arn
+        Id: Target0
+
+  # Findings to suppress in Bridge accounts.
+  # * Suppress findings for insecure access to S3 buckets in the bridge accounts
+  #   because consent forms are accessed via HTTP
+  # * Suppress findings for unused credentials because automation runs less
+  #   frequently than every 45 days.
+  SuppressFindingsForBridgeAccounts:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: SecHubSuppress findings for Bridge accounts
+      EventPattern:
+        detail:
+          findings:
+            GeneratorId:
+              # Ensure S3 Bucket Policy is set to deny HTTP requests
+              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.2'
+              # Disable credentials unused for more than 45 days
+              - 'cis-aws-foundations-benchmark/v/1.4.0/1.12'
+            Workflow:
+              Status:
+              - NEW
+              - NOTIFIED
+            AwsAccountId:
+            - '420786776710' # bridge-dev
+            - '649232250620' # bridge-prod
         detail-type:
         - Security Hub Findings - Imported
         source:

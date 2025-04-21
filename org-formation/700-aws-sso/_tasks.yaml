@@ -17,9 +17,13 @@ Parameters:
     Type: String
     Default: '906769aa66-4b16d4b3-7c9c-44b7-85e0-adbf41dbf49d'
 
-  developerGroup:     #JC aws-develoers
+  developerGroup:     #JC aws-developers
     Type: String
     Default: '906769aa66-49d7689b-ae36-472b-bc3d-893753529227'
+
+  llmDeveloperGroup: #JC aws-llmdevelopers
+    Type: String
+    Default: '8458f408-2011-701d-03c4-a27ef3d4489c'
 
   scienceSupporterGroup:      #JC aws-science-supporters
     Type: String
@@ -145,6 +149,10 @@ Parameters:
     Type: String
     Default: '906769aa66-8f870ac5-9280-4c19-b477-461592fe92a6'
 
+  htanDevDeveloperGroup:        #JC aws-htan-dev-developers
+    Type: String
+    Default: 'f4d84498-c0e1-70e7-215b-49089082ecaa'
+
   bmgfkiAdminGroup:      #JC aws-bmgfki-admins
     Type: String
     Default: '906769aa66-dfc5248b-3d5d-44ce-81ae-6759ee284e59'
@@ -176,14 +184,6 @@ Parameters:
   agoraDevDeveloperGroup:   #JC aws-agoradev-developers
     Type: String
     Default: '906769aa66-97799c36-3766-4b50-9a0a-62b22d9a5c60'
-
-  includeChopProdAdminGroup:     #JC aws-includechopprod-admins
-    Type: String
-    Default: '906769aa66-a5b83d7c-4846-4f46-b134-608d66060765'
-
-  includeChopProdDeveloperGroup:   #JC aws-includechopprod-developers
-    Type: String
-    Default: '906769aa66-24060cf5-7100-4c45-a9be-27c3ff5aba69'
 
   dnTDevAdminGroup:     #JC aws-dntdev-admins
     Type: String
@@ -244,6 +244,10 @@ Parameters:
   dcaProdApplicationManagerGroup:      # JC aws-dca-prod-application-managers
     Type: String
     Default: '540864c8-1021-7048-7142-4563c3f12645'
+
+  dcaProdAdminGroup:      # JC aws-dca-prod-admins
+    Type: String
+    Default: 'e4d814e8-c071-70fb-2b1e-931d3aed6a46'
 
   genieProdViewerGroup:      #JC aws-genie-prod-viewers
     Type: String
@@ -313,6 +317,39 @@ Parameters:
     Type: String
     Default: '2448e4e8-50b1-70e5-def0-07e0f4fcd60e'
 
+  OpenchallengesDevDeveloperGroup:     # JC aws-openchallenges-dev-developers
+    Type: String
+    Default: '44183438-a051-7070-f706-284ffd41907b'
+
+  OpenchallengesDevAdminGroup:     # JC aws-openchallenges-dev-admins
+    Type: String
+    Default: 'e4388458-2011-7096-3f98-3a6eeb10e458'
+
+  OpenchallengesProdAdminGroup:     # JC aws-openchallenges-prod-admins
+    Type: String
+    Default: 'c418a4d8-c021-70b6-6580-1e115806deb6'
+
+  # Synapse LLM infra account
+  SynapseLlmProdAdminGroup:     # JC aws-synapsellm-prod-admins
+    Type: String
+    Default: 'a48864b8-20b1-7071-67b6-b83ea85d1fd0'
+
+  SynapseLlmProdDeveloperGroup:     # JC aws-synapsellm-prod-developers
+    Type: String
+    Default: 'd478d408-10e1-7071-2273-606c45bb8653'
+
+  SynapseLlmProdLlmDeveloperGroup:  # JC aws-synapsellm-prod-llmdevelopers
+    Type: String
+    Default: '44b8f4c8-9031-7097-01d8-d4e845d7d84d'
+
+  GenAiIcDevAdminGroup:     # JC aws-genaiic-dev-admins
+    Type: String
+    Default: 'f48844f8-3051-70ad-e0da-5146fc17caf7'
+
+  GenAiIcDevDevelopersGroup:     # JC aws-genaiic-dev-developers
+    Type: String
+    Default: '04182458-5011-7026-862d-509a06438571'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -321,6 +358,10 @@ Parameters:
   BWmErzkAdminGroup:             #JC aws-BWmErzk-admins
     Type: String
     Default: '143894c8-1031-70c4-b98a-9d2a9aec59bd'
+
+  MkPreYnAdminGroup:             #JC aws-MkPreYn-admins
+    Type: String
+    Default: 'd4284428-6061-70b8-191c-37e390b2a596'
 
 #----------------------------------------------------------------------------------------------
 
@@ -389,6 +430,7 @@ SsoDeveloper:
     permissionSetName: 'Developer'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/PowerUserAccess'
+      - 'arn:aws:iam::aws:policy/IAMReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
       - 'arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy'
@@ -597,6 +639,40 @@ SsoApplicationManager:
           }
         ]
       }
+
+SsoLlmDeveloper:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: SynapseLlmDeveloperPolicy
+  StackName: !Sub '${resourcePrefix}-${appName}-llmdeveloper'
+  StackDescription: 'Permission set used by an Large Language Model developer'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref llmDeveloperGroup
+    permissionSetName: 'LlmDeveloper'
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/PowerUserAccess'
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Effect": "Deny",
+                  "Action": "sts:AssumeRole",
+                  "Resource": "*"
+              }
+          ]
+      }
+    sessionDuration: 'PT12H'
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
 SsoSynapseDWDevAthenaUser:
@@ -907,6 +983,60 @@ SsoSynapseProdAdmin:
     principalId: !Ref synapseProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
+SsoSynapseLlmProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellmprod-admin'
+  StackDescription: 'SSO: admin role used by SynapseLlm prod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref SynapseLlmProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoSynapseLlmProdDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellmprod-developer'
+  StackDescription: 'SSO: developer role used by SynapseLlm prod developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref SynapseLlmProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoSynapseLlmProdLlmDeveloper:
+  Type: update-stacks
+  DependsOn: SsoLlmDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsellmprod-llmdeveloper'
+  StackDescription: 'SSO: LLM developer role used by SynapseLlm prod LLM developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseLlmProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref SynapseLlmProdLlmDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-llmdeveloper-permission-set-arn' ]
+
 SsoSynapseDevDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
@@ -975,8 +1105,55 @@ SsoImageCentralAmiLibrarian:
     permissionSetName: 'AMI-Librarian'
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AmazonEC2FullAccess'
-      - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+      - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+      - 'arn:aws:iam::aws:policy/AWSCloudFormationFullAccess'
+      - 'arn:aws:iam::aws:policy/AWSImageBuilderFullAccess'
     sessionDuration: 'PT12H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "InstanceRoleAccess",
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreateRole",
+              "iam:AttachRolePolicy",
+              "iam:DetachRolePolicy",
+              "iam:DeleteRole"
+            ],
+            "Resource": "arn:aws:iam::867686887310:role/executionServiceEC2Role/*"
+          },
+          {
+            "Sid": "InstanceProfileAccess",
+            "Effect": "Allow",
+            "Action": [
+              "iam:AddRoleToInstanceProfile",
+              "iam:CreateInstanceProfile",
+              "iam:GetInstanceProfile",
+              "iam:PassRole",
+              "iam:DeleteInstanceProfile",
+              "iam:GetInstanceProfile",
+              "iam:RemoveRoleFromInstanceProfile"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "ImageInfrastructureConfigurationAccess",
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreateServiceLinkedRole",
+              "iam:GetInstanceProfile",
+              "iam:GetRole",
+              "iam:PassRole",
+              "sns:Publish",
+              "ecr:BatchGetRepositoryScanningConfiguration",
+              "inspector2:BatchGetAccountStatus"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
 
 SsoBridgeDevAdmin:
   Type: update-stacks
@@ -1305,6 +1482,24 @@ SsoHtanDevAdmin:
     principalId: !Ref htanDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
+SsoHtanDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-htandev-developer'
+  StackDescription: 'SSO: developer role used by htandev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref HtanDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref htanDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+
 SsoBmgfkiAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -1484,40 +1679,6 @@ SsoAgoraDevDeveloper:
     principalId: !Ref agoraDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
-SsoIncludeChopProdAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-includechopprod-admin'
-  StackDescription: 'SSO: admin role used by includechopprod admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref IncludeChopProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref includeChopProdAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
-SsoIncludeChopProdDeveloper:
-  Type: update-stacks
-  DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-includechopprod-developer'
-  StackDescription: 'SSO: developer role used by includechopprod developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref IncludeChopProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref includeChopProdDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
 SsoDntDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -1619,6 +1780,23 @@ SsoBWmErzkAdmin:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref BWmErzkAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoMkPreYnAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-MkPreYn-admin'
+  StackDescription: 'SSO: admin role used by MkPreYn admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref  MkPreYnAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref MkPreYnAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoRecoverDevAdmin:
@@ -1793,6 +1971,24 @@ SsoDCAProdApplicationManager:
     instanceArn: !Ref instanceArn
     principalId: !Ref dcaProdApplicationManagerGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-application-manager-permission-set-arn' ]
+
+SsoDCAProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-dca-prod-admin'
+  StackDescription: 'SSO: Administrator role used by DCA admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref DCAProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref dcaProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoGenieProdViewer:
   Type: update-stacks
@@ -2048,4 +2244,89 @@ SsoItsandboxDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref itsandboxDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoOpenchallengesDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-dev-developer'
+  StackDescription: 'SSO: Developer role used by openchallenges developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref OpenChallengesDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref OpenchallengesDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoOpenchallengesDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-dev-admin'
+  StackDescription: 'SSO: admin role used by OpenChallenges dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref OpenChallengesDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref OpenchallengesDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoOpenchallengesProdAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-prod-admin'
+  StackDescription: 'SSO: admin role used by OpenChallenges prod admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref OpenChallengesProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref OpenchallengesProdAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoGenAiIcDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-genaiic-dev-admin'
+  StackDescription: 'SSO: admin role used by GenAiIc dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref GenAiIcDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref GenAiIcDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoGenAiIcDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-genaiic-dev-developer'
+  StackDescription: 'SSO: developer role used by GenAiIc dev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref GenAiIcDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref GenAiIcDevDevelopersGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]

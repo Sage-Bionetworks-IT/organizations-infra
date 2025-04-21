@@ -100,11 +100,22 @@ Resources:
           - W3011
     DeletionPolicy: Retain
     Type: "AWS::S3::Bucket"
-    Properties: {}
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
   # ofn manages aws config now. we keep legacy bucket to retain the old data
   # https://github.com/Sage-Bionetworks-IT/organizations-infra/tree/master/org-formation/80-aws-config-inventory
   AWSS3ConfigBucket:
     Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
   # dynamodb monitoring resources
   AWSSNSDynamoTopic:
     Type: "AWS::SNS::Topic"
@@ -251,15 +262,32 @@ Resources:
         config:
           ignore_checks:
           - W3011
+          - W3045
     Type: AWS::S3::Bucket
     Condition: CreateProdResources
     Properties:
-      AccessControl: PublicRead
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       BucketName: android-apps.sagebridge.org
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
     DeletionPolicy: Retain
+  AndroidAppBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Condition: CreateProdResources
+    Properties:
+      Bucket: !Ref AWSS3AndroidAppBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${AWSS3AndroidAppBucket.Arn}/*'
 Outputs:
   AwsDefaultVpcId:
     Value: !Ref AwsDefaultVpcId

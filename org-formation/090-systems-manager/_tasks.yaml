@@ -60,3 +60,32 @@ PatchMembers:
     IncludeMasterAccount: true
   Parameters:
     ManagementAccountNumber: !Ref accountId
+
+# This will run the Stack Armor Nessus installation script each day
+# on any EC2 in us-east-1 tagged with execute-script:install-stack-armor-agent
+# Since the script is idempotent, running every day ensures the script
+# completes in case of a one-time outage
+#
+# The aim is to install the agent on instances running in the Synapse production
+# account. The automation to deploy the Synapse production stack will add the
+# necessary tags.  Other stacks deployed to the account will have to include
+# the tag in their deployment scripts.
+StackArmorAgentInstallation:
+  Type: update-stacks
+  Template: Scheduled-Script-Automation.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-script-execution'
+  StackDescription: Setup Systems manager automatic script execution
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  OrganizationBindings:
+    ScriptExecutionMemberBinding:
+      Account: '*'
+      IncludeMasterAccount: true
+  Parameters:
+    EventBridgeRuleSchedule: "cron(0 2 * * ? *)"
+    TargetRegionIds: "us-east-1"
+    TargetTagName: execute-script
+    TargetTagValue: install-stack-armor-agent
+    ScriptUrl: https://raw.githubusercontent.com/Sage-Bionetworks/infra-utils/v1.0.11/stack-armor/install-nessus-agent.sh
+    ScriptParameters: STACK_ARMOR_KEY:/stack-armor/install-nessus-key

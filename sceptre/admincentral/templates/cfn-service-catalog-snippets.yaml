@@ -13,6 +13,7 @@ Resources:
         config:
           ignore_checks:
             - E3001
+            - E3006
     Properties:
       Target:
         Bucket: !ImportValue

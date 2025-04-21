@@ -1,6 +1,6 @@
 template:
   type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/0.1.7/cfn-cr-alb-rule.yaml
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-alb-rule/0.1.8/cfn-cr-alb-rule.yaml
 stack_name: cfn-cr-alb-rule
 dependencies:
   - "strides/sc-kms-key.yaml"

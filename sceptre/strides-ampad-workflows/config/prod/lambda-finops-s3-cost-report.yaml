@@ -1,0 +1,9 @@
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/lambda-finops-s3-cost-report/1.0.1/lambda-finops-s3-cost-report.yaml
+stack_name: lambda-finops-s3-cost-report
+parameters:
+  Sender: "aws.strides@sagebase.org"
+  Recipients: "sc-strides-support@sagebase.org,cloud-cost-audit@sagebase.org"
+stack_tags:
+  OwnerEmail: "it@sagebase.org"
