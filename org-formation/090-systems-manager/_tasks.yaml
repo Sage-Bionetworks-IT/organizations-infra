@@ -61,7 +61,7 @@ PatchMembers:
   Parameters:
     ManagementAccountNumber: !Ref accountId
 
-PatchPolicy:
+QuickSetupPatchPolicy:
   Type: update-stacks
   Template: QuickSetup-PatchPolicy.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-patchpolicy'

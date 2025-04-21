@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: An SSM patch policy to patch all instances in the given OUs
+Description: An SSM patch policy to patch all instances in the given AWS Organization
 Parameters:
   TargetOrgRoot:
     Type: String
@@ -10,7 +10,7 @@ Parameters:
     Description: >-
       Comma separated list of AWS regions to target.
 Resources:
-  PatchLogBucket:
+  QuickSetupPatchLogBucket:
     Type: "AWS::S3::Bucket"
     Properties:
       PublicAccessBlockConfiguration:
@@ -18,10 +18,10 @@ Resources:
         BlockPublicPolicy: true
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
-  PatchLogBucketPolicy:
+  QuickSetupPatchLogBucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     Properties:
-      Bucket: !Ref PatchLogBucket
+      Bucket: !Ref QuickSetupPatchLogBucket
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -33,15 +33,15 @@ Resources:
               - 's3:List*'
               - 's3:Put*'
             Resource:
-              - !Sub '${PatchLogBucket.Arn}'
-              - !Sub '${PatchLogBucket.Arn}/*'
+              - !Sub '${QuickSetupPatchLogBucket.Arn}'
+              - !Sub '${QuickSetupPatchLogBucket.Arn}/*'
             Condition:
               # require an account principal associated with our Org
               StringEquals:
                 "aws:PrincipalOrgID": !Ref TargetOrgRoot
               ArnLike:
                 "aws:PrincipalArn": "arn:aws:iam::*:root"
-  PatchPolicy:
+  QuickSetupPatchPolicy:
     Type: "AWS::SSMQuickSetup::ConfigurationManager"
     Properties:
       Name: "PatchResourceGroup"
@@ -63,7 +63,7 @@ Resources:
           ConfigurationOptionsScanValue: "cron(0 17 ? * * *)"  # 10am PST
           ConfigurationOptionsInstallValue: "cron(0 19 ? * WED *)"  # 12pm PST
           OutputLogEnableS3: true
-          OutputS3BucketName: !Ref PatchLogBucket
+          OutputS3BucketName: !Ref QuickSetupPatchLogBucket
           OutputBucketRegion: !Ref "AWS::Region"
           PatchBaselineRegion: 'us-east-1'
           SelectedPatchBaselines: '{"ALMA_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0cb0c4966f86b059b","label":"AWS-AlmaLinuxDefaultPatchBaseline","description":"Default
@@ -81,12 +81,13 @@ Resources:
             Patch Baseline for Rocky Linux Provided by AWS.","disabled":false},"SUSE":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-07d8884178197b66b","label":"AWS-SuseDefaultPatchBaseline","description":"Default
             Patch Baseline for Suse Provided by AWS.","disabled":false},"UBUNTU":{"value":"pb-06e3563bd35503f2b","label":"custom-UbuntuServer-Blog-Baseline","description":"Default
             Patch Baseline for Ubuntu Provided by AWS.","disabled":false},"WINDOWS":{"value":"pb-016889927b2bb8542","label":"custom-WindowsServer-Blog-Baseline","disabled":false}}'
+          RebootOption: 'NoReboot'
           TargetType: '*'
           TargetOrganizationalRoot: !Ref TargetOrgRoot
           TargetRegions: !Ref TargetRegions
 Outputs:
   PatchPolicyArn:
     Description: 'Patch policy ARN'
-    Value: !Ref PatchPolicyAll
+    Value: !Ref QuickSetupPatchPolicy
     Export:
       Name: !Sub '${AWS::StackName}-PatchPolicyArn'
