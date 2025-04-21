@@ -433,7 +433,6 @@ SsoDeveloper:
       - 'arn:aws:iam::aws:policy/IAMReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
-      - 'arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy'
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
     sessionDuration: 'PT12H'
     inlinePolicy: >-
