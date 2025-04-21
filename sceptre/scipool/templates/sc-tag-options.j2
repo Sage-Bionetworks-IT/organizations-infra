@@ -8,7 +8,7 @@ Resources:
     Properties:
       Active: true
       Key: "CostCenter"
-      Value: {{ CostCenter.replace(' ','').replace('(','').replace(')','').replace('+','').replace('.','').replace('-','').replace('_','').replace('/','') }}
+      Value: {{ CostCenter.replace('(','').replace(')','') }}
   {% endfor %}
 {% endif %}
 
