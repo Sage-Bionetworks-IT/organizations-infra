@@ -38,9 +38,6 @@ execute the validations by running `pre-commit run --all-files`.
 ## Issues
 * https://sagebionetworks.jira.com/projects/BRIDGE
 
-## Builds
-* https://travis-ci.org/Sage-Bionetworks/Bridge-infra
-
 ## Secrets
 * We use the [AWS SSM](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html)
 to store secrets for this project.  Sceptre retrieves the secrets using
