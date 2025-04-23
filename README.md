@@ -9,6 +9,23 @@ using [cloudformation][4].
 We [boostrapped](./org-formation/000-bootstrap/README.md)
 our AWS management account before deployments can happen.
 
+## Directory Organization
+
+This repo manages AWS resources with two different cloudformation deployment tools,
+[Org-formation][1] and [Sceptre][2].  In general the files for each tool are arranged
+in the corresponding subdirectories in this repo.  The files in the `sceptre` folder are
+there to support legacy deployments, before we starting using org-formation.
+
+Deployment of future resources should be done with org-formation and the corresponding
+files should be added to the `org-formation` folder. There are two exceptions to this
+general rule:
+
+* `sceptre/aws-opendata` and `sceptre/strides-ampad-worflows` deploy to AWS accounts that
+   are not part of the Sage organization therefore cannot be deployed with org-formation.
+* `sceptre/scipool` is for the Sage service catalog.  This can be a stand alone repo
+   however we've decided to move it into this repo to make  CI/CD deployments easier.
+
+
 ### org-formation
 
 Deploy resources to master and all member accounts

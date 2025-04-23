@@ -34,6 +34,7 @@ Organization:
         - !Ref ScceDevAccount
         - !Ref CnbDevAccount
         - !Ref OpenChallengesDevAccount
+        - !Ref GenAiIcDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -53,7 +54,6 @@ Organization:
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
         - !Ref OpenChallengesProdAccount
-        - !Ref CodeOceanProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -116,7 +116,6 @@ Organization:
       OrganizationalUnitName: synapse
       Accounts:
         - !Ref SynapseDevAccount
-        - !Ref SynapseDWAccount
         - !Ref SynapseProdAccount
         - !Ref SynapseLlmDevAccount
         - !Ref SynapseLlmProdAccount
@@ -181,16 +180,6 @@ Organization:
       AccountId: '449435941126'
       RootEmail: synapse.dev@sagebase.org
       Alias: org-sagebase-synapsedev
-      Tags:
-        <<: !Include ./_platform_org_tags.yaml
-
-  SynapseDWAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-synapsedw
-      AccountId: '383874245509'
-      RootEmail: synapse.dw@sagebase.org
-      Alias: org-sagebase-synapsedw
       Tags:
         <<: !Include ./_platform_org_tags.yaml
 
@@ -651,18 +640,18 @@ Organization:
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-synapsellm-prod@sagebase.org
 
-  CodeOceanProdAccount:
+  GenAiIcDevAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: org-sagebase-codeocean-prod
-      RootEmail: aws-codeocean-prod@sagebase.org
-      Alias: org-sagebase-codeocean-prod
+      AccountName: org-sagebase-genaiic-dev
+      RootEmail: aws-genaiic-dev@sagebase.org
+      Alias: org-sagebase-genaiic-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        AccountOwner: it@sagebase.org
-        CostCenter: NO PROGRAM / 000000
+        AccountOwner: milen.nikolov@sagebase.org
+        CostCenter: ARPA-H with Leidos / 125200
         budget-alarm-threshold: 2000
-        budget-alarm-threshold-email-recipient: aws-codeocean-prod@sagebase.org
+        budget-alarm-threshold-email-recipient: aws-genaiic-dev@sagebase.org
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
