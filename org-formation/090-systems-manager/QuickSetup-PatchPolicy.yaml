@@ -62,6 +62,8 @@ Resources:
           ConfigurationOptionsPatchOperation: "ScanAndInstall"
           ConfigurationOptionsScanValue: "cron(0 17 ? * * *)"  # 10am PST
           ConfigurationOptionsInstallValue: "cron(0 19 ? * WED *)"  # 12pm PST
+          # Don't automatically attach instance profiles to instances, we manage them with CFN
+          IsPolicyAttachAllowed: false
           OutputLogEnableS3: true
           OutputS3BucketName: !Ref QuickSetupPatchLogBucket
           OutputBucketRegion: !Ref "AWS::Region"
