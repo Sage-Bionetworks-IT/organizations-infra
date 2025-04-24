@@ -277,7 +277,7 @@ Resources:
     Type: "AWS::SSM::Document"
     Properties:
       DocumentType: Automation
-      Name: "Automation-Run-Script"
+      Name: "Automation-Run-Script-v2"
       Content:
         schemaVersion: '0.3'
         description: "Run a parameterized script on EC2 instances"
