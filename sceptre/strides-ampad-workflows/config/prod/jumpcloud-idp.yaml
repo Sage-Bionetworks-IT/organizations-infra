@@ -5,6 +5,7 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 parameters:
   AdminMetadata: !file_contents idp/jumpcloud/strides-ampad-workflows-admin.xml
+  DeveloperMetadata: !file_contents idp/jumpcloud/strides-ampad-workflows-developer.xml
   AuditorMetadata: !file_contents idp/jumpcloud/strides-ampad-workflows-auditor.xml
   TowerViewerMetadata: !file_contents idp/jumpcloud/strides-ampad-workflows-towerviewer.xml
 dependencies:
