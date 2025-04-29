@@ -346,7 +346,7 @@ AgoraProdAppDnsForward:
     Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "agora-prod.adknowledgeportal.org"
+    SourceHostName: "agora.adknowledgeportal.org"
     # ID of the adknowledgeportal.org zone (in sageit account)
     SourceHostedZoneId: "Z2DTJC6JTFRHBN"
     # the value of the CNAME record
