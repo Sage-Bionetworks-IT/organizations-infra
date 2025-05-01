@@ -420,7 +420,7 @@ SynapseLlmLambdaExecRoleBoundary:
         "Statement": [
           {
             "Effect": "Allow",
-            "Action": ["logs:*", "bedrock:*", "aoss:*" ],
+            "Action": ["lambda:*", "logs:*", "bedrock:*", "aoss:*" ],
             "Resource": "*"
           },
           {
