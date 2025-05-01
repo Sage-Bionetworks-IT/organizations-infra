@@ -85,6 +85,15 @@ Resources:
             Condition:
               StringEquals:
                 "SAML:aud": "https://signin.aws.amazon.com/saml"
+      Policies:
+        - PolicyName: IamExtraPermissions
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              Action:
+                - iam:PassRole
+              Effect: Allow
+              Resource: "*"
   AuditorSamlProvider:
     Type: Custom::SAMLProvider
     Properties:

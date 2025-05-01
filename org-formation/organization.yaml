@@ -425,12 +425,12 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: org-sagebase-dnt-dev
-      RootEmail: ibc-ops@sagebase.org
+      RootEmail: aws-dpe-dev@sagebase.org
       Alias: org-sagebase-dnt-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
         budget-alarm-threshold: 10000
-        budget-alarm-threshold-email-recipient: ibc-ops@sagebase.org
+        budget-alarm-threshold-email-recipient: aws-dpe-dev@sagebase.org
         AccountOwner: thomas.yu@sagebase.org
 
   AgoraDevAccount:
