@@ -412,15 +412,19 @@ SynapseLlmDeveloperPolicy:
           {
             "Effect": "Allow",
             "Action": "iam:PassRole",
-            "Resource": "*"
+            "Resource": "arn:aws:iam::${aws:AccountId}:role/synllm-*"
           },
           {
+            "Sid": "ManageRolesWithBoundary ",
             "Effect": "Allow",
             "Action": [
               "iam:CreateRole",
+              "iam:PutRolePolicy",
+              "iam:AttachRolePolicy",
+              "iam:UpdateAssumeRolePolicy",
               "iam:PutRolePermissionsBoundary"
             ],
-            "Resource": "arn:aws:iam::${AWS::AccountId}:role/synllmrole-*",
+            "Resource": "*",
             "Condition": {
               "StringEquals": {
                 "iam:PermissionsBoundary": "${synLlmLambdaExecPermissionBoundary}"
@@ -428,25 +432,36 @@ SynapseLlmDeveloperPolicy:
             }
           },
           {
-            "Effect": "Allow",
-            "Action": [
-              "iam:UpdateRole",
-              "iam:DeleteRole",
-              "iam:AttachRolePolicy",
-              "iam:DetachRolePolicy"
-            ],
-            "Resource": "arn:aws:iam::${AWS::AccountId}:role/synllmrole-*"
-          },
-          {
+            "Sid": "ManagePolicies",
             "Effect": "Allow",
             "Action": [
               "iam:CreatePolicy",
-              "iam:DeletePolicy",
               "iam:CreatePolicyVersion",
-              "iam:SetDefaultPolicyVersion",
-              "iam:DeletePolicyVersion"
+              "iam:DeletePolicy",
+              "iam:DeletePolicyVersion",
+              "iam:GetPolicy",
+              "iam:GetPolicyVersion",
+              "iam:ListPolicyVersions",
+              "iam:ListPolicies",
+              "iam:SetDefaultPolicyVersion"
             ],
-            "Resource": "arn:aws:iam::${AWS::AccountId}:policy/synllmpol-*"
+            "Resource": "*",
+            "Condition": {
+              "StringLike": {
+                "iam:PolicyName": "synllm-*"
+              }
+            }
+          },
+          {
+              "Sid": "AllowListRoleInfos",
+              "Action": [
+                  "iam:GetRole",
+                  "iam:ListRoles",
+                  "iam:GetAccountSummary",
+                  "iam:ListAccountAliases"
+              ],
+              "Resource": "*",
+              "Effect": "Allow"
           }
         ]
       }
