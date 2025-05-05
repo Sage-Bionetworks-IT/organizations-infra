@@ -1,0 +1,95 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: An SSM patch policy to patch all instances in the given AWS Organization
+Parameters:
+  TargetOrgRoot:
+    Type: String
+    Description: >-
+      AWS Organization root ID to target.
+  TargetRegions:
+    Type: String
+    Description: >-
+      Comma separated list of AWS regions to target.
+Resources:
+  QuickSetupPatchLogBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  QuickSetupPatchLogBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref QuickSetupPatchLogBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          # All member accounts need write access to this bucket
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - 's3:Get*'
+              - 's3:List*'
+              - 's3:Put*'
+            Resource:
+              - !Sub '${QuickSetupPatchLogBucket.Arn}'
+              - !Sub '${QuickSetupPatchLogBucket.Arn}/*'
+            Condition:
+              # require an account principal associated with our Org
+              StringEquals:
+                "aws:PrincipalOrgID": !Ref TargetOrgRoot
+              ArnLike:
+                "aws:PrincipalArn": "arn:aws:iam::*:root"
+  QuickSetupPatchPolicy:
+    Type: "AWS::SSMQuickSetup::ConfigurationManager"
+    Properties:
+      Name: "PatchResourceGroup"
+      Description: "Patch all SSM managed nodes"
+      ConfigurationDefinitions:
+      - Type: AWSQuickSetupType-PatchPolicy
+        LocalDeploymentExecutionRoleName: AWS-QuickSetup-StackSet-Local-ExecutionRole
+        LocalDeploymentAdministrationRoleArn: "arn:aws:iam::531805629419:role/AWS-QuickSetup-PatchPolicy-LocalAdministrationRole"
+        Parameters:
+          PatchPolicyName: PatchPolicyAll
+          # Patch baselines can be found with the command:
+          #   aws ssm describe-patch-baselines |jq '.BaselineIdentities | map({ (.OperatingSystem): (.value = .BaselineId | .label = .BaselineName | .description = .BaselineDescription | .disabled=false | del(.BaselineId, .BaselineName, .OperatingSystem, .BaselineDescription, .DefaultBaseline)) }) | add'
+          #
+          # More information at:
+          #   https://aws.amazon.com/blogs/mt/deploy-aws-systems-manager-quick-setup-programmatically-across-your-aws-organization/
+          #   https://github.com/aws-samples/aws-management-and-governance-samples/blob/master/AWSSystemsManager/Quick-Setup-API/patch-policy-examples/patch-policy-cfn-template.yaml
+          #   https://github.com/aws-samples/aws-management-and-governance-samples/blob/master/AWSSystemsManager/Quick-Setup-API/patch-policy-examples/default-patch-baselines.txt
+          ConfigurationOptionsPatchOperation: "ScanAndInstall"
+          ConfigurationOptionsScanValue: "cron(0 17 ? * * *)"  # 10am PST
+          ConfigurationOptionsInstallValue: "cron(0 19 ? * WED *)"  # 12pm PST
+          # Don't automatically attach instance profiles to instances, we manage them with CFN
+          IsPolicyAttachAllowed: false
+          OutputLogEnableS3: true
+          OutputS3BucketName: !Ref QuickSetupPatchLogBucket
+          OutputBucketRegion: !Ref "AWS::Region"
+          PatchBaselineRegion: 'us-east-1'
+          SelectedPatchBaselines: '{"ALMA_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0cb0c4966f86b059b","label":"AWS-AlmaLinuxDefaultPatchBaseline","description":"Default
+            Patch Baseline for Alma Linux Provided by AWS.","disabled":false},"AMAZON_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0c10e657807c7a700","label":"AWS-AmazonLinuxDefaultPatchBaseline","description":"Default
+            Patch Baseline for Amazon Linux Provided by AWS.","disabled":false},"AMAZON_LINUX_2":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0be8c61cde3be63f3","label":"AWS-AmazonLinux2DefaultPatchBaseline","description":"Baseline
+            containing all Security and Bugfix updates approved for Amazon Linux 2 instances","disabled":false},"AMAZON_LINUX_2022":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0028ca011460d5eaf","label":"AWS-AmazonLinux2022DefaultPatchBaseline","description":"Default
+            Patch Baseline for Amazon Linux 2022 Provided by AWS.","disabled":false},"AMAZON_LINUX_2023":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-05c9c9bf778d4c4d0","label":"AWS-AmazonLinux2023DefaultPatchBaseline","description":"Default
+            Patch Baseline for Amazon Linux 2023 Provided by AWS.","disabled":false},"CENTOS":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-03e3f588eec25344c","label":"AWS-CentOSDefaultPatchBaseline","description":"Default
+            Patch Baseline for CentOS Provided by AWS.","disabled":false},"DEBIAN":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-09a5f8eb62bde80b1","label":"AWS-DebianDefaultPatchBaseline","description":"Default
+            Patch Baseline for Debian Provided by AWS.","disabled":false},"MACOS":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ee4f94581368c0d4","label":"AWS-MacOSDefaultPatchBaseline","description":"Default
+            Patch Baseline for MacOS Provided by AWS.","disabled":false},"ORACLE_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-06bff38e95fe85c02","label":"AWS-OracleLinuxDefaultPatchBaseline","description":"Default
+            Patch Baseline for Oracle Linux Server Provided by AWS.","disabled":false},"RASPBIAN":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ec16280999c5c75e","label":"AWS-RaspbianDefaultPatchBaseline","description":"Default
+            Patch Baseline for Raspbian Provided by AWS.","disabled":false},"REDHAT_ENTERPRISE_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0cbb3a633de00f07c","label":"AWS-RedHatDefaultPatchBaseline","description":"Default
+            Patch Baseline for Redhat Enterprise Linux Provided by AWS.","disabled":false},"ROCKY_LINUX":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-03ec98bc512aa3ac0","label":"AWS-RockyLinuxDefaultPatchBaseline","description":"Default
+            Patch Baseline for Rocky Linux Provided by AWS.","disabled":false},"SUSE":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-07d8884178197b66b","label":"AWS-SuseDefaultPatchBaseline","description":"Default
+            Patch Baseline for Suse Provided by AWS.","disabled":false},"UBUNTU":{"value":"pb-06e3563bd35503f2b","label":"custom-UbuntuServer-Blog-Baseline","description":"Default
+            Patch Baseline for Ubuntu Provided by AWS.","disabled":false},"WINDOWS":{"value":"pb-016889927b2bb8542","label":"custom-WindowsServer-Blog-Baseline","disabled":false}}'
+          RebootOption: 'NoReboot'
+          TargetType: '*'
+          TargetOrganizationalRoot: !Ref TargetOrgRoot
+          TargetRegions: !Ref TargetRegions
+Outputs:
+  PatchPolicyArn:
+    Description: 'Patch policy ARN'
+    Value: !Ref QuickSetupPatchPolicy
+    Export:
+      Name: !Sub '${AWS::StackName}-PatchPolicyArn'
