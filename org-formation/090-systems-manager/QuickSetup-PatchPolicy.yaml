@@ -85,7 +85,7 @@ Resources:
             Patch Baseline for Ubuntu Provided by AWS.","disabled":false},"WINDOWS":{"value":"pb-016889927b2bb8542","label":"custom-WindowsServer-Blog-Baseline","disabled":false}}'
           RebootOption: 'NoReboot'
           TargetType: '*'
-          TargetOrganizationalRoot: !Ref TargetOrgRoot
+          TargetOrganizationalUnits: !Ref TargetOrgRoot
           TargetRegions: !Ref TargetRegions
 Outputs:
   PatchPolicyArn:
