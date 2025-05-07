@@ -460,7 +460,8 @@ Resources:
           - Arn
         Id: Target0
 
-  # Same as the above SuppressFindingsForPublicBucketsRule, extending here due to Rule character size limit
+  # Same as the above SuppressFindingsForPublicBucketsRule
+  # extending here due to event pattern parameter limit of 2048 chars
   SuppressFindingsForPublicBucketsRule2:
     Type: AWS::Events::Rule
     Properties:
