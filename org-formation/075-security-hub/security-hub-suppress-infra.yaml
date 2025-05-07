@@ -437,6 +437,8 @@ Resources:
                 - prefix: 'arn:aws:s3:::sage-igenomes'
                 # See ticket DPE-1234
                 - prefix: 'arn:aws:s3:::synapse-croissant-metadata'
+                # This should only match with 2.1.5.1
+                - 'AWS::::Account:140124849929'
                 # Cloudfront buckets in org-sagebase-sageit account
                 - prefix: 'arn:aws:s3:::admodelexplorer.org'
                 - prefix: 'arn:aws:s3:::alzdrugtool.synapse.org'
@@ -495,8 +497,6 @@ Resources:
                 - prefix: 'arn:aws:s3:::www.csbcpson2018.org'
                 - prefix: 'arn:aws:s3:::www.elevatems.org'
                 - prefix: 'arn:aws:s3:::www.journeypro.org'
-                # This should only match with 2.1.5.1
-                - 'AWS::::Account:140124849929'
             GeneratorId:
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.1'
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2'
