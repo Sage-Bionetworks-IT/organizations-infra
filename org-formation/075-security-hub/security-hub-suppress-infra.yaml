@@ -486,7 +486,6 @@ Resources:
                 - prefix: 'arn:aws:s3:::prod*'
                 - prefix: 'arn:aws:s3:::psychencode.org'
                 - prefix: 'arn:aws:s3:::sso.sageit.org'
-                - prefix: 'arn:aws:s3:::staging.admodelexplorer.org'
                 - prefix: 'arn:aws:s3:::staging*'
                 - prefix: 'arn:aws:s3:::stopadportal.synapse.org'
                 - prefix: 'arn:aws:s3:::test.admodeladexplorer.org'
