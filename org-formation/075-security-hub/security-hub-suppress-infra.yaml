@@ -460,11 +460,12 @@ Resources:
           - Arn
         Id: Target0
 
-  # Same as the above SuppressFindingsForPublicBucketsRule, extending here due to Rule character size limit
+  # Same as the above SuppressFindingsForPublicBucketsRule
+  # extending here due to event pattern parameter limit of 2048 chars
   SuppressFindingsForPublicBucketsRule2:
     Type: AWS::Events::Rule
     Properties:
-      Description: SecHubSuppress findings (identified by generatorId) for the infra resources in all accounts
+      Description: SecHubSuppress findings (identified by generatorId) for the infra resources in org-sagebase-sageit account
       EventPattern:
         detail:
           findings:
@@ -483,51 +484,14 @@ Resources:
                 - prefix: 'arn:aws:s3:::mobiletoolbox.org'
                 - prefix: 'arn:aws:s3:::privacytoolkit.sagebase.org'
                 - prefix: 'arn:aws:s3:::privacytoolkit.sagebionetworks.org'
-                - prefix: 'arn:aws:s3:::prod.bsmn.synapse.org'
-                - prefix: 'arn:aws:s3:::prod.cancercomplexity.synapse.org'
-                - prefix: 'arn:aws:s3:::prod.covid19patientcorps.sagebionetworks.org'
-                - prefix: 'arn:aws:s3:::prod.covidrecoverycorps.org'
-                - prefix: 'arn:aws:s3:::prod.covidrecoverycorpsresearcher.synapse.org'
-                - prefix: 'arn:aws:s3:::prod.csbc-pson.synapse.org'
-                - prefix: 'arn:aws:s3:::prod.dhealth.synapse.org'
-                - prefix: 'arn:aws:s3:::prod.eliteportal.org'
-                - prefix: 'arn:aws:s3:::prod.htan.synapse.org'
-                - prefix: 'arn:aws:s3:::prod.mindkindstudy.org'
-                - prefix: 'arn:aws:s3:::prod.mobiletoolbox.org'
-                - prefix: 'arn:aws:s3:::prod.modeladexplorer.org'
-                - prefix: 'arn:aws:s3:::prod.nf.synapse.org'
-                - prefix: 'arn:aws:s3:::prod.psychencode.synapse.org'
-                - prefix: 'arn:aws:s3:::prod.studies.mobiletoolbox.org'
-                - prefix: 'arn:aws:s3:::prod.wtgmhdc.synapse.org'
+                - prefix: 'arn:aws:s3:::prod*'
                 - prefix: 'arn:aws:s3:::psychencode.org'
                 - prefix: 'arn:aws:s3:::sso.sageit.org'
-                - prefix: 'arn:aws:s3:::staging.admodelexplorer.org'
-                - prefix: 'arn:aws:s3:::staging.alzdrugtool.synapse.org'
-                - prefix: 'arn:aws:s3:::staging.bsmn.synapse.org'
-                - prefix: 'arn:aws:s3:::staging.cancercomplexity.synapse.org'
-                - prefix: 'arn:aws:s3:::staging.covid19patientcorps.sagebionetworks.org'
-                - prefix: 'arn:aws:s3:::staging.covidrecoverycorps.org'
-                - prefix: 'arn:aws:s3:::staging.covidrecoverycorpsresearcher.synapse.org'
-                - prefix: 'arn:aws:s3:::staging.csbc-pson.synapse.org'
-                - prefix: 'arn:aws:s3:::staging.dhealth.synapse.org'
-                - prefix: 'arn:aws:s3:::staging.eliteportal.org'
-                - prefix: 'arn:aws:s3:::staging.htan.synapse.org'
-                - prefix: 'arn:aws:s3:::staging.mindkindstudy.org'
-                - prefix: 'arn:aws:s3:::staging.mobiletoolbox.org'
-                - prefix: 'arn:aws:s3:::staging.modeladexplorer.org'
-                - prefix: 'arn:aws:s3:::staging.nf.synapse.org'
-                - prefix: 'arn:aws:s3:::staging.stopadportal.synapse.org'
-                - prefix: 'arn:aws:s3:::staging.studies.mobiletoolbox.org'
-                - prefix: 'arn:aws:s3:::staging.wtgmhdc.synapse.org'
-                - prefix: 'arn:aws:s3:::static.ampadportal.org'
-                - prefix: 'arn:aws:s3:::static.nf.synapse.org'
+                - prefix: 'arn:aws:s3:::staging*'
                 - prefix: 'arn:aws:s3:::stopadportal.synapse.org'
                 - prefix: 'arn:aws:s3:::test.admodeladexplorer.org'
                 - prefix: 'arn:aws:s3:::vpn.sageit.org'
-                - prefix: 'arn:aws:s3:::www.csbconsortium.org'
-                - prefix: 'arn:aws:s3:::www.csbcpson2018.org'
-                - prefix: 'arn:aws:s3:::www.elevatems.org'
-                - prefix: 'arn:aws:s3:::www.journeypro.org'
+                - prefix: 'arn:aws:s3:::www*'
             GeneratorId:
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.1'
               - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2'
@@ -537,6 +501,8 @@ Resources:
               Status:
               - NEW
               - NOTIFIED
+              AwsAccountId:
+                - '797640923903' # org-sagebase-sageit
         detail-type:
         - Security Hub Findings - Imported
         source:
@@ -547,7 +513,7 @@ Resources:
           Fn::GetAtt:
           - SecurityHubFindingsQueue
           - Arn
-        Id: Target2
+        Id: Target0
 
   # This rule suppresses findings with the given generator IDs only for the IAM accounts specified
   SuppressFindingsForIAMsRule:
