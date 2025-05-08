@@ -310,7 +310,7 @@ AgoraDevAppDnsForward:
     Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "newagora-dev.adknowledgeportal.org"
+    SourceHostName: "agora-dev.adknowledgeportal.org"
     # ID of the adknowledgeportal.org zone (in sageit account)
     SourceHostedZoneId: "Z2DTJC6JTFRHBN"
     # the value of the CNAME record
@@ -328,7 +328,7 @@ AgoraStageAppDnsForward:
     Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "newagora-stage.adknowledgeportal.org"
+    SourceHostName: "agora-stage.adknowledgeportal.org"
     # ID of the adknowledgeportal.org zone (in sageit account)
     SourceHostedZoneId: "Z2DTJC6JTFRHBN"
     # the value of the CNAME record
@@ -346,7 +346,7 @@ AgoraProdAppDnsForward:
     Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "newagora-prod.adknowledgeportal.org"
+    SourceHostName: "agora.adknowledgeportal.org"
     # ID of the adknowledgeportal.org zone (in sageit account)
     SourceHostedZoneId: "Z2DTJC6JTFRHBN"
     # the value of the CNAME record
