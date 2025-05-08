@@ -29,19 +29,6 @@ LinkManagementAccount:
     MonitoringAccountId: !Ref MonitorCentralAccount
     SinkIdentifier: "6046cc13-135d-4e41-ae56-63327a7a7b8c"
 
-# Allow member accounts to share cloudwatch data with MonitorCentral
-CrossAccountSharingRole:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.8.6/templates/Cloudwatch/CrossAccountSharingRole-AccountList.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-CrossAccountSharingRole'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: '*'
-    ExcludeAccount: !Ref MonitorCentralAccount
-  Parameters:
-    MonitoringAccountIds: !Ref MonitorCentralAccount
-
-
 AgoraCwDashboards:
   Type: update-stacks
   Template: ./agora-cw-dashboards.njk
