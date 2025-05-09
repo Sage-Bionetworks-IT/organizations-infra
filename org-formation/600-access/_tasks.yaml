@@ -424,7 +424,7 @@ SynapseLlmDeveloperPolicy:
               "iam:UpdateAssumeRolePolicy",
               "iam:PutRolePermissionsBoundary"
             ],
-            "Resource": "*",
+            "Resource": "arn:aws:iam::${aws:AccountId}:role/synllm-*",
             "Condition": {
               "StringEquals": {
                 "iam:PermissionsBoundary": "${synLlmLambdaExecPermissionBoundary}"
