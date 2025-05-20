@@ -149,13 +149,6 @@ VpnAuthRoutes:
           - "aws-admins"
           - "aws-synapse-admins"
           - "aws-synapseprod-developers"
-      # org-sagebase-agora-dev
-      agoradev-vpc:
-        CIDR: "10.255.45.0/24"
-        AccessGroups:
-          - "aws-admins"
-          - "aws-agoradev-admins"
-          - "aws-agoradev-developers"
       # org-sagebase-scipooldev
       cesspoolvpc:
         CIDR: "10.31.0.0/16"
