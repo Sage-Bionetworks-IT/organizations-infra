@@ -183,6 +183,10 @@ GithubOidcSageBionetworksSynapse:
         branches: ["*"]
       - name: "nbconvert-webapp"
         branches: ["master", "develop"]
+      - name: "synapse-ops-dev"
+        branches: ["main"]
+      - name: "synapse-ops-prod"
+        branches: ["main"]
   DefaultOrganizationBinding:
     Account:
       - !Ref SynapseDevAccount
