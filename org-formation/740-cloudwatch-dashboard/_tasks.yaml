@@ -29,25 +29,6 @@ LinkManagementAccount:
     MonitoringAccountId: !Ref MonitorCentralAccount
     SinkIdentifier: "6046cc13-135d-4e41-ae56-63327a7a7b8c"
 
-AgoraCwDashboards:
-  Type: update-stacks
-  Template: ./agora-cw-dashboards.njk
-  StackName: !Sub '${resourcePrefix}-${appName}-agora'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref MonitorCentralAccount
-  TemplatingContext:
-    Dashboards:
-      - Name: "agora-develop"
-        ElasticBeanstalkEnvName: "agora-develop"
-        AccountId: "607346494281"
-      - Name: "agora-staging"
-        ElasticBeanstalkEnvName: "agora-staging"
-        AccountId: "681175625864"
-      - Name: "agora-prod"
-        ElasticBeanstalkEnvName: "agora-prod"
-        AccountId: "681175625864"
-
 NextflowCwDashboards:
   Type: update-stacks
   Template: ./nextflow-cw-dashboards.njk

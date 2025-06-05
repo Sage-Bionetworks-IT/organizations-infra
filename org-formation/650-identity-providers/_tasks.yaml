@@ -158,13 +158,53 @@ GithubOidcSageBionetworksSynapse:
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
-      - name: "synapse-docker-registry"
-        branches: ["*"]
       - name: "nbconvert-webapp"
         branches: ["master", "develop"]
   DefaultOrganizationBinding:
     Account:
       - !Ref SynapseDevAccount
+      - !Ref SynapseProdAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksSynapseOpsDev:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-ops-dev
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-ops-dev
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-ops-dev"
+        branches: ["main"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseDevAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksSynapseOpsProd:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-ops-prod
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-ops-prod
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-ops-prod"
+        branches: ["main"]
+  DefaultOrganizationBinding:
+    Account:
       - !Ref SynapseProdAccount
     Region: us-east-1
 
@@ -805,29 +845,6 @@ GithubOidcBridgeDigitalHealthOpenBridgeWeb:
     Account: !Ref SageITAccount
     Region: us-east-1
 
-GithubOidcAgoraInfraDeploy:
-  Type: update-stacks
-  DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-agora-infra-deploy
-  Parameters:
-    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-agora-infra-deploy
-    MaxSessionDuration: 7200
-    ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AdministratorAccess"
-      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
-  TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks"
-    Repositories:
-      - name: "agora2-infra"
-        branches: ["main"]
-  DefaultOrganizationBinding:
-    Account:
-      - !Ref AgoraDevAccount
-      - !Ref AgoraProdAccount
-    Region: us-east-1
-
 GithubOidcAgoraInfraV3:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
@@ -845,28 +862,6 @@ GithubOidcAgoraInfraV3:
     Repositories:
       - name: "agora-infra-v3"
         branches: ["dev","stage","prod"]
-  DefaultOrganizationBinding:
-    Account:
-      - !Ref AgoraDevAccount
-      - !Ref AgoraProdAccount
-    Region: us-east-1
-
-GithubOidcAgoraEBDeploy:
-  Type: update-stacks
-  DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-agora-eb-deploy
-  Parameters:
-    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-agora-eb-deploy
-    MaxSessionDuration: 7200
-    ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk"
-  TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks"
-    Repositories:
-      - name: "Agora"
-        branches: ["develop", "prod", "staging"]
   DefaultOrganizationBinding:
     Account:
       - !Ref AgoraDevAccount
