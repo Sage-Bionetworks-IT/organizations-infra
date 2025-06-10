@@ -3,6 +3,89 @@ Description: "Setup AWS Security Hub"
 Resources:
   SecurityHub:
     Type: "AWS::SecurityHub::Hub"
+
+  SuppressSecHubFindingsInSageItAccount:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsInSageItAccount"
+      RuleOrder: "100"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for resources in org-sagebase-sageit account"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        AwsAccountId:
+          - Value: "797640923903"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.1"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.2"
+            Comparison: "EQUALS"
+        ResourceId:
+          - Value: "arn:aws:s3:::admodelexplorer.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::alzdrugtool.synapse.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::aws-sso.sageit.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::brainsomaticmosaicism.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::csbconsortium.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::designmanual.sagebase.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::install.studies.mobiletoolbox.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::it1363.sagebase.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::mindkindstudyredirector.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::mobiletoolbox.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::privacytoolkit.sagebase.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::privacytoolkit.sagebionetworks.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::prod"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::psychencode.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::sso.sageit.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::staging"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::stopadportal.synapse.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::test.admodeladexplorer.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::vpn.sageit.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::www"
+            Comparison: "PREFIX"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
+
 Outputs:
   SecurityHubArn:
     Description: "The security hub ARN"
