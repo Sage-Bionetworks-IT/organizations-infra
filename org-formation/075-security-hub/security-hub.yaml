@@ -76,6 +76,8 @@ Resources:
             Comparison: "PREFIX"
           - Value: "arn:aws:s3:::www"
             Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::static"
+            Comparison: "PREFIX"
       Actions:
         - Type: "FINDING_FIELDS_UPDATE"
           FindingFieldsUpdate:
