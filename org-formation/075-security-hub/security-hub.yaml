@@ -143,6 +143,101 @@ Resources:
               Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
               UpdatedBy: "sechub-automation"
 
+  SuppressSecHubFindingsForPublicBucket:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForPublicBucket"
+      RuleOrder: "300"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for public buckets in all AWS accounts"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.1"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1"  # (IT-4236) "2.1.5.1 S3 Block Public Access setting should be enabled"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2"   # 2.1.5.2 S3 Block Public Access setting should be enabled at the bucket level
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.2"     # 2.1.2 Ensure S3 Bucket Policy is set to deny HTTP requests
+            Comparison: "EQUALS"
+        ResourceId:
+          - Value: "arn:aws:s3:::bootstrap-awss3cloudformationbucket-"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::cf-templates-"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::cloudformationmanageduploadinfra"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::cost-and-usage-reports.sagebase.org"
+            Comparison: "PREFIX"
+          #---- IT-4072 public Bridge buckets. ---
+          - Value: "arn:aws:s3:::android-apps.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::ios-apps.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::research.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::research-staging.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::admin.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::admin-staging.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::developer.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::mpower.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::smart4sure.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::parkinsonmpower.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::sagebase-rules-microservice-outputbucket-17vzcnk2xnq0"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::sharethejourneyapp.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-repo-maven-releases"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-static-bcs"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-static-pd"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-teamstudy"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-truststore"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-ui-test"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::web-mpower-2"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::sage-igenomes"
+            Comparison: "PREFIX"
+          #-------------------------------------------
+          - Value: "arn:aws:s3:::synapse-croissant-metadata"  # See ticket DPE-1234
+            Comparison: "PREFIX"
+          - Value: "AWS::::Account:140124849929"   # This should only match with 2.1.5.1
+            Comparison: "PREFIX"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
 
 Outputs:
   SecurityHubArn:
