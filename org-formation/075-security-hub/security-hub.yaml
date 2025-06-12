@@ -113,7 +113,9 @@ Resources:
           - Value: "aws-foundational-security-best-practices/v/1.0.0/EC2.2"
             Comparison: "EQUALS"
           - Value: "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14"
-            Comparison: "cis-aws-foundations-benchmark/v/1.4.0/1.6" # same as v/1.2.0/rule/1.14
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/1.6"   # same as v/1.2.0/rule/1.14
+            Comparison: "EQUALS"
           - Value: "aws-foundational-security-best-practices/v/1.0.0/IAM.6"
             Comparison: "EQUALS"
           - Value: "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7"
