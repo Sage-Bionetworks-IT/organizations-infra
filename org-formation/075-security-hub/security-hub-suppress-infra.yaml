@@ -357,47 +357,6 @@ Resources:
   # Event schema: https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cwe-event-formats.html
   # Findings schema:https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-format.html
 
-  # This rule suppresses findings for the given controls (GeneratorId) in all the accounts
-  SuppressFindingsInAllAccountsRule:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: SecHubSuppress findings (identified by generatorId) for all accounts
-      EventPattern:
-        detail:
-          findings:
-            GeneratorId:
-              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.3'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/5.3' # same as v/1.2.0/rule/4.3
-              - 'aws-foundational-security-best-practices/v/1.0.0/EC2.2'
-              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/1.6' # same as v/1.2.0/rule/1.14
-              - 'aws-foundational-security-best-practices/v/1.0.0/IAM.6'
-              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/3.7'
-              # SecHub Recommendation: no security group allows unrestricted ingress access to port 22/3389.
-              # Supression Reason: Allow for bastian hosts and testing
-              - 'cis-aws-foundations-benchmark/v/1.2.0/rule/4.1'
-              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.1'
-              - 'arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.2'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/3.5'  # (IT-3619) "3.5 Ensure AWS Config is enabled in all regions"
-              - 'cis-aws-foundations-benchmark/v/1.4.0/5.1'  # (IT-4190) "5.1 Ensure no Network ACLs allow ingress from 0.0.0.0/0 to remote server administration ports"
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1'  # (IT-4236) "2.1.5.1 S3 Block Public Access setting should be enabled"
-            Workflow:
-              Status:
-              - NEW
-              - NOTIFIED
-        detail-type:
-        - Security Hub Findings - Imported
-        source:
-        - aws.securityhub
-      State: ENABLED
-      Targets:
-      - Arn:
-          Fn::GetAtt:
-          - SecurityHubFindingsQueue
-          - Arn
-        Id: Target0
-
   # This rule suppresses findings with the given generator IDs only for the infra resources
   SuppressFindingsForPublicBucketsRule:
     Type: AWS::Events::Rule
@@ -448,61 +407,6 @@ Resources:
               Status:
               - NEW
               - NOTIFIED
-        detail-type:
-        - Security Hub Findings - Imported
-        source:
-        - aws.securityhub
-      State: ENABLED
-      Targets:
-      - Arn:
-          Fn::GetAtt:
-          - SecurityHubFindingsQueue
-          - Arn
-        Id: Target0
-
-  # Same as the above SuppressFindingsForPublicBucketsRule
-  # extending here due to event pattern parameter limit of 2048 chars
-  SuppressFindingsForPublicBucketsRule2:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: SecHubSuppress findings (identified by generatorId) for the infra resources in org-sagebase-sageit account
-      EventPattern:
-        detail:
-          findings:
-            Resources:
-              Id:
-                # Cloudfront buckets in org-sagebase-sageit account
-                - prefix: 'arn:aws:s3:::admodelexplorer.org'
-                - prefix: 'arn:aws:s3:::alzdrugtool.synapse.org'
-                - prefix: 'arn:aws:s3:::aws-sso.sageit.org'
-                - prefix: 'arn:aws:s3:::brainsomaticmosaicism.org'
-                - prefix: 'arn:aws:s3:::csbconsortium.org'
-                - prefix: 'arn:aws:s3:::designmanual.sagebase.org'
-                - prefix: 'arn:aws:s3:::install.studies.mobiletoolbox.org'
-                - prefix: 'arn:aws:s3:::it1363.sagebase.org'
-                - prefix: 'arn:aws:s3:::mindkindstudyredirector.org'
-                - prefix: 'arn:aws:s3:::mobiletoolbox.org'
-                - prefix: 'arn:aws:s3:::privacytoolkit.sagebase.org'
-                - prefix: 'arn:aws:s3:::privacytoolkit.sagebionetworks.org'
-              #  - prefix: 'arn:aws:s3:::prod*'
-                - prefix: 'arn:aws:s3:::psychencode.org'
-                - prefix: 'arn:aws:s3:::sso.sageit.org'
-              #  - prefix: 'arn:aws:s3:::staging*'
-                - prefix: 'arn:aws:s3:::stopadportal.synapse.org'
-                - prefix: 'arn:aws:s3:::test.admodeladexplorer.org'
-                - prefix: 'arn:aws:s3:::vpn.sageit.org'
-              #  - prefix: 'arn:aws:s3:::www*'
-            GeneratorId:
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.1'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.2'
-            Workflow:
-              Status:
-              - NEW
-              - NOTIFIED
-              AwsAccountId:
-                - '797640923903' # org-sagebase-sageit
         detail-type:
         - Security Hub Findings - Imported
         source:
