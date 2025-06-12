@@ -143,7 +143,7 @@ Resources:
               Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
               UpdatedBy: "sechub-automation"
 
-  SuppressSecHubFindingsForPublicBucket:
+  SuppressSecHubFindingsForPublicBuckets:
     Type: AWS::SecurityHub::AutomationRule
     Properties:
       RuleName: "SuppressSecHubFindingsForPublicBucket"
