@@ -4,6 +4,43 @@ Resources:
   SecurityHub:
     Type: "AWS::SecurityHub::Hub"
 
+  # This rule suppresses findings with the given generator IDs only for the IAM accounts specified
+  SuppressSecHubFindingsForIam:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForIam"
+      RuleOrder: "50"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for IAM resources in all AWS accounts"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.4"
+            Comparison: "EQUALS"
+        ResourceId:
+          - Value: "arn:aws:iam::325565585839:user/ran-uploader"   # synapseprod IT-2396, do not exempt human users
+            Comparison: "PREFIX"
+          - Value: "arn:aws:iam::237179673806:user/synapse-login-scipoolprod-ServiceUser-"   #scipool IT-2315
+            Comparison: "PREFIX"
+        Actions:
+          - Type: "FINDING_FIELDS_UPDATE"
+            FindingFieldsUpdate:
+              Workflow:
+                Status: "SUPPRESSED"
+              Note:
+                Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+                UpdatedBy: "sechub-automation"
+
   SuppressSecHubFindingsInSageItAccount:
     Type: AWS::SecurityHub::AutomationRule
     Properties:
