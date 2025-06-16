@@ -357,68 +357,6 @@ Resources:
   # Event schema: https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cwe-event-formats.html
   # Findings schema:https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-format.html
 
-  # This rule suppresses findings with the given generator IDs only for the infra resources
-  SuppressFindingsForPublicBucketsRule:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: SecHubSuppress findings (identified by generatorId) for the infra resources in all accounts
-      EventPattern:
-        detail:
-          findings:
-            Resources:
-              Id:
-                - prefix: 'arn:aws:s3:::bootstrap-awss3cloudformationbucket-'
-                - prefix: 'arn:aws:s3:::essentials-awss3lambdaartifactsbucket-'
-                - prefix: 'arn:aws:s3:::cf-templates-'
-                - prefix: 'arn:aws:s3:::cloudformationmanageduploadinfra'
-                - prefix: 'arn:aws:s3:::cost-and-usage-reports.sagebase.org'
-                # IT-4072 public Bridge buckets
-                - prefix: 'arn:aws:s3:::android-apps.sagebridge.org'
-                - prefix: 'arn:aws:s3:::ios-apps.sagebridge.org'
-                - prefix: 'arn:aws:s3:::research.sagebridge.org'
-                - prefix: 'arn:aws:s3:::research-staging.sagebridge.org'
-                - prefix: 'arn:aws:s3:::admin.sagebridge.org'
-                - prefix: 'arn:aws:s3:::admin-staging.sagebridge.org'
-                - prefix: 'arn:aws:s3:::developer.sagebridge.org'
-                - prefix: 'arn:aws:s3:::mpower.sagebridge.org'
-                - prefix: 'arn:aws:s3:::smart4sure.sagebridge.org'
-                - prefix: 'arn:aws:s3:::parkinsonmpower.org'
-                - prefix: 'arn:aws:s3:::cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz'
-                - prefix: 'arn:aws:s3:::sagebase-rules-microservice-outputbucket-17vzcnk2xnq0'
-                - prefix: 'arn:aws:s3:::sharethejourneyapp.org'
-                - prefix: 'arn:aws:s3:::org-sagebridge-repo-maven-releases'
-                - prefix: 'arn:aws:s3:::org-sagebridge-static-bcs'
-                - prefix: 'arn:aws:s3:::org-sagebridge-static-pd'
-                - prefix: 'arn:aws:s3:::org-sagebridge-teamstudy'
-                - prefix: 'arn:aws:s3:::org-sagebridge-truststore'
-                - prefix: 'arn:aws:s3:::org-sagebridge-ui-test'
-                - prefix: 'arn:aws:s3:::web-mpower-2'
-                - prefix: 'arn:aws:s3:::sage-igenomes'
-                # See ticket DPE-1234
-                - prefix: 'arn:aws:s3:::synapse-croissant-metadata'
-                # This should only match with 2.1.5.1
-                - 'AWS::::Account:140124849929'
-            GeneratorId:
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.1'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1'
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.2'
-            Workflow:
-              Status:
-              - NEW
-              - NOTIFIED
-        detail-type:
-        - Security Hub Findings - Imported
-        source:
-        - aws.securityhub
-      State: ENABLED
-      Targets:
-      - Arn:
-          Fn::GetAtt:
-          - SecurityHubFindingsQueue
-          - Arn
-        Id: Target0
-
   # This rule suppresses findings in org-sagebase-imagecentral for EBS encryption since the volumes
   # in this account are used for creating public AMIs
   SuppressFindingsForPublicImagesRule:
