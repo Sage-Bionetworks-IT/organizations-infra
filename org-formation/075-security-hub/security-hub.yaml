@@ -25,7 +25,7 @@ Resources:
           - Value: "Security Hub"
             Comparison: "EQUALS"
         GeneratorId:
-          - Value: "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.4"
+          - Value: "cis-aws-foundations-benchmark/v/1.2.0/rule/1.4"
             Comparison: "EQUALS"
         ResourceId:
           - Value: "arn:aws:iam::325565585839:user/ran-uploader"   # synapseprod IT-2396, do not exempt human users
