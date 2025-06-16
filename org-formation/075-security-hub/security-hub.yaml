@@ -32,14 +32,14 @@ Resources:
             Comparison: "PREFIX"
           - Value: "arn:aws:iam::237179673806:user/synapse-login-scipoolprod-ServiceUser-"   #scipool IT-2315
             Comparison: "PREFIX"
-        Actions:
-          - Type: "FINDING_FIELDS_UPDATE"
-            FindingFieldsUpdate:
-              Workflow:
-                Status: "SUPPRESSED"
-              Note:
-                Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
-                UpdatedBy: "sechub-automation"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
 
   SuppressSecHubFindingsInSageItAccount:
     Type: AWS::SecurityHub::AutomationRule
