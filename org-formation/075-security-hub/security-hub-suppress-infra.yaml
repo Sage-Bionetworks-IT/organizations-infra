@@ -389,38 +389,6 @@ Resources:
           - Arn
         Id: Target0
 
-  # Findings to suppress in Bridge accounts.
-  # * Suppress findings for insecure access to S3 buckets in the bridge accounts
-  #   because consent forms are accessed internally by the app via HTTP.
-  SuppressFindingsForBridgeAccounts:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: SecHubSuppress findings for Bridge accounts
-      EventPattern:
-        detail:
-          findings:
-            GeneratorId:
-              # Ensure S3 Bucket Policy is set to deny HTTP requests
-              - 'cis-aws-foundations-benchmark/v/1.4.0/2.1.2'
-            Workflow:
-              Status:
-              - NEW
-              - NOTIFIED
-            AwsAccountId:
-            - '420786776710' # bridge-dev
-            - '649232250620' # bridge-prod
-        detail-type:
-        - Security Hub Findings - Imported
-        source:
-        - aws.securityhub
-      State: ENABLED
-      Targets:
-      - Arn:
-          Fn::GetAtt:
-          - SecurityHubFindingsQueue
-          - Arn
-        Id: Target0
-
   # Findings to suppress for service users in Bridge accounts.
   # * Suppress findings for unused credentials because automation runs less
   #   frequently than every 45 days.
