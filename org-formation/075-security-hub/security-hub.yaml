@@ -351,6 +351,49 @@ Resources:
               Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
               UpdatedBy: "sechub-automation"
 
+  # Findings to suppress for service users in Bridge accounts.
+  # * Suppress findings for unused credentials because automation runs less
+  #   frequently than every 45 days.
+  # * Suppress findings for access key rotation because we don't know everywhere
+  #   that they're used, creating a risk of a prolonged outage and data loss.
+  SuppressSecHubFindingsForBridgeServiceUsers:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForBridgeServiceUsers"
+      RuleOrder: "340"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for service users in Bridge accounts"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        AwsAccountId:
+          - Value: "420786776710"   # org-sagebase-bridgedev
+            Comparison: "EQUALS"
+          - Value: "649232250620"   # org-sagebase-bridgeprod
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/1.12"     # Disable credentials unused for more than 45 days
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/1.14"     # Disable credentials unused for more than 90 days
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
 Outputs:
   SecurityHubArn:
     Description: "The security hub ARN"
