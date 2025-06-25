@@ -984,7 +984,7 @@ GithubOidcSynapseStatusLambda:
         ]
       }
   TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks-IT"
+    GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "synapse-status-lambda"
         branches: ["main"]
