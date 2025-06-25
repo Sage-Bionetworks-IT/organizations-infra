@@ -960,20 +960,7 @@ GithubOidcSynapseStatusLambda:
                     "lambda:PutFunctionConcurrency",
                     "lambda:DeleteFunctionConcurrency"
                 ],
-                "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:prod-StatusUpdaterFunction*"
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "iam:CreateRole",
-                    "iam:DeleteRole",
-                    "iam:GetRole",
-                    "iam:GetRolePolicy",
-                    "iam:PutRolePolicy",
-                    "iam:DeleteRolePolicy",
-                    "iam:PassRole"
-                ],
-                "Resource": "arn:aws:iam::${AWS::AccountId}:role/prod-StatusUpdaterFunction*"
+                "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:SynapsestatusStack-StatusUpdaterFunction*"
             },
             {
                 "Effect": "Allow",
@@ -985,7 +972,7 @@ GithubOidcSynapseStatusLambda:
                     "cloudformation:DescribeStackEvents",
                     "cloudformation:GetTemplateSummary"
                 ],
-                "Resource": "arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${Stack}/*"
+                "Resource": "arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/*"
             },
             {
                 "Effect": "Allow",
