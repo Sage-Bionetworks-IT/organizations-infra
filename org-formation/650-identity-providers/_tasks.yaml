@@ -934,6 +934,78 @@ GithubOidcSceptreAws:
       - !Ref SceptreDevAccount
     Region: us-east-1
 
+GithubOidcSynapseStatusLambda:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-synapse-status-lambda
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-synapse-status-lambda-deploy
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "lambda:CreateFunction",
+                    "lambda:DeleteFunction",
+                    "lambda:GetFunction",
+                    "lambda:UpdateFunctionCode",
+                    "lambda:UpdateFunctionConfiguration",
+                    "lambda:AddPermission",
+                    "lambda:RemovePermission",
+                    "lambda:GetFunctionCodeSigningConfig",
+                    "lambda:PutFunctionConcurrency",
+                    "lambda:DeleteFunctionConcurrency"
+                ],
+                "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:prod-StatusUpdaterFunction*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "iam:CreateRole",
+                    "iam:DeleteRole",
+                    "iam:GetRole",
+                    "iam:GetRolePolicy",
+                    "iam:PutRolePolicy",
+                    "iam:DeleteRolePolicy",
+                    "iam:PassRole"
+                ],
+                "Resource": "arn:aws:iam::${AWS::AccountId}:role/prod-StatusUpdaterFunction*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "cloudformation:CreateStack",
+                    "cloudformation:UpdateStack",
+                    "cloudformation:DeleteStack",
+                    "cloudformation:DescribeStacks",
+                    "cloudformation:DescribeStackEvents",
+                    "cloudformation:GetTemplateSummary"
+                ],
+                "Resource": "arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${Stack}/*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "cloudformation:ListStacks"
+                ],
+                "Resource": "*"
+            }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "synapse-status-lambda"
+        branches: ["main"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseProdAccount
+    Region: us-east-1
+
 ############################### Managed Policies ###############################
 # Managed policies used in github OIDC providers
 # Note: Managed policies can be used as work around for the AWS cloudformation
