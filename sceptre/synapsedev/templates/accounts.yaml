@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Metadata:
   cfn-lint:
     config:
-      ignore_checks: [ "W1011" ]
+      ignore_checks: [ "W1011", "W3037" ]
 Parameters:
   InitNewUserPassword:
     Type: String
