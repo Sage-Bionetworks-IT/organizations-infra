@@ -29,6 +29,15 @@ PatchResourceGroup:
     Account: '*'
     IncludeMasterAccount: true
 
+PatchGroupTagger:
+  Type: update-stacks
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-tag-patch-group/1.0.0/lambda-tag-patch-group.yaml'
+  StackName: !Sub '${resourcePrefix}-${appName}-patch-group-tagger'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+
 PatchManager:
   Type: update-stacks
   DependsOn: PatchResourceGroup
