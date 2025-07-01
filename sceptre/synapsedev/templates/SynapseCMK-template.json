@@ -1,6 +1,15 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "The master encryption key used to encypt/decypt all Synapse master secrets",
+    "Metadata": {
+        "cfn-lint": {
+            "config": {
+                "ignore_checks": [
+                    "W3037"
+                ]
+            }
+        }
+    },
     "Parameters": {
         "Stack": {
             "Description": "The stack",

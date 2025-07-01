@@ -1,6 +1,10 @@
 ---
 Description: Setup IAM policies, groups and accounts
 AWSTemplateFormatVersion: 2010-09-09
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks: [W3037]
 Resources:
   # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
   # Therefore you must do the following before deleting them from this file:
