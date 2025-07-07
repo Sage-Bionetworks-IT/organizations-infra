@@ -442,7 +442,7 @@ SsoDeveloper:
               {
                   "Effect": "Deny",
                   "Action": "sts:AssumeRole",
-                  "Resource": "*"
+                  "Resource": "*",
                   "Condition": {
                     "StringNotEquals": {
                         "aws:PrincipalArn": {
