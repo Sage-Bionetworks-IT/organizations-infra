@@ -442,7 +442,14 @@ SsoDeveloper:
               {
                   "Effect": "Deny",
                   "Action": "sts:AssumeRole",
-                  "Resource": "*"
+                  "Resource": "*",
+                  "Condition": {
+                    "StringNotEquals": {
+                        "aws:PrincipalArn": {
+                            "Fn::ImportValue": "us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn"
+                        }
+                    }
+                  }
               }
           ]
       }
