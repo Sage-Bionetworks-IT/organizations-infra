@@ -949,6 +949,18 @@ GithubOidcSynapseStatusLambda:
             {
                 "Effect": "Allow",
                 "Action": [
+                    "iam:CreateRole",
+                    "iam:DeleteRole",
+                    "iam:GetRole",
+                    "iam:PutRolePolicy",
+                    "iam:DeleteRolePolicy",
+                    "iam:PassRole"
+                ],
+                "Resource": "arn:aws:iam::${AWS::AccountId}:role/*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
                     "lambda:CreateFunction",
                     "lambda:DeleteFunction",
                     "lambda:GetFunction",
@@ -960,7 +972,7 @@ GithubOidcSynapseStatusLambda:
                     "lambda:PutFunctionConcurrency",
                     "lambda:DeleteFunctionConcurrency"
                 ],
-                "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:SynapsestatusStack-StatusUpdaterFunction*"
+                "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*"
             },
             {
                 "Effect": "Allow",
@@ -980,7 +992,30 @@ GithubOidcSynapseStatusLambda:
                     "cloudformation:ListStacks"
                 ],
                 "Resource": "*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "events:PutRule",
+                    "events:PutTargets",
+                    "events:DeleteRule",
+                    "events:RemoveTargets",
+                    "events:DescribeRule"
+                ],
+                "Resource": "*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                  "ec2:DescribeVpcs",
+                  "ec2:DescribeSubnets",
+                  "ec2:CreateNetworkInterface",
+                  "ec2:DeleteNetworkInterface",
+                  "ec2:DescribeNetworkInterfaces"
+              ],
+              "Resource": "*"
             }
+
         ]
       }
   TemplatingContext:
