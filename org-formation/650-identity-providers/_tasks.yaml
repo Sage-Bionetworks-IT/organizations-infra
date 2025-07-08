@@ -965,66 +965,7 @@ GithubOidcSynapseStatusLambda:
             {
                 "Effect": "Allow",
                 "Action": "sts:AssumeRole",
-                "Resource": "arn:aws:iam::449435941126:role/cdk-hnb659fds-*"
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "lambda:CreateFunction",
-                    "lambda:DeleteFunction",
-                    "lambda:GetFunction",
-                    "lambda:UpdateFunctionCode",
-                    "lambda:UpdateFunctionConfiguration",
-                    "lambda:AddPermission",
-                    "lambda:RemovePermission",
-                    "lambda:GetFunctionCodeSigningConfig",
-                    "lambda:PutFunctionConcurrency",
-                    "lambda:DeleteFunctionConcurrency"
-                ],
-                "Resource": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*"
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "cloudformation:CreateStack",
-                    "cloudformation:UpdateStack",
-                    "cloudformation:DeleteStack",
-                    "cloudformation:DescribeStacks",
-                    "cloudformation:DescribeStackEvents",
-                    "cloudformation:GetTemplateSummary"
-                ],
-                "Resource": "arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/*"
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "cloudformation:ListStacks"
-                ],
-                "Resource": "*"
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "events:PutRule",
-                    "events:PutTargets",
-                    "events:DeleteRule",
-                    "events:RemoveTargets",
-                    "events:DescribeRule"
-                ],
-                "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                  "ec2:DescribeVpcs",
-                  "ec2:DescribeSubnets",
-                  "ec2:CreateNetworkInterface",
-                  "ec2:DeleteNetworkInterface",
-                  "ec2:DescribeNetworkInterfaces",
-                  "ec2:DescribeRouteTables",
-                  "ec2:DescribeVpnGateways"
-            ],
-              "Resource": "*"
+                "Resource": "arn:aws:iam::${AWS::AccountId}:role/cdk-hnb659fds-*"
             }
         ]
       }
