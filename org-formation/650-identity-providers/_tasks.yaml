@@ -953,10 +953,19 @@ GithubOidcSynapseStatusLambda:
                     "iam:DeleteRole",
                     "iam:GetRole",
                     "iam:PutRolePolicy",
-                    "iam:DeleteRolePolicy",
-                    "iam:PassRole"
+                    "iam:DeleteRolePolicy"
                 ],
                 "Resource": "arn:aws:iam::${AWS::AccountId}:role/*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": "iam:PassRole",
+                "Resource": "arn:aws:iam::${AWS::AccountId}:role/SynapseStatusStack-StatusUpdater*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": "arn:aws:iam::449435941126:role/cdk-hnb659fds-*"
             },
             {
                 "Effect": "Allow",
@@ -1011,11 +1020,12 @@ GithubOidcSynapseStatusLambda:
                   "ec2:DescribeSubnets",
                   "ec2:CreateNetworkInterface",
                   "ec2:DeleteNetworkInterface",
-                  "ec2:DescribeNetworkInterfaces"
-              ],
+                  "ec2:DescribeNetworkInterfaces",
+                  "ec2:DescribeRouteTables",
+                  "ec2:DescribeVpnGateways"
+            ],
               "Resource": "*"
             }
-
         ]
       }
   TemplatingContext:
