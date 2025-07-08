@@ -437,18 +437,14 @@ SsoDeveloper:
     sessionDuration: 'PT12H'
     inlinePolicy:
       Fn::Sub:
-      - {
+      - >-
+        {
           "Version": "2012-10-17",
           "Statement": [
               {
-                  "Effect": "Deny",
-                  "Action": "sts:AssumeRole",
-                  "Resource": "*",
-                  "Condition": {
-                    "StringNotEquals": {
-                        "aws:PrincipalArn": "${AllowedRole}"
-                    }
-                  }
+                  “Effect”: “Allow”,
+                  “Action”: “sts:AssumeRole”,
+                  “Resource”: “${AllowedRole}”
               }
           ]
         }
