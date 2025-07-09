@@ -448,7 +448,7 @@ SsoDeveloper:
                 }
             ]
           }
-        - AllowedRole: 'arn:aws:iam::050451359079:role/synapsellmprod-bedrock-full-access-ServiceRole-WpQ20TgVRPeR'
+        - AllowedRole: !CopyValue 'us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn'
 
 SsoFinanceAuditor:
   Type: update-stacks
