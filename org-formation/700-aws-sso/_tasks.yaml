@@ -435,17 +435,20 @@ SsoDeveloper:
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
     sessionDuration: 'PT12H'
-    inlinePolicy: >-
-      {
-          "Version": "2012-10-17",
-          "Statement": [
-              {
+    inlinePolicy:
+      Fn::Sub:
+        - >-
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
                   "Effect": "Allow",
                   "Action": "sts:AssumeRole",
-                  "Resource": "arn:aws:iam::050451359079:role/synapsellmprod-bedrock-full-access-ServiceRole-WpQ20TgVRPeR"
-              }
-          ]
-      }
+                  "Resource": "${AllowedRole}"
+                }
+            ]
+          }
+        - AllowedRole: 'arn:aws:iam::050451359079:role/synapsellmprod-bedrock-full-access-ServiceRole-WpQ20TgVRPeR'
 
 SsoFinanceAuditor:
   Type: update-stacks
