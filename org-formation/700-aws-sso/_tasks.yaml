@@ -448,7 +448,7 @@ SsoDeveloper:
                 }
             ]
           }
-        - AllowedRole: !CopyValue 'us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn'
+        - AllowedRole: !CopyValue ['us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn', !Ref SynapseLlmProdAccount]
 
 SsoFinanceAuditor:
   Type: update-stacks
