@@ -448,7 +448,7 @@ SsoDeveloper:
               }
           ]
         }
-      - AllowedRole: '!ImportValue us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn'
+      - AllowedRole: !ImportValue us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn
 
 SsoFinanceAuditor:
   Type: update-stacks
