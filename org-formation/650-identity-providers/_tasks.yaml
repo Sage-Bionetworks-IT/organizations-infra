@@ -942,33 +942,9 @@ GithubOidcSynapseStatusLambda:
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-synapse-status-lambda-deploy
-    PolicyDocument: |
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "iam:CreateRole",
-                    "iam:DeleteRole",
-                    "iam:GetRole",
-                    "iam:PutRolePolicy",
-                    "iam:DeleteRolePolicy"
-                ],
-                "Resource": "arn:aws:iam::${AWS::AccountId}:role/*"
-            },
-            {
-                "Effect": "Allow",
-                "Action": "iam:PassRole",
-                "Resource": "arn:aws:iam::${AWS::AccountId}:role/SynapseStatusStack-StatusUpdater*"
-            },
-            {
-                "Effect": "Allow",
-                "Action": "sts:AssumeRole",
-                "Resource": "arn:aws:iam::${AWS::AccountId}:role/cdk-hnb659fds-*"
-            }
-        ]
-      }
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
