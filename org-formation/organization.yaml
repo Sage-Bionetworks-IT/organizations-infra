@@ -106,7 +106,6 @@ Organization:
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
-        - !Ref BmgfkiAccount
         - !Ref ScipoolDevAccount
         - !Ref ScipoolProdAccount
 
@@ -285,17 +284,6 @@ Organization:
       Alias: org-sagebase-scipoolprod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-
-  BmgfkiAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-bmgfki
-      AccountId: '464102568320'
-      RootEmail: aws.bmgfki@sagebase.org
-      Alias: org-sagebase-bmgfki
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        CostCenter: 'BMGF-Ki / 30144'
 
   ScicompAccount:
     Type: OC::ORG::Account

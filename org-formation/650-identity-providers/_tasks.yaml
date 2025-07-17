@@ -572,7 +572,6 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
   DefaultOrganizationBinding:
     Account:
       - !Ref ScipoolProdAccount
-      - !Ref BmgfkiAccount
     Region: us-east-1
 
 GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
