@@ -1,8 +1,0 @@
-# budget rules per user by synapse team id
-teams:
-  '3432633': # BMGFKI_ServiceCatalogUsers
-    amount: '5000'
-    period: MONTHLY
-    unit: USD
-    community_manager_emails:
-      - 'bmgfki-sc-support@sagebase.org'

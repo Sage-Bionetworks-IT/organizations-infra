@@ -1,5 +1,0 @@
-template:
-  path: "sc-s3-launchrole.yaml"
-stack_name: "sc-s3-launchrole"
-dependencies:
-  - "bmgfki/essentials.yaml"

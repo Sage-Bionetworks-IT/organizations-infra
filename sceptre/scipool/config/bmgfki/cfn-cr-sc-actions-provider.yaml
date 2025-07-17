@@ -1,8 +1,0 @@
-template:
-  type: http
-  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/cfn-cr-sc-actions-provider/0.2.1/cfn-cr-sc-actions-provider.yaml
-stack_name: cfn-cr-sc-actions-provider
-stack_tags:
-  OwnerEmail: "it@sagebase.org"
-dependencies:
-  - bmgfki/bootstrap.yaml
