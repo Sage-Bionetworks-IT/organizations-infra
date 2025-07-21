@@ -1,8 +1,0 @@
-notify_user_only:
-  - 25.0
-  - 50.0
-  - 80.0
-notify_admins_too:
-  - 90.0
-  - 100.0
-  - 110.0

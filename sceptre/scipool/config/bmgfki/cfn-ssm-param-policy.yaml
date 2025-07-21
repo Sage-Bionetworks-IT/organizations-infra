@@ -1,8 +1,0 @@
-template:
-  path: "cfn-ssm-param-policy.yaml"
-stack_name: "cfn-ssm-param-policy"
-stack_tags:
-  OwnerEmail: "it@sagebase.org"
-dependencies:
-  - "bmgfki/cfn-macro-ssm-param.yaml"
-  - "bmgfki/sc-ec2vpc-launchrole.yaml"
