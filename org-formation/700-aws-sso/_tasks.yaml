@@ -153,14 +153,6 @@ Parameters:
     Type: String
     Default: 'f4d84498-c0e1-70e7-215b-49089082ecaa'
 
-  bmgfkiAdminGroup:      #JC aws-bmgfki-admins
-    Type: String
-    Default: '906769aa66-dfc5248b-3d5d-44ce-81ae-6759ee284e59'
-
-  bmgfkiCommunityManagerGroup:  #JC aws-bmgfki-community-managers
-    Type: String
-    Default: '906769aa66-0a6a0177-d4cf-47e4-a5bc-4ba5297995ff'
-
   cnbAdminGroup:      #JC aws-cnb-admins
     Type: String
     Default: '906769aa66-911ad81b-8331-4670-a8eb-d53c63d6a0e1'
@@ -435,17 +427,20 @@ SsoDeveloper:
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
     sessionDuration: 'PT12H'
-    inlinePolicy: >-
-      {
-          "Version": "2012-10-17",
-          "Statement": [
-              {
-                  "Effect": "Deny",
+    inlinePolicy:
+      Fn::Sub:
+        - >-
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                  "Effect": "Allow",
                   "Action": "sts:AssumeRole",
-                  "Resource": "*"
-              }
-          ]
-      }
+                  "Resource": "${AllowedRole}"
+                }
+            ]
+          }
+        - AllowedRole: !CopyValue ['us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn', !Ref SynapseLlmProdAccount]
 
 SsoFinanceAuditor:
   Type: update-stacks
@@ -1499,41 +1494,6 @@ SsoHtanDevDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref htanDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
-
-SsoBmgfkiAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-bmgf-admin'
-  StackDescription: 'SSO: admin role used by BMGF KI admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref BmgfkiAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref bmgfkiAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
-SsoBmgfkiCommunityManager:
-  Type: update-stacks
-  DependsOn: [ SsoScipoolDevCommunityManager ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-bmgfki-community-manager'
-  StackDescription: 'SSO: community manager role used by BMGF KI community manager group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref BmgfkiAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref bmgfkiCommunityManagerGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager-permission-set-arn' ]
 
 SsoCnbAdmin:
   Type: update-stacks

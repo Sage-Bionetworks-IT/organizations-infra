@@ -346,8 +346,62 @@ AgoraProdAppDnsForward:
     Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "agora-prod.adknowledgeportal.org"
+    SourceHostName: "agora.adknowledgeportal.org"
     # ID of the adknowledgeportal.org zone (in sageit account)
     SourceHostedZoneId: "Z2DTJC6JTFRHBN"
     # the value of the CNAME record
     TargetHostName: !CopyValue ['agora-prod-load-balancer-dns', !Ref AgoraProdAccount]
+
+# forward dev.modeladexplorer.org to modeladexplorer-infra ALB
+# https://github.com/Sage-Bionetworks/modeladexplorer-infra
+ModelAdExplorerDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-modeladexplorer-dev-cname'
+  StackDescription: Setup a CNAME for modeladexplorer-infra dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dev.modeladexplorer.org"
+    # ID of the modeladexplorer.org zone (in sageit account)
+    SourceHostedZoneId: "Z038526037U7WWZ1418M6"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['model-ad-dev-load-balancer-dns', !Ref AgoraDevAccount]
+
+# forward stage.modeladexplorer.org to modeladexplorer-infra ALB
+# https://github.com/Sage-Bionetworks/modeladexplorer-infra
+ModelAdExplorerStageAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-modeladexplorer-stage-cname'
+  StackDescription: Setup a CNAME for modeladexplorer-infra stage ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "stage.modeladexplorer.org"
+    # ID of the modeladexplorer.org zone (in sageit account)
+    SourceHostedZoneId: "Z038526037U7WWZ1418M6"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['model-ad-stage-load-balancer-dns', !Ref AgoraProdAccount]
+
+# forward prod.modeladexplorer.org to modeladexplorer-infra ALB
+# https://github.com/Sage-Bionetworks/modeladexplorer-infra
+ModelAdExplorerProdAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-modeladexplorer-prod-cname'
+  StackDescription: Setup a CNAME for modeladexplorer-infra prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "prod.modeladexplorer.org"
+    # ID of the modeladexplorer.org zone (in sageit account)
+    SourceHostedZoneId: "Z038526037U7WWZ1418M6"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['model-ad-prod-load-balancer-dns', !Ref AgoraProdAccount]
