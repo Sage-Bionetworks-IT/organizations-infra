@@ -425,7 +425,7 @@ SynapseLlmDeveloperPolicy:
           {
             "Effect": "Allow",
             "Action": "iam:PassRole",
-            "Resource": "arn:aws:iam::${aws:AccountId}:role/synllm-*"
+            "Resource": "arn:aws:iam::${CurrentAccount.AccountId}:role/synllm-*"
           },
           {
             "Sid": "ManageRolesWithBoundary ",
@@ -437,7 +437,7 @@ SynapseLlmDeveloperPolicy:
               "iam:UpdateAssumeRolePolicy",
               "iam:PutRolePermissionsBoundary"
             ],
-            "Resource": "arn:aws:iam::${aws:AccountId}:role/synllm-*",
+            "Resource": "arn:aws:iam::${CurrentAccount.AccountId}:role/synllm-*",
             "Condition": {
               "StringEquals": {
                 "iam:PermissionsBoundary": "${synLlmLambdaExecPermissionBoundary}"
@@ -455,23 +455,18 @@ SynapseLlmDeveloperPolicy:
               "iam:GetPolicy",
               "iam:GetPolicyVersion",
               "iam:ListPolicyVersions",
-              "iam:ListPolicies",
               "iam:SetDefaultPolicyVersion"
             ],
-            "Resource": "*",
-            "Condition": {
-              "StringLike": {
-                "iam:PolicyName": "synllm-*"
-              }
-            }
+            "Resource": "arn:aws:iam::${CurrentAccount.AccountId}:policy/synllm-*",
           },
           {
-              "Sid": "AllowListRoleInfos",
+              "Sid": "AllowList",
               "Action": [
                   "iam:GetRole",
                   "iam:ListRoles",
                   "iam:GetAccountSummary",
-                  "iam:ListAccountAliases"
+                  "iam:ListAccountAliases",
+                  "iam:ListPolicies"
               ],
               "Resource": "*",
               "Effect": "Allow"
