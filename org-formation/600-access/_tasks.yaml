@@ -408,7 +408,7 @@ SynapseLlmDeveloperPolicy:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
   StackName: synapsellm-developer-policy
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
+    IncludeMasterAccount: false
     Account:
       - !Ref SynapseLlmProdAccount
     Region: !Ref primaryRegion
@@ -431,12 +431,12 @@ SynapseLlmDeveloperPolicy:
       }
     PolicyName: SynapseLlmDeveloperPolicy
 
-SynapseLlmLambdaExecRoleBoundary:
+SynapseLlmDevRolePermissionBoundary:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
-  StackName: synllm-lambdaexecrole-boundary
+  StackName: syn-llmdevrole-permission-boundary
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
+    IncludeMasterAccount: false
     Account:
       - !Ref SynapseLlmProdAccount
     Region: !Ref primaryRegion
@@ -446,19 +446,47 @@ SynapseLlmLambdaExecRoleBoundary:
         "Version": "2012-10-17",
         "Statement": [
           {
-            "Effect": "Allow",
-            "Action": ["lambda:*", "logs:*", "bedrock:*", "aoss:*" ],
-            "Resource": "*"
+            "Sid": "CannotEditBoundaryPolicy",
+            "Effect": "Deny",
+            "Action": [
+              "iam:CreatePolicyVersion",
+              "iam:DeletePolicy",
+              "iam:DeletePolicyVersion",
+              "iam:SetDefaultPolicyVersion"
+            ],
+            "Resource": [
+              "arn:aws:iam::${CurrentAccount.AccountId}:policy/SynLlmDevRolePermissionBoundary"
+            ]
           },
           {
-            "Effect": "Allow",
+            "Sid": "CannotCreateOrChangeRoleWithoutBoundary",
+            "Effect": "Deny",
             "Action": [
-              "s3:GetObject",
-              "s3:PutObject",
-              "s3:ListBucket"
+              "iam:CreateRole",
+              "iam:PutUserPermissionsBoundary",
+              "iam:PutRolePermissionsBoundary"
             ],
-            "Resource": "*"
+            "Resource": "*",
+            "Condition": {
+              "StringNotEquals": {
+                "iam:PermissionsBoundary": "arn:aws:iam::${CurrentAccount.AccountId}:policy/SynLlmDevRolePermissionBoundary"
+              }
+            }
+          },
+          {
+            "Sid": "CannotRemoveBoundary",
+            "Effect": "Deny",
+            "Action": [
+              "iam:DeleteUserPermissionsBoundary",
+              "iam:DeleteRolePermissionsBoundary"
+            ],
+            "Resource": [ "*" ],
+            "Condition": {
+              "StringEquals": {
+                "iam:PermissionsBoundary": "arn:aws:iam::${CurrentAccount.AccountId}:policy/SynLlmDevRolePermissionBoundary"
+              }
+            }
           }
         ]
       }
-    PolicyName: SynLlmLambdaExecRoleBoundary
+    PolicyName: SynLlmDevRolePermissionBoundary
