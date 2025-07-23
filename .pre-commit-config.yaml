@@ -18,11 +18,11 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
+    rev: v1.37.1
     hooks:
       - id: yamllint
   - repo: https://github.com/awslabs/cfn-python-lint
-    rev: v1.23.1
+    rev: v1.36.1
     hooks:
       - id: cfn-python-lint
         files: templates/.*\.(json|yml|yaml)$
@@ -32,12 +32,12 @@ repos:
     hooks:
       - id: remove-tabs
   - repo: https://github.com/sirosen/check-jsonschema
-    rev: 0.31.1
+    rev: 0.33.1
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
   - repo: https://github.com/aristanetworks/j2lint.git
-    rev: v1.1.0
+    rev: v1.2.0
     hooks:
       - id: j2lint
         args: [--ignore, S3, V1, --]

@@ -3,6 +3,397 @@ Description: "Setup AWS Security Hub"
 Resources:
   SecurityHub:
     Type: "AWS::SecurityHub::Hub"
+
+  # This rule suppresses findings with the given generator IDs only for the IAM accounts specified
+  SuppressSecHubFindingsForIam:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForIam"
+      RuleOrder: "50"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for IAM resources in all AWS accounts"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.2.0/rule/1.4"
+            Comparison: "EQUALS"
+        ResourceId:
+          - Value: "arn:aws:iam::325565585839:user/ran-uploader"   # synapseprod IT-2396, do not exempt human users
+            Comparison: "PREFIX"
+          - Value: "arn:aws:iam::237179673806:user/synapse-login-scipoolprod-ServiceUser-"   #scipool IT-2315
+            Comparison: "PREFIX"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
+  SuppressSecHubFindingsInSageItAccount:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsInSageItAccount"
+      RuleOrder: "100"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for resources in org-sagebase-sageit account"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        AwsAccountId:
+          - Value: "797640923903"      # org-sagebase-sageit
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.1"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2"   # 2.1.5.2 S3 Block Public Access setting should be enabled at the bucket level
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.2"     # 2.1.2 Ensure S3 Bucket Policy is set to deny HTTP requests
+            Comparison: "EQUALS"
+        ResourceId:
+          - Value: "arn:aws:s3:::admodelexplorer.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::alzdrugtool.synapse.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::aws-sso.sageit.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::brainsomaticmosaicism.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::csbconsortium.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::designmanual.sagebase.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::install.studies.mobiletoolbox.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::it1363.sagebase.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::mindkindstudyredirector.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::mobiletoolbox.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::privacytoolkit.sagebase.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::privacytoolkit.sagebionetworks.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::prod"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::psychencode.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::sso.sageit.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::staging"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::stopadportal.synapse.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::test.admodeladexplorer.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::vpn.sageit.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::www"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::static"
+            Comparison: "PREFIX"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
+  # This rule suppresses findings for the given controls (GeneratorId) in all the accounts
+  SuppressSecHubFindingsInAllAccounts:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsInAllAccounts"
+      RuleOrder: "200"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for resources in all accounts"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.3"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/5.3" # same as v/1.2.0/rule/4.3
+            Comparison: "EQUALS"
+          - Value: "aws-foundational-security-best-practices/v/1.0.0/EC2.2"
+            Comparison: "EQUALS"
+          - Value: "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/1.14"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/1.6"   # same as v/1.2.0/rule/1.14
+            Comparison: "EQUALS"
+          - Value: "aws-foundational-security-best-practices/v/1.0.0/IAM.6"
+            Comparison: "EQUALS"
+          - Value: "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/2.7"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/3.7"
+            Comparison: "EQUALS"
+            # SecHub Recommendation: no security group allows unrestricted ingress access to port 22/3389.
+            # Supression Reason: Allow for bastian hosts and testing
+          - Value: "cis-aws-foundations-benchmark/v/1.2.0/rule/4.1"
+            Comparison: "EQUALS"
+          - Value: "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.1"
+            Comparison: "EQUALS"
+          - Value: "arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0/rule/4.2"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/3.5"  # (IT-3619) "3.5 Ensure AWS Config is enabled in all regions"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/5.1"  # (IT-4190) "5.1 Ensure no Network ACLs allow ingress from 0.0.0.0/0 to remote server administration ports"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1"  # (IT-4236) "2.1.5.1 S3 Block Public Access setting should be enabled"
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
+  SuppressSecHubFindingsForPublicBuckets:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForPublicBucket"
+      RuleOrder: "300"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for public buckets in all AWS accounts"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.1"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1"  # (IT-4236) "2.1.5.1 S3 Block Public Access setting should be enabled"
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.5.2"   # 2.1.5.2 S3 Block Public Access setting should be enabled at the bucket level
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.2"     # 2.1.2 Ensure S3 Bucket Policy is set to deny HTTP requests
+            Comparison: "EQUALS"
+        ResourceId:
+          - Value: "arn:aws:s3:::bootstrap-awss3cloudformationbucket-"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::essentials-awss3lambdaartifactsbucket-"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::cf-templates-"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::cloudformationmanageduploadinfra"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::cost-and-usage-reports.sagebase.org"
+            Comparison: "PREFIX"
+          #---- IT-4072 public Bridge buckets. ---
+          - Value: "arn:aws:s3:::android-apps.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::ios-apps.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::research.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::research-staging.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::admin.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::admin-staging.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::developer.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::mpower.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::smart4sure.sagebridge.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::parkinsonmpower.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::cfn-snippets-bucket-cloudformationsnippetsbucket-elu83sv8ocdz"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::sagebase-rules-microservice-outputbucket-17vzcnk2xnq0"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::sharethejourneyapp.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-repo-maven-releases"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-static-bcs"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-static-pd"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-teamstudy"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-truststore"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::org-sagebridge-ui-test"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::web-mpower-2"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::sage-igenomes"
+            Comparison: "PREFIX"
+          #-------------------------------------------
+          - Value: "arn:aws:s3:::synapse-croissant-metadata"  # See ticket DPE-1234
+            Comparison: "PREFIX"
+          - Value: "AWS::::Account:140124849929"   # This should only match with 2.1.5.1
+            Comparison: "PREFIX"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
+  SuppressFindingsEbsEncryptionImageCentral:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressFindingsEbsEncryptionImageCentral"
+      RuleOrder: "310"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for EBS encryption in imagecentral account"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        AwsAccountId:
+          - Value: "867686887310"    # org-sagebase-imagecentral account
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.2.1"   # EBS encryption enabled by default
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
+  # Findings to suppress in Bridge accounts.
+  # * Suppress findings for insecure access to S3 buckets in the bridge accounts
+  #   because consent forms are accessed internally by the app via HTTP.
+  SuppressSecHubFindingsForBridgeAccounts:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForBridgeAccounts"
+      RuleOrder: "330"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for AWS Bridge accounts"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        AwsAccountId:
+          - Value: "420786776710"   # org-sagebase-bridgedev
+            Comparison: "EQUALS"
+          - Value: "649232250620"   # org-sagebase-bridgeprod
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.2"     # 2.1.2 Ensure S3 Bucket Policy is set to deny HTTP requests
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
+  # Findings to suppress for service users in Bridge accounts.
+  # * Suppress findings for unused credentials because automation runs less
+  #   frequently than every 45 days.
+  # * Suppress findings for access key rotation because we don't know everywhere
+  #   that they're used, creating a risk of a prolonged outage and data loss.
+  SuppressSecHubFindingsForBridgeServiceUsers:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForBridgeServiceUsers"
+      RuleOrder: "340"
+      RuleStatus: "ENABLED"
+      Description: "Suppress Security Hub findings for service users in Bridge accounts"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        AwsAccountId:
+          - Value: "420786776710"   # org-sagebase-bridgedev
+            Comparison: "EQUALS"
+          - Value: "649232250620"   # org-sagebase-bridgeprod
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/1.12"     # Disable credentials unused for more than 45 days
+            Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/1.14"     # Disable credentials unused for more than 90 days
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
 Outputs:
   SecurityHubArn:
     Description: "The security hub ARN"

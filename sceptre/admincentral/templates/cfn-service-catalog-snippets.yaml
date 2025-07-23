@@ -40,9 +40,3 @@ Resources:
           VpnSecurityGroup: "us-east-1-stridespoolvpc-VpnSecurityGroup"
           VPCId: "us-east-1-stridespoolvpc-VPCId"
           TgwSecurityGroupId: "us-east-1-tgw-spoke-stridespoolvpc-TgwSecurityGroupId"
-        "464102568320":   # org-sagebase-bmgfki
-          PrivateSubnet: "us-east-1-gatespoolvpc-PrivateSubnet"
-          PrivateSubnet1: "us-east-1-gatespoolvpc-PrivateSubnet1"
-          VpnSecurityGroup: "us-east-1-gatespoolvpc-VpnSecurityGroup"
-          VPCId: "us-east-1-gatespoolvpc-VPCId"
-          TgwSecurityGroupId: "us-east-1-tgw-spoke-gatespoolvpc-TgwSecurityGroupId"

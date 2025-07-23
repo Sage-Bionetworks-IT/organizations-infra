@@ -153,14 +153,6 @@ Parameters:
     Type: String
     Default: 'f4d84498-c0e1-70e7-215b-49089082ecaa'
 
-  bmgfkiAdminGroup:      #JC aws-bmgfki-admins
-    Type: String
-    Default: '906769aa66-dfc5248b-3d5d-44ce-81ae-6759ee284e59'
-
-  bmgfkiCommunityManagerGroup:  #JC aws-bmgfki-community-managers
-    Type: String
-    Default: '906769aa66-0a6a0177-d4cf-47e4-a5bc-4ba5297995ff'
-
   cnbAdminGroup:      #JC aws-cnb-admins
     Type: String
     Default: '906769aa66-911ad81b-8331-4670-a8eb-d53c63d6a0e1'
@@ -342,9 +334,13 @@ Parameters:
     Type: String
     Default: '44b8f4c8-9031-7097-01d8-d4e845d7d84d'
 
-  CodeOceanProdAdminGroup:     # JC aws-codeocean-prod-admins
+  GenAiIcDevAdminGroup:     # JC aws-genaiic-dev-admins
     Type: String
-    Default: '8408c468-40f1-70e2-f2ca-ec2874400609'
+    Default: 'f48844f8-3051-70ad-e0da-5146fc17caf7'
+
+  GenAiIcDevDevelopersGroup:     # JC aws-genaiic-dev-developers
+    Type: String
+    Default: '04182458-5011-7026-862d-509a06438571'
 
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
@@ -431,17 +427,20 @@ SsoDeveloper:
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AmazonBedrockFullAccess'
     sessionDuration: 'PT12H'
-    inlinePolicy: >-
-      {
-          "Version": "2012-10-17",
-          "Statement": [
-              {
-                  "Effect": "Deny",
+    inlinePolicy:
+      Fn::Sub:
+        - >-
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                  "Effect": "Allow",
                   "Action": "sts:AssumeRole",
-                  "Resource": "*"
-              }
-          ]
-      }
+                  "Resource": "${AllowedRole}"
+                }
+            ]
+          }
+        - AllowedRole: !CopyValue ['us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn', !Ref SynapseLlmProdAccount]
 
 SsoFinanceAuditor:
   Type: update-stacks
@@ -518,6 +517,7 @@ SsoViewer:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AWSImageBuilderReadOnlyAccess'
     sessionDuration: 'PT12H'
     masterAccountId: !Ref MasterAccount
 
@@ -578,6 +578,7 @@ SsoViewerPlus:
       - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSNetworkManagerReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
+      - arn:aws:iam::aws:policy/AWSImageBuilderReadOnlyAccess
     inlinePolicy: >-
       {
         "Version": "2012-10-17",
@@ -1494,41 +1495,6 @@ SsoHtanDevDeveloper:
     principalId: !Ref htanDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
-
-SsoBmgfkiAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-bmgf-admin'
-  StackDescription: 'SSO: admin role used by BMGF KI admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref BmgfkiAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref bmgfkiAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
-SsoBmgfkiCommunityManager:
-  Type: update-stacks
-  DependsOn: [ SsoScipoolDevCommunityManager ]
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-bmgfki-community-manager'
-  StackDescription: 'SSO: community manager role used by BMGF KI community manager group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref BmgfkiAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref bmgfkiCommunityManagerGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-scipooldev-community-manager-permission-set-arn' ]
-
 SsoCnbAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -2292,20 +2258,36 @@ SsoOpenchallengesProdAdmin:
     principalId: !Ref OpenchallengesProdAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-
-SsoCodeOceanProdAdmin:
+SsoGenAiIcDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-codeocean-prod-admin'
-  StackDescription: 'SSO: admin role used by CodeOcean prod admin group'
+  StackName: !Sub '${resourcePrefix}-${appName}-genaiic-dev-admin'
+  StackDescription: 'SSO: admin role used by GenAiIc dev admin group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: !Ref CodeOceanProdAccount
+      Account: !Ref GenAiIcDevAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref CodeOceanProdAdminGroup
+    principalId: !Ref GenAiIcDevAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoGenAiIcDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-genaiic-dev-developer'
+  StackDescription: 'SSO: developer role used by GenAiIc dev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref GenAiIcDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref GenAiIcDevDevelopersGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
