@@ -572,7 +572,6 @@ GithubOidcSciPoolProdSageBionetworksSynapseLoginAwsInfra:
   DefaultOrganizationBinding:
     Account:
       - !Ref ScipoolProdAccount
-      - !Ref BmgfkiAccount
     Region: us-east-1
 
 GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
@@ -932,6 +931,27 @@ GithubOidcSceptreAws:
   DefaultOrganizationBinding:
     Account:
       - !Ref SceptreDevAccount
+    Region: us-east-1
+
+GithubOidcSynapseStatusLambda:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-synapse-status-lambda
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-synapse-status-lambda-deploy
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-status-lambda"
+        branches: ["main"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseProdAccount
     Region: us-east-1
 
 ############################### Managed Policies ###############################
