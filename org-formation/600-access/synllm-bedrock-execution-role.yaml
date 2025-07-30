@@ -15,7 +15,8 @@ Resources:
             Action: sts:AssumeRole
             Condition:
               StringEquals:
-                aws:SourceAccount: "${CurrentAccount.AccountId}"
+                aws:SourceAccount:
+                  'Fn::Sub': '${AWS::AccountId}'
       Policies:
         - PolicyName: BedrockInvokeAndOpenSearchPolicy
           PolicyDocument:
@@ -23,7 +24,9 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: bedrock:InvokeModel
-                Resource: "arn:aws:bedrock:us-east-1:${CurrentAccount.AccountId}:foundation-model/*"
+                Resource:
+                  'Fn::Sub': 'arn:aws:bedrock:us-east-1:${AWS::AccountId}:foundation-model/*'
               - Effect: Allow
                 Action: aoss:APIAccessAll
-                Resource: "arn:aws:aoss:us-east-1:${CurrentAccount.AccountId}:collection/*"
+                Resource:
+                  'Fn::Sub': 'arn:aws:aoss:us-east-1:${AWS::AccountId}:collection/*'
