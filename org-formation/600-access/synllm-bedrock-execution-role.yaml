@@ -5,7 +5,7 @@ Resources:
   BedrockKnowledgeBaseExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Ref BedrockRoleName
+      RoleName: synllm-bedrock-exec-role
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
