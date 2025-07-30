@@ -408,7 +408,7 @@ SynapseLlmDeveloperPolicy:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
   StackName: synapsellm-developer-policy
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
+    IncludeMasterAccount: false
     Account:
       - !Ref SynapseLlmProdAccount
     Region: !Ref primaryRegion
@@ -426,51 +426,17 @@ SynapseLlmDeveloperPolicy:
             "Effect": "Allow",
             "Action": "iam:PassRole",
             "Resource": "arn:aws:iam::${CurrentAccount.AccountId}:role/synllm-*"
-          },
-          {
-            "Sid": "ManageRolesWithBoundary ",
-            "Effect": "Allow",
-            "Action": [
-              "iam:CreateRole",
-              "iam:PutRolePolicy",
-              "iam:AttachRolePolicy",
-              "iam:UpdateAssumeRolePolicy",
-              "iam:PutRolePermissionsBoundary"
-            ],
-            "Resource": "arn:aws:iam::${CurrentAccount.AccountId}:role/synllm-*",
-            "Condition": {
-              "StringEquals": {
-                "iam:PermissionsBoundary": "${synLlmLambdaExecPermissionBoundary}"
-              }
-            }
-          },
-          {
-            "Sid": "ManagePolicies",
-            "Effect": "Allow",
-            "Action": [
-              "iam:CreatePolicy",
-              "iam:CreatePolicyVersion",
-              "iam:DeletePolicy",
-              "iam:DeletePolicyVersion",
-              "iam:GetPolicy",
-              "iam:GetPolicyVersion",
-              "iam:ListPolicyVersions",
-              "iam:SetDefaultPolicyVersion"
-            ],
-            "Resource": "arn:aws:iam::${CurrentAccount.AccountId}:policy/synllm-*",
-          },
-          {
-              "Sid": "AllowList",
-              "Action": [
-                  "iam:GetRole",
-                  "iam:ListRoles",
-                  "iam:GetAccountSummary",
-                  "iam:ListAccountAliases",
-                  "iam:ListPolicies"
-              ],
-              "Resource": "*",
-              "Effect": "Allow"
           }
         ]
       }
     PolicyName: SynapseLlmDeveloperPolicy
+
+SynLlmBedrockExecutionRole:
+  Type: update-stacks
+  Template: ./synllm-bedrock-execution-role.yaml
+  StackName: synllm-bedrock-exec-role
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref SynapseLlmProdAccount
+    Region: !Ref primaryRegion

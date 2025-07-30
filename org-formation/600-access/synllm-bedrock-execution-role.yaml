@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Role used by Bedrock to invoke models and access AOSS
+
+Resources:
+  BedrockKnowledgeBaseExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref BedrockRoleName
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: bedrock.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                aws:SourceAccount: "${CurrentAccount.AccountId}"
+      Policies:
+        - PolicyName: BedrockInvokeAndOpenSearchPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: bedrock:InvokeModel
+                Resource: "arn:aws:bedrock:us-east-1:${CurrentAccount.AccountId}:foundation-model/*"
+              - Effect: Allow
+                Action: aoss:APIAccessAll
+                Resource: "arn:aws:aoss:us-east-1:${CurrentAccount.AccountId}:collection/*"
