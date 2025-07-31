@@ -957,7 +957,7 @@ GithubOidcSynapseStatusLambda:
 GithubOidcBixArenaInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-bixarena-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
