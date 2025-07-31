@@ -954,6 +954,28 @@ GithubOidcSynapseStatusLambda:
       - !Ref SynapseProdAccount
     Region: us-east-1
 
+GithubOidcBixArenaInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-bixarena-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-bixarena-infra
+    MaxSessionDuration: 7200
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "bixarena-infra"
+        branches: ["stage","prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref BixArenaProdAccount
+    Region: us-east-1
+
 ############################### Managed Policies ###############################
 # Managed policies used in github OIDC providers
 # Note: Managed policies can be used as work around for the AWS cloudformation
