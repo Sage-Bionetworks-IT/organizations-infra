@@ -52,4 +52,3 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.4.12/ec2/sc-ec2-linux-docker-notebook.yaml'
       Name: 'v1.4.12'
-
