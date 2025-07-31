@@ -408,7 +408,7 @@ SynapseLlmDeveloperPolicy:
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
   StackName: synapsellm-developer-policy
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
+    IncludeMasterAccount: false
     Account:
       - !Ref SynapseLlmProdAccount
     Region: !Ref primaryRegion
@@ -425,8 +425,18 @@ SynapseLlmDeveloperPolicy:
           {
             "Effect": "Allow",
             "Action": "iam:PassRole",
-            "Resource": "*"
+            "Resource": "arn:aws:iam::${CurrentAccount.AccountId}:role/synllm-*"
           }
         ]
       }
     PolicyName: SynapseLlmDeveloperPolicy
+
+SynLlmBedrockExecutionRole:
+  Type: update-stacks
+  Template: ./synllm-bedrock-execution-role.yaml
+  StackName: synllm-bedrock-exec-role
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref SynapseLlmProdAccount
+    Region: !Ref primaryRegion
