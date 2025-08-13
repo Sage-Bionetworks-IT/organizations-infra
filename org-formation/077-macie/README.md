@@ -1,5 +1,5 @@
 ### Purpose of these templates
-The templates in this folder enables
+The templates in this folder enable
 [AWS Macie](https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html)
 across our AWS organization.
 

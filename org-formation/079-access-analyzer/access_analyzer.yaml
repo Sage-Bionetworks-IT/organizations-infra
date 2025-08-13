@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Setup IAM Access Analyzer"
+Resources:
+  AccessAnalyzer:
+    Type: AWS::AccessAnalyzer::Analyzer
+    Properties:
+      # External access analyzers help you identify potential risks of accessing
+      # resources by enabling you to identify any resource policies that grant access
+      # to an external principal.
+      Type: ACCOUNT
