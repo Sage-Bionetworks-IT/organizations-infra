@@ -15,7 +15,7 @@ AnomalyDetectorService:
 # Deploy a general-use microservice for interacting with MIPS in admincentral
 MipsMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-mips-api/1.2.2/lambda-mips-api.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-mips-api/1.3.0/lambda-mips-api.yaml'
   StackName: !Sub '${resourcePrefix}-mips-microservice'
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
@@ -24,7 +24,7 @@ MipsMicroservice:
   Parameters:
     AcmCertificateArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sageit-finops-cert-CertificateArn']
     DnsNames: "mips-api.finops.sageit.org"
-    MipsOrganization: 'SAGE_24146'
+    MipOrganization: 'SAGE_24146'
     SsmKeyAdminArns:
       - 'arn:aws:sts::745159704268:assumed-role/AWSReservedSSO_Administrator_30244677b3ea9498/joni.harker@sagebase.org'
       - !Sub 'arn:aws:iam::${CurrentAccount.AccountId}:root'
