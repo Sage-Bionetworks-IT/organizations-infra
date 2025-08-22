@@ -72,3 +72,22 @@ CostNotificationMicroservice:
     # Uncomment the following lines to disable user reports
     #RestrictRecipients: "True"
     #ApprovedRecipients: "it@sagebase.org"
+
+# Deploy a microservice for retrieving balances from lambda-mips-api and uploading them to FloQast via SFTP
+# Run daily at 8pm PDT (4am UTC)
+FloQastSftpMicroservice:
+  Type: update-stacks
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-floqast-sftp/1.0.0/lambda-finops-floqast-sftp.yaml'
+  StackName: !Sub '${resourcePrefix}-floqast-microservice'
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref AdminCentralAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    Schedule: "cron(0 4 * * ? *)"
+    PeriodCount: "13"
+    SsmPrefix: "/lambda/floqast-sftp"
+    KmsKeyAdminArns:
+      - 'arn:aws:sts::745159704268:assumed-role/AWSReservedSSO_Administrator_30244677b3ea9498/joni.harker@sagebase.org'
+      - !Sub 'arn:aws:iam::${CurrentAccount.AccountId}:root'
+      - 'arn:aws:iam::745159704268:role/github-oidc-sage-bionetwo-ProviderRoleorganization-93H11ERK3F4N'
