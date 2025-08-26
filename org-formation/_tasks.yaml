@@ -36,6 +36,11 @@ Macie:
   DependsOn: [ Types ]
   Path: ./077-macie/_tasks.yaml
 
+AccessAnalyzer:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./079-access-analyzer/_tasks.yaml
+
 AwsConfigInventory:
   Type: include
   DependsOn: [ Types ]
