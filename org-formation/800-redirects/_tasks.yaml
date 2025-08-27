@@ -409,7 +409,7 @@ ModelAdExplorerProdAppDnsForward:
 # Issue IT-4498, redirect treat-ad.org to treatad.org
 TreatAdApexRedirect:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-redirector.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
   StackName: !Sub '${resourcePrefix}-treatad-redirect'
   StackDescription: Setup a redirect from treat-ad.org to treatad.org
   DefaultOrganizationBindingRegion: !Ref primaryRegion
@@ -418,8 +418,7 @@ TreatAdApexRedirect:
   Parameters:
     # the endpoint we are redirecting from
     SourceHostName: "treat-ad.org"
-    SourceAcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/278a1102-c60d-4f51-81c0-6b1ca767945d"
-    # ID of the sageit.org zone (in sageit account)
+    # ID of the tret-ad.org zone (in sageit account)
     SourceHostedZoneId: "Z08344463B10GP0C3L4G6"
-    # the endpoint we are redirecting to (AWS VPN client self service)
+    # the endpoint we are redirecting to
     TargetHostName: "treatad.org"
