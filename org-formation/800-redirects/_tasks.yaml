@@ -405,3 +405,20 @@ ModelAdExplorerProdAppDnsForward:
     SourceHostedZoneId: "Z038526037U7WWZ1418M6"
     # the value of the CNAME record
     TargetHostName: !CopyValue ['model-ad-prod-load-balancer-dns', !Ref AgoraProdAccount]
+
+# Issue IT-4498, redirect treat-ad.org to treatad.org
+TreatAdApexRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-treatad-apex-redirect'
+  StackDescription: Setup a redirect from treat-ad.org to treatad.org
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "treat-ad.org"
+    # the endpoint we are redirecting to
+    TargetDomainName: "treatad.org"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/e8e438c6-8b58-4c39-b63d-d9c2a051e068"
+    RedirectFctName: !Sub '${resourcePrefix}-treatad-apex-redirect-cloudfront-fct'
