@@ -410,15 +410,15 @@ ModelAdExplorerProdAppDnsForward:
 TreatAdApexRedirect:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
-  StackName: !Sub '${resourcePrefix}-treatad-redirect'
+  StackName: !Sub '${resourcePrefix}-treatad-apex-redirect'
   StackDescription: Setup a redirect from treat-ad.org to treatad.org
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
   Parameters:
     # the endpoint we are redirecting from
-    SourceHostName: "treat-ad.org"
-    # ID of the tret-ad.org zone (in sageit account)
-    SourceHostedZoneId: "Z08344463B10GP0C3L4G6"
+    SourceDomainName: "treat-ad.org"
     # the endpoint we are redirecting to
-    TargetHostName: "treatad.org"
+    TargetDomainName: "treatad.org"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/e8e438c6-8b58-4c39-b63d-d9c2a051e068"
+    RedirectFctName: !Sub '${resourcePrefix}-treatad-apex-redirect-cloudfront-fct'
