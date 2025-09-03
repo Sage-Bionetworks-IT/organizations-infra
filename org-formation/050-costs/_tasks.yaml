@@ -28,7 +28,6 @@ MipsMicroservice:
     SsmKeyAdminArns:
       - 'arn:aws:sts::745159704268:assumed-role/AWSReservedSSO_Administrator_30244677b3ea9498/joni.harker@sagebase.org'
       - !Sub 'arn:aws:iam::${CurrentAccount.AccountId}:root'
-      - 'arn:aws:iam::745159704268:role/github-oidc-sage-bionetwo-ProviderRoleorganization-93H11ERK3F4N'
 
 # Deploy a microservice for generating cost category rules
 CostCategoryRulesMicroservice:
@@ -90,4 +89,3 @@ FloQastSftpMicroservice:
     KmsKeyAdminArns:
       - 'arn:aws:sts::745159704268:assumed-role/AWSReservedSSO_Administrator_30244677b3ea9498/joni.harker@sagebase.org'
       - !Sub 'arn:aws:iam::${CurrentAccount.AccountId}:root'
-      - 'arn:aws:iam::745159704268:role/github-oidc-sage-bionetwo-ProviderRoleorganization-93H11ERK3F4N'
