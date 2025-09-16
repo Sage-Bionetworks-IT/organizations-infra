@@ -166,6 +166,44 @@ GithubOidcSageBionetworksSynapse:
       - !Ref SynapseProdAccount
     Region: us-east-1
 
+GithubOidcSageBionetworksSynapseBuild:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.4/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-build
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-build
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  TemplatingContext:
+    Repositories:
+      - owner: "Sage-Bionetworks"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
+      - owner: "brucehoff"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
+      - owner: "SandhraSokhal"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
+      - owner: "marcomarasca"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
+      - owner: "john-hill"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
+      - owner: "xschildw"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
+      - owner: "nickgros"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseDevAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksSynapseOpsDev:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
