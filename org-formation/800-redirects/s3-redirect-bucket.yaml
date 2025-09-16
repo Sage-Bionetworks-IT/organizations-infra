@@ -1,0 +1,56 @@
+# Setup a static website bucket for the sole purpose of
+# redirecting all request to another website.
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Provision a S3 website with redirect rules
+Parameters:
+  RedirectFrom:
+    Description: Domain name of the old website (redirected from)
+    Type: String
+    AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
+    ConstraintDescription: must be a valid DNS zone name.
+  RedirectTo:
+    Description: Domain name of the new website (redirected to)
+    Type: String
+    AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
+    ConstraintDescription: must be a valid DNS zone name.
+Resources:
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks: [W3045]
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      BucketName: !Ref RedirectFrom
+      WebsiteConfiguration:
+        RedirectAllRequestsTo:
+          HostName: !Ref RedirectTo
+          Protocol: https
+  WebsiteBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${WebsiteBucket.Arn}/*'
+Outputs:
+  BucketWebsiteUrl:
+    Value: !GetAtt WebsiteBucket.WebsiteURL
+    Description: URL for website redirector
+    Export:
+      Name: !Sub '${AWS::StackName}-BucketWebsiteUrl'
+  WebsiteBucket:
+    Value: !Ref WebsiteBucket
+    Description: The bucket containing the website redirect rules
+    Export:
+      Name: !Sub '${AWS::StackName}-WebsiteBucket'
