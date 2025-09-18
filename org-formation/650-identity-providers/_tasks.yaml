@@ -176,6 +176,7 @@ GithubOidcSageBionetworksSynapseBuild:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-build
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
+    MaxSessionDuration: 43200
   TemplatingContext:
     Repositories:
       - owner: "Sage-Bionetworks"
