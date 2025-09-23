@@ -422,3 +422,20 @@ TreatAdApexRedirect:
     TargetDomainName: "treatad.org"
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/e8e438c6-8b58-4c39-b63d-d9c2a051e068"
     RedirectFctName: !Sub '${resourcePrefix}-treatad-apex-redirect-cloudfront-fct'
+
+# Issue IT-4466, redirect www.cancercomplexity.synapse.org to cancercomplexity.synapse.org
+CckpRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-cckp-redirect'
+  StackDescription: Setup a redirect from www.cancercomplexity.synapse.org to cancercomplexity.synapse.org
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "www.cancercomplexity.synapse.org"
+    # the endpoint we are redirecting to
+    TargetDomainName: "cancercomplexity.synapse.org"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/9ed90713-56b4-4383-b296-76dd284abe85"
+    RedirectFctName: !Sub '${resourcePrefix}-cckp-redirect-cloudfront-fct'
