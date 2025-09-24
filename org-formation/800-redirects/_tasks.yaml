@@ -423,6 +423,7 @@ TreatAdApexRedirect:
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/e8e438c6-8b58-4c39-b63d-d9c2a051e068"
     RedirectFctName: !Sub '${resourcePrefix}-treatad-apex-redirect-cloudfront-fct'
 
+
 # Issue IT-4466, redirect www.cancercomplexity.synapse.org to cancercomplexity.synapse.org
 CckpRedirect:
   Type: update-stacks
