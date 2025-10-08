@@ -930,9 +930,9 @@ GithubOidcBixArenaInfra:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks-IT"
+    GitHubOrg: "Sage-Bionetworks"
     Repositories:
-      - name: "bixarena-infra"
+      - name: "sage-monorepo"
         branches: ["stage","prod"]
   DefaultOrganizationBinding:
     Account:
