@@ -933,7 +933,7 @@ GithubOidcBixArenaInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "sage-monorepo"
-        branches: ["stage","prod"]
+        branches: ["main","prod"]
   DefaultOrganizationBinding:
     Account:
       - !Ref BixArenaProdAccount
