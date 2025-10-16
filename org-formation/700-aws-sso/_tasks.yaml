@@ -344,11 +344,11 @@ Parameters:
 
   BixArenaDevAdminGroup:     # JC aws-bixarena-dev-admins
     Type: String
-    Default: 'TBD'
+    Default: '44184428-3041-708e-d3eb-13e1087d6a83'
 
   BixArenaDevDeveloperGroup:     # JC aws-bixarena-dev-developers
     Type: String
-    Default: 'TBD'
+    Default: 'e4a80428-1011-70ac-cd92-8ef05c19ac4f'
 
   BixArenaProdAdminGroup:     # JC aws-bixarena-prod-admins
     Type: String
