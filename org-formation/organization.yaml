@@ -35,6 +35,7 @@ Organization:
         - !Ref CnbDevAccount
         - !Ref OpenChallengesDevAccount
         - !Ref GenAiIcDevAccount
+        - !Ref BixArenaDevAccount
         - !Ref BixArenaProdAccount
 
   ScienceProdOU:
@@ -641,6 +642,19 @@ Organization:
         CostCenter: ARPA-H with Leidos / 125200
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-genaiic-dev@sagebase.org
+
+  BixArenaDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-bixarena-dev
+      RootEmail: aws-bixarena-dev@sagebase.org
+      Alias: org-sagebase-bixarena-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: thomas.schaffter@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-bixarena-dev@sagebase.org
 
   BixArenaProdAccount:
     Type: OC::ORG::Account
