@@ -651,7 +651,7 @@ Organization:
       Alias: org-sagebase-bixarena-dev
       Tags:
         <<: !Include ./_default_org_tags.yaml
-        AccountOwner: Thomas.Schaffter@sagebase.org
+        AccountOwner: thomas.schaffter@sagebase.org
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-bixarena-dev@sagebase.org
