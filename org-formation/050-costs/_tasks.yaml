@@ -76,7 +76,7 @@ CostNotificationMicroservice:
 # Run daily at 8pm PDT (4am UTC)
 FloQastSftpMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-floqast-sftp/1.0.0/lambda-finops-floqast-sftp.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-floqast-sftp/1.0.1/lambda-finops-floqast-sftp.yaml'
   StackName: !Sub '${resourcePrefix}-floqast-microservice'
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
