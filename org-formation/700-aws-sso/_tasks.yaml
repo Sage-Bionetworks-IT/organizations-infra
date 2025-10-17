@@ -342,6 +342,14 @@ Parameters:
     Type: String
     Default: '04182458-5011-7026-862d-509a06438571'
 
+  BixArenaDevAdminGroup:     # JC aws-bixarena-dev-admins
+    Type: String
+    Default: '44184428-3041-708e-d3eb-13e1087d6a83'
+
+  BixArenaDevDeveloperGroup:     # JC aws-bixarena-dev-developers
+    Type: String
+    Default: 'e4a80428-1011-70ac-cd92-8ef05c19ac4f'
+
   BixArenaProdAdminGroup:     # JC aws-bixarena-prod-admins
     Type: String
     Default: 'f4e8a418-10b1-70cc-a6b6-95aea41819d1'
@@ -2298,6 +2306,42 @@ SsoGenAiIcDevDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref GenAiIcDevDevelopersGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoBixArenaDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-bixarena-dev-admin'
+  StackDescription: 'SSO: admin role used by BixArena dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BixArenaDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref BixArenaDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoBixArenaDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-bixarena-dev-developer'
+  StackDescription: 'SSO: developer role used by BixArena dev developer group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BixArenaDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref BixArenaDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
 SsoBixArenaProdAdmin:
