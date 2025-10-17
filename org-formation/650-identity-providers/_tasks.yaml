@@ -995,7 +995,9 @@ SynapseMonorepoBucketAccessPolicy:
                             "arn:aws:s3:::prod.ampals.synapse.org",
                             "arn:aws:s3:::staging.ampals.synapse.org",
                             "arn:aws:s3:::prod.classicportal.synapse.org",
-                            "arn:aws:s3:::staging.classicportal.synapse.org"
+                            "arn:aws:s3:::staging.classicportal.synapse.org",
+                            "arn:aws:s3:::prod.arcusbio.synapse.org",
+                            "arn:aws:s3:::staging.arcusbio.synapse.org"
                           ]
           }
         ]
@@ -1053,7 +1055,9 @@ SynapseMonorepoFileAccessPolicy:
                             "arn:aws:s3:::prod.ampals.synapse.org/*",
                             "arn:aws:s3:::staging.ampals.synapse.org/*",
                             "arn:aws:s3:::prod.classicportal.synapse.org/*",
-                            "arn:aws:s3:::staging.classicportal.synapse.org/*"
+                            "arn:aws:s3:::staging.classicportal.synapse.org/*",
+                            "arn:aws:s3:::prod.arcusbio.synapse.org/*",
+                            "arn:aws:s3:::staging.arcusbio.synapse.org/*"
                           ]
           }
         ]
@@ -1119,7 +1123,9 @@ SynapseMonorepoCloudfrontAccessPolicy:
                             "arn:aws:cloudfront::797640923903:distribution/E1YSZZSCY9FB9L",
                             "arn:aws:cloudfront::797640923903:distribution/EZY77E5LBAYK7",
                             "arn:aws:cloudfront::797640923903:distribution/E2Q0H70VTYIILR",
-                            "arn:aws:cloudfront::797640923903:distribution/EOJ4LGOT1G0D8"
+                            "arn:aws:cloudfront::797640923903:distribution/EOJ4LGOT1G0D8",
+                            "arn:aws:cloudfront::797640923903:distribution/E22C042TIAV42X",
+                            "arn:aws:cloudfront::797640923903:distribution/E1CMCI9H5DS1CH"
                           ]
           }
         ]
