@@ -945,7 +945,7 @@ GithubOidcBixArenaDevInfra:
 GithubOidcBixArenaInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/IAM/github-oidc-provider.j2
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.4/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-bixarena-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -955,10 +955,13 @@ GithubOidcBixArenaInfra:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks"
     Repositories:
-      - name: "sage-monorepo"
+      - owner: "Sage-Bionetworks"
+        name: "sage-monorepo"
         branches: ["infra/bixarena/*"]
+      - owner: "Sage-Bionetworks-IT"
+        name: "bixarena-infra"
+        branches: ["stage"]
   DefaultOrganizationBinding:
     Account:
       - !Ref BixArenaProdAccount
