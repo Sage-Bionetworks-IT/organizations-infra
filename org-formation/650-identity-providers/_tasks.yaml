@@ -961,7 +961,7 @@ GithubOidcBixArenaInfra:
         branches: ["infra/bixarena/*"]
       - owner: "Sage-Bionetworks-IT"
         name: "bixarena-infra"
-        branches: ["stage"]
+        branches: ["dev", "stage", "prod"]
   DefaultOrganizationBinding:
     Account:
       - !Ref BixArenaProdAccount
