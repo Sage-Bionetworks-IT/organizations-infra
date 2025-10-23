@@ -672,13 +672,13 @@ GithubOidcSageBionetworksSynapseProdWebMonorepoInfra:
               "Sid": "ListObjectsInBucket",
               "Effect": "Allow",
               "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketMultipartUploads" ],
-              "Resource": [ "arn:aws:s3:::staging-signin.synapse.org", "arn:aws:s3:::prod-signin-synapse-websitebucket-u91v422hx5bs" ]
+              "Resource": [ "arn:aws:s3:::staging-signin-synapse-websitebucket-d0h9iyfy390u", "arn:aws:s3:::prod-signin-synapse-websitebucket-u91v422hx5bs" ]
           },
           {
               "Sid": "AllObjectActions",
               "Effect": "Allow",
               "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:*Multipart*" ],
-              "Resource": ["arn:aws:s3:::staging-signin.synapse.org/*", "arn:aws:s3:::prod-signin-synapse-websitebucket-u91v422hx5bs/*" ]
+              "Resource": ["arn:aws:s3:::staging-signin-synapse-websitebucket-d0h9iyfy390u/*", "arn:aws:s3:::prod-signin-synapse-websitebucket-u91v422hx5bs/*" ]
           },
           {
               "Sid": "CloudfrontActions",
