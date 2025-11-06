@@ -440,3 +440,57 @@ CckpRedirect:
     TargetDomainName: "cancercomplexity.synapse.org"
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/9ed90713-56b4-4383-b296-76dd284abe85"
     RedirectFctName: !Sub '${resourcePrefix}-cckp-redirect-cloudfront-fct'
+
+# forward dev.bixarena.ai to BixArena ALB endpoint in org-sagebase-bixareana-dev
+# https://github.com/Sage-Bionetworks/bixarena-infra
+BixArenaDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-bixarean-dev-cname'
+  StackDescription: Setup a CNAME for bixarena dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref BixArenaDevAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dev.bixarena.ai"
+    # ID of the adknowledgeportal.org zone (in sageit account)
+    SourceHostedZoneId: "Z03918251MR2GR14XW5PH"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['bixarena-dev-load-balancer-dns', !Ref BixArenaDevAccount]
+
+# forward stage.bixarena.ai to BixArena ALB endpoint in org-sagebase-bixareana-prod
+# https://github.com/Sage-Bionetworks/bixarena-infra
+BixArenaStageAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-bixarean-stage-cname'
+  StackDescription: Setup a CNAME for bixarena stage ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref BixArenaProdAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "stage.bixarena.ai"
+    # ID of the adknowledgeportal.org zone (in sageit account)
+    SourceHostedZoneId: "Z03918251MR2GR14XW5PH"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['bixarena-stage-load-balancer-dns', !Ref BixArenaProdAccount]
+
+# forward prod.bixarena.ai to BixArena ALB endpoint in org-sagebase-bixareana-prod
+# https://github.com/Sage-Bionetworks/bixarena-infra
+BixArenaProdAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-bixarean-prod-cname'
+  StackDescription: Setup a CNAME for bixarena prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref BixArenaProdAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "prod.bixarena.ai"
+    # ID of the adknowledgeportal.org zone (in sageit account)
+    SourceHostedZoneId: "Z03918251MR2GR14XW5PH"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['bixarena-prod-load-balancer-dns', !Ref BixArenaProdAccount]
