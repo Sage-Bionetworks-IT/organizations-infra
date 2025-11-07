@@ -442,7 +442,7 @@ CckpRedirect:
     RedirectFctName: !Sub '${resourcePrefix}-cckp-redirect-cloudfront-fct'
 
 # Issue IT-4701, redirect rddc.bio to raredisease.bio
-RdccRedirect:
+RddcRedirect:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
   StackName: !Sub '${resourcePrefix}-rddcbio-redirect'
