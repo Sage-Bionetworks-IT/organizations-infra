@@ -440,3 +440,37 @@ CckpRedirect:
     TargetDomainName: "cancercomplexity.synapse.org"
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/9ed90713-56b4-4383-b296-76dd284abe85"
     RedirectFctName: !Sub '${resourcePrefix}-cckp-redirect-cloudfront-fct'
+
+# Issue IT-4701, redirect rddc.bio to raredisease.bio
+RddcRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-rddcbio-redirect'
+  StackDescription: Setup a redirect from rddc.bio to raredisease.bio
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "rddc.bio"
+    # the endpoint we are redirecting to
+    TargetDomainName: "raredisease.bio"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/5109f497-ea46-4dd8-a2ef-b48ebbd14360"
+    RedirectFctName: !Sub '${resourcePrefix}-rddcbio-redirect-cloudfront-fct'
+
+# Issue IT-4701, redirect rdc.bio to raredisease.bio
+RdcRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-rdcbio-redirect'
+  StackDescription: Setup a redirect from rdc.bio to raredisease.bio
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "rdc.bio"
+    # the endpoint we are redirecting to
+    TargetDomainName: "raredisease.bio"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/bbdeda6e-2a04-4fcc-9bb9-9b699c9e7326"
+    RedirectFctName: !Sub '${resourcePrefix}-rdcbio-redirect-cloudfront-fct'
