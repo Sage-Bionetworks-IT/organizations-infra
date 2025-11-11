@@ -117,7 +117,7 @@ jobs:
       role-to-assume: "arn:aws:iam::465877038949:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/scipool"
       role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
-      sceptre-command: "sceptre launch develop --prune --yes"
+      sceptre-command: "sceptre launch develop --prune --yes --max-concurrency 1"
   sceptre-scipoolprod:
     needs: [org-formation]
     uses: "./.github/workflows/aws-scipool.yaml"
@@ -132,7 +132,7 @@ jobs:
       role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetworks-it"
       role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/scipool"
-      sceptre-command: "sceptre launch strides --prune --yes"
+      sceptre-command: "sceptre launch strides --prune --yes --max-concurrency 1"
   sceptre-sageit-staging:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
@@ -140,7 +140,7 @@ jobs:
       role-to-assume: "arn:aws:iam::797640923903:role/sagebase-github-oidc-sage-bionetworks-it"
       role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/sageit"
-      sceptre-command: "sceptre launch staging --prune --yes"
+      sceptre-command: "sceptre launch staging --prune --yes --max-concurrency 1"
   sceptre-sageit-prod:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
