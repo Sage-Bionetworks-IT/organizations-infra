@@ -31,6 +31,14 @@ Resources:
                 Action: "lambda:InvokeFunction"
                 Resource:
                   - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*"
+              - Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                  - "s3:GetObjectVersion"
+                  - "s3:ListBucket"
+                Resource:
+                  - !Sub "arn:aws:s3:::*"
+                  - !Sub "arn:aws:s3:::*/*"
 
 Outputs:
   BedrockAgentRoleArn:
