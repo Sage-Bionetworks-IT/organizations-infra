@@ -125,6 +125,7 @@ jobs:
       role-to-assume: "arn:aws:iam::237179673806:role/sagebase-github-oidc-sage-bionetworks-it"
       role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/scipool"
+      sceptre-command: "sceptre launch prod --prune --yes --max-concurrency 1"
   sceptre-stridespool:
     needs: [org-formation, sceptre-strides]
     uses: "./.github/workflows/aws-scipool.yaml"
