@@ -18,6 +18,8 @@ Resources:
                 aws:SourceAccount: !Ref AWS::AccountId
               ArnLike:
                 aws:SourceArn: !Sub "arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent/*"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
       Policies:
         - PolicyName: bedrockAgentPolicy
           PolicyDocument:
@@ -31,7 +33,6 @@ Resources:
                 Action: "lambda:InvokeFunction"
                 Resource:
                   - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*"
-
 Outputs:
   BedrockAgentRoleArn:
     Description: The ARN of the Bedrock Agent Role
