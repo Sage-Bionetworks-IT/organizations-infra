@@ -1,0 +1,15 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'access_analyzer'
+
+AccessAnalyzer:
+  Type: update-stacks
+  Template: access_analyzer.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  StackDescription: Setup IAM Access Analyzer service
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: '*'
