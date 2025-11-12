@@ -5,7 +5,6 @@ Resources:
   bedrockAgentResourcesBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: bedrock-agent-resources
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -49,8 +48,8 @@ Resources:
 # delete first two lines after migrating
                   - !Sub "arn:aws:s3:::lolrus-bukkit"
                   - !Sub "arn:aws:s3:::lolrus-bukkit/*"
-                  - !Sub "arn:aws:s3:::bedrock-agent-resources"
-                  - !Sub "arn:aws:s3:::bedrock-agent-resources/*"
+                  - !Sub "${bedrockAgentResourcesBucket}"
+                  - !Sub "${bedrockAgentResourcesBucket}/*"
 
 Outputs:
   BedrockAgentRoleArn:
