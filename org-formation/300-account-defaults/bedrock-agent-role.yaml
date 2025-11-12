@@ -2,6 +2,15 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Enables executing a Bedrock model
 
 Resources:
+  bedrockAgentResourcesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: bedrock-agent-resources
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
 # https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html
   bedrockAgentRole:
     Type: AWS::IAM::Role
@@ -37,8 +46,11 @@ Resources:
                   - "s3:GetObjectVersion"
                   - "s3:ListBucket"
                 Resource:
-                  - !Sub "arn:aws:s3:::*"
-                  - !Sub "arn:aws:s3:::*/*"
+# delete first two lines after migrating
+                  - !Sub "arn:aws:s3:::lolrus-bukkit"
+                  - !Sub "arn:aws:s3:::lolrus-bukkit/*"
+                  - !Sub "arn:aws:s3:::bedrock-agent-resources"
+                  - !Sub "arn:aws:s3:::bedrock-agent-resources/*"
 
 Outputs:
   BedrockAgentRoleArn:
