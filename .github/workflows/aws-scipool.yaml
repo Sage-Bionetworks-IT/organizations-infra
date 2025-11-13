@@ -20,6 +20,9 @@ on:
       working-dir:
         required: true
         type: string
+      target-environment:
+        required: true
+        type: string
       sceptre-command:
         type: string
         default: "sceptre launch prod --prune --yes"
@@ -58,10 +61,7 @@ jobs:
         # SC-26 & SC-219 workaround: dis-associate and re-associate SC actions on every deploy
         run: |
           cd ${{ inputs.working-dir }}
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker.yaml
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-docker-notebook.yaml
-          sceptre delete --yes prod/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
-          sceptre delete --yes strides/sc-product-assoc-ec2-linux-docker.yaml
-          sceptre delete --yes strides/sc-product-assoc-ec2-linux-docker-notebook.yaml
-          sceptre delete --yes strides/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
+          sceptre delete --yes ${{ inputs.target-environment }}/sc-product-assoc-ec2-linux-docker.yaml
+          sceptre delete --yes ${{ inputs.target-environment }}/sc-product-assoc-ec2-linux-docker-notebook.yaml
+          sceptre delete --yes ${{ inputs.target-environment }}/sc-product-assoc-ec2-linux-windows-jumpcloud.yaml
           ${{ inputs.sceptre-command }}

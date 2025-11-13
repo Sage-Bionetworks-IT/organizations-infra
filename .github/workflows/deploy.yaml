@@ -112,8 +112,9 @@ jobs:
       working-dir: "sceptre/strides-ampad-workflows"
   sceptre-scipooldev:
     needs: [org-formation]
-    uses: "./.github/workflows/aws-deploy.yaml"
+    uses: "./.github/workflows/aws-scipool.yaml"
     with:
+      target-environment: "develop"
       role-to-assume: "arn:aws:iam::465877038949:role/sagebase-github-oidc-sage-bionetworks-it"
       working-dir: "sceptre/scipool"
       role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
@@ -122,6 +123,7 @@ jobs:
     needs: [org-formation]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
+      target-environment: "prod"
       role-to-assume: "arn:aws:iam::237179673806:role/sagebase-github-oidc-sage-bionetworks-it"
       role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/scipool"
@@ -130,6 +132,7 @@ jobs:
     needs: [org-formation, sceptre-strides]
     uses: "./.github/workflows/aws-scipool.yaml"
     with:
+      target-environment: "strides"
       role-to-assume: "arn:aws:iam::423819316185:role/github-oidc-sage-bionetworks-it"
       role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/scipool"
