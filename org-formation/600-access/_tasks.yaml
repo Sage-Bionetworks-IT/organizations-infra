@@ -239,6 +239,52 @@ SynapseImageCentralImageBuilderPipelineAccess:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AWSImageBuilderReadOnlyAccess
 
+# IAM role for RDS export to S3 and Snowflake access
+RDSSnowflakeExportRole:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/refs/tags/v0.10.5/templates/IAM/cross-account-access.yaml
+  StackName: rds-snowflake-export-role
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account: !Ref DpeProdAccount
+    Region: us-east-1
+  Parameters:
+    PrincipalArns:
+      - arn:aws:iam::766808016710:root  # DPE Prod account
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "S3ExportWriteAndRead",
+            "Effect": "Allow",
+            "Action": [
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:ListBucket",
+              "s3:GetBucketLocation"
+            ],
+            "Resource": [
+              "arn:aws:s3:::synapse-rds-snapshots-dev",
+              "arn:aws:s3:::synapse-rds-snapshots-dev/*"
+            ]
+          },
+          {
+            "Sid": "KMSForSSEKMSObjects",
+            "Effect": "Allow",
+            "Action": [
+              "kms:Decrypt",
+              "kms:Encrypt",
+              "kms:ReEncrypt*",
+              "kms:GenerateDataKey*",
+              "kms:DescribeKey",
+              "kms:CreateGrant"
+            ],
+            "Resource": "arn:aws:kms:us-east-1:766808016710:key/f5991bf5-9722-4153-954d-253f280aa7f3"
+          }
+        ]
+      }
+
 
 #---------------------------------
 #  Managed Policies
