@@ -934,9 +934,6 @@ GithubOidcBixArenaDevInfra:
       - owner: "Sage-Bionetworks"
         name: "sage-monorepo"
         branches: ["main"]
-      - owner: "Sage-Bionetworks-IT"
-        name: "bixarena-infra"
-        branches: ["dev"]
   DefaultOrganizationBinding:
     Account:
       - !Ref BixArenaDevAccount
@@ -959,9 +956,6 @@ GithubOidcBixArenaInfra:
       - owner: "Sage-Bionetworks"
         name: "sage-monorepo"
         branches: ["infra/bixarena/*"]
-      - owner: "Sage-Bionetworks-IT"
-        name: "bixarena-infra"
-        branches: ["dev", "stage", "prod"]
   DefaultOrganizationBinding:
     Account:
       - !Ref BixArenaProdAccount
