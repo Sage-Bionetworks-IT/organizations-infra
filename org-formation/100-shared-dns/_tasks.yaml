@@ -102,3 +102,19 @@ SagebioApiZoneAcmCertificate:
       - !Ref GenieProdAccount
   Parameters:
     DnsDomainName: "api.sagebionetworks.org"
+
+# Wildcard certificate for '*.synapse.org'
+SynapseOrgZoneAcmCertificate:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/acm-certificate.yaml
+  StackName: !Sub '${resourcePrefix}-synapse-org-cert'
+  StackDescription: Create a wildcard certificate for synapse org domains
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    # We need a copy of this certificate in every account where it will be used
+    # Each certificate needs to be manually verified
+    Account:
+      - !Ref DnTDevAccount
+      - !Ref DpeProdAccount
+  Parameters:
+    DnsDomainName: "synapse.org"
