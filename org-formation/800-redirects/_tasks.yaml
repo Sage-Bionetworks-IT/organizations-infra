@@ -256,7 +256,7 @@ SynapseMCPDevDnsForward:
     # ID of the synapse.org zone (in Synapse prod account)
     SourceHostedZoneId: ZHAU99KV4A1WU
     # the value of the CNAME record
-    TargetHostName: "synaps-AppLo-eUrDchB5Y55d-1276030746.us-east-1.elb.amazonaws.com"
+    TargetHostName: !CopyValue ['synapse-mcp-dev-load-balancer-dns', !Ref DnTDevAccount]
 
 # forward dev.sagedpe.org to dev EKS stack ALB in org-sagebase-dnt-dev
 # apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
