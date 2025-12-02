@@ -309,7 +309,7 @@
                     "Id": "key-default-1",
                     "Statement": [
                         {
-                            "Sid": "Deny administration of the key",
+                            "Sid": "Deny administration of the key to unapproved IAM entities",
                             "Effect": "Deny",
                             "Principal": {
                                 "AWS": "*"
@@ -333,7 +333,7 @@
                             }
                         },
                         {
-                            "Sid": "Allow root administration of the key",
+                            "Sid": "Allow administration of the key to those not denied access.",
                             "Effect": "Allow",
                             "Principal": {
                                 "AWS": "*"
