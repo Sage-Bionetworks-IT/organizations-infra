@@ -204,6 +204,9 @@ GithubOidcSageBionetworksSynapseBuild:
       - owner: "Sage-Bionetworks"
         name: "Synapse-Repository-Services"
         branches: ["*"]
+      - owner: "Sage-Bionetworks"
+        name: "Synapse-Stack-Builder"
+        branches: ["develop"]
       - owner: "brucehoff"
         name: "Synapse-Repository-Services"
         branches: ["*"]
