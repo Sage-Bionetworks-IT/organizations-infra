@@ -309,7 +309,7 @@
                     "Id": "key-default-1",
                     "Statement": [
                         {
-                            "Sid": "Deny administration of the key",
+                            "Sid": "Deny administration of the key to unapproved IAM entities",
                             "Effect": "Deny",
                             "Principal": {
                                 "AWS": "*"
@@ -325,29 +325,18 @@
                                         { "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn" },
                                         { "Fn::GetAtt": [ "SynapseDeploymentRole", "Arn" ] },
                                         { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
-                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" }
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/Synapse-Build-*-CodeBuildServiceRole" },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/Deployment-Pipeline-CodeBuildServiceRole" }
                                     ]
                                 }
                             }
                         },
                         {
-                            "Sid": "Allow root administration of the key",
+                            "Sid": "Allow administration of the key to those not denied access.",
                             "Effect": "Allow",
                             "Principal": {
-                                "AWS": [
-                                    {
-                                        "Fn::GetAtt": [
-                                            "SynapseDeploymentRole",
-                                            "Arn"
-                                        ]
-                                    },
-                                    {
-                                        "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn"
-                                    },
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" }
-                                ]
+                                "AWS": "*"
                             },
                             "Action": [
                                 "kms:*"
