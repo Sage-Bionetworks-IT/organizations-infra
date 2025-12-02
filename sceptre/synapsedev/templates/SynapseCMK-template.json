@@ -325,7 +325,9 @@
                                         { "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn" },
                                         { "Fn::GetAtt": [ "SynapseDeploymentRole", "Arn" ] },
                                         { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
-                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" }
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/Synapse-Build-*-CodeBuildServiceRole" },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/Deployment-Pipeline-CodeBuildServiceRole" }
                                     ]
                                 }
                             }
@@ -334,20 +336,7 @@
                             "Sid": "Allow root administration of the key",
                             "Effect": "Allow",
                             "Principal": {
-                                "AWS": [
-                                    {
-                                        "Fn::GetAtt": [
-                                            "SynapseDeploymentRole",
-                                            "Arn"
-                                        ]
-                                    },
-                                    {
-                                        "Fn::ImportValue": "us-east-1-accounts-AWSIAMAdminRoleArn"
-                                    },
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_693a85eb20cd5043" }
-                                ]
+                                "AWS": "*"
                             },
                             "Action": [
                                 "kms:*"
