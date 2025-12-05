@@ -474,19 +474,19 @@ RddcRedirect:
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/5109f497-ea46-4dd8-a2ef-b48ebbd14360"
     RedirectFctName: !Sub '${resourcePrefix}-rddcbio-redirect-cloudfront-fct'
 
-# Issue IT-4701, redirect rdc.bio to raredisease.bio
-RdcRedirect:
+# Issue IT-4772, redirect www.bioarena.io to bioarena.io
+BioarenaRedirect:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
-  StackName: !Sub '${resourcePrefix}-rdcbio-redirect'
-  StackDescription: Setup a redirect from rdc.bio to raredisease.bio
+  StackName: !Sub '${resourcePrefix}-bioarena-redirect'
+  StackDescription: Setup a redirect from www.bioarena.io to bioarena.io
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
   Parameters:
     # the endpoint we are redirecting from
-    SourceDomainName: "rdc.bio"
+    SourceDomainName: "www.bioarena.io"
     # the endpoint we are redirecting to
-    TargetDomainName: "raredisease.bio"
-    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/bbdeda6e-2a04-4fcc-9bb9-9b699c9e7326"
-    RedirectFctName: !Sub '${resourcePrefix}-rdcbio-redirect-cloudfront-fct'
+    TargetDomainName: "bioarena.io"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/79f26e28-199e-4089-9172-7a9a1daf380c"
+    RedirectFctName: !Sub '${resourcePrefix}-bioarena-redirect-cloudfront-fct'
