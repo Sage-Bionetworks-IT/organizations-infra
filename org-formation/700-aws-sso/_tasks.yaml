@@ -495,7 +495,7 @@ SsoSecurityAuditor:
     IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
-      Account: '*'
+      Account: !Ref SecurityCentralAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref securityAuditorGroup
@@ -505,9 +505,6 @@ SsoSecurityAuditor:
       - 'arn:aws:iam::aws:policy/job-function/SupportUser'
       - 'arn:aws:iam::aws:policy/AmazonInspector2ReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
-      - 'arn:aws:iam::aws:policy/AWSElasticBeanstalkReadOnly'
-      - 'arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess'
-      - 'arn:aws:iam::aws:policy/AmazonMacieReadOnlyAccess'
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
 
