@@ -173,6 +173,8 @@ Resources:
             Comparison: "EQUALS"
           - Value: "cis-aws-foundations-benchmark/v/1.4.0/2.1.5.1"  # (IT-4236) "2.1.5.1 S3 Block Public Access setting should be enabled"
             Comparison: "EQUALS"
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/3.4" # (IT-4722, and other IT issues with the same finding for other AWS accounts)
+            Comparison: "EQUALS"
       Actions:
         - Type: "FINDING_FIELDS_UPDATE"
           FindingFieldsUpdate:
