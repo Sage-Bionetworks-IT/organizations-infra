@@ -213,7 +213,7 @@ GithubOidcSageBionetworksSynapseBuild:
       - owner: "SandhraSokhal"
         name: "Synapse-Repository-Services"
         branches: ["*"]
-      - owner: "marcomarasca"
+      - owner: "BryanFauble"
         name: "Synapse-Repository-Services"
         branches: ["*"]
       - owner: "john-hill"
