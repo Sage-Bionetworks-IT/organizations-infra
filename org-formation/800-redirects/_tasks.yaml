@@ -524,3 +524,20 @@ BioarenaRedirect:
     TargetDomainName: "bioarena.io"
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/79f26e28-199e-4089-9172-7a9a1daf380c"
     RedirectFctName: !Sub '${resourcePrefix}-bioarena-redirect-cloudfront-fct'
+
+# Issue IT-4787, redirect blog.sagebionetworks.org to blog.synapse.org
+BlogSagebionetworksRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-blog-sagebionetworks-redirect'
+  StackDescription: Setup a redirect from blog.sagebionetworks.org to blog.synapse.org
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "blog.sagebionetworks.org"
+    # the endpoint we are redirecting to
+    TargetDomainName: "blog.synapse.org"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/1924e910-f09e-44a0-8266-088ad5b80490"
+    RedirectFctName: !Sub '${resourcePrefix}-blog-sagebionetworks-redirect-cloudfront-fct'
