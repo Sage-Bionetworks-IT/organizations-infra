@@ -360,7 +360,7 @@ Parameters:
 
   SageBrainProdDeveloperGroup:     # JC aws-sagebrain-prod-developers
     Type: String
-    Default: 'TBD'
+    Default: '64c81408-e0a1-70a3-dbc1-143a8ebecd9e'
 
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
