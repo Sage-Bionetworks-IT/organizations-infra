@@ -56,6 +56,7 @@ Organization:
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
         - !Ref OpenChallengesProdAccount
+        - !Ref SageBrainProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -668,6 +669,19 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-bixarena-prod@sagebase.org
+
+  SageBrainProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-sagebrain-prod
+      RootEmail: aws-sagebrain-prod@sagebase.org
+      Alias: org-sagebase-sagebrain-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: Susheel.Varma@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-sagebrain-prod@sagebase.org
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
