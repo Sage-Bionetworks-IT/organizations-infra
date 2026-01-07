@@ -118,3 +118,15 @@ SynapseOrgZoneAcmCertificate:
       - !Ref DpeProdAccount
   Parameters:
     DnsDomainName: "synapse.org"
+
+# Zone for dev.bioarena.io
+DevBioArenaZone:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.8/templates/R53-hostedzone.yaml
+  StackName: !Sub '${resourcePrefix}-dev-bioarena-zone'
+  StackDescription: Hosted zone for dev.bioarena.io
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref BixArenaDevAccount
+  Parameters:
+    DnsDomainName: "dev.bioarena.io"
