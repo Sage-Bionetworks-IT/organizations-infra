@@ -358,6 +358,10 @@ Parameters:
     Type: String
     Default: '7478a468-8051-708a-24cc-0b07adfa1835'
 
+  SageBrainProdDeveloperGroup:     # JC aws-sagebrain-prod-developers
+    Type: String
+    Default: 'TBD'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -2375,4 +2379,22 @@ SsoBixArenaProdDeveloper:
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref BixArenaProdDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoSageBrainProdDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-sagebrain-prod-developer'
+  StackDescription: 'SSO: developer role used by SageBrain prod developers group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SageBrainProdAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref SageBrainDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
