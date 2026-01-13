@@ -2396,5 +2396,5 @@ SsoSageBrainProdDeveloper:
       Account: !Ref SageBrainProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref SageBrainDeveloperGroup
+    principalId: !Ref SageBrainProdDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
