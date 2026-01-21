@@ -31,7 +31,7 @@ EbsVolumeCleanup:
 
 Ec2InstanceTerminator:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-ec2-terminator/0.0.1/lambda-ec2-terminator.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-ec2-terminator/1.0.0/lambda-ec2-terminator.yaml'
   StackName: lambda-ec2-terminator
   Parameters:
     Ec2Action: "TERMINATE"
