@@ -263,7 +263,7 @@ SynapseMCPStageDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-synapse-mcp-stage-cname'
-  StackDescription: Setup a CNAME for synapse-stage-server dev ALB
+  StackDescription: Setup a CNAME for synapse-stage-server staging ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SynapseProdAccount
@@ -274,6 +274,23 @@ SynapseMCPStageDnsForward:
     SourceHostedZoneId: ZHAU99KV4A1WU
     # the value of the CNAME record
     TargetHostName: !CopyValue ['synapse-mcp-stage-load-balancer-dns', !Ref DpeProdAccount]
+
+# forward `mcp.synapse.org` Synapse MCP server ALB
+SynapseMCPProdDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-synapse-mcp-prod-cname'
+  StackDescription: Setup a CNAME for synapse-prod-server prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "mcp.synapse.org"
+    # ID of the synapse.org zone (in Synapse prod account)
+    SourceHostedZoneId: ZHAU99KV4A1WU
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['synapse-mcp-prod-load-balancer-dns', !Ref DpeProdAccount]
 
 # forward dev.sagedpe.org to dev EKS stack ALB in org-sagebase-dnt-dev
 # apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
