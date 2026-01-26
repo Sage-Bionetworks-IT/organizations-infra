@@ -27,7 +27,7 @@ Parameters:
 
   aiKiroProGroup: #JC aws-ai-kiro-pro
     Type: String
-    Default: 'TBD'
+    Default: '642824a8-a071-70c3-941a-67dc56dd2c5e'
 
   scienceSupporterGroup:      #JC aws-science-supporters
     Type: String
