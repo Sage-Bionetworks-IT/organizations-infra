@@ -239,6 +239,16 @@ SynapseImageCentralImageBuilderPipelineAccess:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AWSImageBuilderReadOnlyAccess
 
+# Give Vanta compliance tool read-only access to our AWS ORG IT-4821
+VantaReadOnlyAccess:
+  Type: update-stacks
+  Template: vanta-readonly-role-cf.yml
+  StackName: vanta-read-only-access
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
+
 
 #---------------------------------
 #  Managed Policies
