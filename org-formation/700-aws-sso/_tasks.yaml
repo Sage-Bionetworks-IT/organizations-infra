@@ -25,6 +25,10 @@ Parameters:
     Type: String
     Default: '8458f408-2011-701d-03c4-a27ef3d4489c'
 
+  aiKiroProGroup: #JC aws-ai-kiro-pro
+    Type: String
+    Default: '642824a8-a071-70c3-941a-67dc56dd2c5e'
+
   scienceSupporterGroup:      #JC aws-science-supporters
     Type: String
     Default: '906769aa66-5d23a723-54f3-4c08-a67b-311e555f4e85'
@@ -686,6 +690,28 @@ SsoLlmDeveloper:
           ]
       }
     sessionDuration: 'PT12H'
+
+SsoAiKiroPro:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-ai-kiro-pro'
+  StackDescription: 'Permission set used by an AWS Kiro user'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref MasterAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref aiKiroProGroup
+    permissionSetName: 'ai-kiro-pro'
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/AmazonQDeveloperAccess'
+    sessionDuration: 'PT12H'
+
 
 # Role for a user that can only access AWS Athena in the Synapse Dev account
 SsoSynapseDWDevAthenaUser:
