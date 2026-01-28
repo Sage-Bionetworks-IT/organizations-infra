@@ -275,42 +275,6 @@ SynapseMCPStageDnsForward:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['synapse-mcp-stage-load-balancer-dns', !Ref DpeProdAccount]
 
-# forward dev.sagedpe.org to dev EKS stack ALB in org-sagebase-dnt-dev
-# apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
-SageDpeDevAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-sagedpe-dev-cname'
-  StackDescription: Setup a CNAME for sagepde.org dev ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "dev.sagedpe.org"
-    # ID of the sagedpe.org zone (in sageit account)
-    SourceHostedZoneId: "Z04325181I2YIP983P1AD"
-    # the value of the CNAME record
-    TargetHostName: "ac5c848ac4ff54e2bb11dd87685375b0-1875694220.us-east-1.elb.amazonaws.com"
-
-# forward staging.sagedpe.org to staging EKS stack ALB in org-sagebase-dpe-prod
-# apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
-SageDpeStagingAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-sagedpe-staging-cname'
-  StackDescription: Setup a CNAME for sagepde.org staging ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "staging.sagedpe.org"
-    # ID of the sagedpe.org zone (in sageit account)
-    SourceHostedZoneId: "Z04325181I2YIP983P1AD"
-    # the value of the CNAME record
-    TargetHostName: "ae44aad490bd44942875e55a14963d7a-688764136.us-east-1.elb.amazonaws.com"
-
 
 # forward prod.sagedpe.org to prod EKS stack ALB in org-sagebase-dpe-prod
 # apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
