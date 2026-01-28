@@ -242,8 +242,8 @@ SynapseImageCentralImageBuilderPipelineAccess:
 # Give Vanta compliance tool read-only access to our AWS ORG IT-4821
 VantaReadOnlyAccess:
   Type: update-stacks
-  Template: vanta-readonmly-role-cf.yml
-  StackName: vanta-readonmly-access
+  Template: vanta-readonly-role-cf.yml
+  StackName: vanta-read-only-access
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
