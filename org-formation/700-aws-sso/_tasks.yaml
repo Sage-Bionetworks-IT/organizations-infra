@@ -700,7 +700,7 @@ SsoAiKiroPro:
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
+    IncludeMasterAccount: false
   OrganizationBindings:
     TargetBinding:
       Account: !Ref MasterAccount
