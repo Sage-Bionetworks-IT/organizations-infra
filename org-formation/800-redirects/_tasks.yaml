@@ -133,42 +133,6 @@ DcaProdAppDnsForward:
 
 # *.api.sagebionetworks.org
 
-# forward schematic-dev.api.sagebionetworks.org to schematic-infra ALB
-# https://github.com/Sage-Bionetworks-IT/schematic-infra-v2
-SchematicDevAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-schematic-dev-cname'
-  StackDescription: Setup a CNAME for schematic-infra dev ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "schematic-dev.api.sagebionetworks.org"
-    # ID of the api.sagebionetworks.org zone (in sageit account)
-    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
-    # the value of the CNAME record
-    TargetHostName: !CopyValue ['schematic-dev-load-balancer-dns', !Ref DnTDevAccount]
-
-# forward schematic-staging.api.sagebionetworks.org to schematic-infra ALB
-# https://github.com/Sage-Bionetworks-IT/schematic-infra-v2
-SchematicStagingAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-schematic-staging-cname'
-  StackDescription: Setup a CNAME for schematic-infra stage ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "schematic-staging.api.sagebionetworks.org"
-    # ID of the api.sagebionetworks.org zone (in sageit account)
-    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
-    # the value of the CNAME record
-    TargetHostName: !CopyValue ['schematic-stage-load-balancer-dns', !Ref DCAProdAccount]
-
 # forward schematic.api.sagebionetworks.org to schematic-infra ALB
 # https://github.com/Sage-Bionetworks/schematic-infra-v2
 SchematicProdAppDnsForward:
@@ -263,7 +227,7 @@ SynapseMCPStageDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
   StackName: !Sub '${resourcePrefix}-synapse-mcp-stage-cname'
-  StackDescription: Setup a CNAME for synapse-stage-server dev ALB
+  StackDescription: Setup a CNAME for synapse-stage-server stage ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SynapseProdAccount
@@ -275,42 +239,22 @@ SynapseMCPStageDnsForward:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['synapse-mcp-stage-load-balancer-dns', !Ref DpeProdAccount]
 
-# forward dev.sagedpe.org to dev EKS stack ALB in org-sagebase-dnt-dev
-# apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
-SageDpeDevAppDnsForward:
+# forward `mcp.synapse.org` Synapse MCP server ALB
+SynapseMCPProdDnsForward:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-sagedpe-dev-cname'
-  StackDescription: Setup a CNAME for sagepde.org dev ALB
+  StackName: !Sub '${resourcePrefix}-synapse-mcp-prod-cname'
+  StackDescription: Setup a CNAME for synapse-prod-server prod ALB
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
+    Account: !Ref SynapseProdAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "dev.sagedpe.org"
-    # ID of the sagedpe.org zone (in sageit account)
-    SourceHostedZoneId: "Z04325181I2YIP983P1AD"
+    SourceHostName: "mcp.synapse.org"
+    # ID of the synapse.org zone (in Synapse prod account)
+    SourceHostedZoneId: ZHAU99KV4A1WU
     # the value of the CNAME record
-    TargetHostName: "ac5c848ac4ff54e2bb11dd87685375b0-1875694220.us-east-1.elb.amazonaws.com"
-
-# forward staging.sagedpe.org to staging EKS stack ALB in org-sagebase-dpe-prod
-# apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
-SageDpeStagingAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-sagedpe-staging-cname'
-  StackDescription: Setup a CNAME for sagepde.org staging ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "staging.sagedpe.org"
-    # ID of the sagedpe.org zone (in sageit account)
-    SourceHostedZoneId: "Z04325181I2YIP983P1AD"
-    # the value of the CNAME record
-    TargetHostName: "ae44aad490bd44942875e55a14963d7a-688764136.us-east-1.elb.amazonaws.com"
-
+    TargetHostName: !CopyValue ['synapse-mcp-prod-load-balancer-dns', !Ref DpeProdAccount]
 
 # forward prod.sagedpe.org to prod EKS stack ALB in org-sagebase-dpe-prod
 # apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
