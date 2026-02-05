@@ -309,7 +309,8 @@
                                         { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
                                         { "Fn::GetAtt": [ "SynapseDeploymentRole", "Arn" ] },
                                         { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
-                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_6620166dd0e7f1b6" }
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_6620166dd0e7f1b6" },
+                                        { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/Deployment-Pipeline-CodeBuildServiceRole" }
                                     ]
                                 }
                             }
@@ -318,12 +319,7 @@
                             "Sid": "Allow root administration of the key",
                             "Effect": "Allow",
                             "Principal": {
-                                "AWS": [
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
-                                    { "Fn::GetAtt": ["SynapseDeploymentRole", "Arn"] },
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/sagebase-github-oidc-sage-bionetworks-it" },
-                                    { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Administrator_6620166dd0e7f1b6" }
-                                ]
+                                "AWS": "*"
                             },
                             "Action": [
                                 "kms:*"
