@@ -1,4 +1,4 @@
 template:
   type: http
-  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.5/templates/bootstrap.yaml
+  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.6/templates/bootstrap.yaml
 stack_name: bootstrap
