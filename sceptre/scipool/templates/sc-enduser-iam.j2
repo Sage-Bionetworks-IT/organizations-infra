@@ -61,7 +61,10 @@ Resources:
             Action:
               - organizations:DescribeOrganization
               - servicecatalog:DescribeProvisionedProduct
-              - cloudwatch:GetMetricData  # access to EC2 monitoring info
+              # access to EC2 monitoring info
+              - cloudwatch:Describe*
+              - cloudwatch:GetMetric*
+              - cloudwatch:List*
             Resource: "*"
 {% if sceptre_user_data.IncludeTestPolicy is defined %}
   {% if sceptre_user_data.IncludeTestPolicy == true %}
