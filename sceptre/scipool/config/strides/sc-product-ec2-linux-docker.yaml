@@ -62,7 +62,11 @@ sceptre_user_data:
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.4.0/ec2/sc-ec2-linux-docker.yaml'
       Name: 'v1.4.0'
-    - Description: 'Update Amazon Linux AMI {{ range(1, 10000) | random }}'
+    - Description: 'Update Amazon Linux AMI'
       Info:
         LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.4.3/ec2/sc-ec2-linux-docker.yaml'
       Name: 'v1.4.3'
+    - Description: 'Monitoring with Cloudwatch {{ range(1, 10000) | random }}'
+      Info:
+        LoadTemplateFromURL: 'https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/{{stack_group_config.service_catalog_library}}/v1.5.0/ec2/sc-ec2-linux-docker.yaml'
+      Name: 'v1.5.0'
