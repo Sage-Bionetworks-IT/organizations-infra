@@ -36,7 +36,7 @@
         "AWS_REGION": "us-east-1"
       }
     },
-    "aws-cdk-mcp-server": {
+    "aws-diagram-mcp-server": {
       "command": "uvx",
       "args": ["awslabs.aws-diagram-mcp-server@latest"],
       "env": {
@@ -45,7 +45,7 @@
         "AWS_REGION": "us-east-1"
       }
     },
-    "aws-diagram-mcp-server": {
+    "aws-cdk-mcp-server": {
       "command": "uvx",
       "args": ["awslabs.cdk-mcp-server@latest"],
       "env": {
@@ -54,15 +54,11 @@
         "AWS_REGION": "us-east-1"
       }
     },
-    "git": {
-      "command": "uvx",
-      "args": ["mcp-server-git"],
-      "disabled": false,
-      "autoApprove": [
-        "log",
-        "show",
-        "diff",
-        "status"
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-filesystem",
+        "."
       ]
     }
   }
