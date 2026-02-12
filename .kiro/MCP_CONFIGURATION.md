@@ -12,26 +12,26 @@ This document describes the Model Context Protocol (MCP) server configuration fo
 
 ## Installed MCP Servers
 
-### 1. AWS Core (`aws-core`)
+### 1. AWS Knowledge (`aws-knowledge-mcp-server`)
 
-**Purpose**: Core AWS functionality and prompt understanding for AWS-related queries.
+**Purpose**: AWS regional availability, service information, and knowledge base access via HTTP.
 
 **Configuration**:
 ```json
 {
-  "command": "uvx",
-  "args": ["awslabs.core-mcp-server@latest"],
-  "env": {
-    "FASTMCP_LOG_LEVEL": "ERROR"
-  },
+  "url": "https://knowledge-mcp.global.api.aws",
+  "type": "http",
   "disabled": false
 }
 ```
 
 **Capabilities**:
-- AWS prompt understanding and translation
-- Core AWS service guidance
-- General AWS best practices
+- Get AWS regional availability for products, APIs, and CloudFormation resources
+- List all AWS regions
+- Access AWS knowledge base information
+- Check service and feature availability across regions
+
+**Connection Type**: HTTP (no local installation required)
 
 **Status**: ✅ Enabled
 
@@ -78,9 +78,7 @@ This document describes the Model Context Protocol (MCP) server configuration fo
   "command": "uvx",
   "args": ["awslabs.aws-pricing-mcp-server@latest"],
   "env": {
-    "FASTMCP_LOG_LEVEL": "ERROR",
-    "AWS_PROFILE": "default",
-    "AWS_REGION": "us-east-1"
+    "FASTMCP_LOG_LEVEL": "ERROR"
   }
 }
 ```
@@ -93,8 +91,7 @@ This document describes the Model Context Protocol (MCP) server configuration fo
 - Query pricing attributes and values
 
 **AWS Configuration**:
-- Profile: `default`
-- Region: `us-east-1`
+- No AWS credentials required (uses public pricing API)
 
 **Status**: ✅ Enabled
 
@@ -110,9 +107,7 @@ This document describes the Model Context Protocol (MCP) server configuration fo
   "command": "uvx",
   "args": ["awslabs.aws-iac-mcp-server@latest"],
   "env": {
-    "FASTMCP_LOG_LEVEL": "ERROR",
-    "AWS_PROFILE": "default",
-    "AWS_REGION": "us-east-1"
+    "FASTMCP_LOG_LEVEL": "ERROR"
   }
 }
 ```
@@ -125,8 +120,7 @@ This document describes the Model Context Protocol (MCP) server configuration fo
 - Pre-deployment validation
 
 **AWS Configuration**:
-- Profile: `default`
-- Region: `us-east-1`
+- Uses default AWS credentials from environment
 
 **Status**: ✅ Enabled
 
@@ -142,9 +136,7 @@ This document describes the Model Context Protocol (MCP) server configuration fo
   "command": "uvx",
   "args": ["awslabs.aws-diagram-mcp-server@latest"],
   "env": {
-    "FASTMCP_LOG_LEVEL": "ERROR",
-    "AWS_PROFILE": "default",
-    "AWS_REGION": "us-east-1"
+    "FASTMCP_LOG_LEVEL": "ERROR"
   }
 }
 ```
@@ -157,43 +149,41 @@ This document describes the Model Context Protocol (MCP) server configuration fo
 - Support for multiple cloud providers
 
 **AWS Configuration**:
-- Profile: `default`
-- Region: `us-east-1`
+- No AWS credentials required
 
 **Requirements**:
 - Graphviz must be installed on the system
+
+**Output Location**:
+- Diagrams are saved to `generated-diagrams/` folder in workspace
 
 **Status**: ✅ Enabled
 
 ---
 
-### 6. AWS CDK (`aws-cdk-mcp-server`)
+### 6. AWS CloudFormation (`aws-cfn-mcp-server`)
 
-**Purpose**: AWS CDK-specific guidance, patterns, and best practices.
+**Purpose**: Direct CloudFormation resource management and operations.
 
 **Configuration**:
 ```json
 {
   "command": "uvx",
-  "args": ["awslabs.cdk-mcp-server@latest"],
-  "env": {
-    "FASTMCP_LOG_LEVEL": "ERROR",
-    "AWS_PROFILE": "default",
-    "AWS_REGION": "us-east-1"
-  }
+  "args": ["awslabs.cfn-mcp-server@latest"]
 }
 ```
 
 **Capabilities**:
-- CDK general guidance and best practices
-- CDK Nag rule explanations
-- AWS Solutions Constructs patterns
-- GenAI CDK constructs
-- Lambda layer documentation
+- Get CloudFormation resource schema information
+- List AWS resources of a specified type
+- Get details of specific AWS resources
+- Create, update, and delete AWS resources
+- Track long-running operations
+- Generate CloudFormation templates from existing resources (IaC Generator)
 
 **AWS Configuration**:
-- Profile: `default`
-- Region: `us-east-1`
+- Uses default AWS credentials from environment
+- Requires appropriate IAM permissions for resource operations
 
 **Status**: ✅ Enabled
 
@@ -238,15 +228,15 @@ This document describes the Model Context Protocol (MCP) server configuration fo
 
 ### AWS-Specific Settings
 
-**AWS_PROFILE**: `default`
-- Uses the default AWS CLI profile
-- Ensure your `~/.aws/credentials` file has a `[default]` profile configured
+Most AWS MCP servers now use default AWS credentials from your environment rather than explicit profile/region configuration. This provides more flexibility and follows AWS SDK best practices.
 
-**AWS_REGION**: `us-east-1`
-- Default region for AWS operations
-- Can be overridden by specific tool calls
+**AWS Credentials**: Automatically detected from:
+1. Environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`)
+2. AWS credentials file (`~/.aws/credentials`)
+3. IAM role (if running on EC2/ECS/Lambda)
+4. AWS SSO
 
-**AWS_DOCUMENTATION_PARTITION**: `aws`
+**AWS_DOCUMENTATION_PARTITION**: `aws` (for aws-docs server)
 - Standard AWS partition (not GovCloud or China)
 
 ---
@@ -286,6 +276,12 @@ aws configure
 
 ## Usage Examples
 
+### Checking Regional Availability
+```
+"Is Lambda available in eu-south-2 region?"
+"Check if CloudFormation resource AWS::Lambda::Function is available in ap-southeast-3"
+```
+
 ### Searching AWS Documentation
 ```
 "Search AWS documentation for Transit Gateway pricing"
@@ -311,6 +307,13 @@ aws configure
 "What are the best practices for CDK stack organization?"
 ```
 
+### Managing CloudFormation Resources
+```
+"List all S3 buckets in my account"
+"Get details for S3 bucket my-bucket-name"
+"Create an S3 bucket with encryption enabled"
+```
+
 ---
 
 ## Troubleshooting
@@ -333,12 +336,29 @@ aws configure
 
 ### AWS Credential Errors
 
-If you see "config profile (default) could not be found":
+If you see AWS credential-related errors:
 
-1. Run `aws configure` to set up credentials
-2. Or specify a different profile in the MCP config:
-   ```json
-   "AWS_PROFILE": "your-profile-name"
+1. **Check your AWS credentials**:
+   ```bash
+   aws sts get-caller-identity
+   ```
+
+2. **Configure credentials if needed**:
+   ```bash
+   aws configure
+   ```
+
+3. **Or use environment variables**:
+   ```bash
+   export AWS_ACCESS_KEY_ID=your_access_key
+   export AWS_SECRET_ACCESS_KEY=your_secret_key
+   export AWS_DEFAULT_REGION=us-east-1
+   ```
+
+4. **For AWS SSO**:
+   ```bash
+   aws sso login --profile your-profile
+   export AWS_PROFILE=your-profile
    ```
 
 ### Diagram Generation Fails
@@ -360,25 +380,26 @@ dot -V
 
 ## Customization
 
-### Changing AWS Profile
+### Using AWS SSO or Named Profiles
 
-Edit `.kiro/settings/mcp.json` and update the `AWS_PROFILE` value:
+If you need to use a specific AWS profile, set it as an environment variable before starting Kiro:
 
-```json
-"env": {
-  "AWS_PROFILE": "your-profile-name",
-  "AWS_REGION": "us-east-1"
-}
+```bash
+export AWS_PROFILE=your-profile-name
+```
+
+Or add it to your shell configuration (~/.zshrc, ~/.bashrc):
+
+```bash
+echo 'export AWS_PROFILE=your-profile-name' >> ~/.zshrc
 ```
 
 ### Changing Default Region
 
-Update the `AWS_REGION` value:
+Set the AWS region via environment variable:
 
-```json
-"env": {
-  "AWS_REGION": "us-west-2"
-}
+```bash
+export AWS_DEFAULT_REGION=us-west-2
 ```
 
 ### Disabling a Server
@@ -432,6 +453,7 @@ In Kiro:
    - Never commit credentials to version control
    - Use IAM roles with least privilege
    - Rotate access keys regularly
+   - Consider using AWS SSO for better security
 
 2. **Auto-Approve**: Use cautiously
    - Only auto-approve read-only operations
@@ -440,6 +462,12 @@ In Kiro:
 3. **Workspace Access**: Filesystem server has access to workspace files
    - Ensure sensitive data is not in the workspace
    - Use `.gitignore` for secrets
+   - Generated diagrams are saved to `generated-diagrams/` (excluded from git)
+
+4. **CloudFormation Operations**: aws-cfn-mcp-server can create/modify/delete resources
+   - Review operations carefully before approval
+   - Ensure you have appropriate IAM permissions
+   - Test in non-production environments first
 
 ---
 

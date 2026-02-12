@@ -1,11 +1,8 @@
 {
   "mcpServers": {
-    "aws-core": {
-      "command": "uvx",
-      "args": ["awslabs.core-mcp-server@latest"],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      },
+    "aws-knowledge-mcp-server": {
+      "url": "https://knowledge-mcp.global.api.aws",
+      "type": "http",
       "disabled": false
     },
     "aws-docs": {
@@ -39,12 +36,11 @@
         "FASTMCP_LOG_LEVEL": "ERROR"
       }
     },
-    "aws-cdk-mcp-server": {
+    "aws-cfn-mcp-server": {
       "command": "uvx",
-      "args": ["awslabs.cdk-mcp-server@latest"],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      }
+      "args": [
+        "awslabs.cfn-mcp-server@latest"
+      ]
     },
     "filesystem": {
       "command": "npx",
