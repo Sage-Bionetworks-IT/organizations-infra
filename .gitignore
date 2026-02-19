@@ -145,6 +145,3 @@ org-formation/200-baseline/cdk-bootstrap.json
 org-formation/200-baseline/tmptemplate.json
 
 .project
-
-# aws-diagram-mcp-server
-generated-diagrams/
