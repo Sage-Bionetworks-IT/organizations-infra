@@ -32,7 +32,7 @@ MipsMicroservice:
 # Deploy a microservice for generating cost category rules
 CostCategoryRulesMicroservice:
   Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-cost-rules/1.0.1/lambda-finops-cost-rules.yaml'
+  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-cost-rules/1.0.2/lambda-finops-cost-rules.yaml'
   StackName: !Sub '${resourcePrefix}-rules-microservice'
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
