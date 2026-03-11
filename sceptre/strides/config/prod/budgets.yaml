@@ -1,0 +1,10 @@
+template:
+  type: http
+  url: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.6/templates/Billing/budgets.yaml
+stack_name: "budget-alarms"
+stack_tags:
+  OwnerEmail: "it@sagebase.org"
+parameters:
+  budgetName: strides
+  budgetAmount: 25000
+  emailAddress: "ADTR-computebudget@sagebase.org"
