@@ -1009,6 +1009,28 @@ GithubOidcItSandboxDeploy:   # allow repos to make test deployments into ITSandb
       - !Ref ITSandboxAccount
     Region: us-east-1
 
+GithubOidcSynapseRdsSnowflakeExportInfraDeploy:   # allow repos to deploy infra for Synapse RDS Snowflake export
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.4/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-synapse-rds-snowflake-export-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-synapse-rds-snowflake-export-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+    MaxSessionDuration: 43200
+  TemplatingContext:
+    Repositories:
+      - owner: "Sage-Bionetworks"
+        name: "synapse-rds-snowflake-export-infra"
+        branches: ["main", "develop"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SynapseDevAccount
+      - !Ref SynapseProdAccount
+    Region: us-east-1
+
 
 ############################### Managed Policies ###############################
 # Managed policies used in github OIDC providers
