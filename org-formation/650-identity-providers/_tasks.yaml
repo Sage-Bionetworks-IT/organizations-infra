@@ -1009,7 +1009,7 @@ GithubOidcItSandboxDeploy:   # allow repos to make test deployments into ITSandb
       - !Ref ITSandboxAccount
     Region: us-east-1
 
-GithubOidcSynapseRdsSnowflakeExportInfraDeploy:   # allow repos to make test deployments into Synapse accounts
+GithubOidcSynapseRdsSnowflakeExportInfraDeploy:   # allow repos to deploy infra for Synapse RDS Snowflake export
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.4/templates/IAM/github-oidc-provider.j2
