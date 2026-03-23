@@ -683,6 +683,19 @@ Organization:
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-sagebrain-prod@sagebase.org
 
+  SageBrainDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-sagebrain-dev
+      RootEmail: aws-sagebrain-prod@sagebase.org
+      Alias: org-sagebase-sagebrain-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: Susheel.Varma@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-sagebrain-prod@sagebase.org
+
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
     Type: OC::ORG::Account
