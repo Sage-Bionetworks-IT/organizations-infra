@@ -36,7 +36,6 @@ TransitGateway:
       - !Ref BridgeProdAccount
       - !Ref SynapseDevAccount
       - !Ref SynapseProdAccount
-      - !Ref AgoraDevAccount
       - !Ref iAtlasProdAccount
       - !Ref ScipoolDevAccount
       - !Ref ScipoolProdAccount
@@ -101,9 +100,6 @@ TransitGatewayRoutes:
         CIDR: "10.20.0.0/16"
       synapse-ops-vpc-v2:
         CIDR: "10.30.0.0/16"
-      # org-sagebase-agora-dev
-      agoradev-vpc:
-        CIDR: "10.255.45.0/24"
       # org-sagebase-scipooldev
       cesspoolvpc:
         CIDR: "10.31.0.0/16"
@@ -134,7 +130,6 @@ Mappings:
       '055273631518': 'computevpc'  # org-sagebase-scicomp
       '420786776710': 'BridgeServer2-vpc'   # org-sagebase-bridgedev
       '649232250620': 'BridgeServer2-vpc'   # org-sagebase-bridgeprod
-      '607346494281': 'agoravpc'      # org-sagebase-agora-dev
       '465877038949': 'cesspoolvpc'      # org-sagebase-scipooldev
       '237179673806': 'internalpoolvpc'      # org-sagebase-scipooldev
       '797640923903': 'defaultvpc' # org-sagebase-sageit
@@ -165,7 +160,6 @@ TransitGatewaySpokeA:
       - !Ref ScicompAccount
       - !Ref BridgeDevAccount
       - !Ref BridgeProdAccount
-      - !Ref AgoraDevAccount
       - !Ref ScipoolDevAccount
       - !Ref ScipoolProdAccount
       - !Ref SageITAccount

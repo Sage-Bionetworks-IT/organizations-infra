@@ -1,0 +1,67 @@
+# This template was provided by Vanta
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  ExternalId:
+    Type: String
+    Description: "ExternalId - Vanta defined. Used for allowing the VantaScanner to assume the VantaAuditorRole role."
+    Default: "67DD6432A9BD521"
+  SecurityAuditARN:
+    Type: String
+    Description: "ARN of the SecurityAudit Managed Policy"
+    Default: "arn:aws:iam::aws:policy/SecurityAudit"
+  VantaScannerArn:
+    Type: String
+    Description: "ARN of the Vanta Scanner"
+    Default: "arn:aws:iam::956993596390:role/scanner"
+Resources:
+  VantaAdditionalPermissionsPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: VantaAdditionalPermissions
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - identitystore:DescribeGroup
+              - identitystore:DescribeGroupMembership
+              - identitystore:DescribeUser
+              - identitystore:GetGroupId
+              - identitystore:GetGroupMembershipId
+              - identitystore:GetUserId
+              - identitystore:IsMemberInGroups
+              - identitystore:ListGroupMemberships
+              - identitystore:ListGroups
+              - identitystore:ListUsers
+              - identitystore:ListGroupMembershipsForMember
+            Resource: "*"
+          - Effect: Deny
+            Action:
+              - datapipeline:EvaluateExpression
+              - datapipeline:QueryObjects
+              - rds:DownloadDBLogFilePortion
+            Resource: "*"
+  VantaAuditorRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ""
+            Effect: Allow
+            Principal:
+              AWS: !Ref "VantaScannerArn"
+            Condition:
+              StringEquals:
+                sts:ExternalId: !Ref "ExternalId"
+            Action: sts:AssumeRole
+      Path: /
+      RoleName: vanta-auditor
+      ManagedPolicyArns:
+        - !Ref "SecurityAuditARN"
+        - !Ref "VantaAdditionalPermissionsPolicy"
+      MaxSessionDuration: 3600
+Outputs:
+  VantaAuditorRoleArn:
+    Description: "The ARN of the vanta-auditor role that was created"
+    Value: !GetAtt [VantaAuditorRole, Arn]

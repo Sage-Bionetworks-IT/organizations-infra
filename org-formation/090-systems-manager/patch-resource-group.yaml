@@ -15,7 +15,6 @@ Resources:
             - "AWS::EC2::Instance"
             - "AWS::EC2::ReservedInstance"
             - "AWS::ECS::ContainerInstance"
-            - "AWS::OpsWorks::Instance"
             - "AWS::RDS::DBInstance"
             - "AWS::RDS::ReservedDBInstance"
             - "AWS::SSM::ManagedInstance"

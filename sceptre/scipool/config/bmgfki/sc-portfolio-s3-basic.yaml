@@ -1,8 +1,0 @@
-template:
-  path: "sc-portfolio-s3-basic.yaml"
-stack_name: "sc-portfolio-s3-basic"
-stack_tags:
-  OwnerEmail: "it@sagebase.org"
-dependencies:
-  - "bmgfki/sc-s3-launchrole.yaml"
-  - "bmgfki/sc-enduser-iam.yaml"

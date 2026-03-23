@@ -277,7 +277,6 @@ Resources:
     Type: "AWS::SSM::Document"
     Properties:
       DocumentType: Automation
-      Name: "Automation-Run-Script"
       Content:
         schemaVersion: '0.3'
         description: "Run a parameterized script on EC2 instances"
@@ -325,7 +324,7 @@ Resources:
               - "for KV in ${SSM_TO_ENV_MAP[@]} ; do"
               - "  export ${KV%%:*}=${KV##*:}"
               - "done"
-              - "SCRIPT_PATH=/tmp/script.sh"
+              - "SCRIPT_PATH=~/script.sh"
               - "wget -O $SCRIPT_PATH {{ ScriptUrl }}"
               - "chmod +x $SCRIPT_PATH"
               - "$SCRIPT_PATH"

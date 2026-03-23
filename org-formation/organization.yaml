@@ -35,6 +35,8 @@ Organization:
         - !Ref CnbDevAccount
         - !Ref OpenChallengesDevAccount
         - !Ref GenAiIcDevAccount
+        - !Ref BixArenaDevAccount
+        - !Ref BixArenaProdAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -54,6 +56,7 @@ Organization:
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
         - !Ref OpenChallengesProdAccount
+        - !Ref SageBrainProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -106,7 +109,6 @@ Organization:
       ServiceControlPolicies:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
-        - !Ref BmgfkiAccount
         - !Ref ScipoolDevAccount
         - !Ref ScipoolProdAccount
 
@@ -285,17 +287,6 @@ Organization:
       Alias: org-sagebase-scipoolprod
       Tags:
         <<: !Include ./_default_org_tags.yaml
-
-  BmgfkiAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-bmgfki
-      AccountId: '464102568320'
-      RootEmail: aws.bmgfki@sagebase.org
-      Alias: org-sagebase-bmgfki
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        CostCenter: 'BMGF-Ki / 30144'
 
   ScicompAccount:
     Type: OC::ORG::Account
@@ -652,6 +643,45 @@ Organization:
         CostCenter: ARPA-H with Leidos / 125200
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-genaiic-dev@sagebase.org
+
+  BixArenaDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-bixarena-dev
+      RootEmail: aws-bixarena-dev@sagebase.org
+      Alias: org-sagebase-bixarena-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: thomas.schaffter@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-bixarena-dev@sagebase.org
+
+  BixArenaProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-bixarena-prod
+      RootEmail: aws-bixarena-prod@sagebase.org
+      Alias: org-sagebase-bixarena-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: Thomas.Schaffter@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-bixarena-prod@sagebase.org
+
+  SageBrainProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-sagebrain-prod
+      RootEmail: aws-sagebrain-prod@sagebase.org
+      Alias: org-sagebase-sagebrain-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: Susheel.Varma@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: aws-sagebrain-prod@sagebase.org
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:

@@ -133,42 +133,6 @@ DcaProdAppDnsForward:
 
 # *.api.sagebionetworks.org
 
-# forward schematic-dev.api.sagebionetworks.org to schematic-infra ALB
-# https://github.com/Sage-Bionetworks-IT/schematic-infra-v2
-SchematicDevAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-schematic-dev-cname'
-  StackDescription: Setup a CNAME for schematic-infra dev ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "schematic-dev.api.sagebionetworks.org"
-    # ID of the api.sagebionetworks.org zone (in sageit account)
-    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
-    # the value of the CNAME record
-    TargetHostName: !CopyValue ['schematic-dev-load-balancer-dns', !Ref DnTDevAccount]
-
-# forward schematic-staging.api.sagebionetworks.org to schematic-infra ALB
-# https://github.com/Sage-Bionetworks-IT/schematic-infra-v2
-SchematicStagingAppDnsForward:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
-  StackName: !Sub '${resourcePrefix}-schematic-staging-cname'
-  StackDescription: Setup a CNAME for schematic-infra stage ALB
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the name of the CNAME record
-    SourceHostName: "schematic-staging.api.sagebionetworks.org"
-    # ID of the api.sagebionetworks.org zone (in sageit account)
-    SourceHostedZoneId: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-sagebio-api-zone-HostedZoneId']
-    # the value of the CNAME record
-    TargetHostName: !CopyValue ['schematic-stage-load-balancer-dns', !Ref DCAProdAccount]
-
 # forward schematic.api.sagebionetworks.org to schematic-infra ALB
 # https://github.com/Sage-Bionetworks/schematic-infra-v2
 SchematicProdAppDnsForward:
@@ -241,6 +205,56 @@ SynapseDockerRegistryProdDnsForward:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['registry-prod-DockerFargateStack-LoadBalancerDNS', !Ref SynapseProdAccount]
 
+# forward `mcp-dev.synapse.org` Synapse MCP server ALB
+SynapseMCPDevDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-synapse-mcp-dev-cname'
+  StackDescription: Setup a CNAME for synapse-mcp-server dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "mcp-dev.synapse.org"
+    # ID of the synapse.org zone (in Synapse prod account)
+    SourceHostedZoneId: ZHAU99KV4A1WU
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['synapse-mcp-dev-load-balancer-dns', !Ref DnTDevAccount]
+
+# forward `mcp-stage.synapse.org` Synapse MCP server ALB
+SynapseMCPStageDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-synapse-mcp-stage-cname'
+  StackDescription: Setup a CNAME for synapse-stage-server stage ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "mcp-stage.synapse.org"
+    # ID of the synapse.org zone (in Synapse prod account)
+    SourceHostedZoneId: ZHAU99KV4A1WU
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['synapse-mcp-stage-load-balancer-dns', !Ref DpeProdAccount]
+
+# forward `mcp.synapse.org` Synapse MCP server ALB
+SynapseMCPProdDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-synapse-mcp-prod-cname'
+  StackDescription: Setup a CNAME for synapse-prod-server prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseProdAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "mcp.synapse.org"
+    # ID of the synapse.org zone (in Synapse prod account)
+    SourceHostedZoneId: ZHAU99KV4A1WU
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['synapse-mcp-prod-load-balancer-dns', !Ref DpeProdAccount]
 
 # forward dev.sagedpe.org to dev EKS stack ALB in org-sagebase-dnt-dev
 # apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
@@ -278,7 +292,6 @@ SageDpeStagingAppDnsForward:
     # the value of the CNAME record
     TargetHostName: "ae44aad490bd44942875e55a14963d7a-688764136.us-east-1.elb.amazonaws.com"
 
-
 # forward prod.sagedpe.org to prod EKS stack ALB in org-sagebase-dpe-prod
 # apps are setup with terraform at https://github.com/Sage-Bionetworks-Workflows/eks-stack
 SageDpeProdAppDnsForward:
@@ -310,7 +323,7 @@ AgoraDevAppDnsForward:
     Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "newagora-dev.adknowledgeportal.org"
+    SourceHostName: "agora-dev.adknowledgeportal.org"
     # ID of the adknowledgeportal.org zone (in sageit account)
     SourceHostedZoneId: "Z2DTJC6JTFRHBN"
     # the value of the CNAME record
@@ -328,7 +341,7 @@ AgoraStageAppDnsForward:
     Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "newagora-stage.adknowledgeportal.org"
+    SourceHostName: "agora-stage.adknowledgeportal.org"
     # ID of the adknowledgeportal.org zone (in sageit account)
     SourceHostedZoneId: "Z2DTJC6JTFRHBN"
     # the value of the CNAME record
@@ -346,8 +359,165 @@ AgoraProdAppDnsForward:
     Account: !Ref SageITAccount
   Parameters:
     # the name of the CNAME record
-    SourceHostName: "newagora-prod.adknowledgeportal.org"
+    SourceHostName: "agora.adknowledgeportal.org"
     # ID of the adknowledgeportal.org zone (in sageit account)
     SourceHostedZoneId: "Z2DTJC6JTFRHBN"
     # the value of the CNAME record
     TargetHostName: !CopyValue ['agora-prod-load-balancer-dns', !Ref AgoraProdAccount]
+
+# forward dev.modeladexplorer.org to modeladexplorer-infra ALB
+# https://github.com/Sage-Bionetworks/modeladexplorer-infra
+ModelAdExplorerDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-modeladexplorer-dev-cname'
+  StackDescription: Setup a CNAME for modeladexplorer-infra dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dev.modeladexplorer.org"
+    # ID of the modeladexplorer.org zone (in sageit account)
+    SourceHostedZoneId: "Z038526037U7WWZ1418M6"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['model-ad-dev-load-balancer-dns', !Ref AgoraDevAccount]
+
+# forward stage.modeladexplorer.org to modeladexplorer-infra ALB
+# https://github.com/Sage-Bionetworks/modeladexplorer-infra
+ModelAdExplorerStageAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-modeladexplorer-stage-cname'
+  StackDescription: Setup a CNAME for modeladexplorer-infra stage ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "stage.modeladexplorer.org"
+    # ID of the modeladexplorer.org zone (in sageit account)
+    SourceHostedZoneId: "Z038526037U7WWZ1418M6"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['model-ad-stage-load-balancer-dns', !Ref AgoraProdAccount]
+
+# forward prod.modeladexplorer.org to modeladexplorer-infra ALB
+# https://github.com/Sage-Bionetworks/modeladexplorer-infra
+ModelAdExplorerProdAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-modeladexplorer-prod-cname'
+  StackDescription: Setup a CNAME for modeladexplorer-infra prod ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "prod.modeladexplorer.org"
+    # ID of the modeladexplorer.org zone (in sageit account)
+    SourceHostedZoneId: "Z038526037U7WWZ1418M6"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['model-ad-prod-load-balancer-dns', !Ref AgoraProdAccount]
+
+# Issue IT-4498, redirect treat-ad.org to treatad.org
+TreatAdApexRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-treatad-apex-redirect'
+  StackDescription: Setup a redirect from treat-ad.org to treatad.org
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "treat-ad.org"
+    # the endpoint we are redirecting to
+    TargetDomainName: "treatad.org"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/e8e438c6-8b58-4c39-b63d-d9c2a051e068"
+    RedirectFctName: !Sub '${resourcePrefix}-treatad-apex-redirect-cloudfront-fct'
+
+
+# Issue IT-4466, redirect www.cancercomplexity.synapse.org to cancercomplexity.synapse.org
+CckpRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-cckp-redirect'
+  StackDescription: Setup a redirect from www.cancercomplexity.synapse.org to cancercomplexity.synapse.org
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "www.cancercomplexity.synapse.org"
+    # the endpoint we are redirecting to
+    TargetDomainName: "cancercomplexity.synapse.org"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/9ed90713-56b4-4383-b296-76dd284abe85"
+    RedirectFctName: !Sub '${resourcePrefix}-cckp-redirect-cloudfront-fct'
+
+# Issue IT-4701, redirect rddc.bio to raredisease.bio
+RddcRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-rddcbio-redirect'
+  StackDescription: Setup a redirect from rddc.bio to raredisease.bio
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "rddc.bio"
+    # the endpoint we are redirecting to
+    TargetDomainName: "raredisease.bio"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/5109f497-ea46-4dd8-a2ef-b48ebbd14360"
+    RedirectFctName: !Sub '${resourcePrefix}-rddcbio-redirect-cloudfront-fct'
+
+# Issue IT-4701, redirect rdc.bio to raredisease.bio
+RdcRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-rdcbio-redirect'
+  StackDescription: Setup a redirect from rdc.bio to raredisease.bio
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "rdc.bio"
+    # the endpoint we are redirecting to
+    TargetDomainName: "raredisease.bio"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/bbdeda6e-2a04-4fcc-9bb9-9b699c9e7326"
+    RedirectFctName: !Sub '${resourcePrefix}-rdcbio-redirect-cloudfront-fct'
+
+# Issue IT-4772, redirect www.bioarena.io to bioarena.io
+BioarenaRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-bioarena-redirect'
+  StackDescription: Setup a redirect from www.bioarena.io to bioarena.io
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "www.bioarena.io"
+    # the endpoint we are redirecting to
+    TargetDomainName: "bioarena.io"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/79f26e28-199e-4089-9172-7a9a1daf380c"
+    RedirectFctName: !Sub '${resourcePrefix}-bioarena-redirect-cloudfront-fct'
+
+# Issue IT-4787, redirect blog.sagebionetworks.org to blog.synapse.org
+BlogSagebionetworksRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-blog-sagebionetworks-redirect'
+  StackDescription: Setup a redirect from blog.sagebionetworks.org to blog.synapse.org
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "blog.sagebionetworks.org"
+    # the endpoint we are redirecting to
+    TargetDomainName: "blog.synapse.org"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/1924e910-f09e-44a0-8266-088ad5b80490"
+    RedirectFctName: !Sub '${resourcePrefix}-blog-sagebionetworks-redirect-cloudfront-fct'
