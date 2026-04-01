@@ -144,6 +144,28 @@ GithubOidcSageBionetworksItSynapseMcpInfra:
       - !Ref DpeProdAccount
     Region: us-east-1
 
+GithubOidcSageBionetworksItSageBrainInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sage-brain-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sage-brain-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks-IT"
+    Repositories:
+      - name: "sage-brain-infra"
+        branches: ["dev", "stage", "prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SageBrainDevAccount
+      - !Ref SageBrainProdAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksSynapseDockerRegistry:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
