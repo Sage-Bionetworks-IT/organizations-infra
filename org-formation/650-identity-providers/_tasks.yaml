@@ -148,17 +148,17 @@ GithubOidcSageBionetworksItSageBrainInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sage-brain-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sagebrain-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sage-brain-infra
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sagebrain-infra
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
-      - name: "sage-brain-infra"
+      - name: "sagebrain-infra"
         branches: ["dev", "stage", "prod"]
   DefaultOrganizationBinding:
     Account:
