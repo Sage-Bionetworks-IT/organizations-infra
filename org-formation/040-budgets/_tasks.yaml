@@ -12,3 +12,13 @@ BudgetAlarms:
     budgetName: !Sub '${resourcePrefix}-budget-${CurrentAccount.AccountId}'
     budgetAmount: !GetAtt CurrentAccount.Tags.budget-alarm-threshold
     emailAddress: !GetAtt CurrentAccount.Tags.budget-alarm-threshold-email-recipient
+
+BudgetAlarmTransferCosts:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.9.7/templates/Billing/budgets-transfer-costs.yaml
+  StackName: !Sub '${resourcePrefix}-data-transfer-alarm'
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    budgetAmount: 10000
