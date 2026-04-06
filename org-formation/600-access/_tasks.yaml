@@ -95,7 +95,7 @@ DnTDevCIServiceAccounts:
 # Setup Four Points access IT-3758
 FPTMinimumAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.8/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: strides-fpt-minimum-access
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
@@ -147,7 +147,7 @@ FPTMinimumAccess:
 # Setup StackArmor read-only access IT-3780
 StackArmorReadOnlyAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.8/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: stack-armor-read-only-access
   DefaultOrganizationBinding:
     Account: !Ref SynapseProdAccount
@@ -163,7 +163,7 @@ StackArmorReadOnlyAccess:
 # https://repost.aws/knowledge-center/bedrock-invoke-with-cross-account
 SynapseLlmProdBedrockFullAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.8/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: synapsellmprod-bedrock-full-access
   DefaultOrganizationBinding:
     Account: !Ref SynapseLlmProdAccount
@@ -179,7 +179,7 @@ SynapseLlmProdBedrockFullAccess:
 # Setup Gen AI AWS team access (issue IT-4355)
 GenAiIcCollaboratorAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.8/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: genaiic-collaborator-access
   DefaultOrganizationBinding:
     Account: !Ref GenAiIcDevAccount
@@ -194,7 +194,7 @@ GenAiIcCollaboratorAccess:
 # Setup cross-account access to Image Builder Pipeline in Image Central account from Synapse accounts
 SynapseImageCentralImageBuilderPipelineAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.8/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: synapse-image-builder-pipline-read-access
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
