@@ -88,39 +88,6 @@ DnTDevCIServiceAccounts:
       - !Ref DnTDevAccount
     Region: us-east-1
 
-SynapseProdRedashServiceUser:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/IAM/service-user.yaml
-  StackName: synapseprod-redash-service-user
-  Parameters:
-    ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/service-role/AWSQuicksightAthenaAccess
-    PolicyDocument: >-
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-            "Effect": "Allow",
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::prod.datawarehouse.sagebase.org/*"
-          },
-          {
-            "Effect": "Allow",
-            "Action": [
-              "s3:GetBucketLocation",
-              "s3:ListBucket"
-            ],
-            "Resource": "arn:aws:s3:::prod.datawarehouse.sagebase.org"
-          }
-        ]
-      }
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: false
-    Account:
-      - !Ref SynapseProdAccount
-    Region: us-east-1
-
-
 #---------------------------------
 #  Roles for cross-account access
 #---------------------------------
@@ -128,7 +95,7 @@ SynapseProdRedashServiceUser:
 # Setup Four Points access IT-3758
 FPTMinimumAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: strides-fpt-minimum-access
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
@@ -181,7 +148,7 @@ FPTMinimumAccess:
 # Setup StackArmor read-only access IT-3780
 StackArmorReadOnlyAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: stack-armor-read-only-access
   DefaultOrganizationBinding:
     Account: !Ref SynapseProdAccount
@@ -197,7 +164,7 @@ StackArmorReadOnlyAccess:
 # https://repost.aws/knowledge-center/bedrock-invoke-with-cross-account
 SynapseLlmProdBedrockFullAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: synapsellmprod-bedrock-full-access
   DefaultOrganizationBinding:
     Account: !Ref SynapseLlmProdAccount
@@ -213,7 +180,7 @@ SynapseLlmProdBedrockFullAccess:
 # Setup Gen AI AWS team access (issue IT-4355)
 GenAiIcCollaboratorAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: genaiic-collaborator-access
   DefaultOrganizationBinding:
     Account: !Ref GenAiIcDevAccount
@@ -228,7 +195,7 @@ GenAiIcCollaboratorAccess:
 # Setup cross-account access to Image Builder Pipeline in Image Central account from Synapse accounts
 SynapseImageCentralImageBuilderPipelineAccess:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.10/templates/IAM/cross-account-access.yaml
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
   StackName: synapse-image-builder-pipline-read-access
   DefaultOrganizationBinding:
     Account: !Ref ImageCentralAccount
