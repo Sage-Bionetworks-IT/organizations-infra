@@ -101,7 +101,7 @@ FPTMinimumAccess:
     Account: !Ref MasterAccount
     Region: us-east-1
   Parameters:
-    ExternalId: "{{resolve:ssm-secure:/Infra/ExternalId/strides-ftp-minimum-access}}"
+    ExternalId: "{{resolve:secretsmanager:ExternalIDs:SecretString:strides-ftp-minimum-access}}"
     PrincipalArns:
       - arn:aws:iam::610061289380:user/danabiller      # Dana Bean
       - arn:aws:iam::610061289380:user/michellebiller  # Michelle Kosiorek
