@@ -1,0 +1,7 @@
+template:
+  path: "opendata-bucket.j2"
+stack_name: "darteval-bucket"
+dependencies:
+  - "prod/bootstrap.yaml"
+parameters:
+  DataSetName: "darteval.opendata.sagebase.org"
