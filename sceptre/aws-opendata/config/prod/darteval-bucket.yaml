@@ -8,3 +8,4 @@ parameters:
 sceptre_user_data:
   SynapseIDs:
     - "3453016" # DPE team
+    - "3485485" # DPE service account
