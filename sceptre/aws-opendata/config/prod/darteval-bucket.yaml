@@ -5,3 +5,6 @@ dependencies:
   - "prod/bootstrap.yaml"
 parameters:
   DataSetName: "darteval.opendata.sagebase.org"
+sceptre_user_data:
+  SynapseIDs:
+    - "3453016" # DPE team
