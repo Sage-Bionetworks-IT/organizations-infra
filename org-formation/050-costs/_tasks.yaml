@@ -78,6 +78,7 @@ FloQastSftpMicroservice:
   Type: update-stacks
   Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-finops-floqast-sftp/1.0.1/lambda-finops-floqast-sftp.yaml'
   StackName: !Sub '${resourcePrefix}-floqast-microservice'
+  DependsOn: MipsMicroservice
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account: !Ref AdminCentralAccount
@@ -85,6 +86,12 @@ FloQastSftpMicroservice:
   Parameters:
     Schedule: "cron(0 4 * * ? *)"
     PeriodCount: "13"
+    # Use the API Gateway URL directly (not CloudFront) for IAM-authenticated access
+    MipApiBalances: !Sub
+      - "${OriginUrl}balances"
+      - OriginUrl: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-mips-microservice-OriginUrl']
+    MipApiRegion: !Ref primaryRegion
+    MipApiExecuteArn: !CopyValue [!Sub '${primaryRegion}-${resourcePrefix}-mips-microservice-BalancesExecuteArn']
     SsmPrefix: "/lambda/floqast-sftp"
     KmsKeyAdminArns:
       - 'arn:aws:sts::745159704268:assumed-role/AWSReservedSSO_Administrator_30244677b3ea9498/joni.harker@sagebase.org'
