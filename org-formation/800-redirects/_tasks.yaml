@@ -521,3 +521,20 @@ BlogSagebionetworksRedirect:
     TargetDomainName: "blog.synapse.org"
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/1924e910-f09e-44a0-8266-088ad5b80490"
     RedirectFctName: !Sub '${resourcePrefix}-blog-sagebionetworks-redirect-cloudfront-fct'
+
+# Issue IT-4957, redirect from https://openchallenges.io to https://challenges.synapse.org/openchallenges
+OpenChallengesRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-openchallenges-redirect'
+  StackDescription: Setup a redirect from openchallenges.io to challenges.synapse.org/openchallenges
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "openchallenges.io"
+    # the endpoint we are redirecting to
+    TargetDomainName: "challenges.synapse.org/openchallenges"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/1dce46e6-8f96-43f3-b964-6ab551ef84d4"
+    RedirectFctName: !Sub '${resourcePrefix}-openchallenges-redirect-cloudfront-fct'
