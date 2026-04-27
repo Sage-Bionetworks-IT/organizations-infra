@@ -50,9 +50,9 @@ Parameters:
         AllowedPattern: '[-_a-zA-Z0-9]+'
         Default: DefenderForCloud-OidcCiem
     customerTenantId:
-        Type: String
+        Type: AWS::SSM::Parameter::Value<String>
         Description: ID of the tenant where the application is created
-        Default: cf916b9c-3114-46b8-baf3-adab001357bf
+        Default: /infra/stack-armor/mdc/customerTenantId
     AzureSPClientId:
         Type: String
         Description: Service Principal Client Id
