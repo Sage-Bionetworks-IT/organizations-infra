@@ -142,7 +142,8 @@ Resources:
                         Condition:
                             StringEquals:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://4d8bed1f-eee7-4d8e-b0dc-8462049a4479'
-                                'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+                                'sts:RoleSessionName':
+                                    'Fn::Sub': 'MicrosoftDefenderForClouds_${customerTenantId}'
             Policies:
                 -
                     PolicyName:
@@ -384,7 +385,8 @@ Resources:
                         Condition:
                             StringEquals:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://b2f86835-c959-461c-b08c-2cd5ca382af5'
-                                'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+                                'sts:RoleSessionName':
+                                    'Fn::Sub': 'MicrosoftDefenderForClouds_${customerTenantId}'
             Policies:
                 -
                     PolicyName:
@@ -415,7 +417,8 @@ Resources:
                         Condition:
                             StringEquals:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://AzureSecurityCenter.MultiCloud.DefenderForServers'
-                                'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+                                'sts:RoleSessionName':
+                                    'Fn::Sub': 'MicrosoftDefenderForClouds_${customerTenantId}'
             Policies:
                 -
                     PolicyName: AzureSecurityCenter_DefenderForServers
@@ -458,7 +461,8 @@ Resources:
                         Condition:
                             StringEquals:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://AzureSecurityCenter.MultiCloud.DefenderForServers.VmScanner'
-                                'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+                                'sts:RoleSessionName':
+                                    'Fn::Sub': 'MicrosoftDefenderForClouds_${customerTenantId}'
             Policies:
                 -
                     PolicyName: AzureSecurityCenter_DefenderForServers_VmScanner
@@ -547,7 +551,8 @@ Resources:
                         Condition:
                             StringEquals:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://AzureSecurityCenter.MultiCloud.DefenderForDatabases'
-                                'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+                                'sts:RoleSessionName':
+                                    'Fn::Sub': 'MicrosoftDefenderForClouds_${customerTenantId}'
             Policies:
                 -
                     PolicyName: AzureSecurityCenter_DefenderForDatabases
@@ -606,7 +611,8 @@ Resources:
                         Condition:
                             StringEquals:
                                 'sts.windows.net/33e01921-4d64-4f8c-a055-5bdaffd5e33d/:aud': 'api://AzureSecurityCenter.MultiCloud.DefenderForDatabases'
-                                'sts:RoleSessionName': MicrosoftDefenderForClouds_cf916b9c-3114-46b8-baf3-adab001357bf
+                                'sts:RoleSessionName':
+                                    'Fn::Sub': 'MicrosoftDefenderForClouds_${customerTenantId}'
             Policies:
                 -
                     PolicyName: AzureSecurityCenter_DatabasesDspm
@@ -711,7 +717,8 @@ Resources:
                 - 'api://mciem-aws-oidc-app'
             ThumbprintList:
                 - 626d44e704d1ceabe3bf0d53397464ac8080142c
-            Url: 'https://sts.windows.net/cf916b9c-3114-46b8-baf3-adab001357bf/'
+            Url:
+                'Fn::Sub': 'https://sts.windows.net/${customerTenantId}/'
     CiemOidcAssumeRolePolicy:
         Type: 'AWS::IAM::ManagedPolicy'
         Properties:
