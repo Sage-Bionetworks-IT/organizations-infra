@@ -538,3 +538,20 @@ OpenChallengesRedirect:
     TargetDomainName: "challenges.synapse.org/openchallenges"
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/1dce46e6-8f96-43f3-b964-6ab551ef84d4"
     RedirectFctName: !Sub '${resourcePrefix}-openchallenges-redirect-cloudfront-fct'
+
+# Issue IT-4919, redirect from  https://thenamhub.org to https://namshub.synapse.org
+NamshubRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-namshub-redirect'
+  StackDescription: Setup a redirect from thenamhub.org to namshub.synapse.org
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "thenamhub.org"
+    # the endpoint we are redirecting to
+    TargetDomainName: "namshub.synapse.org"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/b68960cb-012e-4984-af83-ef093c63608f"
+    RedirectFctName: !Sub '${resourcePrefix}-namshub-redirect-cloudfront-fct'
