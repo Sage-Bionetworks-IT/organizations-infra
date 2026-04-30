@@ -556,7 +556,8 @@ NamshubRedirect:
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/b68960cb-012e-4984-af83-ef093c63608f"
     RedirectFctName: !Sub '${resourcePrefix}-namshub-redirect-cloudfront-fct'
 
-# Issue IT-4981, redirect from  https://modeladexplorer.org to https://prod.modeladexplorer.org
+# Issue IT-4981, temporary redirect from  https://modeladexplorer.org to https://prod.modeladexplorer.org
+# This will be removed once we fix the certificate on the ALB
 ModeladexplorerRedirect:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
