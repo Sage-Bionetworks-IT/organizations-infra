@@ -366,6 +366,14 @@ Parameters:
     Type: String
     Default: '64c81408-e0a1-70a3-dbc1-143a8ebecd9e'
 
+  BedrockExternalDeveloperGroup:     # JC aws-bedrock-external-developers
+    Type: String
+    Default: 'TBD'
+
+  BedrockExternalInferenceManagerGroup:     # JC aws-bedrock-external-inference-managers
+    Type: String
+    Default: 'TBD'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -2422,3 +2430,75 @@ SsoSageBrainProdDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref SageBrainProdDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoBedrockExternalDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-bedrock-external-inference-developer'
+  StackDescription: 'SSO: developer role used by bedrock external inference developers group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BedrockExternalAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bedrockExternalDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+# Least privileged access to manage bedrock API keys in BedrockExternalAccount
+SsoBedrockExternalInferenceManager:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext:
+    customerManagedPolicies:
+      - Name: !Ref CostExplorerPolicyName
+  StackName: !Sub '${resourcePrefix}-${appName}-bedrock-external-inference-manager'
+  StackDescription: 'SSO: inference manager role used by bedrock external inference manager group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BedrockExternalAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref bedrockExternalInferenceManagerGroup
+    permissionSetName: 'bedrock-external-inference-manager'
+    managedPolicies:
+      - 'arn:aws:iam::aws:policy/job-function/ViewOnlyAccess'
+      - 'arn:aws:iam::aws:policy/job-function/SupportUser'
+      - 'arn:aws:iam::aws:policy/AWSSupportAccess'
+    sessionDuration: 'PT12H'
+    inlinePolicy: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "PreventPrivilegedEscalation",
+            "Effect": "Deny",
+            "Action": "sts:AssumeRole",
+            "Resource": "*"
+          },
+          {
+            "Sid": "AllowBedrockManagement",
+            "Effect": "Allow",
+            "Action": [
+              "bedrock:InvokeModel",
+              "bedrock:InvokeModelWithResponseStream",
+              "bedrock:Converse",
+              "bedrock:ConverseStream"
+              "bedrock:ListFoundationModels",
+              "bedrock:GetFoundationModel"
+              "bedrock:CreateApiKey",
+              "bedrock:GetApiKey",
+              "bedrock:ListApiKeys",
+              "bedrock:DeleteApiKey"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
