@@ -368,11 +368,11 @@ Parameters:
 
   BedrockExternalDeveloperGroup:     # JC aws-bedrock-external-developers
     Type: String
-    Default: 'TBD'
+    Default: 'f4b8c448-00f1-70bd-c156-4d6c55aca173'
 
   BedrockExternalInferenceManagerGroup:     # JC aws-bedrock-external-inference-managers
     Type: String
-    Default: 'TBD'
+    Default: '14f81438-c091-70d4-43bc-87ad420e5cbf'
 
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
