@@ -212,8 +212,10 @@ VantaReadOnlyAccess:
   Template: vanta-readonly-role-cf.yml
   StackName: vanta-read-only-access
   DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
+    IncludeMasterAccount: false
+    Account:
+      - !Ref SynapseLlmProdAccount
+      - !Ref SynapseProdAccount
     Region: !Ref primaryRegion
 
 
