@@ -704,7 +704,7 @@ Organization:
     Type: OC::ORG::Account
     Properties:
       AccountName: org-sagebase-bedrockcentral
-      RootEmail: aws-bedrockcentral@sagebase.org
+      RootEmail: aws.bedrockcentral@sagebase.org
       Alias: org-sagebase-bedrockcentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
