@@ -77,7 +77,7 @@ Organization:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref SceptreDevAccount
-        - !Ref BedrockExternalAccount
+        - !Ref BedrockCentralAccount
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -698,14 +698,14 @@ Organization:
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-sagebrain-dev@sagebase.org
 
-  # This account is for external-facing Bedrock workloads
+  # Centralized Bedrock services for other accounts.
   # External clients (claude, copilot, etc..) will use Bedrock in this account
-  BedrockExternalAccount:
+  BedrockCentralAccount:
     Type: OC::ORG::Account
     Properties:
-      AccountName: org-sagebase-bedrock-external
-      RootEmail: aws-bedrock-external@sagebase.org
-      Alias: org-sagebase-bedrock-external
+      AccountName: org-sagebase-bedrockcentral
+      RootEmail: aws-bedrockcentral@sagebase.org
+      Alias: org-sagebase-bedrockcentral
       Tags:
         <<: !Include ./_default_org_tags.yaml
         AccountOwner: it@sagebase.org
