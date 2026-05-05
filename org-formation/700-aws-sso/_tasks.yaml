@@ -721,7 +721,7 @@ SsoBedrockClient:
               {
                   "Effect": "Allow",
                   "Action": "sts:AssumeRole",
-                  "Resource": "arn:aws:iam::${BedrockCentralAccount}:role/BedrockCrossAccountRole"
+                  "Resource": "arn:aws:iam::042467473451:role/BedrockCrossAccountRole"
               }
           ]
       }
