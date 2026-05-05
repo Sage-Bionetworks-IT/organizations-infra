@@ -206,6 +206,18 @@ SynapseImageCentralImageBuilderPipelineAccess:
     ManagedPolicyArns:
       - arn:aws:iam::aws:policy/AWSImageBuilderReadOnlyAccess
 
+# Setup cross-account Bedrock access for all org accounts via BedrockCentral account
+BedrockCentralCrossAccountAccess:
+  Type: update-stacks
+  Template: bedrock-cross-account-role.yaml
+  StackName: bedrock-cross-account-role
+  DefaultOrganizationBinding:
+    Account: !Ref BedrockCentralAccount
+    Region: us-east-1
+  Parameters:
+    OrganizationId: !Ref organizationPrincipalId
+    RoleName: BedrockCrossAccountRole
+
 # Give Vanta compliance tool read-only access to our AWS ORG IT-4821
 VantaReadOnlyAccess:
   Type: update-stacks
