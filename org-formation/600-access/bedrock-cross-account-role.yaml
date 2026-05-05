@@ -32,4 +32,4 @@ Outputs:
   RoleArn:
     Value: !GetAtt BedrockCrossAccountRole.Arn
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-BedrockCrossAccountRoleArn'
+      Name: !Sub '${AWS::StackName}-BedrockCrossAccountRoleArn'
