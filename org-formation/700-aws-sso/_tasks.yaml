@@ -366,6 +366,10 @@ Parameters:
     Type: String
     Default: '64c81408-e0a1-70a3-dbc1-143a8ebecd9e'
 
+  BedrockCentralClientGroup:     # JC aws-bedrockcentral-clients
+    Type: String
+    Default: 'f4b8c448-00f1-70bd-c156-4d6c55aca173'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -688,6 +692,36 @@ SsoLlmDeveloper:
                   "Effect": "Deny",
                   "Action": "sts:AssumeRole",
                   "Resource": "*"
+              }
+          ]
+      }
+    sessionDuration: 'PT12H'
+
+SsoBedrockClient:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-bedrock-client'
+  StackDescription: 'Permission set used by a Bedrock client'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BedrockCentralAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref BedrockCentralClientGroup
+    permissionSetName: 'BedrockClient'
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Effect": "Allow",
+                  "Action": "sts:AssumeRole",
+                  "Resource": "arn:aws:iam::042467473451:role/BedrockCrossAccountRole"
               }
           ]
       }
