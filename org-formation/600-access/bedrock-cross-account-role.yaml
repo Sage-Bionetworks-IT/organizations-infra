@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Cross-account role for Bedrock access. Allows all accounts in the
+  organization to assume this role.
+Parameters:
+  OrganizationId:
+    Type: String
+    Description: The AWS Organization ID (e.g., o-xxxxxxxxxx)
+  RoleName:
+    Type: String
+    Default: BedrockCrossAccountRole
+    Description: Name of the IAM role
+Resources:
+  BedrockCrossAccountRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Ref RoleName
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                'aws:PrincipalOrgID': !Ref OrganizationId
+Outputs:
+  RoleArn:
+    Value: !GetAtt BedrockCrossAccountRole.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-BedrockCrossAccountRoleArn'

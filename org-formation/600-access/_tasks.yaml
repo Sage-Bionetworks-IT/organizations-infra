@@ -218,6 +218,17 @@ VantaReadOnlyAccess:
       - !Ref SynapseProdAccount
     Region: !Ref primaryRegion
 
+# Setup cross-account Bedrock access for all org accounts
+BedrockCentralCrossAccountAccess:
+  Type: update-stacks
+  Template: bedrock-cross-account-role.yaml
+  StackName: bedrock-cross-account-role
+  DefaultOrganizationBinding:
+    Account: !Ref BedrockCentralAccount
+    Region: us-east-1
+  Parameters:
+    OrganizationId: !Ref organizationPrincipalId
+    RoleName: BedrockCrossAccountRole
 
 #---------------------------------
 #  Managed Policies
