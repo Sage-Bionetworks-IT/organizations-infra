@@ -404,6 +404,7 @@ SsoAdministrator:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AdministratorAccess'
       - 'arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser'
+      - 'arn:aws:iam::aws:policy/AWSMarketplaceFullAccess'
     sessionDuration: 'PT8H'
     masterAccountId: !Ref MasterAccount
 
