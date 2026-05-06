@@ -77,6 +77,7 @@ Organization:
         - !Ref RestrictDnsRegistrationSCP
       Accounts:
         - !Ref SceptreDevAccount
+        - !Ref BedrockCentralAccount
 
   ItProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -143,7 +144,6 @@ Organization:
       Accounts:
         - !Ref BuA2aDwAccount
         - !Ref BWmErzkAccount
-        - !Ref MkPreYnAccount
 
   #------- Accounts -----------
   MasterAccount:
@@ -697,6 +697,21 @@ Organization:
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws-sagebrain-dev@sagebase.org
 
+  # Centralized Bedrock services for other accounts.
+  # External clients (claude, copilot, etc..) will use Bedrock in this account
+  BedrockCentralAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-bedrockcentral
+      RootEmail: aws.bedrockcentral@sagebase.org
+      Alias: org-sagebase-bedrockcentral
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: it@sagebase.org
+
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
     Type: OC::ORG::Account
@@ -721,15 +736,3 @@ Organization:
         AccountOwner: susheel.varma@sagebase.org
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: aws.BWmErzk@sagebase.org
-
-  MkPreYnAccount:
-    Type: OC::ORG::Account
-    Properties:
-      AccountName: org-sagebase-MkPreYn
-      RootEmail: aws.MkPreYn@sagebase.org
-      Alias: org-sagebase-MkPreYn
-      Tags:
-        <<: !Include ./_default_org_tags.yaml
-        AccountOwner: mieko.hashimoto@sagebase.org
-        budget-alarm-threshold: 2000
-        budget-alarm-threshold-email-recipient: aws.MkPreYn@sagebase.org
