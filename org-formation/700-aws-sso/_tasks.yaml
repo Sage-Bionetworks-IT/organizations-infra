@@ -370,6 +370,14 @@ Parameters:
     Type: String
     Default: 'f4b8c448-00f1-70bd-c156-4d6c55aca173'
 
+  AiKiroProGroup:     # JC aws-ai-kiro-pro
+    Type: String
+    Default: '642824a8-a071-70c3-941a-67dc56dd2c5e'
+
+  AiKiroProPlusGroup:     # JC aws-ai-kiro-pro-plus
+    Type: String
+    Default: '2458e4d8-8081-70e0-25ce-5915d5682cb8'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -2440,3 +2448,40 @@ SsoSageBrainProdDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref SageBrainProdDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+
+SsoAiKiroPro:
+  Type: update-stacks
+  DependsOn: SsoBedrockClient
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-ai-kiro-pro'
+  StackDescription: 'Permission set used by a AI Kiro Pro identity center group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref MasterAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref AiKiroProGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-BedrockClient-set-arn' ]
+
+SsoAiKiroProPlus:
+  Type: update-stacks
+  DependsOn: SsoBedrockClient
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-ai-kiro-pro'
+  StackDescription: 'Permission set used by a AI Kiro Pro identity center group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref MasterAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref AiKiroProGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-BedrockClient-set-arn' ]
