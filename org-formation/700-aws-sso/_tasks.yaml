@@ -2473,8 +2473,8 @@ SsoAiKiroProPlus:
   DependsOn: SsoBedrockClient
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
   TemplatingContext: {}
-  StackName: !Sub '${resourcePrefix}-${appName}-ai-kiro-pro'
-  StackDescription: 'Permission set used by a AI Kiro Pro identity center group'
+  StackName: !Sub '${resourcePrefix}-${appName}-ai-kiro-pro-plus'
+  StackDescription: 'Permission set used by a AI Kiro Pro plus identity center group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
@@ -2483,5 +2483,5 @@ SsoAiKiroProPlus:
       Account: !Ref MasterAccount
   Parameters:
     instanceArn: !Ref instanceArn
-    principalId: !Ref AiKiroProGroup
+    principalId: !Ref AiKiroProPlusGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-BedrockClient-set-arn' ]
