@@ -2458,8 +2458,6 @@ SsoAiKiroPro:
   StackName: !Sub '${resourcePrefix}-${appName}-ai-kiro-pro'
   StackDescription: 'Permission set used by a AI Kiro Pro identity center group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref MasterAccount
@@ -2476,8 +2474,6 @@ SsoAiKiroProPlus:
   StackName: !Sub '${resourcePrefix}-${appName}-ai-kiro-pro-plus'
   StackDescription: 'Permission set used by a AI Kiro Pro plus identity center group'
   DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
   OrganizationBindings:
     TargetBinding:
       Account: !Ref MasterAccount
