@@ -53,19 +53,10 @@ Parameters:
         Type: AWS::SSM::Parameter::Value<String>
         Description: ID of the tenant where the application is created
         Default: /infra/stack-armor/mdc/customerTenantId
-    AzureSPClientId:
-        Type: String
-        Description: Service Principal Client Id
-        Default: f0e6273c-29e4-49bc-b486-3fd31de2ffc0
     CiemCloudTrailBucketName:
         Type: String
         Description: The name of the s3 bucket where cloudtrail logs are stored
         Default: '*'
-    CiemRoleName:
-        Type: String
-        Description: Provide an role name for CIEM data offering
-        AllowedPattern: '[-_a-zA-Z0-9]+'
-        Default: DefenderForCloud-Ciem
 Conditions:
     IsRunningOnManagementAccount:
         'Fn::And':
@@ -106,12 +97,6 @@ Conditions:
                 Condition: IsRunningOnManagementAccount
             -
                 Condition: IsSingleAccountOnboarding
-    ShoudlCreateCiemDiscoveryRoleWithAwsAccountRef:
-        'Fn::Or':
-            -
-                Condition: IsSingleAccountOnboarding
-            -
-                Condition: IsRunningOnManagementAccount
 Resources:
     ASCDefendersOIDCIdentityProvider:
         Description: Identity provider resource using for MDC authentication with the required thumbprint list and the issuer url
@@ -157,6 +142,7 @@ Resources:
                                     - 'iam:ListAttachedRolePolicies'
                                     - 'iam:ListRolePolicies'
                                     - 'iam:GetRolePolicy'
+                                    - 'iam:GetUserPolicy'
                                     - 'acm:DescribeCertificate'
                                     - 'acm:ListCertificates'
                                     - 'acm:ListTagsForCertificate'
@@ -170,6 +156,7 @@ Resources:
                                     - 'bedrock:ListCustomModels'
                                     - 'bedrock:ListFoundationModels'
                                     - 'bedrock:ListAgents'
+                                    - 'bedrock:GetAgent'
                                     - 'cloudformation:ListStacks'
                                     - 'cloudformation:DescribeStacks'
                                     - 'cloudformation:DescribeStackSet'
@@ -188,6 +175,7 @@ Resources:
                                     - 'cloudtrail:ListTags'
                                     - 'cloudtrail:LookupEvents'
                                     - 'cloudtrail:GetTrailStatus'
+                                    - 'cloudtrail:GetTrail'
                                     - 'cloudwatch:ListTagsForResource'
                                     - 'cloudwatch:DescribeAlarms'
                                     - 'codebuild:BatchGetProjects'
@@ -232,7 +220,10 @@ Resources:
                                     - 'ecs:DescribeServices'
                                     - 'ecs:ListTaskDefinitions'
                                     - 'ecs:DescribeTaskDefinition'
+                                    - 'ecs:ListTasks'
+                                    - 'ecs:DescribeTasks'
                                     - 'ecs:ListClusters'
+                                    - 'ecs:DescribeClusters'
                                     - 'eks:DescribeNodegroup'
                                     - 'eks:ListNodegroups'
                                     - 'eks:DescribeCluster'
@@ -258,9 +249,15 @@ Resources:
                                     - 'guardduty:ListDetectors'
                                     - 'iam:ListPolicies'
                                     - 'iam:GenerateCredentialReport'
+                                    - 'iam:GetCredentialReport'
+                                    - 'iam:GetUser'
+                                    - 'iam:ListRoles'
                                     - 'iam:GetRole'
+                                    - 'iam:GetGroup'
+                                    - 'iam:GetPolicy'
                                     - 'iam:GetPolicyVersion'
                                     - 'iam:GetAccountPasswordPolicy'
+                                    - 'iam:GetGroupPolicy'
                                     - 'iam:ListServerCertificates'
                                     - 'iam:GetAccessKeyLastUsed'
                                     - 'iam:ListEntitiesForPolicy'
@@ -274,6 +271,14 @@ Resources:
                                     - 'iam:ListUsers'
                                     - 'iam:GetAccountSummary'
                                     - 'iam:ListAccessKeys'
+                                    - 'iam:ListGroupPolicies'
+                                    - 'iam:ListInstanceProfilesForRole'
+                                    - 'iam:GetInstanceProfile'
+                                    - 'iam:GenerateServiceLastAccessedDetails'
+                                    - 'iam:GetServiceLastAccessedDetails'
+                                    - 'identitystore:ListUsers'
+                                    - 'identitystore:ListGroups'
+                                    - 'identitystore:ListGroupMemberships'
                                     - 'kms:ListKeys'
                                     - 'kms:ListKeyPolicies'
                                     - 'kms:GetKeyRotationStatus'
@@ -296,6 +301,13 @@ Resources:
                                     - 'network-firewall:DescribeFirewall'
                                     - 'network-firewall:ListFirewallPolicies'
                                     - 'network-firewall:ListRuleGroups'
+                                    - 'organizations:ListPoliciesForTarget'
+                                    - 'organizations:ListTargetsForPolicy'
+                                    - 'organizations:DescribePolicy'
+                                    - 'organizations:ListPolicies'
+                                    - 'organizations:ListOrganizationalUnitsForParent'
+                                    - 'organizations:ListRoots'
+                                    - 'organizations:ListAccountsForParent'
                                     - 'rds:DescribeDBClusterSnapshotAttributes'
                                     - 'rds:DescribeEventSubscriptions'
                                     - 'rds:DescribeDBSnapshots'
@@ -343,6 +355,12 @@ Resources:
                                     - 'ssm:DescribeParameters'
                                     - 'ssm:ListTagsForResource'
                                     - 'ssm:ListResourceComplianceSummaries'
+                                    - 'sso:ListInstances'
+                                    - 'sso:ListPermissionSets'
+                                    - 'sso:ListAccountsForProvisionedPermissionSet'
+                                    - 'sso:DescribePermissionSet'
+                                    - 'sso:ListAccountAssignments'
+                                    - 'states:ListStateMachines'
                                     - 'sts:GetCallerIdentity'
                                     - 'waf-regional:GetWebACLForResource'
                                     - 'waf-regional:GetRuleGroup'
@@ -365,6 +383,24 @@ Resources:
                                     - 'macie2:GetMacieSession'
                                     - 'macie2:ListClassificationJobs'
                                     - 'resource-explorer-2:ListTagsForResource'
+                                    - 'amplify:ListApps'
+                                    - 'acm-pca:ListCertificateAuthorities'
+                                    - 'apprunner:ListServices'
+                                    - 'memorydb:DescribeClusters'
+                                    - 'kinesisanalytics:ListApplications'
+                                    - 'events:ListRules'
+                                    - 'storagegateway:ListGateways'
+                                    - 'elasticache:DescribeCacheClusters'
+                                    - 'batch:DescribeJobQueues'
+                                    - 'qbusiness:ListApplications'
+                                    - 'lightsail:GetBuckets'
+                                    - 'lightsail:GetBucketAccessKeys'
+                                    - 'lightsail:GetRelationalDatabases'
+                                    - 'lightsail:GetDisks'
+                                    - 'lightsail:GetDiskSnapshots'
+                                    - 'sagemaker:ListEndpoints'
+                                    - 'sagemaker:DescribeEndpoint'
+                                    - 'identitystore:ListGroups'
                                 Resource: '*'
             RoleName:
                 Ref: CspmMonitorAwsRoleName
@@ -719,26 +755,6 @@ Resources:
                 - 626d44e704d1ceabe3bf0d53397464ac8080142c
             Url:
                 'Fn::Sub': 'https://sts.windows.net/${customerTenantId}/'
-    CiemOidcAssumeRolePolicy:
-        Type: 'AWS::IAM::ManagedPolicy'
-        Properties:
-            ManagedPolicyName:
-                'Fn::Sub': 'mdc-mciem-oidc-${customerTenantId}-assume'
-            PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                    -
-                        Effect: Allow
-                        Action:
-                            - 'sts:AssumeRole'
-                            - 'sts:GetAccessKeyInfo'
-                            - 'sts:GetCallerIdentity'
-                            - 'sts:GetFederationToken'
-                            - 'sts:GetServiceBearerToken'
-                            - 'sts:GetSessionToken'
-                            - 'sts:TagSession'
-                        Resource:
-                            'Fn::Sub': 'arn:aws:iam::*:role/${CiemRoleName}'
     CiemOidcRole:
         Type: 'AWS::IAM::Role'
         Condition: ShouldCreateOidc
@@ -746,11 +762,8 @@ Resources:
             RoleName:
                 Ref: CiemOidcRoleName
             AssumeRolePolicyDocument:
-                'Fn::Sub': '{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Principal": {"Federated": "arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/${customerTenantId}/"},"Action": "sts:AssumeRoleWithWebIdentity","Condition": {"StringEquals": {"sts.windows.net/${customerTenantId}/:aud": "api://mciem-aws-oidc-app","sts.windows.net/${customerTenantId}/:sub": "${AzureSPClientId}"}}}]}'
+                'Fn::Sub': '{"Version": "2012-10-17","Statement": [{"Effect": "Allow","Principal": {"Federated": "arn:aws:iam::${AWS::AccountId}:oidc-provider/sts.windows.net/${customerTenantId}/"},"Action": "sts:AssumeRoleWithWebIdentity","Condition": {"StringEquals": {"sts.windows.net/${customerTenantId}/:aud": "api://mciem-aws-oidc-app"}}}]}'
             Path: /
-            ManagedPolicyArns:
-                -
-                    Ref: CiemOidcAssumeRolePolicy
     CiemCloudTrailAccessPolicy:
         Type: 'AWS::IAM::ManagedPolicy'
         Properties:
@@ -769,45 +782,6 @@ Resources:
                                 'Fn::Sub': 'arn:aws:s3:::${CiemCloudTrailBucketName}'
                             -
                                 'Fn::Sub': 'arn:aws:s3:::${CiemCloudTrailBucketName}/*'
-    CiemMemberAccountRole:
-        Type: 'AWS::IAM::Role'
-        Condition: IsRunningOnMemberAccount
-        Properties:
-            RoleName:
-                Ref: CiemRoleName
-            AssumeRolePolicyDocument:
-                Statement:
-                    -
-                        Effect: Allow
-                        Principal:
-                            AWS:
-                                'Fn::Sub': 'arn:aws:iam::${OidcAccountId}:role/${CiemOidcRoleName}'
-                        Action: 'sts:AssumeRole'
-            Path: /
-            ManagedPolicyArns:
-                - 'arn:aws:iam::aws:policy/SecurityAudit'
-                -
-                    Ref: CiemCloudTrailAccessPolicy
-    CiemAccountRole:
-        Type: 'AWS::IAM::Role'
-        DependsOn: CiemOidcRole
-        Condition: ShoudlCreateCiemDiscoveryRoleWithAwsAccountRef
-        Properties:
-            RoleName:
-                Ref: CiemRoleName
-            AssumeRolePolicyDocument:
-                Statement:
-                    -
-                        Effect: Allow
-                        Principal:
-                            AWS:
-                                'Fn::Sub': 'arn:aws:iam::${AWS::AccountId}:role/${CiemOidcRoleName}'
-                        Action: 'sts:AssumeRole'
-            Path: /
-            ManagedPolicyArns:
-                - 'arn:aws:iam::aws:policy/SecurityAudit'
-                -
-                    Ref: CiemCloudTrailAccessPolicy
 Outputs:
     CrossCloudSecurityCenterReadOnlyARN:
         Value:
@@ -846,17 +820,3 @@ Outputs:
                 - CiemOidcRole
                 - Arn
         Description: Role ARN for CIEM OIDC Role
-    CiemAccountRoleArn:
-        Condition: ShoudlCreateCiemDiscoveryRoleWithAwsAccountRef
-        Value:
-            'Fn::GetAtt':
-                - CiemAccountRole
-                - Arn
-        Description: Role ARN for CIEM Role
-    CiemMemberAccountRoleArn:
-        Condition: IsRunningOnMemberAccount
-        Value:
-            'Fn::GetAtt':
-                - CiemMemberAccountRole
-                - Arn
-        Description: Role ARN for CIEM Role
