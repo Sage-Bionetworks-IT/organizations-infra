@@ -309,18 +309,6 @@ Parameters:
     Type: String
     Default: '2448e4e8-50b1-70e5-def0-07e0f4fcd60e'
 
-  OpenchallengesDevDeveloperGroup:     # JC aws-openchallenges-dev-developers
-    Type: String
-    Default: '44183438-a051-7070-f706-284ffd41907b'
-
-  OpenchallengesDevAdminGroup:     # JC aws-openchallenges-dev-admins
-    Type: String
-    Default: 'e4388458-2011-7096-3f98-3a6eeb10e458'
-
-  OpenchallengesProdAdminGroup:     # JC aws-openchallenges-prod-admins
-    Type: String
-    Default: 'c418a4d8-c021-70b6-6580-1e115806deb6'
-
   # Synapse LLM infra account
   SynapseLlmProdAdminGroup:     # JC aws-synapsellm-prod-admins
     Type: String
@@ -2243,57 +2231,6 @@ SsoItsandboxDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref itsandboxDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
-SsoOpenchallengesDevDeveloper:
-  Type: update-stacks
-  DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-dev-developer'
-  StackDescription: 'SSO: Developer role used by openchallenges developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref OpenChallengesDevAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref OpenchallengesDevDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
-SsoOpenchallengesDevAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-dev-admin'
-  StackDescription: 'SSO: admin role used by OpenChallenges dev admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref OpenChallengesDevAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref OpenchallengesDevAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
-SsoOpenchallengesProdAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-prod-admin'
-  StackDescription: 'SSO: admin role used by OpenChallenges prod admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref OpenChallengesProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref OpenchallengesProdAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoGenAiIcDevAdmin:
   Type: update-stacks
