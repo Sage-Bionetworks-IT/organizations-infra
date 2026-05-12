@@ -115,10 +115,9 @@ GithubOidcSageBionetworksItSchematicInfraV2:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
       - name: "schematic-infra-v2"
-        branches: ["dev", "stage", "prod"]
+        branches: ["prod"]
   DefaultOrganizationBinding:
     Account:
-      - !Ref DnTDevAccount
       - !Ref DCAProdAccount
     Region: us-east-1
 
