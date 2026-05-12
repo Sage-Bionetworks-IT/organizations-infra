@@ -123,6 +123,7 @@ Organization:
         - !Ref SynapseProdAccount
         - !Ref SynapseLlmDevAccount
         - !Ref SynapseLlmProdAccount
+        - !Ref SynapseContinuityPocAccount
 
   BridgeOU:
     Type: OC::ORG::OrganizationalUnit
@@ -711,6 +712,19 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: it@sagebase.org
+
+  SynapseContinuityPocAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-synapse-continuity-poc
+      RootEmail: aws-synapse-continuity-poc@sagebase.org
+      Alias: org-sagebase-synapse-continuity-poc
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: NO PROGRAM / 000000
+        budget-alarm-threshold: 2000
+        budget-alarm-threshold-email-recipient: synapse-continuity-poc@sagebase.org
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
