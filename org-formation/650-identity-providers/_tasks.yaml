@@ -93,10 +93,9 @@ GithubOidcSageBionetworksDataCuratorInfra:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
       - name: "data_curator-infra"
-        branches: ["*"]
+        branches: ["prod"]
   DefaultOrganizationBinding:
     Account:
-      - !Ref DnTDevAccount
       - !Ref DCAProdAccount
     Region: us-east-1
 
