@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Per-account GuardDuty finding notifications"
+Parameters:
+  SubscriberEmail:
+    Type: String
+    Description: Email address to subscribe to the GuardDuty SNS topic
+Resources:
+  GuardDutyTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "guardduty-topic"
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref SubscriberEmail
+  GuardDutyEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: "detect-guardduty-finding"
+      Description: "Trigger on High-severity (>= 7.0) GuardDuty findings"
+      State: ENABLED
+      EventPattern:
+        source:
+          - aws.guardduty
+        detail-type:
+          - "GuardDuty Finding"
+        detail:
+          severity:
+            - numeric: [ ">=", 7.0 ]
+      Targets:
+        - Arn: !Ref GuardDutyTopic
+          Id: target-id1
+  SnsTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+        - !Ref GuardDutyTopic
+      PolicyDocument:
+        Statement:
+          - Sid: "TrustEventBridgeToPublish"
+            Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sns:Publish
+            Resource: !Ref GuardDutyTopic
+          - Sid: "AccountOwner"
+            Effect: Allow
+            Principal:
+              AWS: "*"
+            Action:
+              - SNS:GetTopicAttributes
+              - SNS:SetTopicAttributes
+              - SNS:Subscribe
+              - SNS:ListSubscriptionsByTopic
+              - SNS:Publish
+              - SNS:Receive
+            Resource: !Ref GuardDutyTopic
+            Condition:
+              StringEquals:
+                AWS:SourceOwner: !Ref AWS::AccountId
+Outputs:
+  GuardDutyTopicArn:
+    Description: The GuardDuty notifications SNS topic ARN
+    Value: !Ref GuardDutyTopic
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-GuardDutyTopicArn'

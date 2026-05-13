@@ -19,6 +19,12 @@ Resources:
             S3Logs:
               Enable: True
 
+  OrganizationConfiguration:
+      Type: AWS::GuardDuty::OrganizationConfiguration
+      Properties:
+          DetectorId: !Ref Detector
+          AutoEnableOrganizationMembers: ALL
+
 Outputs:
   DetectorId:
     Value: !Ref Detector
