@@ -6,7 +6,7 @@ GuardDuty supports a management-member model, which this stack assumes. `Securit
 **Note:** the delegated-administrator designation itself (the AWS Organizations `EnableOrganizationAdminAccount` call that must run in the management/master account) is **not** managed by this IaC — it was bootstrapped manually and lives outside this repo. This stack does not include `AWS::GuardDuty::OrganizationAdminAccount`. What is codified here:
 
 - `AWS::GuardDuty::Detector` deployed to `SecurityCentralAccount` in every region listed in the `guardDutyRegions` parameter (see `org-formation/_parameters.yaml`), which covers all commercial regions where GuardDuty is supported.
-- `AWS::GuardDuty::OrganizationConfiguration` with `AutoEnableOrganizationMembers: ALL` to enroll every current member account and auto-enroll new accounts. This resource depends on the delegated-admin relationship already being in place.
+- `AWS::GuardDuty::OrganizationConfiguration` with `AutoEnableOrganizationMembers: NEW` so that new accounts joining the org are auto-enrolled. Existing accounts retain their current state — accounts that are intentionally suspended stay suspended. (We deliberately avoid `ALL` here, which would re-enable every suspended account on apply. To re-enable a specific account, do it explicitly via the GuardDuty console or the `UpdateMemberDetectors` API.) This resource depends on the delegated-admin relationship already being in place.
 
 ### Notifications
 

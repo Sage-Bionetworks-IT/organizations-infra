@@ -18,8 +18,11 @@ allRegions:
     - us-east-1
 
 # Commercial AWS regions where GuardDuty is supported. Used by 070-guard-duty
-# to deploy detectors and notification stacks org-wide so threat detection is
-# active even in regions we don't otherwise use (a common crypto-mining vector).
+# to deploy GuardDuty detectors so threat detection is active even in regions we
+# don't otherwise use (a common crypto-mining vector). Note: the GuardDuty
+# notifications stack is intentionally deployed only in `primaryRegion` (not
+# every region in this list) to keep each account owner's SNS email
+# confirmations down to one per account — see 070-guard-duty/_tasks.yaml.
 guardDutyRegions:
   Type: List<String>
   Default:
