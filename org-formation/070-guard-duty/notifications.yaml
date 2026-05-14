@@ -48,14 +48,19 @@ Resources:
                 aws:SourceAccount: !Ref AWS::AccountId
               ArnEquals:
                 aws:SourceArn: !GetAtt GuardDutyEventRule.Arn
+          # Grants the account (delegating to IAM) the topic-management actions that the
+          # CloudFormation/org-formation execution role needs to update or delete this topic.
+          # Without these, a custom TopicPolicy can block subsequent stack updates.
           - Sid: "AccountOwner"
             Effect: Allow
             Principal:
               AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
             Action:
               - SNS:GetTopicAttributes
-              - SNS:ListSubscriptionsByTopic
+              - SNS:SetTopicAttributes
+              - SNS:DeleteTopic
               - SNS:Subscribe
+              - SNS:ListSubscriptionsByTopic
             Resource: !Ref GuardDutyTopic
 Outputs:
   GuardDutyTopicArn:
