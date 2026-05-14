@@ -27,10 +27,14 @@ GuardDutyNotifications:
   Template: ./notifications.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-notifications'
   StackDescription: Per-account GuardDuty notifications (RootEmail subscriber, severity >= 7.0)
+  # Notifications are deployed in primaryRegion only so each account owner receives a single
+  # SNS confirmation email (not ~20, one per region). Detectors still run in every region in
+  # guardDutyRegions, so threats are detected everywhere; non-primaryRegion findings remain
+  # visible in the GuardDuty console via the delegated admin (cross-region aggregation).
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
-    Region: !Ref guardDutyRegions
+    Region: !Ref primaryRegion
   Parameters:
     SubscriberEmail: !GetAtt CurrentAccount.RootEmail
 

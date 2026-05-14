@@ -19,6 +19,11 @@ Resources:
             S3Logs:
               Enable: True
 
+  # Codifies the GuardDuty org behavior for the delegated administrator (SecurityCentralAccount):
+  # all current org members are enrolled and new accounts are auto-enrolled (AutoEnableOrganizationMembers: ALL).
+  # The delegated-admin designation itself (Organizations EnableOrganizationAdminAccount, an
+  # AWS::GuardDuty::OrganizationAdminAccount resource in the management account) is NOT
+  # managed here — it was bootstrapped manually and remains outside IaC. See README.md.
   OrganizationConfiguration:
       Type: AWS::GuardDuty::OrganizationConfiguration
       Properties:
