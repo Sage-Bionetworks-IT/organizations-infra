@@ -42,21 +42,20 @@ Resources:
               Service: events.amazonaws.com
             Action: sns:Publish
             Resource: !Ref GuardDutyTopic
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+              ArnEquals:
+                aws:SourceArn: !GetAtt GuardDutyEventRule.Arn
           - Sid: "AccountOwner"
             Effect: Allow
             Principal:
-              AWS: "*"
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
             Action:
               - SNS:GetTopicAttributes
-              - SNS:SetTopicAttributes
-              - SNS:Subscribe
               - SNS:ListSubscriptionsByTopic
-              - SNS:Publish
-              - SNS:Receive
+              - SNS:Subscribe
             Resource: !Ref GuardDutyTopic
-            Condition:
-              StringEquals:
-                AWS:SourceOwner: !Ref AWS::AccountId
 Outputs:
   GuardDutyTopicArn:
     Description: The GuardDuty notifications SNS topic ARN

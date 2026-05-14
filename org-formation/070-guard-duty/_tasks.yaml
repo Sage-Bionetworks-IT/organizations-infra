@@ -15,10 +15,10 @@ GuardDuty:
   Template: ./guardduty.yaml
   StackName: !Sub '${resourcePrefix}-${appName}'
   StackDescription: GuardDuty
-  DefaultOrganizationBindingRegion: !Ref guardDutyRegions
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account: !Ref accountId
+    Region: !Ref guardDutyRegions
   Parameters:
     resourcePrefix: !Ref resourcePrefix
 
@@ -27,10 +27,10 @@ GuardDutyNotifications:
   Template: ./notifications.yaml
   StackName: !Sub '${resourcePrefix}-${appName}-notifications'
   StackDescription: Per-account GuardDuty notifications (RootEmail subscriber, severity >= 7.0)
-  DefaultOrganizationBindingRegion: !Ref guardDutyRegions
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
     Account: '*'
+    Region: !Ref guardDutyRegions
   Parameters:
     SubscriberEmail: !GetAtt CurrentAccount.RootEmail
 
