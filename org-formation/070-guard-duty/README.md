@@ -1,7 +1,7 @@
 ### Purpose of these templates
 The templates in this folder enable [GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html) in each account. Amazon GuardDuty is a continuous security monitoring service that analyzes and processes the following Data sources: VPC Flow Logs, AWS CloudTrail management event logs, Cloudtrail S3 data event logs, and DNS logs.
 
-GuardDuty supports a management-member model, which this stack uses. The Management account is configured to be the SecurityAccount, all other accounts are member accounts. `AWS::GuardDuty::OrganizationConfiguration` with `AutoEnableOrganizationMembers: ALL` ensures every current member account is enrolled and new accounts are auto-enrolled.
+GuardDuty supports a management-member model, which this stack uses. `SecurityCentralAccount` is configured as the GuardDuty delegated administrator; all other accounts are member accounts. `AWS::GuardDuty::OrganizationConfiguration` with `AutoEnableOrganizationMembers: ALL` ensures every current member account is enrolled and new accounts are auto-enrolled.
 
 Detector + organization configuration are deployed to SecurityCentralAccount in every region listed in the `guardDutyRegions` parameter (see `org-formation/_parameters.yaml`), which covers all commercial regions where GuardDuty is supported.
 

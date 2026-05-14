@@ -35,6 +35,7 @@ Resources:
       Topics:
         - !Ref GuardDutyTopic
       PolicyDocument:
+        Version: '2012-10-17'
         Statement:
           - Sid: "TrustEventBridgeToPublish"
             Effect: Allow
