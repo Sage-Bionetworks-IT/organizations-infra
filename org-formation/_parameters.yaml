@@ -17,6 +17,36 @@ allRegions:
   Default:
     - us-east-1
 
+# Commercial AWS regions where GuardDuty is supported. Used by 070-guard-duty
+# to deploy GuardDuty detectors so threat detection is active even in regions we
+# don't otherwise use (a common crypto-mining vector). Note: the GuardDuty
+# notifications stack is intentionally deployed only in `primaryRegion` (not
+# every region in this list) to keep each account owner's SNS email
+# confirmations down to one per account — see 070-guard-duty/_tasks.yaml.
+guardDutyRegions:
+  Type: List<String>
+  Default:
+    - us-east-1
+    - us-east-2
+    - us-west-1
+    - us-west-2
+    - ca-central-1
+    - eu-west-1
+    - eu-west-2
+    - eu-west-3
+    - eu-central-1
+    - eu-north-1
+    - eu-south-1
+    - ap-northeast-1
+    - ap-northeast-2
+    - ap-northeast-3
+    - ap-southeast-1
+    - ap-southeast-2
+    - ap-south-1
+    - sa-east-1
+    - af-south-1
+    - me-south-1
+
 AdminCentralCfnBucket:
   Type: String
   Default: bootstrap-awss3cloudformationbucket-19qromfd235z9

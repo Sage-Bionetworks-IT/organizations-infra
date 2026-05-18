@@ -15,12 +15,28 @@ GuardDuty:
   Template: ./guardduty.yaml
   StackName: !Sub '${resourcePrefix}-${appName}'
   StackDescription: GuardDuty
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     IncludeMasterAccount: false
     Account: !Ref accountId
+    Region: !Ref guardDutyRegions
   Parameters:
     resourcePrefix: !Ref resourcePrefix
+
+GuardDutyNotifications:
+  Type: update-stacks
+  Template: ./notifications.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-notifications'
+  StackDescription: Per-account GuardDuty notifications (RootEmail subscriber, severity >= 7.0)
+  # Notifications are deployed in primaryRegion only so each account owner receives a single
+  # SNS confirmation email (not ~20, one per region). Detectors still run in every region in
+  # guardDutyRegions, so threats are detected everywhere; non-primaryRegion findings remain
+  # visible in the GuardDuty console via the delegated admin (cross-region aggregation).
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    Region: !Ref primaryRegion
+  Parameters:
+    SubscriberEmail: !GetAtt CurrentAccount.RootEmail
 
 # ==================================================================================================
 # one off associations for Guardduty in AWS accounts that are not in the Sage ORG
