@@ -215,7 +215,7 @@ BedrockCentralCrossAccountAccess:
     OrganizationId: !Ref organizationPrincipalId
     RoleName: BedrockCrossAccountRole
 
-# Setup access for NYU collaborators for scce-dev account
+# Setup access for NYU collaborators for scce-dev account (IT-5133)
 BenchmarkCollaboratorAccess:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.9/templates/IAM/cross-account-access.yaml
@@ -257,14 +257,10 @@ BenchmarkCollaboratorAccess:
                 "s3:GetObjectVersion",
                 "s3:ListMultipartUploadParts",
                 "s3:PutObject",
-                "s3:PutObjectAcl",
-                "s3:PutObjectLegalHold",
-                "s3:PutObjectRetention",
                 "s3:PutObjectTagging"
             ],
             "Resource": [
-                "arn:aws:s3:::*/*",
-                "arn:aws:s3:us-east-1:*:accesspoint/*/object/*"
+                "arn:aws:s3:headless-agents-benchmark-results-458117591059/*",
             ]
         },
         {
