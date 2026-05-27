@@ -306,8 +306,8 @@ BenchmarkCollaboratorAccess:
                 "iam:PassRole"
             ],
             "Resource": [
-                "arn:aws:iam::458117591059:role/headless-agents-batch-job-role",
-                "arn:aws:iam::458117591059:role/headless-agents-ecs-task-execution-role"
+                "arn:aws:iam::${CurrentAccount.AccountId}:role/headless-agents-batch-job-role",
+                "arn:aws:iam::${CurrentAccount.AccountId}:role/headless-agents-ecs-task-execution-role"
             ]
           }
         ]
