@@ -292,17 +292,6 @@ BenchmarkCollaboratorAccess:
         {
             "Effect": "Allow",
             "Action": [
-                "s3-object-lambda:ListMultipartUploadParts",
-                "s3-object-lambda:PutObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::*/*",
-                "arn:aws:s3:us-east-1:*:accesspoint/*/object/*"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
                 "iam:PassRole"
             ],
             "Resource": [
