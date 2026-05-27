@@ -233,7 +233,6 @@ BenchmarkCollaboratorAccess:
         {
             "Effect": "Allow",
             "Action": [
-                "iot:ListJobs",
                 "ecr:DescribeRepositories",
                 "ecr:GetAuthorizationToken",
                 "ecr:InitiateLayerUpload",
