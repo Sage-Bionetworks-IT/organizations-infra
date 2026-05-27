@@ -279,7 +279,7 @@ BenchmarkCollaboratorAccess:
                 "kms:GenerateDataKey"
             ],
             "Resource": [
-                "arn:aws:kms:us-east-1:*:key/*"
+                "arn:aws:kms:us-east-1:458117591059:key/*"
             ],
             "Condition": {
                 "StringEquals": {
