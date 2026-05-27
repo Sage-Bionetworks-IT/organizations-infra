@@ -226,7 +226,7 @@ BenchmarkCollaboratorAccess:
   Parameters:
     PrincipalArns:
       - arn:aws:iam::246534652589:root      # Nikolaos Kalavros
-    PolicyDocument: >-
+    PolicyDocument: !Sub >-
       {
         "Version": "2012-10-17",
         "Statement": [
