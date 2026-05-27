@@ -275,16 +275,6 @@ BenchmarkCollaboratorAccess:
         {
             "Effect": "Allow",
             "Action": [
-                "s3-object-lambda:ListBucket"
-            ],
-            "Resource": [
-                "arn:aws:s3:::*",
-                "arn:aws:s3:us-east-1:*:accesspoint/*"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
                 "kms:Decrypt",
                 "kms:GenerateDataKey"
             ],
