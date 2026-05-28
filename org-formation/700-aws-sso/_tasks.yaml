@@ -309,18 +309,6 @@ Parameters:
     Type: String
     Default: '2448e4e8-50b1-70e5-def0-07e0f4fcd60e'
 
-  OpenchallengesDevDeveloperGroup:     # JC aws-openchallenges-dev-developers
-    Type: String
-    Default: '44183438-a051-7070-f706-284ffd41907b'
-
-  OpenchallengesDevAdminGroup:     # JC aws-openchallenges-dev-admins
-    Type: String
-    Default: 'e4388458-2011-7096-3f98-3a6eeb10e458'
-
-  OpenchallengesProdAdminGroup:     # JC aws-openchallenges-prod-admins
-    Type: String
-    Default: 'c418a4d8-c021-70b6-6580-1e115806deb6'
-
   # Synapse LLM infra account
   SynapseLlmProdAdminGroup:     # JC aws-synapsellm-prod-admins
     Type: String
@@ -366,6 +354,10 @@ Parameters:
     Type: String
     Default: '64c81408-e0a1-70a3-dbc1-143a8ebecd9e'
 
+  BedrockCentralClientGroup:     # JC aws-bedrockcentral-clients
+    Type: String
+    Default: 'f4b8c448-00f1-70bd-c156-4d6c55aca173'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -374,10 +366,6 @@ Parameters:
   BWmErzkAdminGroup:             #JC aws-BWmErzk-admins
     Type: String
     Default: '143894c8-1031-70c4-b98a-9d2a9aec59bd'
-
-  MkPreYnAdminGroup:             #JC aws-MkPreYn-admins
-    Type: String
-    Default: 'd4284428-6061-70b8-191c-37e390b2a596'
 
 #----------------------------------------------------------------------------------------------
 
@@ -400,6 +388,7 @@ SsoAdministrator:
     managedPolicies:
       - 'arn:aws:iam::aws:policy/AdministratorAccess'
       - 'arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser'
+      - 'arn:aws:iam::aws:policy/AWSMarketplaceFullAccess'
     sessionDuration: 'PT8H'
     masterAccountId: !Ref MasterAccount
 
@@ -688,6 +677,36 @@ SsoLlmDeveloper:
                   "Effect": "Deny",
                   "Action": "sts:AssumeRole",
                   "Resource": "*"
+              }
+          ]
+      }
+    sessionDuration: 'PT12H'
+
+SsoBedrockClient:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.7/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-bedrock-client'
+  StackDescription: 'Permission set used by a Bedrock client'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref BedrockCentralAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref BedrockCentralClientGroup
+    permissionSetName: 'BedrockClient'
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Effect": "Allow",
+                  "Action": "sts:AssumeRole",
+                  "Resource": "arn:aws:iam::042467473451:role/BedrockCrossAccountRole"
               }
           ]
       }
@@ -1766,23 +1785,6 @@ SsoBWmErzkAdmin:
     principalId: !Ref BWmErzkAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
-SsoMkPreYnAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-MkPreYn-admin'
-  StackDescription: 'SSO: admin role used by MkPreYn admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref  MkPreYnAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref MkPreYnAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
 SsoRecoverDevAdmin:
   Type: update-stacks
   DependsOn: SsoAdministrator
@@ -2229,57 +2231,6 @@ SsoItsandboxDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref itsandboxDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
-SsoOpenchallengesDevDeveloper:
-  Type: update-stacks
-  DependsOn: SsoDeveloper
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-dev-developer'
-  StackDescription: 'SSO: Developer role used by openchallenges developer group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref OpenChallengesDevAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref OpenchallengesDevDeveloperGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
-
-SsoOpenchallengesDevAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-dev-admin'
-  StackDescription: 'SSO: admin role used by OpenChallenges dev admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref OpenChallengesDevAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref OpenchallengesDevAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
-
-SsoOpenchallengesProdAdmin:
-  Type: update-stacks
-  DependsOn: SsoAdministrator
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.2.11/templates/SSO/aws-sso.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-openchallenges-prod-admin'
-  StackDescription: 'SSO: admin role used by OpenChallenges prod admin group'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-  OrganizationBindings:
-    TargetBinding:
-      Account: !Ref OpenChallengesProdAccount
-  Parameters:
-    instanceArn: !Ref instanceArn
-    principalId: !Ref OpenchallengesProdAdminGroup
-    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
 SsoGenAiIcDevAdmin:
   Type: update-stacks
