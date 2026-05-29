@@ -225,7 +225,7 @@ BenchmarkCollaboratorAccess:
     Region: us-east-1
   Parameters:
     PrincipalArns:
-      - arn:aws:iam::246534652589:user/nikolaos.kalavros@nyulangone.org     # Nikolaos Kalavros
+      - arn:aws:iam::246534652589:root     # Nikolaos Kalavros
     PolicyDocument: !Sub >-
       {
         "Version": "2012-10-17",
