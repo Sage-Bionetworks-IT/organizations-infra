@@ -268,8 +268,7 @@ BenchmarkCollaboratorAccess:
             "s3:ListBucket"
           ],
           "Resource": [
-            "arn:aws:s3:::*",
-            "arn:aws:s3:us-east-1:*:accesspoint/*"
+            "arn:aws:s3:::headless-agents-benchmark-results-458117591059"
           ]
         },
         {
