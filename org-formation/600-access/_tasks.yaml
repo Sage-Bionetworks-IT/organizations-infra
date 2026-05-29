@@ -259,7 +259,7 @@ BenchmarkCollaboratorAccess:
             "s3:PutObjectTagging"
           ],
           "Resource": [
-            "arn:aws:s3:::headless-agents-benchmark-results-458117591059/*"
+            "arn:aws:s3:::headless-agents-benchmark-results-${CurrentAccount.AccountId}/*"
           ]
         },
         {
@@ -268,7 +268,7 @@ BenchmarkCollaboratorAccess:
             "s3:ListBucket"
           ],
           "Resource": [
-            "arn:aws:s3:::headless-agents-benchmark-results-458117591059"
+            "arn:aws:s3:::headless-agents-benchmark-results-${CurrentAccount.AccountId}"
           ]
         },
         {
