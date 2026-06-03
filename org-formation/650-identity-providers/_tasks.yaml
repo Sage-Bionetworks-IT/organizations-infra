@@ -202,7 +202,6 @@ GithubOidcSageBionetworksItSageBrainInfraNF:
         branches: ["develop"]
   DefaultOrganizationBinding:
     Account:
-      - !Ref SageBrainDevAccount
       - !Ref SageBrainProdAccount
     Region: us-east-1
 
