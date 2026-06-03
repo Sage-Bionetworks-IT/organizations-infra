@@ -171,7 +171,7 @@ GithubOidcSageBionetworksItSageBrainInfraNF:
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sagebrain-infra-nf
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sagebrain-infra
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sagebrain-infra-nf
     PolicyDocument: |
       {
         "Version": "2012-10-17",
