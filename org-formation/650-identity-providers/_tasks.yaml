@@ -182,7 +182,7 @@ GithubOidcSageBionetworksItSageBrainInfraNF:
               "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
                           "s3:ListParts", "s3:ListMultipartUploads"
                         ],
-              "Resource": [ "arn:aws:s3:::app-prod-neptune-neptunedatabucket*" ]
+              "Resource": [ "arn:aws:s3:::app-*-neptune-neptunedatabucket*" ]
           },
           {
               "Sid": "AllObjectActions",
@@ -191,7 +191,7 @@ GithubOidcSageBionetworksItSageBrainInfraNF:
                           "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload",
                           "s3:CreateMultipartUpload"
                         ],
-              "Resource": ["arn:aws:s3:::app-prod-neptune-neptunedatabucket*/*"]
+              "Resource": ["arn:aws:s3:::app-*-neptune-neptunedatabucket*/*"]
           }
         ]
       }
