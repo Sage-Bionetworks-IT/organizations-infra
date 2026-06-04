@@ -199,7 +199,92 @@ GithubOidcSageBionetworksItSageBrainInfraNF:
     GitHubOrg: "nf-osi"
     Repositories:
       - name: "kg-pipeline"
-        branches: ["develop"]
+        branches: ["develop", "main"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SageBrainDevAccount
+      - !Ref SageBrainProdAccount
+    Region: us-east-1
+
+GithubOidcSageBionetworksItSageBrainInfraMain:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sagebrain-infra-main
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sagebrain-infra-main
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
+                          "s3:ListParts", "s3:ListMultipartUploads"
+                        ],
+              "Resource": [ "arn:aws:s3:::app-prod-neptune-neptunedatabucket*" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:DeleteObjects",
+                          "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload",
+                          "s3:CreateMultipartUpload"
+                        ],
+              "Resource": ["arn:aws:s3:::app-prod-neptune-neptunedatabucket*/*"]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "Sage_Brain"
+        branches: ["develop", "main"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref SageBrainDevAccount
+      - !Ref SageBrainProdAccount
+    Region: us-east-1
+
+
+GithubOidcSageBionetworksItSageBrainInfraAmpAls:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sagebrain-infra-sagebrain
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-it-sagebrain-infra-sagebrain
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "ListObjectsInBucket",
+              "Effect": "Allow",
+              "Action": [ "s3:GetBucketLocation", "s3:ListBucket", "s3:ListBucketV2",
+                          "s3:ListParts", "s3:ListMultipartUploads"
+                        ],
+              "Resource": [ "arn:aws:s3:::app-prod-neptune-neptunedatabucket*" ]
+          },
+          {
+              "Sid": "AllObjectActions",
+              "Effect": "Allow",
+              "Action": [ "s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:DeleteObjects",
+                          "s3:UploadPart", "s3:CompleteMultipartUpload", "s3:AbortMultipartUpload",
+                          "s3:CreateMultipartUpload"
+                        ],
+              "Resource": ["arn:aws:s3:::app-prod-neptune-neptunedatabucket*/*"]
+          }
+        ]
+      }
+  TemplatingContext:
+    GitHubOrg: "amp-als"
+    Repositories:
+      - name: "kg-pipeline"
+        branches: ["develop", "main"]
   DefaultOrganizationBinding:
     Account:
       - !Ref SageBrainDevAccount
