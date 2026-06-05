@@ -955,6 +955,7 @@ SsoWorkflowNextflowTowerViewer:
       Account:
         - !Ref WorkflowsNextflowDevAccount
         - !Ref WorkflowsNextflowProdAccount
+        - !Ref SageBrainProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowTowerViewerGroup
