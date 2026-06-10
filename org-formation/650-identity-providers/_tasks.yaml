@@ -979,6 +979,7 @@ GithubOidcWorkflowsProdNextflowInfra:
   DefaultOrganizationBinding:
     Account:
       - !Ref WorkflowsNextflowProdAccount
+      - !Ref SageBrainProdAccount
     Region: us-east-1
 
 GithubOidcAgoraInfraV3:
