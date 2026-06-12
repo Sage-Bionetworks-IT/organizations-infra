@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Per-account GuardDuty finding notifications"
+Parameters:
+  SubscriberEmail:
+    Type: String
+    Description: Email address to subscribe to the GuardDuty SNS topic
+Resources:
+  GuardDutyTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "guardduty-topic"
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref SubscriberEmail
+  GuardDutyEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: "detect-guardduty-finding"
+      Description: "Trigger on High-severity (>= 7.0) GuardDuty findings"
+      State: ENABLED
+      EventPattern:
+        source:
+          - aws.guardduty
+        detail-type:
+          - "GuardDuty Finding"
+        detail:
+          severity:
+            - numeric: [ ">=", 7.0 ]
+      Targets:
+        - Arn: !Ref GuardDutyTopic
+          Id: target-id1
+  SnsTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+        - !Ref GuardDutyTopic
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: "TrustEventBridgeToPublish"
+            Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sns:Publish
+            Resource: !Ref GuardDutyTopic
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+              ArnEquals:
+                aws:SourceArn: !GetAtt GuardDutyEventRule.Arn
+          # Grants the account (delegating to IAM) the topic-management actions that the
+          # CloudFormation/org-formation execution role needs to update or delete this topic.
+          # Without these, a custom TopicPolicy can block subsequent stack updates.
+          - Sid: "AccountOwner"
+            Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action:
+              - SNS:GetTopicAttributes
+              - SNS:SetTopicAttributes
+              - SNS:DeleteTopic
+              - SNS:Subscribe
+              - SNS:ListSubscriptionsByTopic
+            Resource: !Ref GuardDutyTopic
+Outputs:
+  GuardDutyTopicArn:
+    Description: The GuardDuty notifications SNS topic ARN
+    Value: !Ref GuardDutyTopic
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-GuardDutyTopicArn'
