@@ -358,6 +358,10 @@ Parameters:
     Type: String
     Default: 'f4b8c448-00f1-70bd-c156-4d6c55aca173'
 
+  SynapseContinuityPocAdminGroup:     # JC aws-synapse-continuity-poc-admins
+    Type: String
+    Default: '34a8f418-8031-703e-1036-66276dcf40f3'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -366,6 +370,7 @@ Parameters:
   BWmErzkAdminGroup:             #JC aws-BWmErzk-admins
     Type: String
     Default: '143894c8-1031-70c4-b98a-9d2a9aec59bd'
+
 
 #----------------------------------------------------------------------------------------------
 
@@ -950,6 +955,7 @@ SsoWorkflowNextflowTowerViewer:
       Account:
         - !Ref WorkflowsNextflowDevAccount
         - !Ref WorkflowsNextflowProdAccount
+        - !Ref SageBrainProdAccount
   Parameters:
     instanceArn: !Ref instanceArn
     principalId: !Ref workflowNextflowTowerViewerGroup
@@ -2373,3 +2379,22 @@ SsoSageBrainProdDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref SageBrainProdDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+
+SsoSynapseContinuityPocAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-MkPreYn-admin'
+  StackDescription: 'SSO: admin role used by Synapse continuity poc admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseContinuityPocAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref SynapseContinuityPocAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
