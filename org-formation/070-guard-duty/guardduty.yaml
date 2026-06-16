@@ -19,20 +19,6 @@ Resources:
             S3Logs:
               Enable: True
 
-  # Codifies the GuardDuty org behavior for the delegated administrator (SecurityCentralAccount):
-  # only NEW accounts joining the org are auto-enrolled. Existing accounts retain their current
-  # enrolled/suspended state, which preserves the few accounts that are intentionally suspended.
-  # If a suspended account should be re-enabled, do that explicitly via the GuardDuty console or
-  # the UpdateMemberDetectors API, not by switching this to ALL (ALL would re-enable every
-  # suspended account on the next apply).
-  # The delegated-admin designation itself (Organizations EnableOrganizationAdminAccount, an
-  # AWS::GuardDuty::OrganizationAdminAccount resource in the management account) is NOT
-  # managed here — it was bootstrapped manually and remains outside IaC. See README.md.
-  OrganizationConfiguration:
-      Type: AWS::GuardDuty::OrganizationConfiguration
-      Properties:
-          DetectorId: !Ref Detector
-          AutoEnableOrganizationMembers: NEW
 
 Outputs:
   DetectorId:
