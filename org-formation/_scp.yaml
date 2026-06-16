@@ -145,6 +145,10 @@
               - 'guardduty:UpdatePublishingDestination'
               - 'guardduty:UpdateThreatIntelSet'
             Resource: '*'
+            Condition:
+              ArnNotLike:
+                aws:PrincipalARN:
+                  - 'arn:aws:iam::*:role/OrganizationAccountAccessRole'
 
   RestrictDnsRegistrationSCP:
     Type: OC::ORG::ServiceControlPolicy
