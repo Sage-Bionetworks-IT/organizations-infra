@@ -19,6 +19,7 @@ Resources:
             S3Logs:
               Enable: True
 
+
 Outputs:
   DetectorId:
     Value: !Ref Detector
