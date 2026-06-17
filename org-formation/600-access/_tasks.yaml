@@ -225,7 +225,9 @@ BenchmarkCollaboratorAccess:
     Region: us-east-1
   Parameters:
     PrincipalArns:
-      - arn:aws:iam::246534652589:root     # Nikolaos Kalavros
+      # ARN provided by collaborators at NYU
+      # OrionLLMBenchUser was the name used to create the user ARN and Nikolaos Kalavros is the user with access
+      - arn:aws:iam::246534652589:user/OrionLLMBenchUser
     PolicyDocument: !Sub >-
       {
         "Version": "2012-10-17",
