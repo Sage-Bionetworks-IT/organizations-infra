@@ -1098,6 +1098,47 @@ SsoSynapseDevDeveloper:
     principalId: !Ref synapseDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
 
+SsoSynapseDevDeveloperIamScoped:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.8/templates/SSO/aws-sso.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-synapsedev-developer-iam-scoped'
+  StackDescription: 'SSO: additional scoped IAM role-management rights for synapsedev developer group'
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SynapseDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref synapseDevDeveloperGroup
+    permissionSetName: 'Developer-IAM-Synapsedev'
+    managedPolicies: [ 'arn:aws:iam::aws:policy/PowerUserAccess' ]
+    sessionDuration: 'PT12H'
+    inlinePolicy: >-
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Sid": "ResourceConstrainedIAM",
+                  "Effect": "Allow",
+                  "Action": [
+                      "iam:DeleteRolePolicy",
+                      "iam:DeleteRole",
+                      "iam:DetachRolePolicy"
+                  ],
+                  "Resource": "arn:aws:iam::449435941126:role/*shared-resources*"
+              },
+              {
+                  "Effect": "Deny",
+                  "Action": "sts:AssumeRole",
+                  "Resource": "*"
+              }
+          ]
+      }
+
 SsoSynapseProdDeveloper:
   Type: update-stacks
   DependsOn: SsoDeveloper
