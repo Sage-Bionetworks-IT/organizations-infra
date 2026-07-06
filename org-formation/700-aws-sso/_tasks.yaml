@@ -509,6 +509,7 @@ SsoSecurityAuditor:
       - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSArtifactReportsReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSArtifactAgreementsReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AmazonMacieReadOnlyAccess'
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
 
