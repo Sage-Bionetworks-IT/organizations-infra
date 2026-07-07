@@ -464,7 +464,7 @@ SsoDeveloper:
                     "iam:DeleteRole",
                     "iam:DetachRolePolicy"
                   ],
-                  "Resource": "arn:aws:iam::${SynapseDevAccountId}:role/*shared-resources*"
+                  "Resource": "arn:aws:iam::${SynapseDevAccountId}:role/*"
                 }
             ]
           }
