@@ -455,10 +455,21 @@ SsoDeveloper:
                   "Effect": "Allow",
                   "Action": "sts:AssumeRole",
                   "Resource": "${AllowedRole}"
+                },
+                {
+                  "Sid": "SynapseDevSharedResourcesCleanup",
+                  "Effect": "Allow",
+                  "Action": [
+                    "iam:DeleteRolePolicy",
+                    "iam:DeleteRole",
+                    "iam:DetachRolePolicy"
+                  ],
+                  "Resource": "arn:aws:iam::${SynapseDevAccountId}:role/*shared-resources*"
                 }
             ]
           }
         - AllowedRole: !CopyValue ['us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn', !Ref SynapseLlmProdAccount]
+          SynapseDevAccountId: !Ref SynapseDevAccount
 
 SsoFinanceAuditor:
   Type: update-stacks
