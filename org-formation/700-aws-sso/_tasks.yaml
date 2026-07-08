@@ -460,11 +460,19 @@ SsoDeveloper:
                   "Sid": "SynapseDevSharedResourcesCleanup",
                   "Effect": "Allow",
                   "Action": [
-                    "iam:DeleteRolePolicy",
                     "iam:DeleteRole",
-                    "iam:DetachRolePolicy"
+                    "iam:DeleteRolePolicy",
+                    "iam:DetachRolePolicy",
+                    "iam:RemoveRoleFromInstanceProfile",
+                    "iam:DeleteInstanceProfile",
+                    "iam:DeletePolicy",
+                    "iam:DeletePolicyVersion"
                   ],
-                  "Resource": "arn:aws:iam::${SynapseDevAccountId}:role/*"
+                  "Resource": [
+                    "arn:aws:iam::${SynapseDevAccountId}:role/*",
+                    "arn:aws:iam::${SynapseDevAccountId}:instance-profile/*",
+                    "arn:aws:iam::${SynapseDevAccountId}:policy/*"
+                  ]
                 }
             ]
           }
