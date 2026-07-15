@@ -455,10 +455,29 @@ SsoDeveloper:
                   "Effect": "Allow",
                   "Action": "sts:AssumeRole",
                   "Resource": "${AllowedRole}"
+                },
+                {
+                  "Sid": "SynapseDevSharedResourcesCleanup",
+                  "Effect": "Allow",
+                  "Action": [
+                    "iam:DeleteRole",
+                    "iam:DeleteRolePolicy",
+                    "iam:DetachRolePolicy",
+                    "iam:RemoveRoleFromInstanceProfile",
+                    "iam:DeleteInstanceProfile",
+                    "iam:DeletePolicy",
+                    "iam:DeletePolicyVersion"
+                  ],
+                  "Resource": [
+                    "arn:aws:iam::${SynapseDevAccountId}:role/*",
+                    "arn:aws:iam::${SynapseDevAccountId}:instance-profile/*",
+                    "arn:aws:iam::${SynapseDevAccountId}:policy/*"
+                  ]
                 }
             ]
           }
         - AllowedRole: !CopyValue ['us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn', !Ref SynapseLlmProdAccount]
+          SynapseDevAccountId: !Ref SynapseDevAccount
 
 SsoFinanceAuditor:
   Type: update-stacks
@@ -509,6 +528,7 @@ SsoSecurityAuditor:
       - 'arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSArtifactReportsReadOnlyAccess'
       - 'arn:aws:iam::aws:policy/AWSArtifactAgreementsReadOnlyAccess'
+      - 'arn:aws:iam::aws:policy/AmazonMacieFullAccess'
     sessionDuration: 'PT1H'
     masterAccountId: !Ref MasterAccount
 
