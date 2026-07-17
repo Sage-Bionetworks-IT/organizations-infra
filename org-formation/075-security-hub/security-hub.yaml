@@ -361,6 +361,38 @@ Resources:
               Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
               UpdatedBy: "sechub-automation"
 
+  # Suppression for issue IT-5213
+  SuppressGuardDutyBedrockCrossAccountAnomaly:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressGuardDutyBedrockCrossAccountAnomaly"
+      RuleOrder: "350"
+      RuleStatus: "ENABLED"
+      Description: "Suppress GuardDuty Bedrock cross-account role anomalous API finding (Impact TTP)"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "GuardDuty"
+            Comparison: "EQUALS"
+        Type:
+          - Value: "TTPs/Impact/IAMUser-AnomalousBehavior"
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Suppressed: Bedrock cross-account role anomalous API is expected behavior"
+              UpdatedBy: "sechub-automation"
+
 Outputs:
   SecurityHubArn:
     Description: "The security hub ARN"
