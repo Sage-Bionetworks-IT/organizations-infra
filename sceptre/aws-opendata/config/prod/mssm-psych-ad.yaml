@@ -1,0 +1,11 @@
+template:
+  path: "opendata-bucket.j2"
+stack_name: "mssm-psych-ad"
+dependencies:
+  - "prod/bootstrap.yaml"
+parameters:
+  DataSetName: "mssm-psych-ad.opendata.sagebase.org"
+sceptre_user_data:
+  SynapseIDs:
+    - "3357888" # Will Poehlman
+    - "3324230" # Tom Yu
