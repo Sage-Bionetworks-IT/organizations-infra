@@ -486,12 +486,29 @@ OpenChallengesRedirect:
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/1dce46e6-8f96-43f3-b964-6ab551ef84d4"
     RedirectFctName: !Sub '${resourcePrefix}-openchallenges-redirect-cloudfront-fct'
 
-# Issue IT-4919, redirect from  https://thenamhub.org to https://namshub.synapse.org
-NamshubRedirect:
+# Issue IT-4919, redirect from  https://namhub.org to https://namhub.synapse.org
+NamhubRedirect:
   Type: update-stacks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
-  StackName: !Sub '${resourcePrefix}-namshub-redirect'
-  StackDescription: Setup a redirect from thenamhub.org to namshub.synapse.org
+  StackName: !Sub '${resourcePrefix}-namhub-redirect'
+  StackDescription: Setup a redirect from namhub.org to namhub.synapse.org
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the endpoint we are redirecting from
+    SourceDomainName: "namhub.org"
+    # the endpoint we are redirecting to
+    TargetDomainName: "namhub.synapse.org"
+    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/785cd4b2-a446-4de3-8e70-653b1e221000"
+    RedirectFctName: !Sub '${resourcePrefix}-namhub-redirect-cloudfront-fct'
+
+# Issue IT-4919, redirect from  https://thenamhub.org to https://namhub.synapse.org
+TheNamhubRedirect:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
+  StackName: !Sub '${resourcePrefix}-thenamhub-redirect'
+  StackDescription: Setup a redirect from thenamhub.org to namhub.synapse.org
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref SageITAccount
@@ -499,24 +516,6 @@ NamshubRedirect:
     # the endpoint we are redirecting from
     SourceDomainName: "thenamhub.org"
     # the endpoint we are redirecting to
-    TargetDomainName: "namshub.synapse.org"
+    TargetDomainName: "namhub.synapse.org"
     AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/b68960cb-012e-4984-af83-ef093c63608f"
-    RedirectFctName: !Sub '${resourcePrefix}-namshub-redirect-cloudfront-fct'
-
-# Issue IT-4981, temporary redirect from  https://modeladexplorer.org to https://prod.modeladexplorer.org
-# This will be removed once we fix the certificate on the ALB
-ModeladexplorerRedirect:
-  Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.3/templates/S3/s3-apex-redirector.yaml
-  StackName: !Sub '${resourcePrefix}-modeladexplorer-redirect'
-  StackDescription: Setup a redirect from modeladexplorer.org to prod.modeladexplorer.org
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref SageITAccount
-  Parameters:
-    # the endpoint we are redirecting from
-    SourceDomainName: "modeladexplorer.org"
-    # the endpoint we are redirecting to
-    TargetDomainName: "prod.modeladexplorer.org"
-    AcmCertificateArn: "arn:aws:acm:us-east-1:797640923903:certificate/0792e7eb-c2f2-43e0-9a4b-be015c3e4f23"
-    RedirectFctName: !Sub '${resourcePrefix}-modeladexplorer-redirect-cloudfront-fct'
+    RedirectFctName: !Sub '${resourcePrefix}-thenamhub-redirect-cloudfront-fct'
