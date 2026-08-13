@@ -1108,6 +1108,9 @@ GithubOidcItSandboxDeploy:   # allow repos to make test deployments into ITSandb
       - owner: "Sage-Bionetworks-IT"
         name: "aws-cdk-ecs-infra-template"
         branches: ["dev"]
+      - owner: "Sage-Bionetworks-IT"
+        name: "sage-kb-chatbot-infra"
+        branches: ["dev"]
   DefaultOrganizationBinding:
     Account:
       - !Ref ITSandboxAccount
