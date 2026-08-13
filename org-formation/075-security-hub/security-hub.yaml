@@ -274,6 +274,13 @@ Resources:
             Comparison: "PREFIX"
           - Value: "AWS::::Account:140124849929"   # This should only match with 2.1.5.1
             Comparison: "PREFIX"
+          #---- PLFM-8757 Synapse S3 buckets
+          - Value: "arn:aws:s3:::static.synapse.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::ran.synapse.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::staging-ran.synapse.org"
+            Comparison: "PREFIX"
       Actions:
         - Type: "FINDING_FIELDS_UPDATE"
           FindingFieldsUpdate:
@@ -359,6 +366,38 @@ Resources:
               Status: "SUPPRESSED"
             Note:
               Text: "Automatically suppress Security Hub findings with INFORMATIONAL severity"
+              UpdatedBy: "sechub-automation"
+
+  # Suppression for issue IT-5213
+  SuppressGuardDutyBedrockCrossAccountAnomaly:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressGuardDutyBedrockCrossAccountAnomaly"
+      RuleOrder: "350"
+      RuleStatus: "ENABLED"
+      Description: "Suppress GuardDuty Bedrock cross-account role anomalous API finding (Impact TTP)"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "GuardDuty"
+            Comparison: "EQUALS"
+        Type:
+          - Value: "TTPs/Impact/IAMUser-AnomalousBehavior"
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Suppressed: Bedrock cross-account role anomalous API is expected behavior"
               UpdatedBy: "sechub-automation"
 
 Outputs:

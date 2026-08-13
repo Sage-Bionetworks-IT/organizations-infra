@@ -465,28 +465,6 @@ GithubOidcSageBionetworksDNTInfra:
       - !Ref DnTDevAccount
     Region: us-east-1
 
-GithubOidcSageBionetworksDPEAirflowInfra:
-  Type: update-stacks
-  DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dpe-airflow-infra
-  Parameters:
-    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-dpe-airflow-infra
-    ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AdministratorAccess"
-      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
-  TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks"
-    Repositories:
-      - name: "dpe-mwaa-deployment"
-        branches: ["*"]
-  DefaultOrganizationBinding:
-    Account:
-      - !Ref DpeProdAccount
-      - !Ref DnTDevAccount
-    Region: us-east-1
-
 GithubOidcSageBionetworksSecuityHubToJira:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
