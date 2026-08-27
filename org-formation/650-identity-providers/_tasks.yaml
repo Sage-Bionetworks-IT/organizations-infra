@@ -475,6 +475,18 @@ GithubOidcSageBionetworksSecuityHubToJira:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-security-hub-to-jira
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess"
+    PolicyDocument: !Sub >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "SecurityHubBatchUpdateFindings",
+              "Effect": "Allow",
+              "Action": [ "securityhub:BatchUpdateFindings" ],
+              "Resource": "arn:aws:securityhub:*:${AWS::AccountId}:hub/default"
+          }
+        ]
+      }
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
