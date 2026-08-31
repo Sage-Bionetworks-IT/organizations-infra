@@ -165,24 +165,6 @@
               - 'route53domains:TransferDomain'
             Resource: '*'
 
-  # Keep encryption at rest in place on all S3 buckets. AWS applies default
-  # server-side encryption (SSE-S3 minimum) to every bucket automatically, so
-  # denying the ability to delete a bucket's encryption configuration ensures
-  # buckets always remain encrypted at rest.
-  RestrictUnencryptedS3SCP:
-    Type: OC::ORG::ServiceControlPolicy
-    Properties:
-      PolicyName: RestrictUnencryptedS3
-      Description: Prevent disabling encryption at rest on S3 buckets
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Sid: DenyRemovingBucketEncryption
-            Effect: Deny
-            Action:
-              - 's3:DeleteBucketEncryption'
-            Resource: '*'
-
   # from https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-deny-region
   RestrictLeaveOrganizationSCP:
     Type: OC::ORG::ServiceControlPolicy
