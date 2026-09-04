@@ -9,8 +9,26 @@ AnomalyDetectorService:
     IncludeMasterAccount: true
     Account: '*'
     Region: !Ref primaryRegion
+  OrganizationBindings:
+    # SageBrain Dev - custom anomaly settings
+    - Account: !Ref SageBrainDevAccount
+      Region: !Ref primaryRegion
+    # SageBrain Prod - custom anomaly settings
+    - Account: !Ref SageBrainProdAccount
+      Region: !Ref primaryRegion
   Parameters:
     Subscriber: !GetAtt CurrentAccount.RootEmail
+  OrganizationBindingParameters:
+    SageBrainDevAccountBinding:
+      Account: !Ref SageBrainDevAccount
+      Threshold: 300
+      Frequency: IMMEDIATE
+      Subscriber: !GetAtt CurrentAccount.RootEmail
+    SageBrainProdAccountBinding:
+      Account: !Ref SageBrainProdAccount
+      Threshold: 500
+      Frequency: IMMEDIATE
+      Subscriber: !GetAtt CurrentAccount.RootEmail
 
 # Deploy a general-use microservice for interacting with MIPS in admincentral
 MipsMicroservice:

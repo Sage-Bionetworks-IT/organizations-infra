@@ -667,7 +667,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         AccountOwner: Susheel.Varma@sagebase.org
         CostCenter: NO PROGRAM / 000000
-        budget-alarm-threshold: 2000
+        budget-alarm-threshold: 1000
         budget-alarm-threshold-email-recipient: aws-sagebrain-dev@sagebase.org
 
   # Centralized Bedrock services for other accounts.
