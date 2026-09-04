@@ -274,6 +274,13 @@ Resources:
             Comparison: "PREFIX"
           - Value: "AWS::::Account:140124849929"   # This should only match with 2.1.5.1
             Comparison: "PREFIX"
+          #---- PLFM-8757 Synapse S3 buckets
+          - Value: "arn:aws:s3:::static.synapse.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::ran.synapse.org"
+            Comparison: "PREFIX"
+          - Value: "arn:aws:s3:::staging-ran.synapse.org"
+            Comparison: "PREFIX"
       Actions:
         - Type: "FINDING_FIELDS_UPDATE"
           FindingFieldsUpdate:
