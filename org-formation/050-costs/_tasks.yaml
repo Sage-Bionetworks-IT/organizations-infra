@@ -9,26 +9,35 @@ AnomalyDetectorService:
     IncludeMasterAccount: true
     Account: '*'
     Region: !Ref primaryRegion
-  OrganizationBindings:
-    # SageBrain Dev - custom anomaly settings
-    - Account: !Ref SageBrainDevAccount
-      Region: !Ref primaryRegion
-    # SageBrain Prod - custom anomaly settings
-    - Account: !Ref SageBrainProdAccount
-      Region: !Ref primaryRegion
+    ExcludeAccount:
+      - !Ref SageBrainDevAccount
+      - !Ref SageBrainProdAccount
   Parameters:
     Subscriber: !GetAtt CurrentAccount.RootEmail
-  OrganizationBindingParameters:
-    SageBrainDevAccountBinding:
-      Account: !Ref SageBrainDevAccount
-      Threshold: 300
-      Frequency: IMMEDIATE
-      Subscriber: !GetAtt CurrentAccount.RootEmail
-    SageBrainProdAccountBinding:
-      Account: !Ref SageBrainProdAccount
-      Threshold: 500
-      Frequency: IMMEDIATE
-      Subscriber: !GetAtt CurrentAccount.RootEmail
+
+AnomalyDetectorServiceSageBrainDev:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.3/templates/Cost/anomaly-detector-service.yaml
+  StackName: !Sub '${resourcePrefix}-anomaly-detector-service-sagebrain-dev'
+  DefaultOrganizationBinding:
+    Account: !Ref SageBrainDevAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    Subscriber: !GetAtt CurrentAccount.RootEmail
+    Threshold: 300
+    Frequency: IMMEDIATE
+
+AnomalyDetectorServiceSageBrainProd:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.3/templates/Cost/anomaly-detector-service.yaml
+  StackName: !Sub '${resourcePrefix}-anomaly-detector-service-sagebrain-prod'
+  DefaultOrganizationBinding:
+    Account: !Ref SageBrainProdAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    Subscriber: !GetAtt CurrentAccount.RootEmail
+    Threshold: 500
+    Frequency: IMMEDIATE
 
 # Deploy a general-use microservice for interacting with MIPS in admincentral
 MipsMicroservice:
