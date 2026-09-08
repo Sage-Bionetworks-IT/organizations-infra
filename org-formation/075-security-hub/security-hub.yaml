@@ -402,6 +402,44 @@ Resources:
               Text: "Suppressed: Bedrock cross-account role anomalous API is expected behavior"
               UpdatedBy: "sechub-automation"
 
+  # Suppress findings from a specific GuardDuty detector in specific AWS accounts
+  SuppressGuardDutyDetectorFindings:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressGuardDutyDetectorFindings"
+      RuleOrder: "360"
+      RuleStatus: "ENABLED"
+      Description: "Suppress GuardDuty detector findings"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "GuardDuty"
+            Comparison: "EQUALS"
+        AwsAccountId:
+          - Value: "465877038949"   # org-sagebase-scipooldev
+            Comparison: "EQUALS"
+          - Value: "237179673806"   # org-sagebase-scipoolprod
+            Comparison: "EQUALS"
+        Type:
+          # [IT-5244] Finding: A process in Instance has gained root privileges
+          - Value: "TTPs/Privilege Escalation/PrivilegeEscalation:Runtime-ElevationToRoot"
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Suppressed: GuardDuty detector findings"
+              UpdatedBy: "sechub-automation"
+
 Outputs:
   SecurityHubArn:
     Description: "The security hub ARN"
