@@ -25,7 +25,6 @@ AnomalyDetectorServiceSageBrainDev:
   Parameters:
     Subscriber: !GetAtt CurrentAccount.RootEmail
     Threshold: 300
-    Frequency: IMMEDIATE
 
 AnomalyDetectorServiceSageBrainProd:
   Type: update-stacks
@@ -37,7 +36,6 @@ AnomalyDetectorServiceSageBrainProd:
   Parameters:
     Subscriber: !GetAtt CurrentAccount.RootEmail
     Threshold: 500
-    Frequency: IMMEDIATE
 
 # Deploy a general-use microservice for interacting with MIPS in admincentral
 MipsMicroservice:
