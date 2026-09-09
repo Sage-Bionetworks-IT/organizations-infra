@@ -431,6 +431,9 @@ Resources:
           # [IT-5244] Finding: A process in Instance has gained root privileges
           - Value: "TTPs/Privilege Escalation/PrivilegeEscalation:Runtime-ElevationToRoot"
             Comparison: "EQUALS"
+          # [IT-5236] Finding: A reverse shell was detected in EC2 instance
+          - Value: "TTPs/Execution/Execution:Runtime-ReverseShell"
+            Comparison: "EQUALS"
       Actions:
         - Type: "FINDING_FIELDS_UPDATE"
           FindingFieldsUpdate:
