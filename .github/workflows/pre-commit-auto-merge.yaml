@@ -2,6 +2,10 @@ name: Auto-merge pre-commit updates
 
 on:
   pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
     paths:
       - .pre-commit-config.yaml
 
