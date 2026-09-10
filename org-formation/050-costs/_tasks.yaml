@@ -9,8 +9,33 @@ AnomalyDetectorService:
     IncludeMasterAccount: true
     Account: '*'
     Region: !Ref primaryRegion
+    ExcludeAccount:
+      - !Ref SageBrainDevAccount
+      - !Ref SageBrainProdAccount
   Parameters:
     Subscriber: !GetAtt CurrentAccount.RootEmail
+
+AnomalyDetectorServiceSageBrainDev:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.3/templates/Cost/anomaly-detector-service.yaml
+  StackName: !Sub '${resourcePrefix}-anomaly-detector-service-sagebrain-dev'
+  DefaultOrganizationBinding:
+    Account: !Ref SageBrainDevAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    Subscriber: !GetAtt CurrentAccount.RootEmail
+    Threshold: 300
+
+AnomalyDetectorServiceSageBrainProd:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.3/templates/Cost/anomaly-detector-service.yaml
+  StackName: !Sub '${resourcePrefix}-anomaly-detector-service-sagebrain-prod'
+  DefaultOrganizationBinding:
+    Account: !Ref SageBrainProdAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    Subscriber: !GetAtt CurrentAccount.RootEmail
+    Threshold: 500
 
 # Deploy a general-use microservice for interacting with MIPS in admincentral
 MipsMicroservice:

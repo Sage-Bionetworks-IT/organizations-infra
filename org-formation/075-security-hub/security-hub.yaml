@@ -227,6 +227,8 @@ Resources:
           - Value: "arn:aws:s3:::cost-and-usage-reports.sagebase.org"
             Comparison: "PREFIX"
           #---- IT-4072 public Bridge buckets. ---
+          - Value: "arn:aws:s3:::docs.sagebridge.org"
+            Comparison: "PREFIX"
           - Value: "arn:aws:s3:::android-apps.sagebridge.org"
             Comparison: "PREFIX"
           - Value: "arn:aws:s3:::ios-apps.sagebridge.org"
