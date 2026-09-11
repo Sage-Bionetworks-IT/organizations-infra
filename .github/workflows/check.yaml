@@ -6,6 +6,9 @@ on:
   push:
     branches: ['*']
 
+permissions:
+  contents: read
+
 jobs:
   test-npm-deps:          # Useful for testing version updates
     runs-on: ubuntu-latest
