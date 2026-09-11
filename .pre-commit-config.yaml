@@ -1,5 +1,7 @@
 ci:
   autoupdate_schedule: monthly
+  skip: ["cfn-python-lint"] # work around for https://github.com/pre-commit-ci/issues/issues/241
+
 repos:
   - repo: https://github.com/awslabs/git-secrets
     rev: b9e96b3212fa06aea65964ff0d5cda84ce935f38
