@@ -428,11 +428,19 @@ Resources:
           - Value: "237179673806"   # org-sagebase-scipoolprod
             Comparison: "EQUALS"
         Type:
-          # [IT-5244] Finding: A process in Instance has gained root privileges
+          # [IT-5244] Detector: A process in Instance has gained root privileges
           - Value: "TTPs/Privilege Escalation/PrivilegeEscalation:Runtime-ElevationToRoot"
             Comparison: "EQUALS"
-          # [IT-5236] Finding: A reverse shell was detected in EC2 instance
+          # [IT-5236] Detector: A reverse shell was detected in EC2 instance
           - Value: "TTPs/Execution/Execution:Runtime-ReverseShell"
+            Comparison: "EQUALS"
+          # [IT-5287] Detector: An EC2 instance is communicating on an unusual server port
+          - Value: "TTPs/Command and Control/Behavior:EC2-NetworkPortUnusual"
+            Comparison: "EQUALS"
+          # [IT-5425] Detector: Security-sensitive file modification is detected in a resource of type Instance
+          - Value: "TTPs/Defense Evasion/DefenseEvasion:Runtime-SensitiveFileModified"
+            Comparison: "EQUALS"
+          - Value: "TTPs/Persistence/Persistence:Runtime-SensitiveFileModified"
             Comparison: "EQUALS"
       Actions:
         - Type: "FINDING_FIELDS_UPDATE"
