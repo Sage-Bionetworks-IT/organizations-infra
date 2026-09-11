@@ -431,6 +431,11 @@ Resources:
           # [IT-5244] Finding: A process in Instance has gained root privileges
           - Value: "TTPs/Privilege Escalation/PrivilegeEscalation:Runtime-ElevationToRoot"
             Comparison: "EQUALS"
+          # [IT-5425] Finding: Security-sensitive file modification is detected in a resource of type Instance
+          - Value: "TTPs/Defense Evasion/DefenseEvasion:Runtime-SensitiveFileModified"
+            Comparison: "EQUALS"
+          - Value: "TTPs/Persistence/Persistence:Runtime-SensitiveFileModified"
+            Comparison: "EQUALS"
       Actions:
         - Type: "FINDING_FIELDS_UPDATE"
           FindingFieldsUpdate:
