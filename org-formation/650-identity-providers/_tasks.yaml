@@ -475,6 +475,18 @@ GithubOidcSageBionetworksSecuityHubToJira:
     ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-security-hub-to-jira
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AWSSecurityHubReadOnlyAccess"
+    PolicyDocument: !Sub >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "SecurityHubBatchUpdateFindings",
+              "Effect": "Allow",
+              "Action": [ "securityhub:BatchUpdateFindings" ],
+              "Resource": "arn:aws:securityhub:*:${AWS::AccountId}:hub/default"
+          }
+        ]
+      }
   TemplatingContext:
     GitHubOrg: "Sage-Bionetworks"
     Repositories:
@@ -1107,6 +1119,9 @@ GithubOidcItSandboxDeploy:   # allow repos to make test deployments into ITSandb
     Repositories:
       - owner: "Sage-Bionetworks-IT"
         name: "aws-cdk-ecs-infra-template"
+        branches: ["dev"]
+      - owner: "Sage-Bionetworks-IT@63359528"
+        name: "sage-kb-chatbot-infra@1330299852"
         branches: ["dev"]
   DefaultOrganizationBinding:
     Account:
