@@ -451,6 +451,45 @@ Resources:
               Text: "Suppressed: GuardDuty detector findings"
               UpdatedBy: "sechub-automation"
 
+  SuppressSecHubFindingsForTaggedKmsKeys:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForTaggedKmsKeys"
+      RuleOrder: "400"
+      RuleStatus: "ENABLED"
+      Description: "Suppress CIS 3.8 (KMS key rotation) findings for KMS keys tagged SecHubSuppressCis3.8=true"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/3.8"
+            Comparison: "EQUALS"
+        ResourceType:
+          - Value: "AwsKmsKey"
+            Comparison: "EQUALS"
+        ResourceTags:
+          - Key: "SecHubSuppressCis3.8"
+            Value: "true"
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings for KMS keys tagged SecHubSuppressCis3.8=true"
+              UpdatedBy: "sechub-automation"
+
+
 Outputs:
   SecurityHubArn:
     Description: "The security hub ARN"
