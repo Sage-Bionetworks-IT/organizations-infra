@@ -1,8 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Cross-account role for Bedrock access, scoped to OpenAI and Anthropic
-  (Claude) models. Allows all accounts in the organization to assume this
-  role.
+  Cross-account role for Bedrock access. Allows all accounts in the
+  organization to assume this role.
 Parameters:
   OrganizationId:
     Type: String
@@ -16,38 +15,18 @@ Resources:
     Type: 'AWS::IAM::Role'
     Properties:
       RoleName: !Ref RoleName
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
       Policies:
         - PolicyName: BedrockModelAccess
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-              # Restrict model invocation to all OpenAI (openai.*) and
-              # Anthropic (Claude) models available on Bedrock. The OpenAI
-              # family spans the open-weight gpt-oss models as well as the
-              # proprietary GPT-5.6 / GPT-6 models; the openai.* ARN pattern
-              # below covers all of them. Some of these models are sold through
-              # AWS Marketplace, so the auto-subscribe/enablement statements
-              # below cover first use.
-              - Sid: AllowInvokeModels
-                Effect: Allow
-                Action:
-                  - bedrock:InvokeModel
-                  - bedrock:InvokeModelWithResponseStream
-                Resource:
-                  - 'arn:aws:bedrock:*::foundation-model/openai.*'
-                  - 'arn:aws:bedrock:*:*:inference-profile/*openai.*'
-                  - 'arn:aws:bedrock:*::foundation-model/anthropic.*'
-                  - 'arn:aws:bedrock:*:*:inference-profile/*anthropic.*'
               # OpenAI-compatible endpoint (bedrock-mantle). Clients such as
               # Codex that use the OpenAI SDK / Responses API call this endpoint
-              # instead of bedrock-runtime. CreateInference authorizes against
-              # the project ARN (not the model ARN), so model-level restriction
-              # to OpenAI/Anthropic is NOT expressible on this IAM path. The
-              # tightest scoping available here is the project resource: we pin
-              # it to this account and Region so that a caller assuming this
-              # org-wide role cannot target projects in other accounts/Regions.
-              # Provider/model enforcement on the Mantle path must be applied
-              # via a service control policy (SCP), per AWS guidance.
+              # instead of bedrock-runtime.  We pin it to this account and Region
+              # so that a caller assuming this org-wide role cannot target projects
+              # in other accounts/Regions.
               - Sid: AllowBedrockMantleInference
                 Effect: Allow
                 Action:
@@ -56,34 +35,6 @@ Resources:
                   - bedrock-mantle:CreateInference
                 Resource:
                   - !Sub 'arn:aws:bedrock-mantle:${AWS::Region}:${AWS::AccountId}:project/*'
-              # Web search tool used by the OpenAI-compatible endpoint when a
-              # model performs web searches / fetches during inference.
-              - Sid: AllowBedrockWebSearch
-                Effect: Allow
-                Action:
-                  - bedrock-websearch:InvokeSearch
-                  - bedrock-websearch:InvokeFetch
-                Resource: 'arn:aws:bedrock-websearch:*:*:*'
-              # Read-only discovery actions needed by the console/SDK to list
-              # and describe available models. These are non-mutating.
-              - Sid: AllowBedrockModelDiscovery
-                Effect: Allow
-                Action:
-                  - bedrock:ListFoundationModels
-                  - bedrock:GetFoundationModel
-                  - bedrock:ListInferenceProfiles
-                  - bedrock:GetInferenceProfile
-                  - bedrock:ListFoundationModelAgreementOffers
-                  - bedrock:GetFoundationModelAvailability
-                Resource: '*'
-              # Allow Bedrock to enable/activate a model agreement on first use.
-              - Sid: AllowBedrockModelEnablement
-                Effect: Allow
-                Action:
-                  - bedrock:CreateFoundationModelAgreement
-                  - bedrock:GetUseCaseForModelAccess
-                  - bedrock:PutUseCaseForModelAccess
-                Resource: '*'
               # Allow the AWS Marketplace subscription that Bedrock performs on
               # first invoke to enable a serverless model. Product IDs vary
               # across the OpenAI and Anthropic families (and gpt-oss models
