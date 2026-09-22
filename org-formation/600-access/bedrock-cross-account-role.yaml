@@ -42,14 +42,20 @@ Resources:
               # Codex that use the OpenAI SDK / Responses API call this endpoint
               # instead of bedrock-runtime. CreateInference authorizes against
               # the project ARN (not the model ARN), so model-level restriction
-              # to OpenAI is NOT expressible on this path.
+              # to OpenAI/Anthropic is NOT expressible on this IAM path. The
+              # tightest scoping available here is the project resource: we pin
+              # it to this account and Region so that a caller assuming this
+              # org-wide role cannot target projects in other accounts/Regions.
+              # Provider/model enforcement on the Mantle path must be applied
+              # via a service control policy (SCP), per AWS guidance.
               - Sid: AllowBedrockMantleInference
                 Effect: Allow
                 Action:
                   - bedrock-mantle:Get*
                   - bedrock-mantle:List*
                   - bedrock-mantle:CreateInference
-                Resource: '*'
+                Resource:
+                  - !Sub 'arn:aws:bedrock-mantle:${AWS::Region}:${AWS::AccountId}:project/*'
               # Web search tool used by the OpenAI-compatible endpoint when a
               # model performs web searches / fetches during inference.
               - Sid: AllowBedrockWebSearch
