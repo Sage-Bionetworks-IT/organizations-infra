@@ -366,9 +366,6 @@ GithubOidcSageBionetworksSynapseBuild:
       - owner: "xschildw"
         name: "Synapse-Repository-Services"
         branches: ["*"]
-      - owner: "nickgros"
-        name: "Synapse-Repository-Services"
-        branches: ["*"]
       - owner: "afwillia"
         name: "Synapse-Repository-Services"
         branches: ["*"]
