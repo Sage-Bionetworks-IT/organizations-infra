@@ -372,6 +372,12 @@ GithubOidcSageBionetworksSynapseBuild:
       - owner: "afwillia"
         name: "Synapse-Repository-Services"
         branches: ["*"]
+      - owner: "emiranda-sage"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
+      - owner: "dzsolo"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
   DefaultOrganizationBinding:
     Account:
       - !Ref SynapseDevAccount
