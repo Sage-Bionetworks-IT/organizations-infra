@@ -50,11 +50,6 @@ Resources:
                   - bedrock-mantle:List*
                   - bedrock-mantle:CreateInference
                 Resource: '*'
-              - Sid: AllowBedrockMantleCallWithBearerToken
-                Effect: Allow
-                Action:
-                  - bedrock-mantle:CallWithBearerToken
-                Resource: '*'
               # Web search tool used by the OpenAI-compatible endpoint when a
               # model performs web searches / fetches during inference.
               - Sid: AllowBedrockWebSearch
