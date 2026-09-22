@@ -76,7 +76,11 @@ Resources:
             Action:
             - ssm:StartAutomationExecution
             Resource:
-            - arn:aws:ssm:*:*:automation-definition/*
+            # As of 2026-01-20, StartAutomationExecution authorizes against the
+            # 'document' and 'automation-execution' resource types instead of
+            # 'automation-definition'.
+            - !Sub arn:${AWS::Partition}:ssm:*:*:document/*
+            - !Sub arn:${AWS::Partition}:ssm:*:*:automation-execution/*
           - Effect: Allow
             Action:
             - ssm:SendCommand
