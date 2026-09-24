@@ -335,7 +335,7 @@ GithubOidcSageBionetworksSynapse:
 GithubOidcSageBionetworksSynapseBuild:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.4/templates/IAM/github-oidc-provider.j2
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.10/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-synapse-build
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -366,10 +366,16 @@ GithubOidcSageBionetworksSynapseBuild:
       - owner: "xschildw"
         name: "Synapse-Repository-Services"
         branches: ["*"]
+      - owner: "nickgros"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
       - owner: "afwillia"
         name: "Synapse-Repository-Services"
         branches: ["*"]
       - owner: "emiranda-sage"
+        name: "Synapse-Repository-Services"
+        branches: ["*"]
+      - owner: "dzsolo"
         name: "Synapse-Repository-Services"
         branches: ["*"]
   DefaultOrganizationBinding:
