@@ -493,7 +493,7 @@ Resources:
     Type: AWS::SecurityHub::AutomationRule
     Properties:
       RuleName: "SuppressSecHubFindingsForStackArmorKmsKeys"
-      RuleOrder: "400"
+      RuleOrder: "401"
       RuleStatus: "ENABLED"
       Description: "Suppress CIS 3.8 (KMS key rotation) findings for KMS keys tagged execute-script=install-stack-armor-agent"
       Criteria:
@@ -531,7 +531,7 @@ Resources:
     Type: AWS::SecurityHub::AutomationRule
     Properties:
       RuleName: "SuppressSecHubFindingsForDefenderForDatabasesKmsKeys"
-      RuleOrder: "400"
+      RuleOrder: "402"
       RuleStatus: "ENABLED"
       Description: "Suppress CIS 3.8 (KMS key rotation) findings for KMS keys tagged DefenderForDatabases=''"
       Criteria:
