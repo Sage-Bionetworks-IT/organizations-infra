@@ -37,6 +37,7 @@ Organization:
         - !Ref BixArenaDevAccount
         - !Ref BixArenaProdAccount
         - !Ref SageBrainDevAccount
+        - !Ref SageCirroDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -697,6 +698,20 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: synapse-continuity-poc@sagebase.org
+
+  SageCirroDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-cirro-dev
+      RootEmail: aws-cirro-dev@sagebase.org
+      Alias: org-sagebase-cirro-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: RAPID - ARPA-H - BP01 / 126500
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-cirro-dev@sagebase.org
+
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:
