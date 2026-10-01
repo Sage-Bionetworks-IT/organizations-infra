@@ -362,6 +362,10 @@ Parameters:
     Type: String
     Default: '34a8f418-8031-703e-1036-66276dcf40f3'
 
+  CirroDevDeveloperGroup:     # JC aws-cirro-dev-developers
+    Type: String
+    Default: 'TBD'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -2418,3 +2422,21 @@ SsoSynapseContinuityPocAdmin:
     instanceArn: !Ref instanceArn
     principalId: !Ref SynapseContinuityPocAdminGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
+
+SsoCirroDevDeveloper:
+  Type: update-stacks
+  DependsOn: SsoDeveloper
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-cirro-dev-developer'
+  StackDescription: 'SSO: developer role used by Cirro dev developers group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SageCirroDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref CirroDevDeveloperGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
