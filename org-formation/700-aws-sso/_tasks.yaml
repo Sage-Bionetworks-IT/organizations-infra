@@ -366,6 +366,10 @@ Parameters:
     Type: String
     Default: '7408e4c8-9001-702c-004f-ea595ddb257a'
 
+  CirroDevAdminGroup:         # JC aws-cirro-dev-admins
+    Type: String
+    Default: 'f488b468-6011-70b0-18bf-fe2be14bcfc1'
+
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
     Type: String
@@ -2440,3 +2444,21 @@ SsoCirroDevDeveloper:
     instanceArn: !Ref instanceArn
     principalId: !Ref CirroDevDeveloperGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-developer-permission-set-arn' ]
+
+SsoCirroDevAdmin:
+  Type: update-stacks
+  DependsOn: SsoAdministrator
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.2/templates/SSO/aws-sso.njk
+  TemplatingContext: {}
+  StackName: !Sub '${resourcePrefix}-${appName}-cirro-dev-admin'
+  StackDescription: 'SSO: admin role used by Cirro dev admin group'
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+  OrganizationBindings:
+    TargetBinding:
+      Account: !Ref SageCirroDevAccount
+  Parameters:
+    instanceArn: !Ref instanceArn
+    principalId: !Ref CirroDevAdminGroup
+    permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
