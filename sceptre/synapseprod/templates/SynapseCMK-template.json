@@ -327,7 +327,13 @@
                             "Resource": "*"
                         }
                     ]
-                }
+                },
+                "Tags": [
+                    {
+                        "Key": "SecHubSuppressCis3.8",
+                        "Value": "true"
+                    }
+                ]
             }
         },
         "SynapseCMKAlias": {
