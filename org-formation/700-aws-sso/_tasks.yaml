@@ -364,7 +364,7 @@ Parameters:
 
   CirroDevDeveloperGroup:     # JC aws-cirro-dev-developers
     Type: String
-    Default: 'TBD'
+    Default: '7408e4c8-9001-702c-004f-ea595ddb257a'
 
   #------------- personal AWS accounts ------------------
   BuA2aDwAdminGroup:             #JC aws-BuA2aDw-admins
