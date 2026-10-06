@@ -1,5 +1,7 @@
 ci:
   autoupdate_schedule: monthly
+  skip: ["cfn-python-lint"] # work around for https://github.com/pre-commit-ci/issues/issues/241
+
 repos:
   - repo: https://github.com/awslabs/git-secrets
     rev: b9e96b3212fa06aea65964ff0d5cda84ce935f38
@@ -22,7 +24,7 @@ repos:
     hooks:
       - id: yamllint
   - repo: https://github.com/awslabs/cfn-python-lint
-    rev: v1.56.0
+    rev: v1.57.0
     hooks:
       - id: cfn-python-lint
         files: templates/.*\.(json|yml|yaml)$
@@ -32,7 +34,7 @@ repos:
     hooks:
       - id: remove-tabs
   - repo: https://github.com/sirosen/check-jsonschema
-    rev: 0.38.0
+    rev: 0.38.2
     hooks:
       - id: check-github-workflows
       - id: check-github-actions
