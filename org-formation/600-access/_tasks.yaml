@@ -215,7 +215,7 @@ BedrockCentralCrossAccountAccess:
     OrganizationId: !Ref organizationPrincipalId
     RoleName: BedrockCrossAccountRole
 
-CirroDevCrossAccountAccess:
+CirroDevCrossAccountAccess:   #  IT-5363
   Type: update-stacks
   Template: cirro_project_deployment_role.yml
   StackName: cirro-project-deployment-role
@@ -223,7 +223,7 @@ CirroDevCrossAccountAccess:
     Account: !Ref SageCirroDevAccount
     Region: us-east-1
   Parameters:
-    pDataPortalAccountId: "344074613825"
+    pDataPortalAccountId: "344074613825"     # Contact is Nathan Thorpe at Cirro
 
 
 #---------------------------------
