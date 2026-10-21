@@ -61,6 +61,11 @@ AccountDefaults:
   DependsOn: [ Types ]
   Path: ./300-account-defaults/_tasks.yaml
 
+ResourceControlPolicies:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./400-rcp/_tasks.yaml
+
 AccountAccess:
   Type: include
   DependsOn: [ Types ]
