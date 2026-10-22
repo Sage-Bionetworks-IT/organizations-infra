@@ -32,6 +32,8 @@ prefixed with numbers to enforce the order they are deployed in.
   Configure AWS Config for all accounts.
 - 090 [Systems Manager](./090-systems-manager) \
   Configure Systems Manager for all accounts.
+- 400 [Resource Control Policies](./400-rcp) \
+  Configure organization-wide Resource Control Policies (RCPs).
 - 725 [vpc flow logs](./725-vpc-flow-logs) \
   Use AWS config to enable VPC flow logs
 
