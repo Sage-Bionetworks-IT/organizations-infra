@@ -20,7 +20,7 @@ Resources:
       Name: S3HttpsOnlyRCP
       Description: >-
         Denies S3 requests made without HTTPS, except requests made by AWS
-        services.
+        services and requests to the docs.sagebridge.org bucket.
       Type: RESOURCE_CONTROL_POLICY
       TargetIds: !Ref TargetIds
       Content:
@@ -30,7 +30,10 @@ Resources:
             Effect: Deny
             Principal: '*'
             Action: 's3:*'
-            Resource: '*'
+            NotResource:
+              # Exempt consent forms in docs.sagebridge.org bucket from the HTTPS-only requirement.
+              - 'arn:aws:s3:::docs.sagebridge.org'
+              - 'arn:aws:s3:::docs.sagebridge.org/*'
             Condition:
               Bool:
                 aws:SecureTransport: 'false'
