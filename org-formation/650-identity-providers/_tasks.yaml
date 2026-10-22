@@ -1027,7 +1027,7 @@ GithubOidcModelAdExplorerInfra:
 GithubOidcQtlExplorerInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.10/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-qtlexplorer-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -1037,9 +1037,9 @@ GithubOidcQtlExplorerInfra:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
-      - name: "qtlexplorer-infra"
+      - owner: "Sage-Bionetworks-IT@63359528"
+        name: "qtlexplorer-infra@1426248809"
         branches: ["dev","stage","prod"]
   DefaultOrganizationBinding:
     Account:
