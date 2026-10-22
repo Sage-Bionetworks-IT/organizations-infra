@@ -1,17 +1,14 @@
 Parameters:
   <<: !Include '../_parameters.yaml'
 
-AnomalyDetectorService:
+ManagedCostAnomalyMonitor:
   Type: update-stacks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.3.3/templates/Cost/anomaly-detector-service.yaml
-  StackName: !Sub '${resourcePrefix}-anomaly-detector-service'
+  Template: managed-cost-anomaly-monitor.yaml
+  StackName: !Sub '${resourcePrefix}-managed-cost-anomaly-monitor'
   DefaultOrganizationBinding:
     IncludeMasterAccount: true
-    Account: '*'
+    Account: !Ref MasterAccount
     Region: !Ref primaryRegion
-    ExcludeAccount:
-      - !Ref SageBrainDevAccount
-      - !Ref SageBrainProdAccount
   Parameters:
     Subscriber: !GetAtt CurrentAccount.RootEmail
 
