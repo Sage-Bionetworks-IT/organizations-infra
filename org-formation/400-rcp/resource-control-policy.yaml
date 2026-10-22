@@ -6,7 +6,7 @@ Description: >-
 
 Parameters:
   TargetIds:
-    Type: List<String>
+    Type: CommaDelimitedList
     Description: >-
       List of AWS Organizations targets to which the RCP will be attached. Each
       entry must be a root (r-...), organizational unit (ou-...-...), or 12-digit
