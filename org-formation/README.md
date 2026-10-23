@@ -54,6 +54,8 @@ https://sagebionetworks.jira.com/browse/IT-3619
 - 300 [Account Defaults](./300-account-defaults) \
   Configure all accounts via custom CloudFormation types, deploy miscellaneous
   infrastructure expected in all accounts.
+- 400 [Resource Control Policies](./400-rcp) \
+  Configure organization-wide Resource Control Policies (RCPs).
 
 ### Access and Connectivity
 

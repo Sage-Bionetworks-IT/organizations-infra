@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Creates and attaches an AWS Organizations Resource Control Policy (RCP) that
+  denies non-HTTPS requests to Amazon S3 resources, while exempting AWS service
+  principals from the network-context restriction.
+
+Parameters:
+  TargetIds:
+    Type: CommaDelimitedList
+    Description: >-
+      List of AWS Organizations targets to which the RCP will be attached. Each
+      entry must be a root (r-...), organizational unit (ou-...-...), or 12-digit
+      account ID.
+    Default: 'r-yv14'     # Sage-Bio org root
+
+Resources:
+  S3HttpsOnlyResourceControlPolicy:
+    Type: AWS::Organizations::Policy
+    Properties:
+      Name: S3HttpsOnlyRCP
+      Description: >-
+        Denies S3 requests made without HTTPS, except requests made by AWS
+        services and requests to the docs.sagebridge.org bucket.
+      Type: RESOURCE_CONTROL_POLICY
+      TargetIds: !Ref TargetIds
+      Content:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyS3RequestsWithoutHttps
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:*'
+            NotResource:
+              # Exempt consent forms in docs.sagebridge.org bucket from the HTTPS-only requirement.
+              - 'arn:aws:s3:::docs.sagebridge.org'
+              - 'arn:aws:s3:::docs.sagebridge.org/*'
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+              BoolIfExists:
+                aws:PrincipalIsAWSService: 'false'
+
+Outputs:
+  PolicyId:
+    Description: ID of the S3 HTTPS-only resource control policy.
+    Value: !Ref S3HttpsOnlyResourceControlPolicy
+  PolicyArn:
+    Description: ARN of the S3 HTTPS-only resource control policy.
+    Value: !GetAtt S3HttpsOnlyResourceControlPolicy.Arn
