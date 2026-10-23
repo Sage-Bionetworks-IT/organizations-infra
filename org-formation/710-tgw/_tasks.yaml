@@ -41,6 +41,7 @@ TransitGateway:
       - !Ref ScipoolProdAccount
       - !Ref SageITAccount
       - !Ref DpeProdAccount
+      - !Ref DnTDevAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -112,6 +113,11 @@ TransitGatewayRoutes:
       # org-sagebase-dpe-prod
       orca-vpc:
         CIDR: "10.255.24.0/24"
+      mwaa-prod-vpc:
+        CIDR: "10.52.52.0/22"
+      # org-sagebase-dnt-dev
+      mwaa-dev-vpc:
+        CIDR: "10.52.48.0/22"
 
   Parameters:
     VpcSubnetIDs:
@@ -199,6 +205,54 @@ TransitGatewaySpokeB:
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+
+# MWAA VPCs are Terraform-managed (Sage-Bionetworks-Workflows/eks-stack), so they have no
+# CloudFormation exports for TgwSpokesA/B's !CopyValue lookups to resolve. Same situation as
+# the Synapse spokes below, so the VPC/subnet/route-table IDs are literal values pulled
+# directly from the account after `tofu apply`, not CopyValue references.
+TransitGatewaySpokeMwaaDev:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-mwaa-dev'
+  StackDescription: Setup Transit Gateway attachment for the MWAA dev VPC
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DnTDevAccount
+    IncludeMasterAccount: false
+  Parameters:
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    # org-sagebase-dnt-dev mwaa-dev VPC, from `aws ec2 describe-vpcs`/`describe-subnets`/`describe-route-tables`
+    VpcId: "vpc-0f46a2c7fd74308d0"
+    VpcRouteTableId: "rtb-088b5de5227c568d5"
+    SubnetIds:
+      - "subnet-0a7c4cac5cccae304"
+      - "subnet-086d0ae85d6f64f50"
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+
+TransitGatewaySpokeMwaaProd:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-mwaa-prod'
+  StackDescription: Setup Transit Gateway attachment for the MWAA prod VPC
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DpeProdAccount
+    IncludeMasterAccount: false
+  Parameters:
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    # TODO: org-sagebase-dpe-prod mwaa-prod VPC has not been applied yet (eks-stack mwaa-deployments
+    # branch). Fill these in from `aws ec2 describe-vpcs`/`describe-subnets`/`describe-route-tables`
+    # with --profile dpe-prod-admin once `tofu apply` has run.
+    VpcId: "vpc-TODO-fill-after-apply"
+    VpcRouteTableId: "rtb-TODO-fill-after-apply"
+    SubnetIds:
+      - "subnet-TODO-fill-after-apply"
+      - "subnet-TODO-fill-after-apply"
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
 
 TransitGatewaySpokesSynapseDev:
