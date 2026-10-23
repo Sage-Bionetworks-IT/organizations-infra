@@ -366,6 +366,24 @@ ModelAdExplorerProdAppDnsForward:
     # the value of the CNAME record
     TargetHostName: !CopyValue ['model-ad-prod-load-balancer-dns', !Ref AgoraProdAccount]
 
+# forward dev.xqtlexplorer.adknowledgeportal.org to qtlexplorer-infra ALB
+# https://github.com/Sage-Bionetworks-IT/qtlexplorer-infra
+QtlExplorerDevAppDnsForward:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.6.9/templates/R53/cname.yaml
+  StackName: !Sub '${resourcePrefix}-qtlexplorer-dev-cname'
+  StackDescription: Setup a CNAME for qtlexplorer-infra dev ALB
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SageITAccount
+  Parameters:
+    # the name of the CNAME record
+    SourceHostName: "dev.xqtlexplorer.adknowledgeportal.org"
+    # ID of the adknowledgeportal.org zone (in sageit account)
+    SourceHostedZoneId: "Z2DTJC6JTFRHBN"
+    # the value of the CNAME record
+    TargetHostName: !CopyValue ['qtl-dev-load-balancer-dns', !Ref AgoraDevAccount]
+
 # Issue IT-4498, redirect treat-ad.org to treatad.org
 TreatAdApexRedirect:
   Type: update-stacks
