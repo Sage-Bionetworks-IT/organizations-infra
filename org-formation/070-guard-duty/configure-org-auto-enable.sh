@@ -16,15 +16,32 @@
 # Prerequisites:
 #   - AWS CLI v2, jq
 #   - Credentials with permission to call guardduty:ListDetectors, guardduty:ListMembers,
-#     guardduty:CreateMembers and guardduty:UpdateOrganizationConfiguration
-#     in the SecurityCentralAccount (140124849929)
+#     guardduty:CreateMembers, guardduty:UpdateOrganizationConfiguration and
+#     organizations:ListAccounts in the SecurityCentralAccount (140124849929)
 #
 # Usage:
-#   Assume a role in SecurityCentralAccount, then run:
-#     ./configure-org-auto-enable.sh
+#   The RestrictDisableGuardduty SCP (see ../_scp.yaml) denies guardduty:CreateMembers to
+#   everything except OrganizationAccountAccessRole, so SSO roles in SecurityCentralAccount
+#   cannot run this. Assume that role from the management account instead, e.g. with this
+#   profile in ~/.aws/config:
+#     [profile OrganizationAccountAccessRole-Security-Central]
+#     role_arn = arn:aws:iam::140124849929:role/OrganizationAccountAccessRole
+#     source_profile = Administrator-Organization
+#   then run:
+#     aws sso login --profile Administrator-Organization
+#     AWS_PROFILE=OrganizationAccountAccessRole-Security-Central ./configure-org-auto-enable.sh
 #   Set DRY_RUN=1 to print the commands without running them.
 
 set -euo pipefail
+
+EXPECTED_ACCOUNT_ID=140124849929
+
+caller_account=$(aws sts get-caller-identity --query Account --output text)
+if [ "$caller_account" != "$EXPECTED_ACCOUNT_ID" ]; then
+  echo "ERROR: Running as account ${caller_account}, expected ${EXPECTED_ACCOUNT_ID}." >&2
+  echo "Run with AWS_PROFILE=OrganizationAccountAccessRole-Security-Central (current AWS_PROFILE=${AWS_PROFILE:-<unset>})." >&2
+  exit 1
+fi
 
 SOURCE_REGION=us-east-1
 
@@ -71,10 +88,18 @@ run() {
 }
 
 source_detector_id=$(aws guardduty list-detectors --region "${SOURCE_REGION}" --query 'DetectorIds[0]' --output text)
-members=$(aws guardduty list-members --detector-id "${source_detector_id}" --region "${SOURCE_REGION}" \
-  --query 'Members[?RelationshipStatus==`Enabled`].{AccountId: AccountId}' \
+member_ids=$(aws guardduty list-members --detector-id "${source_detector_id}" --region "${SOURCE_REGION}" \
+  --query 'Members[?RelationshipStatus==`Enabled`].AccountId' \
   --output json)
+# The CLI requires Email in each AccountDetails entry, but ListMembers returns null
+# for org-managed members, so take emails from Organizations instead.
+org_accounts=$(aws organizations list-accounts --query 'Accounts[].{AccountId: Id, Email: Email}' --output json)
+members=$(jq -c --argjson ids "${member_ids}" '[.[] | select(.AccountId as $id | $ids | index($id))]' <<< "${org_accounts}")
 member_count=$(jq length <<< "${members}")
+if [ "${member_count}" -ne "$(jq length <<< "${member_ids}")" ]; then
+  echo "ERROR: Some ${SOURCE_REGION} members were not found in the organization." >&2
+  exit 1
+fi
 echo "Found ${member_count} Enabled members in ${SOURCE_REGION}."
 
 for region in "${REGIONS[@]}"; do

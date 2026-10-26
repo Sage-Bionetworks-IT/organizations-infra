@@ -15,11 +15,21 @@
 #     guardduty:ListOrganizationAdminAccounts
 #
 # Usage:
-#   Assume a role in the management account, then run:
-#     ./enable-delegated-admin.sh
+#   Log in to the management account, then run with that profile:
+#     aws sso login --profile Administrator-Organization
+#     AWS_PROFILE=Administrator-Organization ./enable-delegated-admin.sh
 #   Set DRY_RUN=1 to print the commands without running them.
 
 set -euo pipefail
+
+EXPECTED_ACCOUNT_ID=531805629419
+
+caller_account=$(aws sts get-caller-identity --query Account --output text)
+if [ "$caller_account" != "$EXPECTED_ACCOUNT_ID" ]; then
+  echo "ERROR: Running as account ${caller_account}, expected ${EXPECTED_ACCOUNT_ID}." >&2
+  echo "Run with AWS_PROFILE=Administrator-Organization (current AWS_PROFILE=${AWS_PROFILE:-<unset>})." >&2
+  exit 1
+fi
 
 ADMIN_ACCOUNT_ID=140124849929  # SecurityCentralAccount
 
