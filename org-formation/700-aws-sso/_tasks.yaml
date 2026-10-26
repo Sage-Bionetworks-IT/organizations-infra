@@ -481,12 +481,6 @@ SsoDeveloper:
                     "arn:aws:iam::${SynapseDevAccountId}:instance-profile/*",
                     "arn:aws:iam::${SynapseDevAccountId}:policy/*"
                   ]
-                },
-                {
-                  "Sid": "SynapseDevSemanticEmbeddingConnector",
-                  "Effect": "Allow",
-                  "Action": "iam:PassRole",
-                  "Resource": "arn:aws:iam::${SynapseDevAccountId}:role/dev-*-synidx-bedrock-embed"
                 }
             ]
           }
