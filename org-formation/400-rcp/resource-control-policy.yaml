@@ -34,6 +34,27 @@ Resources:
               # Exempt consent forms in docs.sagebridge.org bucket from the HTTPS-only requirement.
               - 'arn:aws:s3:::docs.sagebridge.org'
               - 'arn:aws:s3:::docs.sagebridge.org/*'
+              # Exempt old-style static websites (portals sageit)
+              - arn:aws:s3:::prod.dhealth.synapse.org
+              - arn:aws:s3:::prod.dhealth.synapse.org/*
+              - arn:aws:s3:::staging.dhealth.synapse.org
+              - arn:aws:s3:::staging.dhealth.synapse.org/*
+              - arn:aws:s3:::prod.bsmn.synapse.org
+              - arn:aws:s3:::prod.bsmn.synapse.org/*
+              - arn:aws:s3:::staging.bsmn.synapse.org
+              - arn:aws:s3:::staging.bsmn.synapse.org/*
+              - arn:aws:s3:::prod.nf.synapse.org
+              - arn:aws:s3:::prod.nf.synapse.org/*
+              - arn:aws:s3:::staging.nf.synapse.org
+              - arn:aws:s3:::staging.nf.synapse.org/*
+              - arn:aws:s3:::stopadportal.synapse.org
+              - arn:aws:s3:::stopadportal.synapse.org/*
+              - arn:aws:s3:::staging.stopadportal.synapse.org
+              - arn:aws:s3:::staging.stopadportal.synapse.org/*
+              - arn:aws:s3:::prod.cancercomplexity.synapse.org
+              - arn:aws:s3:::prod.cancercomplexity.synapse.org/*
+              - arn:aws:s3:::staging.cancercomplexity.synapse.org
+              - arn:aws:s3:::staging.cancercomplexity.synapse.org/*
             Condition:
               Bool:
                 aws:SecureTransport: 'false'
