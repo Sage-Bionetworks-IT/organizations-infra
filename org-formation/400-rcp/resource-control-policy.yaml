@@ -55,6 +55,8 @@ Resources:
               - arn:aws:s3:::prod.cancercomplexity.synapse.org/*
               - arn:aws:s3:::staging.cancercomplexity.synapse.org
               - arn:aws:s3:::staging.cancercomplexity.synapse.org/*
+              - arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9
+              - arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*
             Condition:
               Bool:
                 aws:SecureTransport: 'false'
