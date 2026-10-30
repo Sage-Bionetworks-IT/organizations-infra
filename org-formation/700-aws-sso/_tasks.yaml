@@ -424,12 +424,84 @@ SsoAdministratorSupporter:
     principalId: !Ref scienceSupporterGroup
     permissionSetArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-admin-permission-set-arn' ]
 
+# Per-account additions to the Developer permission set.  Developer references this policy
+# by name, so each account's copy defines what Developer gets there on top of the shared
+# baseline.  The permission set fails to provision in any account missing the policy, so
+# accounts without additions get a no-op.  These live here so SsoDeveloper can depend on them.
+DeveloperAccountPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: developer-account-policy
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+    ExcludeAccount: !Ref SynapseDevAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument: >-
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:GetCallerIdentity",
+            "Resource": "*"
+          }
+        ]
+      }
+    PolicyName: !Ref DeveloperAccountPolicyName
+
+SynapseDevDeveloperAccountPolicy:
+  Type: update-stacks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/IAM/managed-policy.yaml
+  StackName: synapsedev-developer-account-policy
+  DefaultOrganizationBinding:
+    Account: !Ref SynapseDevAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    PolicyDocument:
+      Fn::Sub:
+        - >-
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "SynapseDevSharedResourcesCleanup",
+                "Effect": "Allow",
+                "Action": [
+                  "iam:DeleteRole",
+                  "iam:DeleteRolePolicy",
+                  "iam:DetachRolePolicy",
+                  "iam:RemoveRoleFromInstanceProfile",
+                  "iam:DeleteInstanceProfile",
+                  "iam:DeletePolicy",
+                  "iam:DeletePolicyVersion"
+                ],
+                "Resource": [
+                  "arn:aws:iam::${SynapseDevAccountId}:role/*",
+                  "arn:aws:iam::${SynapseDevAccountId}:instance-profile/*",
+                  "arn:aws:iam::${SynapseDevAccountId}:policy/*"
+                ]
+              },
+              {
+                "Sid": "SynapseDevSemanticEmbeddingConnector",
+                "Effect": "Allow",
+                "Action": "iam:PassRole",
+                "Resource": "arn:aws:iam::${SynapseDevAccountId}:role/dev-*-synidx-bedrock-embed"
+              }
+            ]
+          }
+        - SynapseDevAccountId: !Ref SynapseDevAccount
+    PolicyName: !Ref DeveloperAccountPolicyName
+
 SsoDeveloper:
   Type: update-stacks
+  DependsOn: [ DeveloperAccountPolicy, SynapseDevDeveloperAccountPolicy ]
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
       - Name: !Ref CostExplorerPolicyName
+      - Name: !Ref DeveloperAccountPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-developer'
   StackDescription: 'Read and Write role used by Developer group within SDLC organizational units'
   TerminationProtection: false
@@ -463,29 +535,10 @@ SsoDeveloper:
                   "Effect": "Allow",
                   "Action": "sts:AssumeRole",
                   "Resource": "${AllowedRole}"
-                },
-                {
-                  "Sid": "SynapseDevSharedResourcesCleanup",
-                  "Effect": "Allow",
-                  "Action": [
-                    "iam:DeleteRole",
-                    "iam:DeleteRolePolicy",
-                    "iam:DetachRolePolicy",
-                    "iam:RemoveRoleFromInstanceProfile",
-                    "iam:DeleteInstanceProfile",
-                    "iam:DeletePolicy",
-                    "iam:DeletePolicyVersion"
-                  ],
-                  "Resource": [
-                    "arn:aws:iam::${SynapseDevAccountId}:role/*",
-                    "arn:aws:iam::${SynapseDevAccountId}:instance-profile/*",
-                    "arn:aws:iam::${SynapseDevAccountId}:policy/*"
-                  ]
                 }
             ]
           }
         - AllowedRole: !CopyValue ['us-east-1-synapsellmprod-bedrock-full-access-ServiceRoleArn', !Ref SynapseLlmProdAccount]
-          SynapseDevAccountId: !Ref SynapseDevAccount
 
 SsoFinanceAuditor:
   Type: update-stacks
