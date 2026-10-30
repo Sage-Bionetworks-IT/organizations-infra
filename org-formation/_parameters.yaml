@@ -24,3 +24,7 @@ AdminCentralCfnBucket:
 CostExplorerPolicyName:
   Type: String
   Default: cost-explorer-access-policy-CostExplorerAccess
+
+DeveloperAccountPolicyName:
+  Type: String
+  Default: developer-account-policy
