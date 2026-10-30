@@ -13,7 +13,8 @@ Parameters:
   # Subset of commercial AWS regions where we deploy GuardDuty detectors, so
   # threat detection is active even in regions we don't otherwise use (a common
   # crypto-mining vector). This is not exhaustive — opt-in regions and newer
-  # regions are excluded. Expand as needed.
+  # regions are excluded. Expand as needed, and keep the REGIONS lists in
+  # enable-delegated-admin.sh and configure-org-auto-enable.sh in sync.
   guardDutyRegions:
     Type: List<String>
     Default:
