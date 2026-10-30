@@ -1,0 +1,784 @@
+# This file was downloaed as-is from https://github.com/CirroBio/Cirro-install-resources/blob/main/cirro_project_deployment_role.yml
+# It creates a role that allows Cirro cross account access.
+AWSTemplateFormatVersion: 2010-09-09
+Description: Deploys an IAM role used by Cirro to deploy project-related resources in the account.
+Parameters:
+  pRoleName:
+    Description: '(Advanced) Deployment role name.'
+    Default: 'Cirro-ProjectDeploymentBaseRole'
+    Type: String
+  pPermissionsBoundaryName:
+    Description: '(Advanced) Permissions boundary name.'
+    Default: 'CirroPermissionsBoundary'
+    Type: String
+  pDataPortalAccountId:
+    Description: '(Required) Enter the account ID of your Cirro Tenant.'
+    Default: ''
+    Type: String
+  pEnvironmentPrefix:
+    Description: '(Advanced) Enter the prefix used to identify resources created by Cirro in this account.'
+    Default: 'Cirro'
+    Type: String
+  pAccountOwner:
+    Description: '(Optional) Cirro username of the account owner. Only this user can create projects using this account.'
+    Default: ''
+    Type: String
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W2001
+        - W1031
+Conditions:
+  HasAccountOwner:
+    Fn::Not:
+      - Fn::Equals:
+          - !Ref pAccountOwner
+          - ''
+Resources:
+  rProjectPermissionBoundary:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: !Ref pPermissionsBoundaryName
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: PermissionsBoundaryProjectBudgetTemplateDeploy
+            Effect: Allow
+            Action:
+              - budgets:ViewBudget
+              - budgets:ModifyBudget
+              - budgets:*Resource
+            Resource:
+              - !Sub "arn:${AWS::Partition}:budgets::${AWS::AccountId}:budget/${pEnvironmentPrefix}*"
+
+          - Sid: PermissionsBoundarySnsSqsPermissions
+            Effect: Allow
+            Action:
+              - sns:*
+              - sqs:*
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:sns:*:${AWS::AccountId}:${pEnvironmentPrefix}*'
+              - !Sub 'arn:${AWS::Partition}:sqs:*:${AWS::AccountId}:${pEnvironmentPrefix}*'
+
+          - Sid: PermissionsBoundaryBatch
+            Effect: Allow
+            Action:
+              - batch:*
+              - ec2:*
+              - ecs:*
+              - autoscaling:*
+              - cloudwatch:PutMetricData
+              - ecr:*
+              - ssm:*
+              - ssmmessages:*
+              - ec2messages:*
+              - s3:ListAllMyBuckets
+              - omics:*
+            Resource: '*'
+
+          - Sid: PermissionsBoundaryCloudwatchAccess
+            Effect: Allow
+            Action:
+              - logs:*
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:logs:*:${AWS::AccountId}:log-group:/aws/batch/job:*'
+              - !Sub 'arn:${AWS::Partition}:logs:*:${AWS::AccountId}:log-group:/aws/omics/WorkflowLog:*'
+              - !Sub 'arn:${AWS::Partition}:logs:*:${AWS::AccountId}:log-group:/aws/lambda/${pEnvironmentPrefix}*'
+              - !Sub 'arn:${AWS::Partition}:logs:*:${AWS::AccountId}:log-group:/${pEnvironmentPrefix}/*'
+
+          # Allow complete access to the Cirro project bucket
+          - Sid: PermissionsBoundaryProjectS3Access
+            Effect: Allow
+            Action:
+              - s3:*
+              - s3tables:*
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:s3:::project-*'
+              - !Sub 'arn:${AWS::Partition}:s3:*:*:accesspoint/cirro-*'
+              - !Sub 'arn:${AWS::Partition}:s3tables:*:*:bucket/project-*'
+              - !Sub 'arn:${AWS::Partition}:s3tables:*:*:bucket/project-*/*'
+
+          # Respect cross account access granted through bucket policy
+          - Sid: PermissionsBoundaryS3AccessNotInAccount
+            Effect: Allow
+            Action:
+              - s3:GetObject*
+              - s3:PutObject
+              - s3:ListBucket
+              - s3:GetBucketLocation
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:s3:::*'
+            Condition:
+              StringNotEquals:
+                aws:ResourceAccount:
+                  - !Ref AWS::AccountId
+
+          # Permission boundary enforcement
+          - Sid: DenyPermissionsBoundaryDeletion
+            Effect: Deny
+            Action:
+              - iam:DeleteRolePermissionsBoundary
+            Resource: '*'
+            Condition:
+              StringEquals:
+                iam:PermissionsBoundary:
+                  - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${pPermissionsBoundaryName}'
+
+          - Sid: DenyPolicyChange
+            Effect: Deny
+            Action:
+              - iam:CreatePolicyVersion
+              - iam:DeletePolicyVersion
+              - iam:DetachRolePolicy
+              - iam:SetDefaultPolicyVersion
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${pPermissionsBoundaryName}'
+
+          # Must create the role with this permission boundary
+          - Sid: EnforcePermissionBoundary
+            Effect: Deny
+            Action:
+             - iam:CreateRole
+            Resource: '*'
+            Condition:
+              StringNotEquals:
+                iam:PermissionsBoundary:
+                  - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${pPermissionsBoundaryName}'
+
+          # Allow Cirro to create IAM roles used in various actions
+          - Sid: PermissionsBoundaryProjectIamRolePermissions
+            Effect: Allow
+            Action:
+              - iam:*
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${pEnvironmentPrefix}*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${pEnvironmentPrefix}*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:instance-profile/${pEnvironmentPrefix}*'
+
+          # Create SLRs used in resources
+          - Sid: PermissionsBoundaryIAMServiceRoleCreationPermissions
+            Effect: Allow
+            Action:
+              - iam:CreateServiceLinkedRole
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/ecs.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/spot.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/batch.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/autoscaling.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/servicequotas.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/omics.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/pullthroughcache.ecr.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/ecr.amazonaws.com/*'
+
+          # This is project level account automation (it is optional for BYOA)
+          - Sid: PermissionsBoundaryProjectAutomationAccountLevelPermissions
+            Effect: Allow
+            Action:
+              - s3:PutAccountPublicAccessBlock
+              - s3:GetAccountPublicAccessBlock
+              - ec2:GetEbsEncryptionByDefault
+              - ec2:EnableEbsEncryptionByDefault
+              - servicequotas:RequestServiceQuotaIncrease
+              - servicequotas:GetServiceQuota
+              - servicequotas:ListRequestedServiceQuotaChangeHistoryByQuota
+            Resource: '*'
+
+          # Allow access to project KMS key
+          - Sid: PermissionsBoundaryProjectKmsPermissions
+            Effect: Allow
+            Action:
+             - kms:*
+            Resource: '*'
+            Condition:
+              ForAnyValue:StringLike:
+                kms:ResourceAliases: 'alias/project-*'
+
+          - Sid: PermissionsBoundaryProjectSagemakerAccess
+            Effect: Allow
+            Action:
+              - sagemaker:*
+            Resource: '*'
+
+          # Allow creation of lambdas used in Cirro
+          - Sid: PermissionsBoundaryProjectLambdaAccess
+            Effect: Allow
+            Action:
+              - lambda:*
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:lambda:*:${AWS::AccountId}:function:${pEnvironmentPrefix}*'
+              - !Sub 'arn:${AWS::Partition}:lambda:*:${AWS::AccountId}:event-source-mapping:*'
+
+          - Sid: PermissionsBoundaryLambdaEventMapping
+            Effect: Allow
+            Action:
+              - lambda:*EventSourceMapping
+            Resource: "*"
+            Condition:
+              StringLike:
+                lambda:FunctionArn: !Sub "arn:${AWS::Partition}:lambda:*:${AWS::AccountId}:function:${pEnvironmentPrefix}*"
+
+          - Sid: PermissionsBoundaryProjectLambdaLayerAccess
+            Effect: Allow
+            Action:
+              - lambda:GetLayerVersion
+            Resource: '*'
+
+          # Allow talking to Cirro event bus and creating rules
+          - Sid: PermissionsBoundaryEventBridgeAccess
+            Effect: Allow
+            Action:
+              - events:*
+              - execute-api:Invoke
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:events:*:${pDataPortalAccountId}:event-bus/*'
+              - !Sub 'arn:${AWS::Partition}:execute-api:*:${pDataPortalAccountId}:*/*'
+              - !Sub 'arn:${AWS::Partition}:events:*:${AWS::AccountId}:rule/${pEnvironmentPrefix}*'
+
+          # Save SSM params under Cirro prefix
+          - Sid: PermissionsBoundaryProjectCfnOutputsSSMParameters
+            Effect: Allow
+            Action:
+              - ssm:*
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:ssm:*:${AWS::AccountId}:parameter/${pEnvironmentPrefix}/*'
+
+          # Allow Cirro cloudformation stack management
+          - Sid: PermissionsBoundaryProjectCfnStackPermissions
+            Effect: Allow
+            Action:
+              - cloudformation:*Stack
+              - cloudformation:Describe*
+              - cloudformation:*ChangeSet
+              - cloudformation:ListChangeSets
+              - cloudformation:TagResource
+              - cloudformation:UntagResource
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:cloudformation:*:${AWS::AccountId}:stack/${pEnvironmentPrefix}*/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:*:${AWS::AccountId}:changeSet/${pEnvironmentPrefix}*/*'
+
+          # Allow full control over project secrets
+          - Sid: PermissionsBoundarySecretsManager
+            Effect: Allow
+            Action:
+              - secretsmanager:*
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:secretsmanager:*:${AWS::AccountId}:secret:${pEnvironmentPrefix}/*'
+
+          # Allow various metrics access, billing/storage
+          - Sid: PermissionsBoundaryMetrics
+            Effect: Allow
+            Action:
+              - tag:TagResources
+              - tag:UntagResources
+              - ce:GetCostAndUsage*
+              - cloudwatch:GetMetric*
+              - cloudwatch:ListMetrics
+            Resource: '*'
+
+          - Sid: PermissionBoundaryWorkspaces
+            Effect: Allow
+            Action:
+              - ecs:*
+              - elasticfilesystem:*
+            Resource: '*'
+
+  rProjectLambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Ref pRoleName
+      PermissionsBoundary: !Ref rProjectPermissionBoundary
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          Fn::If:
+            - HasAccountOwner
+            - Effect: Allow
+              Principal:
+                AWS:
+                  - !Sub "arn:${AWS::Partition}:iam::${pDataPortalAccountId}:root"
+              Action:
+                - 'sts:AssumeRole'
+              Condition:
+                StringEquals:
+                  sts:ExternalId: !Ref pAccountOwner
+            - Effect: Allow
+              Principal:
+                AWS:
+                  - !Sub "arn:${AWS::Partition}:iam::${pDataPortalAccountId}:root"
+              Action:
+                - 'sts:AssumeRole'
+
+  rProjectLambdaIAMPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      Roles:
+        - !Ref rProjectLambdaRole
+      PolicyName: ProjectDeploymentPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: S3FileAccess
+            Effect: Allow
+            Action:
+              - s3:GetObject*
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:s3:::cirro-resources-*'
+
+          - Sid: ProjectBudgetTemplateDeploy
+            Effect: Allow
+            Action:
+              - budgets:ViewBudget
+              - budgets:ModifyBudget
+              - budgets:*Resource
+            Resource: '*'
+
+          - Sid: ProjectBudgetTemplateSnsPermissions
+            Effect: Allow
+            Action:
+              - sns:Subscribe
+              - sns:Unsubscribe
+              - sns:GetTopicAttributes
+              - sns:SetTopicAttributes
+              - sns:DeleteTopic
+              - sns:CreateTopic
+              - sns:ListSubscriptionsByTopic
+              - sns:TagResource
+              - sns:UntagResource
+              - sns:ListTagsForResource
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:sns:*:${AWS::AccountId}:${pEnvironmentPrefix}*'
+
+          - Sid: DatasetFileUploadedSqsPermissions
+            Effect: Allow
+            Action:
+              - sqs:CreateQueue
+              - sqs:DeleteQueue
+              - sqs:GetQueueAttributes
+              - sqs:SetQueueAttributes
+              - sqs:GetQueueUrl
+              - sqs:RemovePermission
+              - sqs:AddPermission
+              - sqs:TagQueue
+              - sqs:UntagQueue
+              - sqs:ListQueueTags
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:sqs:*:${AWS::AccountId}:${pEnvironmentPrefix}*'
+
+          - Sid: ProjectBatchTemplateDeploy
+            Effect: Allow
+            Action:
+              - batch:*ComputeEnvironment
+              - batch:DescribeComputeEnvironments
+              - batch:DescribeJobQueues
+              - batch:*JobQueue
+              - batch:DescribeJobDefinitions
+              - batch:*JobDefinition
+              - batch:TagResource
+              - batch:UntagResource
+              - batch:ListTagsForResource
+            Resource: '*'
+
+          - Sid: ProjectBatchTemplateEc2Permissions
+            Effect: Allow
+            Action:
+              - ec2:DescribeVpcs
+              - ec2:DescribeSubnets
+              - ec2:DescribeImages
+              - ec2:CreateSecurityGroup
+              - ec2:AuthorizeSecurityGroupEgress
+              - ec2:AuthorizeSecurityGroupIngress
+              - ec2:DescribeSecurityGroupRules
+              - ec2:UpdateSecurityGroupRuleDescriptionsEgress
+              - ec2:UpdateSecurityGroupRuleDescriptionsIngress
+              - ec2:ModifySecurityGroupRules
+              - ec2:DescribeSecurityGroups
+              - ec2:RevokeSecurityGroupEgress
+              - ec2:RevokeSecurityGroupIngress
+              - ec2:DeleteSecurityGroup
+              - ec2:CreateLaunchTemplate
+              - ec2:CreateLaunchTemplateVersion
+              - ec2:DescribeLaunchTemplates
+              - ec2:ModifyLaunchTemplate
+              - ec2:DescribeLaunchTemplateVersions
+              - ec2:GetLaunchTemplateData
+              - ec2:DeleteLaunchTemplate
+              - ec2:DeleteLaunchTemplateVersions
+              - ec2:DescribeTags
+              - ec2:CreateTags
+              - ec2:DeleteTags
+              - ec2:RunInstances
+            Resource: '*'
+
+          - Sid: ProjectBatchTemplateCWPermissions
+            Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:DeleteLogGroup
+              - logs:PutRetentionPolicy
+              - logs:TagResource
+              - logs:ListTagsForResource
+              - logs:UntagResource
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:logs:*:${AWS::AccountId}:log-group:/aws/lambda/${pEnvironmentPrefix}*'
+              - !Sub 'arn:${AWS::Partition}:logs:*:${AWS::AccountId}:log-group:/${pEnvironmentPrefix}/*'
+              - !Sub 'arn:${AWS::Partition}:logs:*:${AWS::AccountId}:log-group:/aws/omics/WorkflowLog'
+
+          - Sid: ProjectS3TemplateDeploy
+            Effect: Allow
+            Action:
+              - s3:CreateBucket
+              - s3:DeleteBucket
+              - s3:*BucketCORS
+              - s3:*BucketAbac
+              - s3:*BucketPolicy
+              - s3:GetBucketPolicyStatus
+              - s3:GetBucketAcl
+              - s3:*EncryptionConfiguration
+              - s3:*BucketTagging
+              - s3:*BucketNotification
+              - s3:*LifecycleConfiguration
+              - s3:PutBucketVersioning
+              - s3:*BucketOwnershipControls
+              - s3:*BucketPublicAccessBlock
+              - s3:ListBucket
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:s3:::project-*'
+
+          - Sid: ProjectS3FileSeed
+            Effect: Allow
+            Action:
+              - s3:PutObject
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:s3:::project-*/resources/*'
+
+          - Sid: ProjectKmsPermissions
+            Effect: Allow
+            Action:
+             - kms:DescribeKey
+             - kms:RetireGrant
+             - kms:CreateGrant
+             - kms:ListGrants
+             - kms:GenerateDataKey*
+            Resource: '*'
+            Condition:
+              ForAnyValue:StringLike:
+                kms:ResourceAliases: 'alias/project-*'
+
+          - Sid: ProjectIamRolePermissions
+            Effect: Allow
+            Action:
+              - iam:UpdateAssumeRolePolicy
+              - iam:PassRole
+              - iam:CreateRole
+              - iam:GetRole
+              - iam:AttachRolePolicy
+              - iam:PutRolePolicy
+              - iam:GetRolePolicy
+              - iam:DetachRolePolicy
+              - iam:DeleteRolePolicy
+              - iam:DeleteRole
+              - iam:ListRoleTags
+              - iam:UntagRole
+              - iam:TagRole
+              - iam:TagPolicy
+              - iam:ListPolicyTags
+              - iam:ListRolePolicies
+              - iam:UntagPolicy
+              - iam:PutRolePermissionsBoundary
+              - iam:CreatePolicy
+              - iam:DeletePolicy
+              - iam:CreatePolicyVersion
+              - iam:DeletePolicyVersion
+              - iam:GetPolicy
+              - iam:ListPolicyVersions
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${pEnvironmentPrefix}*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${pEnvironmentPrefix}*'
+
+          - Sid: IAMInstanceProfilePermissions
+            Effect: Allow
+            Action:
+              - iam:*InstanceProfile
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:instance-profile/${pEnvironmentPrefix}*'
+
+          - Sid: IAMServiceRoleCreationPermissions
+            Effect: Allow
+            Action:
+              - iam:CreateServiceLinkedRole
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/ecs.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/spot.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/batch.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/autoscaling.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/servicequotas.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/omics.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/pullthroughcache.ecr.amazonaws.com/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/ecr.amazonaws.com/*'
+
+          # This is optional
+          - Sid: ProjectAutomationAccountLevelPermissions
+            Effect: Allow
+            Action:
+              - s3:PutAccountPublicAccessBlock
+              - s3:GetAccountPublicAccessBlock
+              - s3:ListAllMyBuckets
+              - ec2:GetEbsEncryptionByDefault
+              - ec2:EnableEbsEncryptionByDefault
+              - servicequotas:RequestServiceQuotaIncrease
+              - servicequotas:GetServiceQuota
+              - servicequotas:ListRequestedServiceQuotaChangeHistoryByQuota
+            Resource: '*'
+
+          - Sid: ProjectEcrAccess
+            Effect: Allow
+            Action:
+              - ecr:Batch*
+              - ecr:GetDownloadUrlForLayer
+            Resource: '*'
+
+          - Sid: ProjectWorkspaceAccess
+            Effect: Allow
+            Action:
+              - ecs:*
+              - autoscaling:*
+            Resource:
+              - !Sub "arn:${AWS::Partition}:ecs:*:${AWS::AccountId}:cluster/${pEnvironmentPrefix}*"
+              - !Sub "arn:${AWS::Partition}:ecs:*:${AWS::AccountId}:container-instance/${pEnvironmentPrefix}*"
+              - !Sub "arn:${AWS::Partition}:ecs:*:${AWS::AccountId}:task-definition/${pEnvironmentPrefix}*"
+              - !Sub "arn:${AWS::Partition}:ecs:*:${AWS::AccountId}:task/${pEnvironmentPrefix}*"
+              - !Sub "arn:${AWS::Partition}:ecs:*:${AWS::AccountId}:capacity-provider/${pEnvironmentPrefix}*"
+              - !Sub "arn:${AWS::Partition}:autoscaling:*:${AWS::AccountId}:autoScalingGroup:*:autoScalingGroupName/${pEnvironmentPrefix}*"
+
+          - Sid: ProjectWorkspaceAccessAll
+            Effect: Allow
+            Action:
+              - ecs:Describe*
+              - autoscaling:Describe*
+              - ecs:DeregisterTaskDefinition
+            Resource: '*'
+
+          - Sid: ProjectWorkspaceEFSAccess
+            Effect: Allow
+            Action:
+              - elasticfilesystem:CreateFileSystem
+              - elasticfilesystem:DeleteFileSystem
+              - elasticfilesystem:CreateMountTarget
+              - elasticfilesystem:DeleteMountTarget
+              - elasticfilesystem:TagResource
+              - elasticfilesystem:UntagResource
+              - elasticfilesystem:UpdateFileSystem
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:elasticfilesystem:*:*:file-system/*'
+
+          - Sid: ProjectWorkspaceEFSDescribe
+            Effect: Allow
+            Action:
+              - elasticfilesystem:DescribeFileSystems
+              - elasticfilesystem:DescribeMountTargets
+              - elasticfilesystem:DescribeMountTargetSecurityGroups
+            Resource: '*'
+
+          - Sid: ProjectLambdaAccess
+            Effect: Allow
+            Action:
+              - lambda:GetFunction
+              - lambda:CreateFunction
+              - lambda:DeleteFunction
+              - lambda:GetFunctionCodeSigningConfig
+              - lambda:AddPermission
+              - lambda:RemovePermission
+              - lambda:UpdateFunctionCode
+              - lambda:UpdateFunctionConfiguration
+              - lambda:ListTags
+              - lambda:*Resource
+              - lambda:*FunctionConcurrency
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:lambda:*:${AWS::AccountId}:function:${pEnvironmentPrefix}*'
+
+          - Sid: LambdaEventMapping
+            Effect: Allow
+            Action:
+              - lambda:*EventSourceMapping
+              - lambda:*Resource
+            Resource: "*"
+
+          - Sid: LambdaLayerAccess
+            Effect: Allow
+            Action:
+              - lambda:GetLayerVersion
+            Resource: '*'
+
+          - Sid: EventBridgeAccess
+            Effect: Allow
+            Action:
+              - events:DescribeRule
+              - events:EnableRule
+              - events:DisableRule
+              - events:DeleteRule
+              - events:PutRule
+              - events:PutTargets
+              - events:RemoveTargets
+              - events:TagResource
+              - events:UntagResource
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:events:*:${AWS::AccountId}:rule/${pEnvironmentPrefix}*'
+
+          - Sid: ProjectCfnOutputsSSMParameters
+            Effect: Allow
+            Action:
+              - ssm:PutParameter
+              - ssm:DeleteParameter
+              - ssm:RemoveTagsFromResource
+              - ssm:AddTagsToResource
+              - ssm:ListTagsForResource
+              - ssm:GetParameters
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:ssm:*:${AWS::AccountId}:parameter/${pEnvironmentPrefix}/*'
+              - !Sub 'arn:${AWS::Partition}:ssm:*:*:parameter/*'
+
+          - Sid: ProjectCfnStackPermissions
+            Effect: Allow
+            Action:
+              - cloudformation:CreateStack
+              - cloudformation:UpdateStack
+              - cloudformation:DeleteStack
+              - cloudformation:DescribeStacks
+              - cloudformation:DescribeStackEvents
+              - cloudformation:DescribeStackResources
+              - cloudformation:DescribeStackResource
+              - cloudformation:CreateChangeSet
+              - cloudformation:DescribeChangeSet
+              - cloudformation:ExecuteChangeSet
+              - cloudformation:DeleteChangeSet
+              - cloudformation:ListChangeSets
+              - cloudformation:TagResource
+              - cloudformation:UntagResource
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:cloudformation:*:${AWS::AccountId}:stack/${pEnvironmentPrefix}*/*'
+              - !Sub 'arn:${AWS::Partition}:cloudformation:*:${AWS::AccountId}:changeSet/${pEnvironmentPrefix}*/*'
+
+          - Sid: ResourceGroupTagging
+            Effect: Allow
+            Action:
+              - tag:UntagResources
+              - tag:TagResources
+            Resource: '*'
+
+          - Sid: S3TablesAccess
+            Effect: Allow
+            Action:
+              - s3tables:CreateTableBucket
+              - s3tables:DeleteTableBucket
+              - s3tables:GetTableBucket
+              - s3tables:ListTableBuckets
+              - s3tables:PutTableBucketEncryption
+              - s3tables:GetTableBucketEncryption
+              - s3tables:PutTableBucketMaintenanceConfiguration
+              - s3tables:GetTableBucketMaintenanceConfiguration
+              - s3tables:PutTableBucketPolicy
+              - s3tables:GetTableBucketPolicy
+              - s3tables:TagResource
+              - s3tables:PutTableBucketStorageClass
+              - s3tables:PutTableBucketMetricsConfiguration
+              - s3tables:ListTagsForResource
+              - s3tables:GetTableBucketMetricsConfiguration
+              - s3tables:GetTableBucketReplication
+              - s3tables:GetTableBucketStorageClass
+              - s3tables:DeleteTableBucketPolicy
+              - s3tables:UntagResource
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:s3tables:*:*:bucket/project-*'
+              - !Sub 'arn:${AWS::Partition}:s3tables:*:*:bucket/project-*/*'
+
+  # AHO grants live in a dedicated managed policy rather than the inline
+  # policy to workaround the 10,240-byte limit
+  rProjectOmicsGrantsPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: !Sub '${pEnvironmentPrefix}-ProjectOmicsDeploymentGrants'
+      Description: HealthOmics deployment grants for the project deployment role
+      Roles:
+        - !Ref rProjectLambdaRole
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ProjectOmicsConfigurationAccess
+            Effect: Allow
+            Action:
+              - omics:DeleteConfiguration
+              - omics:GetConfiguration
+              - omics:TagResource
+              - omics:UntagResource
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:omics:*:${AWS::AccountId}:configuration/*'
+
+          - Sid: ProjectOmicsRunAccess
+            Effect: Allow
+            Action:
+              - omics:DeleteRunGroup
+              - omics:GetRunGroup
+              - omics:UpdateRunGroup
+              - omics:DeleteRunCache
+              - omics:GetRunCache
+              - omics:TagResource
+              - omics:UntagResource
+            Resource:
+              - !Sub 'arn:${AWS::Partition}:omics:*:${AWS::AccountId}:runGroup/*'
+              - !Sub 'arn:${AWS::Partition}:omics:*:${AWS::AccountId}:runCache/*'
+
+          - Sid: ProjectOmicsRunCacheAccess
+            Effect: Allow
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+            Resource:
+              - !Sub "arn:${AWS::Partition}:s3:::project-*-scratch/cirro-aho-runcache/*"
+
+          - Sid: ProjectOmicsUnscopedAccess
+            Effect: Allow
+            Action:
+              - omics:CreateConfiguration
+              - omics:CreateRunGroup
+              - omics:CreateRunCache
+              - omics:ListRunGroups
+              - omics:ListTagsForResource
+              - omics:ListRunCaches
+            Resource: '*'
+
+          - Sid: ProjectEcrPullThroughCacheAccess
+            Effect: Allow
+            Action:
+              - ecr:CreatePullThroughCacheRule
+              - ecr:DeletePullThroughCacheRule
+              - ecr:DescribePullThroughCacheRules
+              - ecr:CreateRepositoryCreationTemplate
+              - ecr:UpdateRepositoryCreationTemplate
+              - ecr:DeleteRepositoryCreationTemplate
+              - ecr:DescribeRepositoryCreationTemplates
+              - ecr:GetRegistryPolicy
+              - ecr:PutRegistryPolicy
+              - ecr:CreateRepository
+              - ecr:SetRepositoryPolicy
+              - ecr:PutLifecyclePolicy
+              - ecr:GetLifecyclePolicy
+              - ecr:DeleteLifecyclePolicy
+            Resource: '*'
+
+  rPermissionBoundaryArn:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: '/Cirro/PermissionBoundaryArn'
+      Type: String
+      Value: !Ref rProjectPermissionBoundary
+      Description: SSM Parameter for Permission Boundary to be applied on all IAM roles
+
+  rDeploymentRoleArn:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: '/Cirro/DeploymentRoleArn'
+      Type: String
+      Value: !Ref rProjectLambdaRole
+      Description: SSM Parameter for the Project deployment role

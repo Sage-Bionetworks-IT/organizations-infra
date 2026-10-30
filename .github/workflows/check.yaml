@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: ['*']
   push:
-    branches: ['*']
+    branches: [master]
 
 permissions:
   contents: read
@@ -36,10 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11.2'
       # Run linters that are set to skip in .pre-commit-config.yaml
       - uses: pre-commit/action@v3.0.1
         with:

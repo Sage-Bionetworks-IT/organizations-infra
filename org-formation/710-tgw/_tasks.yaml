@@ -41,6 +41,7 @@ TransitGateway:
       - !Ref ScipoolProdAccount
       - !Ref SageITAccount
       - !Ref DpeProdAccount
+      - !Ref DnTDevAccount
 
 UnionStationVpc:
   Type: update-stacks
@@ -112,6 +113,9 @@ TransitGatewayRoutes:
       # org-sagebase-dpe-prod
       orca-vpc:
         CIDR: "10.255.24.0/24"
+      # org-sagebase-dnt-dev
+      mwaa-dev:
+        CIDR: "10.52.48.0/22"
 
   Parameters:
     VpcSubnetIDs:
@@ -146,6 +150,9 @@ Mappings:
   TgwSpokesSynapseProd:
     VpcName:
       '325565585839': 'synapse-prod-vpc-2'      # org-sagebase-synapseprod
+  TgwSpokesMwaa:
+    VpcName:
+      '631692904429': 'mwaa-dev'  # org-sagebase-dnt-dev
 
 TransitGatewaySpokeA:
   DependsOn: [ TransitGatewayRoutes ]
@@ -199,6 +206,29 @@ TransitGatewaySpokeB:
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
       - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesB, VpcName, !Ref CurrentAccount], 'PrivateSubnet2']]]
+    TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
+
+# MWAA VPCs are Terraform-managed in Sage-Bionetworks-Workflows/eks-stack (deployments/stacks/mwaa),
+# which publishes the same VPC exports as our CloudFormation VPCs. They only have two private
+# subnets, so they can't use TransitGatewaySpokeA/B, which look up three.
+TransitGatewaySpokeMwaa:
+  DependsOn: [ TransitGatewayRoutes ]
+  Type: update-stacks
+  Template: tgw-spoke.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-spoke-mwaa'
+  StackDescription: Setup Transit Gateway on MWAA spoke accounts
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref DnTDevAccount
+    IncludeMasterAccount: false
+  Parameters:
+    TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
+    VpcRouteTableId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesMwaa, VpcName, !Ref CurrentAccount], 'PrivateRouteTable']]]
+    VpcId: !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesMwaa, VpcName, !Ref CurrentAccount], 'VPCId']]]
+    SubnetIds:
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesMwaa, VpcName, !Ref CurrentAccount], 'PrivateSubnet']]]
+      - !CopyValue [!Join ["-", [!Ref primaryRegion, !FindInMap [TgwSpokesMwaa, VpcName, !Ref CurrentAccount], 'PrivateSubnet1']]]
     TransitGatewayId: !CopyValue [!Sub '${resourcePrefix}-${appName}-TransitGatewayId', !Ref TransitAccount]
 
 TransitGatewaySpokesSynapseDev:

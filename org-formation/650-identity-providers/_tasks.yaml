@@ -372,11 +372,11 @@ GithubOidcSageBionetworksSynapseBuild:
       - owner: "afwillia"
         name: "Synapse-Repository-Services"
         branches: ["*"]
-      - owner: "emiranda-sage"
-        name: "Synapse-Repository-Services"
+      - owner: "emiranda-sage@332244574"
+        name: "Synapse-Repository-Services@1382029100"
         branches: ["*"]
-      - owner: "dzsolo"
-        name: "Synapse-Repository-Services"
+      - owner: "dzsolo@44512109"
+        name: "Synapse-Repository-Services@1381954607"
         branches: ["*"]
   DefaultOrganizationBinding:
     Account:
@@ -1017,6 +1017,29 @@ GithubOidcModelAdExplorerInfra:
     GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
       - name: "modeladexplorer-infra"
+        branches: ["dev","stage","prod"]
+  DefaultOrganizationBinding:
+    Account:
+      - !Ref AgoraDevAccount
+      - !Ref AgoraProdAccount
+    Region: us-east-1
+
+GithubOidcQtlExplorerInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.10/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-qtlexplorer-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-qtlexplorer-infra
+    MaxSessionDuration: 7200
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    Repositories:
+      - owner: "Sage-Bionetworks-IT@63359528"
+        name: "qtlexplorer-infra@1426248809"
         branches: ["dev","stage","prod"]
   DefaultOrganizationBinding:
     Account:

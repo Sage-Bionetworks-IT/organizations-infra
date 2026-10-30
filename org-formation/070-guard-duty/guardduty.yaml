@@ -9,15 +9,15 @@ Resources:
       Properties:
           Enable: True
           FindingPublishingFrequency: FIFTEEN_MINUTES
-          DataSources:
-            Kubernetes:
-              AuditLogs:
-                Enable: False
-            MalwareProtection:
-              ScanEc2InstanceWithFindings:
-                EbsVolumes: True
-            S3Logs:
-              Enable: True
+          # Use Features rather than the deprecated DataSources property; DataSources causes
+          # CloudFormation updates to fail with "#/Features: expected type: JSONArray".
+          Features:
+            - Name: S3_DATA_EVENTS
+              Status: ENABLED
+            - Name: EKS_AUDIT_LOGS
+              Status: DISABLED
+            - Name: EBS_MALWARE_PROTECTION
+              Status: ENABLED
 
 
 Outputs:
