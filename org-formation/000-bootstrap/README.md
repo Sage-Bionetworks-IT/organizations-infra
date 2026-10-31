@@ -46,7 +46,7 @@ once to manage many member accounts.
 
 ### Setup Member Accounts
 
-The power of org-formation is in it’s ability automate the creation and management of
+The power of org-formation is in its ability automate the creation and management of
 many member accounts. Org-formation handles all the bootstrapping required for member accounts.
 
 Create an google group or email for the new AWS member account (i.e. aws.MemberAccount1@company.com)
@@ -75,7 +75,7 @@ It’s the AWSServiceRoleForOrganizations role.
 
 Once the account is created the AWSServiceRoleForOrganizations role can be used to
 access the member account.  Org-formation will also deploy all cloud resources defined
-in it’s templates to the member account.
+in its templates to the member account.
 
 #### Access Member Accounts
 
