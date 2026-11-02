@@ -38,6 +38,7 @@ Organization:
         - !Ref BixArenaProdAccount
         - !Ref SageBrainDevAccount
         - !Ref SageCirroDevAccount
+        - !Ref RapidDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -57,6 +58,7 @@ Organization:
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
         - !Ref SageBrainProdAccount
+        - !Ref RapidProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
