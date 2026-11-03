@@ -116,6 +116,9 @@ TransitGatewayRoutes:
       # org-sagebase-dnt-dev
       mwaa-dev:
         CIDR: "10.52.48.0/22"
+      # org-sagebase-dpe-prod
+      mwaa-prod:
+        CIDR: "10.52.52.0/22"
 
   Parameters:
     VpcSubnetIDs:
@@ -153,6 +156,7 @@ Mappings:
   TgwSpokesMwaa:
     VpcName:
       '631692904429': 'mwaa-dev'  # org-sagebase-dnt-dev
+      '766808016710': 'mwaa-prod'  # org-sagebase-dpe-prod
 
 TransitGatewaySpokeA:
   DependsOn: [ TransitGatewayRoutes ]
@@ -221,6 +225,7 @@ TransitGatewaySpokeMwaa:
   DefaultOrganizationBinding:
     Account:
       - !Ref DnTDevAccount
+      - !Ref DpeProdAccount
     IncludeMasterAccount: false
   Parameters:
     TransitGatewayEndpointCidr: !Ref tgwEndpointCidr
