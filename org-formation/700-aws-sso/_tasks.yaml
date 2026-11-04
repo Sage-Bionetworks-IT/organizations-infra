@@ -460,9 +460,16 @@ SsoDeveloper:
             "Version": "2012-10-17",
             "Statement": [
                 {
+                  "Sid": "AllowAssumeBedrockRole",
                   "Effect": "Allow",
                   "Action": "sts:AssumeRole",
                   "Resource": "${AllowedRole}"
+                },
+                {
+                  "Sid": "DenyAllOtherAssumeRole",
+                  "Effect": "Deny",
+                  "Action": "sts:AssumeRole",
+                  "NotResource": "${AllowedRole}"
                 },
                 {
                   "Sid": "SynapseDevSharedResourcesCleanup",
