@@ -426,7 +426,6 @@ SsoAdministratorSupporter:
 
 SsoDeveloper:
   Type: update-stacks
-  DependsOn: [ SsoSynapseDeveloper, SsoSynapseDevSynapseDeveloper ]
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.5.1/templates/SSO/aws-sso.njk
   TemplatingContext:
     customerManagedPolicies:
@@ -1124,7 +1123,7 @@ SsoSynapseDeveloper:
     customerManagedPolicies:
       - Name: !Ref CostExplorerPolicyName
   StackName: !Sub '${resourcePrefix}-${appName}-synapse-developer'
-  StackDescription: 'SSO: Synapse developer role used by Developer group in synapsedev'
+  StackDescription: 'Permission set used by Synapse developers in synapsedev'
   TerminationProtection: false
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
