@@ -174,6 +174,18 @@ VpnAuthRoutes:
         AccessGroups:
           - "aws-admins"
           - "staff"
+      # org-sagebase-dnt-dev
+      mwaa-dev:
+        CIDR: "10.52.48.0/22"
+        AccessGroups:
+          - "aws-admins"
+          - "staff"
+      # org-sagebase-dpe-prod
+      mwaa-prod:
+        CIDR: "10.52.52.0/22"
+        AccessGroups:
+          - "aws-admins"
+          - "staff"
 
 VpnEndpointRedirect:
   DependsOn: [ Vpn ]

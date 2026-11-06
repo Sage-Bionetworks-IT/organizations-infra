@@ -37,6 +37,8 @@ Organization:
         - !Ref BixArenaDevAccount
         - !Ref BixArenaProdAccount
         - !Ref SageBrainDevAccount
+        - !Ref SageCirroDevAccount
+        - !Ref RapidDevAccount
 
   ScienceProdOU:
     Type: OC::ORG::OrganizationalUnit
@@ -56,6 +58,7 @@ Organization:
         - !Ref DCAProdAccount
         - !Ref DpeProdAccount
         - !Ref SageBrainProdAccount
+        - !Ref RapidProdAccount
 
   PlatformOU:
     Type: OC::ORG::OrganizationalUnit
@@ -654,7 +657,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         AccountOwner: Susheel.Varma@sagebase.org
         CostCenter: NO PROGRAM / 000000
-        budget-alarm-threshold: 2000
+        budget-alarm-threshold: 5000
         budget-alarm-threshold-email-recipient: aws-sagebrain-prod@sagebase.org
 
   SageBrainDevAccount:
@@ -667,7 +670,7 @@ Organization:
         <<: !Include ./_default_org_tags.yaml
         AccountOwner: Susheel.Varma@sagebase.org
         CostCenter: NO PROGRAM / 000000
-        budget-alarm-threshold: 2000
+        budget-alarm-threshold: 1000
         budget-alarm-threshold-email-recipient: aws-sagebrain-dev@sagebase.org
 
   # Centralized Bedrock services for other accounts.
@@ -697,6 +700,46 @@ Organization:
         CostCenter: NO PROGRAM / 000000
         budget-alarm-threshold: 2000
         budget-alarm-threshold-email-recipient: synapse-continuity-poc@sagebase.org
+
+  SageCirroDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-cirro-dev
+      RootEmail: aws-cirro-dev@sagebase.org
+      Alias: org-sagebase-cirro-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: RAPID - ARPA-H - BP01 / 126500
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-cirro-dev@sagebase.org
+
+  RapidDevAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-rapid-dev
+      RootEmail: aws-rapid-dev@sagebase.org
+      Alias: org-sagebase-rapid-dev
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: RAPID - ARPA-H - BP01 / 126500
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-rapid-dev@sagebase.org
+
+  RapidProdAccount:
+    Type: OC::ORG::Account
+    Properties:
+      AccountName: org-sagebase-rapid-prod
+      RootEmail: aws-rapid-prod@sagebase.org
+      Alias: org-sagebase-rapid-prod
+      Tags:
+        <<: !Include ./_default_org_tags.yaml
+        AccountOwner: it@sagebase.org
+        CostCenter: RAPID - ARPA-H - BP01 / 126500
+        budget-alarm-threshold: 1000
+        budget-alarm-threshold-email-recipient: aws-rapid-prod@sagebase.org
+
 
   #------------ Personal Accounts -----------
   BuA2aDwAccount:

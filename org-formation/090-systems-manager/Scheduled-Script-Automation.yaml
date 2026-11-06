@@ -129,7 +129,11 @@ Resources:
             Action:
             - ssm:StartAutomationExecution
             Resource:
-            - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${AutomationDocumentScriptExecution}:$DEFAULT
+            # As of 2026-01-20, StartAutomationExecution authorizes against the
+            # 'document' and 'automation-execution' resource types instead of
+            # 'automation-definition'.
+            - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:document/${AutomationDocumentScriptExecution}
+            - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-execution/*
           - Effect: Allow
             Action:
             - ssm:GetParameter

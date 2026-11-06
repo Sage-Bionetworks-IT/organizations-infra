@@ -17,6 +17,44 @@ Resources:
       RoleName: !Ref RoleName
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonBedrockFullAccess
+      Policies:
+        - PolicyName: BedrockModelAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # OpenAI-compatible endpoint (bedrock-mantle). Clients such as
+              # Codex that use the OpenAI SDK / Responses API call this endpoint
+              # instead of bedrock-runtime.  We pin it to this account and Region
+              # so that a caller assuming this org-wide role cannot target projects
+              # in other accounts/Regions.
+              - Sid: AllowBedrockMantleInference
+                Effect: Allow
+                Action:
+                  - bedrock-mantle:Get*
+                  - bedrock-mantle:List*
+                  - bedrock-mantle:CreateInference
+                Resource:
+                  - !Sub 'arn:aws:bedrock-mantle:${AWS::Region}:${AWS::AccountId}:project/*'
+              # Allow the AWS Marketplace subscription that Bedrock performs on
+              # first invoke to enable a serverless model. Product IDs vary
+              # across the OpenAI and Anthropic families (and gpt-oss models
+              # have none), so ProductId cannot be used to scope this. Instead,
+              # the aws:CalledViaLast condition restricts these actions so they
+              # can ONLY be used when Bedrock itself is the caller (i.e. the
+              # auto-subscribe/enable flow) - not for arbitrary Marketplace
+              # purchases made directly by the principal.
+              - Sid: AllowBedrockMarketplaceSubscription
+                Effect: Allow
+                Action:
+                  - aws-marketplace:Subscribe
+                  - aws-marketplace:ViewSubscriptions
+                  - aws-marketplace:Unsubscribe
+                Resource: '*'
+                Condition:
+                  StringEquals:
+                    'aws:CalledViaLast':
+                      - bedrock.amazonaws.com
+                      - bedrock-mantle.amazonaws.com
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:

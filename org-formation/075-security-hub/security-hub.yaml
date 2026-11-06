@@ -227,6 +227,8 @@ Resources:
           - Value: "arn:aws:s3:::cost-and-usage-reports.sagebase.org"
             Comparison: "PREFIX"
           #---- IT-4072 public Bridge buckets. ---
+          - Value: "arn:aws:s3:::docs.sagebridge.org"
+            Comparison: "PREFIX"
           - Value: "arn:aws:s3:::android-apps.sagebridge.org"
             Comparison: "PREFIX"
           - Value: "arn:aws:s3:::ios-apps.sagebridge.org"
@@ -398,6 +400,169 @@ Resources:
               Status: "SUPPRESSED"
             Note:
               Text: "Suppressed: Bedrock cross-account role anomalous API is expected behavior"
+              UpdatedBy: "sechub-automation"
+
+  # Suppress findings from a specific GuardDuty detector in specific AWS accounts
+  SuppressGuardDutyDetectorFindings:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressGuardDutyDetectorFindings"
+      RuleOrder: "360"
+      RuleStatus: "ENABLED"
+      Description: "Suppress GuardDuty detector findings"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "GuardDuty"
+            Comparison: "EQUALS"
+        AwsAccountId:
+          - Value: "465877038949"   # org-sagebase-scipooldev
+            Comparison: "EQUALS"
+          - Value: "237179673806"   # org-sagebase-scipoolprod
+            Comparison: "EQUALS"
+        Type:
+          # [IT-5244] Detector: A process in Instance has gained root privileges
+          - Value: "TTPs/Privilege Escalation/PrivilegeEscalation:Runtime-ElevationToRoot"
+            Comparison: "EQUALS"
+          # [IT-5236] Detector: A reverse shell was detected in EC2 instance
+          - Value: "TTPs/Execution/Execution:Runtime-ReverseShell"
+            Comparison: "EQUALS"
+          # [IT-5287] Detector: An EC2 instance is communicating on an unusual server port
+          - Value: "TTPs/Command and Control/Behavior:EC2-NetworkPortUnusual"
+            Comparison: "EQUALS"
+          # [IT-5425] Detector: Security-sensitive file modification is detected in a resource of type Instance
+          - Value: "TTPs/Defense Evasion/DefenseEvasion:Runtime-SensitiveFileModified"
+            Comparison: "EQUALS"
+          - Value: "TTPs/Persistence/Persistence:Runtime-SensitiveFileModified"
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Suppressed: GuardDuty detector findings"
+              UpdatedBy: "sechub-automation"
+
+  SuppressSecHubFindingsForTaggedKmsKeys:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForTaggedKmsKeys"
+      RuleOrder: "400"
+      RuleStatus: "ENABLED"
+      Description: "Suppress CIS 3.8 (KMS key rotation) findings for KMS keys tagged SecHubSuppressCis3.8=true"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/3.8"
+            Comparison: "EQUALS"
+        ResourceType:
+          - Value: "AwsKmsKey"
+            Comparison: "EQUALS"
+        ResourceTags:
+          - Key: "SecHubSuppressCis3.8"
+            Value: "true"
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings for KMS keys tagged SecHubSuppressCis3.8=true"
+              UpdatedBy: "sechub-automation"
+
+  SuppressSecHubFindingsForStackArmorKmsKeys:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForStackArmorKmsKeys"
+      RuleOrder: "401"
+      RuleStatus: "ENABLED"
+      Description: "Suppress CIS 3.8 (KMS key rotation) findings for KMS keys tagged execute-script=install-stack-armor-agent"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/3.8"
+            Comparison: "EQUALS"
+        ResourceType:
+          - Value: "AwsKmsKey"
+            Comparison: "EQUALS"
+        ResourceTags:
+          - Key: "execute-script"
+            Value: "install-stack-armor-agent"
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings for KMS keys tagged execute-script=install-stack-armor-agent"
+              UpdatedBy: "sechub-automation"
+
+  SuppressSecHubFindingsForDefenderForDatabasesKmsKeys:
+    Type: AWS::SecurityHub::AutomationRule
+    Properties:
+      RuleName: "SuppressSecHubFindingsForDefenderForDatabasesKmsKeys"
+      RuleOrder: "402"
+      RuleStatus: "ENABLED"
+      Description: "Suppress CIS 3.8 (KMS key rotation) findings for KMS keys tagged DefenderForDatabases=''"
+      Criteria:
+        RecordState:
+          - Value: "ACTIVE"
+            Comparison: "EQUALS"
+        WorkflowStatus:
+          - Value: "NEW"
+            Comparison: "EQUALS"
+          - Value: "NOTIFIED"
+            Comparison: "EQUALS"
+        ProductName:
+          - Value: "Security Hub"
+            Comparison: "EQUALS"
+        GeneratorId:
+          - Value: "cis-aws-foundations-benchmark/v/1.4.0/3.8"
+            Comparison: "EQUALS"
+        ResourceType:
+          - Value: "AwsKmsKey"
+            Comparison: "EQUALS"
+        ResourceTags:
+          - Key: "DefenderForDatabases"
+            Value: ""
+            Comparison: "EQUALS"
+      Actions:
+        - Type: "FINDING_FIELDS_UPDATE"
+          FindingFieldsUpdate:
+            Workflow:
+              Status: "SUPPRESSED"
+            Note:
+              Text: "Automatically suppress Security Hub findings for KMS keys tagged DefenderForDatabases=''"
               UpdatedBy: "sechub-automation"
 
 Outputs:

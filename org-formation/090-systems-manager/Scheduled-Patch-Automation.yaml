@@ -137,7 +137,11 @@ Resources:
             Action:
             - ssm:StartAutomationExecution
             Resource:
-              - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${AutomationDocumentMamrRunPatchBaseline}:$DEFAULT
+              # As of 2026-01-20, StartAutomationExecution authorizes against the
+              # 'document' and 'automation-execution' resource types instead of
+              # 'automation-definition'.
+              - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:document/${AutomationDocumentMamrRunPatchBaseline}
+              - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-execution/*
           - Action: iam:PassRole
             Resource:
               Fn::Sub: arn:${AWS::Partition}:iam::${AWS::AccountId}:role/AWS-SystemsManager-AutomationAdministrationRole

@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Setup org-wide AWS managed cost anomaly detection to monitor all linked
+  accounts. Deploy in the organization management (payer) account.
+Parameters:
+  Threshold:
+    Type: Number
+    Default: 500
+    Description: The dollar value that triggers a notification if the threshold is exceeded.
+  Frequency:
+    Type: String
+    Default: 'DAILY'
+    Description: The frequency that anomaly reports are sent over email
+    AllowedValues:
+      - 'DAILY'
+      - 'WEEKLY'
+  Subscriber:
+    Type: String
+    Description: >-
+      A subscriber email for anomaly detection to send notifications to
+    Default: ''
+Conditions:
+  HasSubscriber: !Not [ !Equals [ '', !Ref Subscriber ] ]
+Resources:
+  AnomalyLinkedAccountMonitor:
+    Type: 'AWS::CE::AnomalyMonitor'
+    Properties:
+      MonitorName: 'linked-account-anomaly'
+      MonitorType: 'DIMENSIONAL'
+      MonitorDimension: 'LINKED_ACCOUNT'
+  AnomalySubscription:
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks: [E3002]
+    Type: 'AWS::CE::AnomalySubscription'
+    Condition: HasSubscriber
+    Properties:
+      SubscriptionName: "linked-account-anomaly-subscription"
+      Threshold: !Ref Threshold
+      Frequency: !Ref Frequency
+      MonitorArnList:
+        - !Ref AnomalyLinkedAccountMonitor
+      Subscribers:
+        - { "Type": "EMAIL", "Address": !Ref Subscriber }
