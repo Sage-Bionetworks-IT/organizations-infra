@@ -5,7 +5,6 @@ Parameters:
   ExternalId:
     Type: String
     Description: "ExternalId - Vanta defined. Used for allowing the VantaScanner to assume the VantaAuditorRole role."
-    Default: "67DD6432A9BD521"
   SecurityAuditARN:
     Type: String
     Description: "ARN of the SecurityAudit Managed Policy"
@@ -17,11 +16,9 @@ Parameters:
   RoleName:
     Type: String
     Description: "Name of the IAM role that the Vanta scanner assumes"
-    Default: "vanta-auditor"
   AdditionalPermissionsPolicyName:
     Type: String
     Description: "Name of the managed policy with additional Vanta deny permissions"
-    Default: "VantaAdditionalPermissions"
 Resources:
   VantaAdditionalPermissionsPolicy:
     Type: AWS::IAM::ManagedPolicy
