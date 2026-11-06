@@ -203,6 +203,23 @@ VantaReadOnlyAccess:
       - !Ref SynapseProdAccount
     Region: !Ref primaryRegion
 
+# Give the Vanta staging instance (Sage Bionetworks) read-only access to select accounts
+VantaStagingReadOnlyAccess:
+  Type: update-stacks
+  Template: vanta-readonly-role-cf.yml
+  StackName: vanta-staging-read-only-access
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: false
+    Account:
+      - !Ref SageBrainProdAccount
+      - !Ref WorkflowsNextflowProdAccount
+      - !Ref DpeProdAccount
+    Region: !Ref primaryRegion
+  Parameters:
+    ExternalId: "8AF32F0EC8E0DBC"
+    RoleName: vanta-staging-auditor
+    AdditionalPermissionsPolicyName: VantaStagingAdditionalPermissions
+
 # Setup cross-account Bedrock access for all org accounts
 BedrockCentralCrossAccountAccess:
   Type: update-stacks
