@@ -5,7 +5,6 @@ Parameters:
   ExternalId:
     Type: String
     Description: "ExternalId - Vanta defined. Used for allowing the VantaScanner to assume the VantaAuditorRole role."
-    Default: "67DD6432A9BD521"
   SecurityAuditARN:
     Type: String
     Description: "ARN of the SecurityAudit Managed Policy"
@@ -14,11 +13,17 @@ Parameters:
     Type: String
     Description: "ARN of the Vanta Scanner"
     Default: "arn:aws:iam::956993596390:role/scanner"
+  RoleName:
+    Type: String
+    Description: "Name of the IAM role that the Vanta scanner assumes"
+  AdditionalPermissionsPolicyName:
+    Type: String
+    Description: "Name of the managed policy with additional Vanta deny permissions"
 Resources:
   VantaAdditionalPermissionsPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      ManagedPolicyName: VantaAdditionalPermissions
+      ManagedPolicyName: !Ref AdditionalPermissionsPolicyName
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -43,12 +48,12 @@ Resources:
                 sts:ExternalId: !Ref "ExternalId"
             Action: sts:AssumeRole
       Path: /
-      RoleName: vanta-auditor
+      RoleName: !Ref RoleName
       ManagedPolicyArns:
         - !Ref "SecurityAuditARN"
         - !Ref "VantaAdditionalPermissionsPolicy"
       MaxSessionDuration: 3600
 Outputs:
   VantaAuditorRoleArn:
-    Description: "The ARN of the vanta-auditor role that was created"
+    Description: "The ARN of the Vanta auditor role that was created"
     Value: !GetAtt [VantaAuditorRole, Arn]
