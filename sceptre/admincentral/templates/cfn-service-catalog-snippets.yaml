@@ -40,3 +40,10 @@ Resources:
           VpnSecurityGroup: "us-east-1-stridespoolvpc-VpnSecurityGroup"
           VPCId: "us-east-1-stridespoolvpc-VPCId"
           TgwSecurityGroupId: "us-east-1-tgw-spoke-stridespoolvpc-TgwSecurityGroupId"
+        "620117233256":   # org-sagebase-sagebrain-prod
+          PrivateSubnet: "us-east-1-sagebrainpoolvpc-PrivateSubnet"
+          PrivateSubnet1: "us-east-1-sagebrainpoolvpc-PrivateSubnet1"
+          VpnSecurityGroup: "us-east-1-sagebrainpoolvpc-VpnSecurityGroup"
+          VPCId: "us-east-1-sagebrainpoolvpc-VPCId"
+          # Like strides, this account has no transit gateway spoke yet; the EC2 Docker product does not read this key
+          TgwSecurityGroupId: "us-east-1-tgw-spoke-sagebrainpoolvpc-TgwSecurityGroupId"
