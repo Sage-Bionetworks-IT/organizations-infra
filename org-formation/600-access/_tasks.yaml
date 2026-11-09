@@ -220,6 +220,7 @@ VantaStagingReadOnlyAccess:
       - !Ref WorkflowsNextflowProdAccount
       - !Ref DpeProdAccount
       - !Ref RapidDevAccount
+      - !Ref SageCirroDevAccount
     Region: !Ref primaryRegion
   Parameters:
     ExternalId: "8AF32F0EC8E0DBC"
