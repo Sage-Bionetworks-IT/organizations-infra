@@ -58,6 +58,11 @@ Resources:
               # Exempt bootstrap S3 Cloudformation bucket (IT-5408)
               - arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9
               - arn:aws:s3:::bootstrap-awss3cloudformationbucket-19qromfd235z9/*
+              # Exempt RANs (IT-5466)
+              - arn:aws:s3:::ran.synapse.org
+              - arn:aws:s3:::ran.synapse.org/*
+              - arn:aws:s3:::staging-ran.synapse.org
+              - arn:aws:s3:::staging-ran.synapse.org/*
             Condition:
               Bool:
                 aws:SecureTransport: 'false'
