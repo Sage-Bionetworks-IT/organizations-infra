@@ -1,0 +1,3 @@
+template:
+  path: "get-role-policy.yaml"
+stack_name: "get-role-policy"

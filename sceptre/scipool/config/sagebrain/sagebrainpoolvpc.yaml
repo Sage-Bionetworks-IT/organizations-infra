@@ -1,0 +1,13 @@
+# Dedicated VPC for Service Catalog instances. Not the Sage Brain application's VPC
+# (sagebrain-infra), which is a small /24 holding the database and API.
+template:
+  type: http
+  url: https://{{stack_group_config.admincentral_cf_bucket}}.s3.amazonaws.com/aws-infra/v0.5.2/vpc.yaml
+stack_name: sagebrainpoolvpc
+dependencies:
+  - sagebrain/bootstrap.yaml
+parameters:
+  # 10.48.0.0/16. Not in use elsewhere in this repository.
+  VpcSubnetPrefix: "10.48"
+  VpcName: sagebrainpoolvpc
+  IncludeBastianSecurityGroup: "false"
