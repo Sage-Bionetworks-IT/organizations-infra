@@ -169,9 +169,27 @@ Resources:
           import uuid
 
           logger = logging.getLogger()
-          logger.setLevel(logging.DEBUG)
+          # Not DEBUG: at DEBUG level botocore logs full API responses, which would
+          # include decrypted SecureString parameter values.
+          logger.setLevel(logging.INFO)
 
           client = boto3.client('ssm')
+
+          # StartAutomationExecution accepts at most 50 accounts per TargetLocation,
+          # so split the account list into one TargetLocation per 50 accounts.
+          MAX_ACCOUNTS_PER_TARGET_LOCATION = 50
+
+          def target_locations(accounts, regions, max_concurrency, max_errors, execution_role_name):
+              return [
+                  {
+                      'Accounts': accounts[i:i + MAX_ACCOUNTS_PER_TARGET_LOCATION],
+                      'Regions': regions,
+                      'TargetLocationMaxConcurrency': max_concurrency,
+                      'TargetLocationMaxErrors': max_errors,
+                      'ExecutionRoleName': execution_role_name
+                  }
+                  for i in range(0, len(accounts), MAX_ACCOUNTS_PER_TARGET_LOCATION)
+              ]
 
           def handler(event,context):
               logger.debug("Received event: " + json.dumps(event, sort_keys=True))
@@ -205,15 +223,7 @@ Resources:
                       'InstallOverrideList' : [f'{RunPatchBaselineInstallOverrideList}'] ,
                       'SnapshotId' : [str(uuid.uuid4())]
                   },
-                  TargetLocations=[
-                      {
-                          'Accounts': TargetAccountsArray,
-                          'Regions': TargetRegionIdsArray,
-                          'TargetLocationMaxConcurrency': f'{TargetLocationMaxConcurrency}',
-                          'TargetLocationMaxErrors': f'{TargetLocationMaxErrors}',
-                          'ExecutionRoleName': f'{ExecutionRoleName}'
-                      }
-                  ]
+                  TargetLocations=target_locations(TargetAccountsArray, TargetRegionIdsArray, TargetLocationMaxConcurrency, TargetLocationMaxErrors, ExecutionRoleName)
               )
               else:
                   response = client.start_automation_execution(
@@ -225,15 +235,7 @@ Resources:
                       'RebootOption' : [f'{RunPatchBaselineRebootOption}'] ,
                       'SnapshotId' : [str(uuid.uuid4())]
                   },
-                  TargetLocations=[
-                      {
-                          'Accounts': TargetAccountsArray,
-                          'Regions': TargetRegionIdsArray,
-                          'TargetLocationMaxConcurrency': f'{TargetLocationMaxConcurrency}',
-                          'TargetLocationMaxErrors': f'{TargetLocationMaxErrors}',
-                          'ExecutionRoleName': f'{ExecutionRoleName}'
-                      }
-                  ]
+                  TargetLocations=target_locations(TargetAccountsArray, TargetRegionIdsArray, TargetLocationMaxConcurrency, TargetLocationMaxErrors, ExecutionRoleName)
               )
               print(response)
       Environment:
