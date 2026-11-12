@@ -1,0 +1,29 @@
+Parameters:
+  <<: !Include '../_parameters.yaml'
+
+  appName:
+    Type: String
+    Default: 'lambda-alarms'
+
+  notificationEmail:
+    Type: String
+    Default: 'it-alert-inbox@sagebase.org'
+
+# Account-wide alarm on any Lambda function error, one stack per account and region.
+# NOTE: each stack creates an email subscription that must be confirmed from the
+# inbox before notifications are delivered.
+LambdaErrorAlarm:
+  Type: update-stacks
+  Template: ./lambda-error-alarm.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}'
+  StackDescription: Account-wide alarm on Lambda function errors
+  DefaultOrganizationBinding:
+    Region: !Ref allRegions
+    # account logical names from ../organization.yaml
+    Account:
+      - !Ref SynapseProdAccount
+  Parameters:
+    NotificationEmail: !Ref notificationEmail
+    ErrorThreshold: 1
+    PeriodSeconds: 300
+    EvaluationPeriods: 3
