@@ -8,8 +8,16 @@
 # CloudFormation does not support this, so it must be run via CLI. Run this before
 # ./configure-org-auto-enable.sh.
 #
+# When to run:
+#   This script is NOT run by CI. Run it manually (it is idempotent) after a region is
+#   added to guardDutyRegions in _tasks.yaml, once the change has merged and CI has
+#   deployed the detector there, then run ./configure-org-auto-enable.sh. It is also safe
+#   to re-run to restore the delegated administrator if it was removed in any region.
+#   It is not needed for feature changes or for new accounts. See README.md.
+#
 # Prerequisites:
 #   - AWS CLI v2
+#   - python3 with PyYAML (regions are read from guardDutyRegions in _tasks.yaml)
 #   - Credentials in the organization management account (531805629419) with permission
 #     to call guardduty:EnableOrganizationAdminAccount and
 #     guardduty:ListOrganizationAdminAccounts
@@ -33,26 +41,9 @@ fi
 
 ADMIN_ACCOUNT_ID=140124849929  # SecurityCentralAccount
 
-# Keep in sync with guardDutyRegions in _tasks.yaml and REGIONS in configure-org-auto-enable.sh
-REGIONS=(
-  us-east-1
-  us-east-2
-  us-west-1
-  us-west-2
-  ca-central-1
-  eu-west-1
-  eu-west-2
-  eu-west-3
-  eu-central-1
-  eu-north-1
-  ap-northeast-1
-  ap-northeast-2
-  ap-northeast-3
-  ap-southeast-1
-  ap-southeast-2
-  ap-south-1
-  sa-east-1
-)
+source "$(dirname "${BASH_SOURCE[0]}")/_guardduty-regions.sh"
+load_guardduty_regions
+echo "Regions (from guardDutyRegions in _tasks.yaml): ${REGIONS[*]}"
 
 for region in "${REGIONS[@]}"; do
   echo "Checking GuardDuty delegated administrator in ${region}..."
