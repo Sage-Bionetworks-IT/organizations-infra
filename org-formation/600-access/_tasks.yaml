@@ -201,6 +201,7 @@ VantaReadOnlyAccess:
     Account:
       - !Ref SynapseLlmProdAccount
       - !Ref SynapseProdAccount
+      - !Ref RapidProdAccount
     Region: !Ref primaryRegion
   Parameters:
     ExternalId: "67DD6432A9BD521"
@@ -218,6 +219,8 @@ VantaStagingReadOnlyAccess:
       - !Ref SageBrainProdAccount
       - !Ref WorkflowsNextflowProdAccount
       - !Ref DpeProdAccount
+      - !Ref RapidDevAccount
+      - !Ref SageCirroDevAccount
     Region: !Ref primaryRegion
   Parameters:
     ExternalId: "8AF32F0EC8E0DBC"
