@@ -1089,45 +1089,6 @@ GithubOidcQtlExplorerInfra:
       - !Ref AgoraProdAccount
     Region: us-east-1
 
-GithubOidcExplorersDevInfra:
-  Type: update-stacks
-  DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.10/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-explorers-dev-infra
-  Parameters:
-    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-explorers-dev-infra
-    MaxSessionDuration: 7200
-    ManagedPolicyArns:
-      - "arn:aws:iam::aws:policy/AdministratorAccess"
-      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
-    PolicyDocument: |
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-          {
-            "Sid": "DenyUnlessMainBranch",
-            "Effect": "Deny",
-            "Action": "*",
-            "Resource": "*",
-            "Condition": {
-              "StringNotEquals": {
-                "token.actions.githubusercontent.com:sub": "repo:Sage-Bionetworks/sage-monorepo:ref:refs/heads/main"
-              }
-            }
-          }
-        ]
-      }
-  TemplatingContext:
-    Repositories:
-      - owner: "Sage-Bionetworks"
-        name: "sage-monorepo"
-        branches: ["main"]
-  DefaultOrganizationBinding:
-    Account:
-      - !Ref AgoraDevAccount
-    Region: us-east-1
-
 GithubOidcSceptreAws:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
@@ -1190,6 +1151,7 @@ GithubOidcBixArenaDevInfra:
   DefaultOrganizationBinding:
     Account:
       - !Ref BixArenaDevAccount
+      - !Ref AgoraDevAccount
     Region: us-east-1
 
 GithubOidcBixArenaInfra:
