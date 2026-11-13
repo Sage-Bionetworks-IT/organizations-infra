@@ -1,0 +1,100 @@
+# Weekly check for outdated versions of externally published templates (aws-infra and the
+# Sage-Bionetworks-IT lambdas, macros and custom resources), opening one PR per org-formation stage
+# and per sceptre environment to update them.
+# See .github/scripts/external_versions.py for which references are recognized.
+#
+# References that can't be updated because the newest release moved or removed the referenced file
+# are listed in a comment on their group's PR, which is kept up to date on later runs, and in the
+# scan job's run summary.
+#
+# PRs opened with the default GITHUB_TOKEN do not trigger the `check` workflow; set the
+# EXTERNAL_VERSIONS_TOKEN secret to a GitHub App or fine-grained token (contents and
+# pull-requests write) to have checks run on them.
+name: external-versions
+
+on:
+  schedule:
+    - cron: "0 13 * * 1"   # Mondays 13:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    outputs:
+      groups: ${{ steps.scan.outputs.groups }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Find outdated references
+        id: scan
+        run: |
+          groups=$(python3 .github/scripts/external_versions.py scan --alerts-file "$RUNNER_TEMP/alerts.md")
+          echo "groups=$groups" >> "$GITHUB_OUTPUT"
+          cat "$RUNNER_TEMP/alerts.md" >> "$GITHUB_STEP_SUMMARY"
+
+  update:
+    needs: scan
+    if: needs.scan.outputs.groups != '[]'
+    name: update ${{ matrix.group }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include: ${{ fromJSON(needs.scan.outputs.groups) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update references
+        id: update
+        env:
+          FILES: ${{ join(matrix.files, ' ') }}
+        run: |
+          body=$(python3 .github/scripts/external_versions.py update --alerts-file "$RUNNER_TEMP/alerts.md" $FILES)
+          {
+            echo "body<<END_OF_BODY"
+            echo "$body"
+            echo "END_OF_BODY"
+          } >> "$GITHUB_OUTPUT"
+      - name: Create or update pull request
+        id: pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.EXTERNAL_VERSIONS_TOKEN || github.token }}
+          add-paths: ${{ join(matrix.files, ',') }}
+          branch: ${{ matrix.branch }}
+          delete-branch: true
+          title: ${{ matrix.title }}
+          commit-message: ${{ matrix.title }}
+          body: ${{ steps.update.outputs.body }}
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+      - name: Comment on moved or removed files
+        if: steps.pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ steps.pr.outputs.pull-request-number }}
+          MARKER: "<!-- external-versions-alerts -->"
+        run: |
+          comment=$(gh api --paginate "repos/$GH_REPO/issues/$PR/comments" \
+            --jq '.[] | select(.body | startswith(env.MARKER)) | .id' | head -n 1)
+          if [ -s "$RUNNER_TEMP/alerts.md" ]; then
+            { echo "$MARKER"; cat "$RUNNER_TEMP/alerts.md"; } > "$RUNNER_TEMP/comment.md"
+          elif [ -n "$comment" ]; then
+            printf '%s\nAll references to moved or removed files have been resolved.\n' "$MARKER" > "$RUNNER_TEMP/comment.md"
+          else
+            exit 0
+          fi
+          if [ -n "$comment" ]; then
+            gh api --method PATCH "repos/$GH_REPO/issues/comments/$comment" -F "body=@$RUNNER_TEMP/comment.md" > /dev/null
+          else
+            gh pr comment "$PR" --body-file "$RUNNER_TEMP/comment.md"
+          fi
