@@ -291,7 +291,7 @@ GithubOidcSageBionetworksItSageBrainInfraAmpAls:
 GithubOidcSageBionetworksItRapidDevInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.10/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-rapid-dev-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -300,9 +300,9 @@ GithubOidcSageBionetworksItRapidDevInfra:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
-      - name: "rapid-infra"
+      - owner: "Sage-Bionetworks-IT@63359528"
+        name: "rapid-infra@1449057147"
         branches: ["dev"]
   DefaultOrganizationBinding:
     Account:
@@ -312,7 +312,7 @@ GithubOidcSageBionetworksItRapidDevInfra:
 GithubOidcSageBionetworksItRapidProdInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
-  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.10/templates/IAM/github-oidc-provider.j2
   StackName: !Sub ${resourcePrefix}-${appName}-sage-bionetworks-rapid-prod-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
@@ -321,9 +321,9 @@ GithubOidcSageBionetworksItRapidProdInfra:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
   TemplatingContext:
-    GitHubOrg: "Sage-Bionetworks-IT"
     Repositories:
-      - name: "rapid-infra"
+      - owner: "Sage-Bionetworks-IT@63359528"
+        name: "rapid-infra@1449057147"
         branches: ["prod"]
   DefaultOrganizationBinding:
     Account:
