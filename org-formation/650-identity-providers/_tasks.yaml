@@ -1101,6 +1101,23 @@ GithubOidcExplorersDevInfra:
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
       - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+    PolicyDocument: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "DenyUnlessMainBranch",
+            "Effect": "Deny",
+            "Action": "*",
+            "Resource": "*",
+            "Condition": {
+              "StringNotEquals": {
+                "token.actions.githubusercontent.com:sub": "repo:Sage-Bionetworks/sage-monorepo:ref:refs/heads/main"
+              }
+            }
+          }
+        ]
+      }
   TemplatingContext:
     Repositories:
       - owner: "Sage-Bionetworks"
