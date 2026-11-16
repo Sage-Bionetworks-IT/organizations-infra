@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  Account-wide alarm that notifies when any Lambda function in this account/region
+  reports errors (function errors and timeouts, AWS/Lambda Errors metric).
+
+Parameters:
+  NotificationEmail:
+    Type: String
+    Description: Email address subscribed to the alarm notification topic
+  ErrorThreshold:
+    Type: Number
+    Default: 1
+    Description: Alarm when the sum of Lambda errors in a period is greater than this value
+  PeriodSeconds:
+    Type: Number
+    Default: 300
+    Description: Length of each evaluation period in seconds
+  EvaluationPeriods:
+    Type: Number
+    Default: 3
+    Description: Number of consecutive breaching periods required to alarm
+
+Resources:
+  LambdaErrorTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub '${AWS::StackName}-topic'
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref NotificationEmail
+
+  LambdaErrorTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+        - !Ref LambdaErrorTopic
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowCloudWatchAlarmsToPublish
+            Effect: Allow
+            Principal:
+              Service: cloudwatch.amazonaws.com
+            Action: sns:Publish
+            Resource: !Ref LambdaErrorTopic
+            Condition:
+              StringEquals:
+                AWS:SourceAccount: !Ref AWS::AccountId
+
+  LambdaErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-any-function-errors'
+      AlarmDescription: !Sub >-
+        One or more Lambda functions in account ${AWS::AccountId} (${AWS::Region})
+        reported errors. To find the failing function, open CloudWatch > Metrics >
+        Lambda > By Function Name > Errors:
+        https://${AWS::Region}.console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#metricsV2:graph=~();namespace=~'AWS*2fLambda;dimensions=~'FunctionName
+        or run the Metrics Insights query:
+        SELECT SUM(Errors) FROM SCHEMA("AWS/Lambda", FunctionName) GROUP BY FunctionName ORDER BY SUM() DESC LIMIT 10.
+        Then check the function's log group /aws/lambda/<function-name>.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Statistic: Sum
+      Period: !Ref PeriodSeconds
+      EvaluationPeriods: !Ref EvaluationPeriods
+      DatapointsToAlarm: !Ref EvaluationPeriods
+      Threshold: !Ref ErrorThreshold
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref LambdaErrorTopic
+      OKActions:
+        - !Ref LambdaErrorTopic
+
+Outputs:
+  LambdaErrorTopicArn:
+    Description: ARN of the Lambda error notification topic
+    Value: !Ref LambdaErrorTopic
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-LambdaErrorTopicArn'
+  LambdaErrorAlarmArn:
+    Description: ARN of the account-wide Lambda error alarm
+    Value: !GetAtt LambdaErrorAlarm.Arn

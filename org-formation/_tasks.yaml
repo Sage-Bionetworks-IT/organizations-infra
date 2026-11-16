@@ -111,6 +111,11 @@ CloudDashboard:
   DependsOn: [ Types ]
   Path: ./740-cloudwatch-dashboard/_tasks.yaml
 
+LambdaAlarms:
+  Type: include
+  DependsOn: [ Types ]
+  Path: ./745-lambda-alarms/_tasks.yaml
+
 Redirects:
   Type: include
   DependsOn: [ AwsSso, ClientVpn ]
