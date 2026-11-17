@@ -13,8 +13,9 @@ Parameters:
   # Subset of commercial AWS regions where we deploy GuardDuty detectors, so
   # threat detection is active even in regions we don't otherwise use (a common
   # crypto-mining vector). This is not exhaustive — opt-in regions and newer
-  # regions are excluded. Expand as needed. enable-delegated-admin.sh and
-  # configure-org-auto-enable.sh read their region list from here.
+  # regions are excluded. Expand as needed. The guardduty_org.py tool in
+  # Sage-Bionetworks/infra-utils (aws/guardduty) reads its region list from here;
+  # see README.md for when to run it.
   guardDutyRegions:
     Type: List<String>
     Default:
