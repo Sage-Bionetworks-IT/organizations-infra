@@ -1082,7 +1082,7 @@ GithubOidcExplorersInfra:
     Repositories:
       - owner: "Sage-Bionetworks-IT@63359528"
         name: "explorers-infra@1426248809"
-        branches: ["dev","stage","prod"]
+        branches: ["main"]
   DefaultOrganizationBinding:
     Account:
       - !Ref AgoraDevAccount
