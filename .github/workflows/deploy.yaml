@@ -137,6 +137,14 @@ jobs:
       role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
       working-dir: "sceptre/scipool"
       sceptre-command: "sceptre launch strides --prune --yes"
+  sceptre-sagebrainpool:
+    needs: [org-formation]
+    uses: "./.github/workflows/aws-deploy.yaml"
+    with:
+      role-to-assume: "arn:aws:iam::620117233256:role/sagebase-github-oidc-sage-bionetworks-it"
+      role-session-name: ${{ needs.org-formation.outputs.role-session-name }}
+      working-dir: "sceptre/scipool"
+      sceptre-command: "sceptre launch sagebrain --prune --yes"
   sceptre-sageit-staging:
     needs: [org-formation]
     uses: "./.github/workflows/aws-deploy.yaml"
