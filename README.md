@@ -69,6 +69,13 @@ Org-formation manages deployments to specific accounts using
 
 Sceptre manages deployments to specific accounts with designated config folders (i.e. config/dev or config/prod).
 
+The [external-versions](.github/workflows/external-versions.yaml) workflow runs weekly to find references
+to outdated versions of externally published templates (aws-infra and the Sage-Bionetworks-IT lambdas,
+macros and custom resources) and opens one PR per org-formation stage and per sceptre environment to
+update them. References it can't update, because the newest release moved or removed the referenced
+file, are listed in a comment on the PR for their directory. It can be run locally with
+`python3 .github/scripts/external_versions.py scan`.
+
 
 ## Contributions
 Contributions are welcome.
