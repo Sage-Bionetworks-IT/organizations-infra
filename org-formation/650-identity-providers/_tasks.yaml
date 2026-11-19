@@ -1066,14 +1066,14 @@ GithubOidcModelAdExplorerInfra:
       - !Ref AgoraProdAccount
     Region: us-east-1
 
-GithubOidcQtlExplorerInfra:
+GithubOidcExplorersInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
   Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.10.10/templates/IAM/github-oidc-provider.j2
-  StackName: !Sub ${resourcePrefix}-${appName}-qtlexplorer-infra
+  StackName: !Sub ${resourcePrefix}-${appName}-explorers-infra
   Parameters:
     ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
-    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-qtlexplorer-infra
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-explorers-infra
     MaxSessionDuration: 7200
     ManagedPolicyArns:
       - "arn:aws:iam::aws:policy/AdministratorAccess"
@@ -1081,7 +1081,7 @@ GithubOidcQtlExplorerInfra:
   TemplatingContext:
     Repositories:
       - owner: "Sage-Bionetworks-IT@63359528"
-        name: "qtlexplorer-infra@1426248809"
+        name: "explorers-infra@1426248809"
         branches: ["dev","stage","prod"]
   DefaultOrganizationBinding:
     Account:
