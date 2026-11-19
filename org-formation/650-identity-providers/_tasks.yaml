@@ -847,6 +847,29 @@ GithubOidcSciPoolDevSageBionetworksSynapseLoginAwsInfra:
     Account: !Ref ScipoolDevAccount
     Region: us-east-1
 
+# Deploys the dedicated Synapse login environment for the Sage Brain Service Catalog
+GithubOidcSageBrainProdSageBionetworksSynapseLoginAwsInfra:
+  Type: update-stacks
+  DependsOn: GithubOidcSageBionetworks
+  Template: https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/v0.7.6/templates/IAM/github-oidc-provider.j2
+  StackName: !Sub ${resourcePrefix}-${appName}-sagebrain-prod-synapse-login-aws-infra
+  Parameters:
+    ProviderArn: !CopyValue [ !Sub '${resourcePrefix}-${appName}-ProviderArn' ]
+    ProviderRoleName: !Sub ${resourcePrefix}-${appName}-sagebrain-prod-synapse-login-aws-infra
+    ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser"
+  TemplatingContext:
+    GitHubOrg: "Sage-Bionetworks"
+    Repositories:
+      - name: "synapse-login-aws-infra"
+        branches: ["prod"]
+      - name: "synapse-login-scipool"
+        branches: ["prod"]
+  DefaultOrganizationBinding:
+    Account: !Ref SageBrainProdAccount
+    Region: us-east-1
+
 GithubOidcSageBionetworksWebMonorepoInfra:
   Type: update-stacks
   DependsOn: GithubOidcSageBionetworks
