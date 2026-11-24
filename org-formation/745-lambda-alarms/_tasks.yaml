@@ -24,6 +24,6 @@ LambdaErrorAlarm:
       - !Ref SynapseProdAccount
   Parameters:
     NotificationEmail: !Ref notificationEmail
-    ErrorThreshold: 1
+    ErrorThreshold: 0
     PeriodSeconds: 300
-    EvaluationPeriods: 3
+    EvaluationPeriods: 1

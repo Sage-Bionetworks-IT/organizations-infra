@@ -9,7 +9,7 @@ Parameters:
     Description: Email address subscribed to the alarm notification topic
   ErrorThreshold:
     Type: Number
-    Default: 1
+    Default: 0
     Description: Alarm when the sum of Lambda errors in a period is greater than this value
   PeriodSeconds:
     Type: Number
@@ -17,7 +17,7 @@ Parameters:
     Description: Length of each evaluation period in seconds
   EvaluationPeriods:
     Type: Number
-    Default: 3
+    Default: 1
     Description: Number of consecutive breaching periods required to alarm
 
 Resources:
@@ -69,9 +69,9 @@ Resources:
       ComparisonOperator: GreaterThanThreshold
       TreatMissingData: notBreaching
       ActionsEnabled: true
+      # No OKActions: with infrequent lambdas the alarm returns to OK on missing data
+      # alone, which would send a misleading "recovered" notification.
       AlarmActions:
-        - !Ref LambdaErrorTopic
-      OKActions:
         - !Ref LambdaErrorTopic
 
 Outputs:

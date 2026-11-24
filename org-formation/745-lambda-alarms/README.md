@@ -4,8 +4,12 @@ the account reports errors (the `AWS/Lambda` `Errors` metric with no `FunctionNa
 dimension, which covers function errors and timeouts, including functions created later).
 
 * One stack per target account and per region in `allRegions`.
-* Alarms when errors are greater than 1 in each of 3 consecutive 5-minute periods.
-* Notifies on ALARM and OK via a per-stack SNS topic emailing `it-alert-inbox@sagebase.org`.
+* Alarms on the first error (errors > 0 in a 5-minute period), so infrequent lambdas
+  (e.g. weekly/monthly finops jobs) are covered as well as frequent ones.
+* Notifies on ALARM only (no OK notification, since infrequent lambdas return to OK on
+  missing data alone) via a per-stack SNS topic emailing `it-alert-inbox@sagebase.org`.
+* Notifications are sent on state change: a function that keeps failing stays in ALARM
+  and sends one email; a new email is sent only after the alarm has returned to OK.
 * The alarm description links to the CloudWatch metrics view by function name to
   identify the failing function.
 
