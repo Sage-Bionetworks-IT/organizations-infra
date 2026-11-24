@@ -98,3 +98,19 @@ StackArmorAgentInstallation:
     TargetTagValue: install-stack-armor-agent
     ScriptUrl: https://raw.githubusercontent.com/Sage-Bionetworks/infra-utils/v1.0.11/stack-armor/install-nessus-agent.sh
     ScriptParameters: STACK_ARMOR_KEY:/stack-armor/install-nessus-key
+
+# Email alerts when the scheduled patching or script execution Lambdas fail. When they
+# fail, no Automation execution starts, so nothing appears in the Automation console.
+SystemsManagerLambdaAlarms:
+  Type: update-stacks
+  DependsOn:
+    - PatchManager
+    - StackArmorAgentInstallation
+  Template: Lambda-Failure-Alarms.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-lambda-alarms'
+  StackDescription: Alarms for the scheduled Systems Manager Lambdas
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref accountId
+  Parameters:
+    AlarmEmail: it-alert-inbox@sagebase.org

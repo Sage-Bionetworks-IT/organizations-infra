@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Email alerts when the scheduled Systems Manager Lambdas (multi-account script execution
+  and patching) fail. A failure there means no Automation execution is started at all, so
+  nothing shows up in the Systems Manager Automation console.
+Parameters:
+  AlarmEmail:
+    Type: String
+    Description: Email address subscribed to the alarm topic. The subscription must be confirmed from the email AWS sends.
+  ScriptExecutionFunctionName:
+    Type: String
+    Default: MultiAccountScriptExecution
+    Description: Name of the Lambda that starts the scheduled script execution Automation.
+  PatchingFunctionName:
+    Type: String
+    Default: MultiAccountPatchingBlog
+    Description: Name of the Lambda that starts the scheduled patching Automation.
+Resources:
+  AlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: systems-manager-lambda-alarms
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref AlarmEmail
+
+  # Each Lambda runs once a day. A failed run is retried twice by Lambda within a few
+  # minutes, so a one-hour period gives a single alarm (one email) per failed day.
+  # Missing data (the hours the Lambda doesn't run) is treated as OK.
+  ScriptExecutionErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${ScriptExecutionFunctionName}-errors'
+      AlarmDescription: !Sub >-
+        The ${ScriptExecutionFunctionName} Lambda failed, so the scheduled script execution
+        Automation (e.g. StackArmor Nessus agent installation) did not start. Check the
+        /aws/lambda/${ScriptExecutionFunctionName} logs in CloudWatch.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref ScriptExecutionFunctionName
+      Statistic: Sum
+      Period: 3600
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref AlarmTopic
+
+  PatchingErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${PatchingFunctionName}-errors'
+      AlarmDescription: !Sub >-
+        The ${PatchingFunctionName} Lambda failed, so the scheduled multi-account patching
+        Automation did not start. Check the /aws/lambda/${PatchingFunctionName} logs in
+        CloudWatch.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref PatchingFunctionName
+      Statistic: Sum
+      Period: 3600
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref AlarmTopic
+Outputs:
+  AlarmTopicArn:
+    Description: SNS topic for Systems Manager Lambda failure alarms
+    Value: !Ref AlarmTopic
+    Export:
+      Name: !Sub '${AWS::StackName}-AlarmTopicArn'

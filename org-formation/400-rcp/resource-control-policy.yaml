@@ -34,6 +34,9 @@ Resources:
               # Exempt consent forms in docs.sagebridge.org bucket from the HTTPS-only requirement.
               - 'arn:aws:s3:::docs.sagebridge.org'
               - 'arn:aws:s3:::docs.sagebridge.org/*'
+              # IT-5490
+              - 'arn:aws:s3:::research.sagebridge.org'
+              - 'arn:aws:s3:::research.sagebridge.org/*'
               # Exempt old-style static websites (portals sageit - IT-5423)
               - arn:aws:s3:::prod.dhealth.synapse.org
               - arn:aws:s3:::prod.dhealth.synapse.org/*
