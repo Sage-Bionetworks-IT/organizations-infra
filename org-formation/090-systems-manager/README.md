@@ -10,12 +10,11 @@ It is the operations hub for your AWS applications and resources, and is broken 
 
 ### Patch Manager
 
-We have setup a centralized multi-account patch management system
-with AWS Systems Manager.  The templates for this setup are found in
-the [aws-samples repo](https://github.com/aws-samples/aws-systems-manager-schedule-central-patch-example)
-which is referenced from the
-[AWS cloud operations and migrations blog](https://aws.amazon.com/blogs/mt/scheduling-centralized-multi-account-multi-region-patching-aws-systems-manager-automation/)
-
+Patching is managed with
+[AWS Systems Manager Quick Setup](https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-quick-setup.html)
+(a Patch Manager patch policy). The policy is defined in `Patch-Manager-Quick-Setup.yaml` and deployed
+by the `PatchManagerQuickSetup` task in `_tasks.yaml` to the organization management account in the
+primary region. Quick Setup then applies the policy to the target accounts and regions.
 
 ### Script Execution
 
