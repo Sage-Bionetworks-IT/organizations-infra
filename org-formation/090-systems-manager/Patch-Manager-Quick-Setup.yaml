@@ -1,0 +1,274 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Systems Manager Quick Setup patch policy (Patch Manager). Scans and installs
+  patches across the organization. Deploy to the organization management
+  account (or a delegated administrator) in the home region.
+
+Parameters:
+  CreateLocalDeploymentRoles:
+    Type: String
+    Default: 'true'
+    AllowedValues: ['true', 'false']
+    Description: >-
+      Create the local deployment administration and execution roles. Set to
+      false to use existing roles.
+  LocalDeploymentAdministrationRoleName:
+    Type: String
+    Default: AWS-QuickSetup-StackSet-Local-AdministrationRole
+  LocalDeploymentExecutionRoleName:
+    Type: String
+    Default: AWS-QuickSetup-StackSet-Local-ExecutionRole
+  TargetOrganizationalUnits:
+    Type: String
+    Default: r-yv14
+    Description: >-
+      Comma-separated list of organizational unit IDs (or the organization
+      root ID) to apply the patch policy to.
+  TargetRegions:
+    Type: String
+    Default: us-east-1
+    Description: Comma-separated list of regions to apply the patch policy to.
+
+Conditions:
+  CreateRoles: !Equals [!Ref CreateLocalDeploymentRoles, 'true']
+
+Resources:
+  LocalDeploymentAdministrationRole:
+    Type: AWS::IAM::Role
+    Condition: CreateRoles
+    Properties:
+      RoleName: !Ref LocalDeploymentAdministrationRoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudformation.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: AssumeExecutionRole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: sts:AssumeRole
+                Resource: !Sub 'arn:${AWS::Partition}:iam::*:role/${LocalDeploymentExecutionRoleName}'
+
+  LocalDeploymentExecutionRole:
+    Type: AWS::IAM::Role
+    Condition: CreateRoles
+    Properties:
+      RoleName: !Ref LocalDeploymentExecutionRoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !GetAtt LocalDeploymentAdministrationRole.Arn
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess'
+
+  SecurityOnlyBaselineAmazonLinux:
+    Type: AWS::SSM::PatchBaseline
+    Properties:
+      Name: org-security-only-amazonlinux
+      Description: Approves only Security classification patches for AMAZON_LINUX
+      OperatingSystem: AMAZON_LINUX
+      PatchGroups: []
+      ApprovalRules:
+        PatchRules:
+          - ApproveAfterDays: 0
+            ComplianceLevel: UNSPECIFIED
+            EnableNonSecurity: false
+            PatchFilterGroup:
+              PatchFilters:
+                - Key: CLASSIFICATION
+                  Values:
+                    - Security
+
+  SecurityOnlyBaselineAmazonLinux2:
+    Type: AWS::SSM::PatchBaseline
+    Properties:
+      Name: org-security-only-amazonlinux2
+      Description: Approves only Security classification patches for AMAZON_LINUX_2
+      OperatingSystem: AMAZON_LINUX_2
+      PatchGroups: []
+      ApprovalRules:
+        PatchRules:
+          - ApproveAfterDays: 0
+            ComplianceLevel: UNSPECIFIED
+            EnableNonSecurity: false
+            PatchFilterGroup:
+              PatchFilters:
+                - Key: CLASSIFICATION
+                  Values:
+                    - Security
+
+  SecurityOnlyBaselineAmazonLinux2023:
+    Type: AWS::SSM::PatchBaseline
+    Properties:
+      Name: org-security-only-amazonlinux2023
+      Description: Approves only Security classification patches for AMAZON_LINUX_2023
+      OperatingSystem: AMAZON_LINUX_2023
+      PatchGroups: []
+      ApprovalRules:
+        PatchRules:
+          - ApproveAfterDays: 0
+            ComplianceLevel: UNSPECIFIED
+            EnableNonSecurity: false
+            PatchFilterGroup:
+              PatchFilters:
+                - Key: CLASSIFICATION
+                  Values:
+                    - Security
+
+  SecurityOnlyBaselineCentOS:
+    Type: AWS::SSM::PatchBaseline
+    Properties:
+      Name: org-security-only-centos
+      Description: Approves only Security classification patches for CENTOS
+      OperatingSystem: CENTOS
+      PatchGroups: []
+      ApprovalRules:
+        PatchRules:
+          - ApproveAfterDays: 0
+            ComplianceLevel: UNSPECIFIED
+            EnableNonSecurity: false
+            PatchFilterGroup:
+              PatchFilters:
+                - Key: CLASSIFICATION
+                  Values:
+                    - Security
+
+  SecurityOnlyBaselineOracleLinux:
+    Type: AWS::SSM::PatchBaseline
+    Properties:
+      Name: org-security-only-oraclelinux
+      Description: Approves only Security classification patches for ORACLE_LINUX
+      OperatingSystem: ORACLE_LINUX
+      PatchGroups: []
+      ApprovalRules:
+        PatchRules:
+          - ApproveAfterDays: 0
+            ComplianceLevel: UNSPECIFIED
+            EnableNonSecurity: false
+            PatchFilterGroup:
+              PatchFilters:
+                - Key: CLASSIFICATION
+                  Values:
+                    - Security
+
+  SecurityOnlyBaselineRedHat:
+    Type: AWS::SSM::PatchBaseline
+    Properties:
+      Name: org-security-only-redhat
+      Description: Approves only Security classification patches for REDHAT_ENTERPRISE_LINUX
+      OperatingSystem: REDHAT_ENTERPRISE_LINUX
+      PatchGroups: []
+      ApprovalRules:
+        PatchRules:
+          - ApproveAfterDays: 0
+            ComplianceLevel: UNSPECIFIED
+            EnableNonSecurity: false
+            PatchFilterGroup:
+              PatchFilters:
+                - Key: CLASSIFICATION
+                  Values:
+                    - Security
+
+  SecurityOnlyBaselineRockyLinux:
+    Type: AWS::SSM::PatchBaseline
+    Properties:
+      Name: org-security-only-rockylinux
+      Description: Approves only Security classification patches for ROCKY_LINUX
+      OperatingSystem: ROCKY_LINUX
+      PatchGroups: []
+      ApprovalRules:
+        PatchRules:
+          - ApproveAfterDays: 0
+            ComplianceLevel: UNSPECIFIED
+            EnableNonSecurity: false
+            PatchFilterGroup:
+              PatchFilters:
+                - Key: CLASSIFICATION
+                  Values:
+                    - Security
+
+  SecurityOnlyBaselineSuse:
+    Type: AWS::SSM::PatchBaseline
+    Properties:
+      Name: org-security-only-suse
+      Description: Approves only Security classification patches for SUSE
+      OperatingSystem: SUSE
+      PatchGroups: []
+      ApprovalRules:
+        PatchRules:
+          - ApproveAfterDays: 0
+            ComplianceLevel: UNSPECIFIED
+            EnableNonSecurity: false
+            PatchFilterGroup:
+              PatchFilters:
+                - Key: CLASSIFICATION
+                  Values:
+                    - Security
+
+  PatchPolicyConfigurationManager:
+    Type: AWS::SSMQuickSetup::ConfigurationManager
+    Properties:
+      Name: org-patch-policy
+      Description: Organization-wide Patch Manager policy
+      ConfigurationDefinitions:
+        - Type: AWSQuickSetupType-PatchPolicy
+          LocalDeploymentAdministrationRoleArn: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${LocalDeploymentAdministrationRoleName}'
+          LocalDeploymentExecutionRoleName: !Ref LocalDeploymentExecutionRoleName
+          Parameters:
+            PatchPolicyName: org-patch-policy
+            SelectedPatchBaselines: !Sub >-
+              {"AMAZON_LINUX":{"value":"arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:patchbaseline/${SecurityOnlyBaselineAmazonLinux}",
+              "label":"org-security-only-amazonlinux", "description":"Security-only patch baseline", "disabled":false},
+              "AMAZON_LINUX_2":{"value":"arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:patchbaseline/${SecurityOnlyBaselineAmazonLinux2}",
+              "label":"org-security-only-amazonlinux2", "description":"Security-only patch baseline", "disabled":false},
+              "AMAZON_LINUX_2023":{"value":"arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:patchbaseline/${SecurityOnlyBaselineAmazonLinux2023}",
+              "label":"org-security-only-amazonlinux2023", "description":"Security-only patch baseline",
+              "disabled":false}, "CENTOS":{"value":"arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:patchbaseline/${SecurityOnlyBaselineCentOS}",
+              "label":"org-security-only-centos", "description":"Security-only patch baseline", "disabled":false},
+              "ORACLE_LINUX":{"value":"arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:patchbaseline/${SecurityOnlyBaselineOracleLinux}",
+              "label":"org-security-only-oraclelinux", "description":"Security-only patch baseline", "disabled":false},
+              "REDHAT_ENTERPRISE_LINUX":{"value":"arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:patchbaseline/${SecurityOnlyBaselineRedHat}",
+              "label":"org-security-only-redhat", "description":"Security-only patch baseline", "disabled":false},
+              "ROCKY_LINUX":{"value":"arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:patchbaseline/${SecurityOnlyBaselineRockyLinux}",
+              "label":"org-security-only-rockylinux", "description":"Security-only patch baseline", "disabled":false},
+              "SUSE":{"value":"arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:patchbaseline/${SecurityOnlyBaselineSuse}",
+              "label":"org-security-only-suse", "description":"Security-only patch baseline", "disabled":false},
+              "DEBIAN":{"value": "arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-09a5f8eb62bde80b1",
+              "label":"AWS-DebianDefaultPatchBaseline","description":"Default Patch Baseline for Debian Provided by AWS.", "disabled":false},
+              "MACOS":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ee4f94581368c0d4","label":"AWS-MacOSDefaultPatchBaseline",
+              "description":"Default Patch Baseline for MacOS Provided by AWS.", "disabled":false},
+              "RASPBIAN":{"value":"arn:aws:ssm:us-east-1:075727635805:patchbaseline/pb-0ec16280999c5c75e",
+              "label":"AWS-RaspbianDefaultPatchBaseline", "description":"Default Patch Baseline for Raspbian Provided by AWS.", "disabled":false}}
+            PatchBaselineUseDefault: custom
+            PatchBaselineRegion: us-east-1
+            ConfigurationOptionsPatchOperation: ScanAndInstall
+            ConfigurationOptionsScanValue: cron(0 1 * * ? *)
+            ConfigurationOptionsScanNextInterval: 'false'
+            ConfigurationOptionsInstallValue: cron(0 2 ? * SAT#1 *)
+            ConfigurationOptionsInstallNextInterval: 'true'
+            RebootOption: RebootIfNeeded
+            IsPolicyAttachAllowed: 'true'
+            HasDeletedBaseline: 'false'
+            OutputLogEnableS3: 'false'
+            OutputBucketRegion: us-east-1
+            TargetType: '*'
+            RateControlConcurrency: 10%
+            RateControlErrorThreshold: 10%
+            TargetOrganizationalUnits: !Ref TargetOrganizationalUnits
+            TargetRegions: !Ref TargetRegions
+    DependsOn:
+      - LocalDeploymentAdministrationRole
+      - LocalDeploymentExecutionRole
+
+Outputs:
+  ConfigurationManagerArn:
+    Description: ARN of the Quick Setup configuration manager
+    Value: !GetAtt PatchPolicyConfigurationManager.ManagerArn
