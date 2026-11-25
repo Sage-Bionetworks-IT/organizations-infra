@@ -58,6 +58,18 @@ PatchManager:
     RunPatchBaselineOperation: "Install"
     TargetRegionIds: "us-east-1"
 
+# Systems Manager Quick Setup patch policy. Quick Setup organization policies
+# must be deployed from the organization management account (or a delegated
+# administrator) in the home region.
+PatchManagerQuickSetup:
+  Type: update-stacks
+  Template: Patch-Manager-Quick-Setup.yaml
+  StackName: !Sub '${resourcePrefix}-${appName}-patch-manager-quick-setup'
+  StackDescription: Systems Manager Quick Setup patch policy (Patch Manager)
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref MasterAccount
+
 PatchMembers:
   Type: update-stacks
   Template: AWS-SystemsManager-AutomationExecutionRole.yaml
