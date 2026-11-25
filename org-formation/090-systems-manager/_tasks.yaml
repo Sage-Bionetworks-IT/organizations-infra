@@ -10,54 +10,6 @@ Parameters:
     Description: The identifier from the account used to manage this service
     Default: !Ref SysmanCentralAccount
 
-SysmanAutomationServiceRole:
-  Type: update-stacks
-  Template: AWS-SystemsManager-AutomationServiceRole.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-sysman-automation-service-role'
-  StackDescription: Service role for AWS System Manager automation
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref accountId
-
-PatchResourceGroup:
-  Type: update-stacks
-  Template: patch-resource-group.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-patch-resource-group'
-  StackDescription: A group of resources to apply patches to
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: '*'
-    IncludeMasterAccount: true
-
-PatchGroupTagger:
-  Type: update-stacks
-  Template: !Sub 'https://${AdminCentralCfnBucket}.s3.amazonaws.com/lambda-tag-patch-group/1.0.0/lambda-tag-patch-group.yaml'
-  StackName: !Sub '${resourcePrefix}-${appName}-patch-group-tagger'
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    IncludeMasterAccount: true
-    Account: '*'
-
-PatchManager:
-  Type: update-stacks
-  DependsOn: PatchResourceGroup
-  Template: Scheduled-Patch-Automation.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-patchmanager'
-  StackDescription: Setup Systems manager patch management for the manager
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: !Ref accountId
-  OrganizationBindings:
-    PatchMemberBinding:
-      Account: '*'
-      IncludeMasterAccount: true
-  Parameters:
-    EventBridgeRuleSchedule: "cron(15 22 * * ? *)"
-    RunPatchBaselineRebootOption: "RebootIfNeeded"
-    ResourceGroupName: !CopyValue sagebase-systemsmanager-patch-resource-group-TagBasedGroupName
-    RunPatchBaselineOperation: "Install"
-    TargetRegionIds: "us-east-1"
-
 # Systems Manager Quick Setup patch policy. Quick Setup organization policies
 # must be deployed from the organization management account (or a delegated
 # administrator) in the home region.
@@ -69,18 +21,6 @@ PatchManagerQuickSetup:
   DefaultOrganizationBindingRegion: !Ref primaryRegion
   DefaultOrganizationBinding:
     Account: !Ref MasterAccount
-
-PatchMembers:
-  Type: update-stacks
-  Template: AWS-SystemsManager-AutomationExecutionRole.yaml
-  StackName: !Sub '${resourcePrefix}-${appName}-patchmember'
-  StackDescription: Setup Systems manager patch management for the member
-  DefaultOrganizationBindingRegion: !Ref primaryRegion
-  DefaultOrganizationBinding:
-    Account: '*'
-    IncludeMasterAccount: true
-  Parameters:
-    ManagementAccountNumber: !Ref accountId
 
 # This will run the Stack Armor Nessus installation script each day
 # on any EC2 in us-east-1 tagged with execute-script:install-stack-armor-agent
